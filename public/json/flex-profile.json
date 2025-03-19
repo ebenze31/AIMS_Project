@@ -1,0 +1,358 @@
+{
+    "type": "flex",
+    "altText": "ข้อมูลของคุณ",
+    "contents": {
+      "type": "bubble",
+      "size": "giga",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "size": "full",
+            "aspectRatio": "2900:5337",
+            "aspectMode": "cover",
+            "url": "https://www.viicheck.com/img/flex/flex_profile.png"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "image",
+                    "url": "https://scdn.line-apps.com/n/channel_devcenter/img/flexsnapshot/clip/clip13.jpg",
+                    "size": "full",
+                    "aspectRatio": "1:1",
+                    "aspectMode": "cover"
+                  }
+                ],
+                "position": "absolute",
+                "width": "100%",
+                "height": "100%",
+                "cornerRadius": "100px",
+                "borderWidth": "bold",
+                "borderColor": "#db2d2e"
+              }
+            ],
+            "position": "absolute",
+            "width": "33%",
+            "height": "18%",
+            "offsetTop": "4.5%",
+            "offsetStart": "8%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "image",
+                "url": "https://www.viicheck.com/img/stickerline/PNG/38.1.png",
+                "size": "full",
+                "position": "absolute"
+              }
+            ],
+            "position": "absolute",
+            "width": "20%",
+            "height": "12.5%",
+            "offsetTop": "15%",
+            "offsetStart": "14%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "E Benze",
+                "wrap": true,
+                "maxLines": 2,
+                "size": "3xl"
+              }
+            ],
+            "position": "absolute",
+            "width": "45%",
+            "height": "14%",
+            "offsetTop": "8%",
+            "offsetStart": "45%",
+            "justifyContent": "center"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "แก้ไข",
+                "color": "#ffffff"
+              }
+            ],
+            "position": "absolute",
+            "offsetTop": "2%",
+            "justifyContent": "center",
+            "backgroundColor": "#db2d2e",
+            "paddingTop": "1%",
+            "paddingBottom": "1%",
+            "paddingStart": "5%",
+            "paddingEnd": "5%",
+            "cornerRadius": "20px",
+            "offsetEnd": "5%",
+            "alignItems": "center",
+            "action": {
+              "type": "uri",
+              "label": "แก้ไขโปรไฟล์",
+              "uri": "https://www.viicheck.com/edit_profile?openExternalBrowser=1"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "อีเมล",
+                "size": "sm"
+              },
+              {
+                "type": "text",
+                "text": "benze@gmail.com",
+                "weight": "bold",
+                "size": "lg"
+              }
+            ],
+            "position": "absolute",
+            "offsetTop": "28%",
+            "action": {
+              "type": "postback",
+              "label": "action",
+              "data": "hello"
+            },
+            "justifyContent": "center",
+            "width": "65%",
+            "offsetStart": "28%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "เบอร์ติดต่อ",
+                "size": "sm"
+              },
+              {
+                "type": "text",
+                "text": "0999999999",
+                "weight": "bold",
+                "size": "lg"
+              }
+            ],
+            "position": "absolute",
+            "offsetTop": "40.5%",
+            "justifyContent": "center",
+            "width": "65%",
+            "offsetStart": "28%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "image",
+                "url": "https://www.viicheck.com/img/stickerline/PNG/47.png",
+                "size": "full",
+                "position": "absolute"
+              }
+            ],
+            "position": "absolute",
+            "width": "14.5%",
+            "height": "9%",
+            "offsetTop": "51.5%",
+            "offsetStart": "8%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "วันเกิด",
+                "size": "sm"
+              },
+              {
+                "type": "text",
+                "text": "31/08/1998",
+                "weight": "bold",
+                "size": "lg"
+              }
+            ],
+            "position": "absolute",
+            "offsetTop": "52.8%",
+            "justifyContent": "center",
+            "width": "65%",
+            "offsetStart": "28%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "เพศ",
+                "size": "sm"
+              },
+              {
+                "type": "text",
+                "text": "ชาย",
+                "weight": "bold",
+                "size": "lg"
+              }
+            ],
+            "position": "absolute",
+            "offsetTop": "64.8%",
+            "justifyContent": "center",
+            "width": "65%",
+            "offsetStart": "28%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ใบอนุญาตขับรถ",
+                "weight": "bold",
+                "size": "lg",
+                "color": "#ffffff"
+              }
+            ],
+            "position": "absolute",
+            "action": {
+              "type": "message",
+              "label": "ใบอนุญาตขับรถ",
+              "text": "ใบอนุญาตขับรถ"
+            },
+            "justifyContent": "center",
+            "width": "85%",
+            "offsetStart": "7.5%",
+            "offsetBottom": "16.8%",
+            "height": "8.5%",
+            "alignItems": "center"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "image",
+                    "url": "https://www.viicheck.com/storage/IMGPARTNER_1",
+                    "aspectMode": "fit",
+                    "aspectRatio": "1:1",
+                    "size": "full"
+                  }
+                ],
+                "width": "16%",
+                "height": "56%",
+                "offsetTop": "34%",
+                "offsetStart": "3.3%",
+                "cornerRadius": "99px",
+                "position": "absolute"
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "image",
+                    "url": "https://www.viicheck.com/storage/IMGPARTNER_2",
+                    "aspectMode": "fit",
+                    "aspectRatio": "1:1",
+                    "size": "full"
+                  }
+                ],
+                "width": "16%",
+                "height": "56.5%",
+                "offsetTop": "34%",
+                "offsetStart": "22.5%",
+                "cornerRadius": "99px",
+                "position": "absolute"
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "image",
+                    "url": "https://www.viicheck.com/storage/IMGPARTNER_3",
+                    "aspectMode": "fit",
+                    "aspectRatio": "1:1",
+                    "size": "full"
+                  }
+                ],
+                "width": "16%",
+                "height": "56%",
+                "offsetTop": "34%",
+                "offsetStart": "42%",
+                "cornerRadius": "99px",
+                "position": "absolute"
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "image",
+                    "url": "https://www.viicheck.com/storage/IMGPARTNER_4",
+                    "aspectMode": "fit",
+                    "size": "full",
+                    "aspectRatio": "1:1"
+                  }
+                ],
+                "width": "16%",
+                "height": "56%",
+                "offsetTop": "34%",
+                "offsetStart": "60.5%",
+                "cornerRadius": "99px",
+                "position": "absolute"
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "image",
+                    "url": "https://www.viicheck.com/storage/IMGPARTNER_5",
+                    "aspectMode": "fit",
+                    "aspectRatio": "1:1",
+                    "size": "full"
+                  }
+                ],
+                "width": "16%",
+                "height": "56%",
+                "offsetTop": "34%",
+                "offsetStart": "80.5%",
+                "cornerRadius": "99px",
+                "position": "absolute"
+              }
+            ],
+            "position": "absolute",
+            "offsetTop": "84.5%",
+            "offsetStart": "6.7%",
+            "width": "87%",
+            "height": "13%",
+            "justifyContent": "center"
+          }
+        ],
+        "position": "relative",
+        "paddingAll": "0px"
+      }
+    }
+}

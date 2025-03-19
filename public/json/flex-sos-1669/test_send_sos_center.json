@@ -1,0 +1,91 @@
+{
+    "type": "flex",
+    "altText": "ตัวอย่าง",
+    "contents": 
+    {
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "ข้อมูลขอความช่วยเหลือ",
+        "weight": "bold",
+        "size": "xl"
+      },
+      {
+        "type": "separator",
+        "margin": "md",
+        "color": "#451167"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "ผู้ขอความช่วยเหลือ",
+            "size": "md",
+            "margin": "md",
+            "weight": "bold"
+          },
+          {
+            "type": "text",
+            "text": "name_user"
+          },
+          {
+            "type": "separator",
+            "margin": "md",
+            "color": "#000000"
+          }
+        ],
+        "margin": "md"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "uri",
+              "label": "ดำเนินการ",
+              "uri": "https://www.viicheck.com/sos_help_center/reply_select/SOS_ID?openExternalBrowser=1&answer=go_to_help&unit_id=_UNIT_ID_"
+            },
+            "margin": "md",
+            "style": "primary",
+            "height": "sm",
+            "color": "#38B6FF"
+          },
+          {
+            "type": "button",
+            "action": {
+              "type": "uri",
+              "label": "โทร",
+              "uri": "tel:phone_user"
+            },
+            "margin": "md",
+            "style": "primary",
+            "height": "sm",
+            "color": "#7ED957"
+          },
+          {
+            "type": "button",
+            "action": {
+              "type": "message",
+              "label": "Meet",
+              "text": "soon"
+            },
+            "margin": "md",
+            "style": "primary",
+            "height": "sm",
+            "color": "#745125"
+          }
+        ],
+        "margin": "md"
+      }
+    ]
+  }
+}
+}

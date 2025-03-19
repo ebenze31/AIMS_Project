@@ -1,0 +1,298 @@
+{
+    "type": "flex",
+    "altText": "โปรโมชั่น",
+    "contents": {
+  "type": "carousel",
+  "contents": [
+    {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img1",
+            "size": "full",
+            "aspectMode": "fit",
+            "aspectRatio": "1:1",
+            "gravity": "top"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "รายละเอียด",
+                  "uri": "https://www.viicheck.com/link1"
+                },
+                "style": "link",
+                "height": "sm",
+                "color": "#ffffff"
+              }
+            ],
+            "position": "absolute",
+            "cornerRadius": "xxl",
+            "offsetTop": "210px",
+            "offsetStart": "100px",
+            "backgroundColor": "#708090cc"
+          }
+        ],
+        "paddingAll": "0px",
+        "backgroundColor": "#000000"
+      }
+    },
+    {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img2",
+            "size": "full",
+            "aspectMode": "fit",
+            "aspectRatio": "1:1",
+            "gravity": "top"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "รายละเอียด",
+                  "uri": "https://www.viicheck.com/link2"
+                },
+                "style": "link",
+                "height": "sm",
+                "color": "#ffffff"
+              }
+            ],
+            "position": "absolute",
+            "cornerRadius": "xxl",
+            "offsetTop": "210px",
+            "offsetStart": "100px",
+            "backgroundColor": "#708090cc"
+          }
+        ],
+        "paddingAll": "0px",
+        "backgroundColor": "#000000"
+      }
+    },
+    {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img3",
+            "size": "full",
+            "aspectMode": "fit",
+            "aspectRatio": "1:1",
+            "gravity": "top"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "รายละเอียด",
+                  "uri": "https://www.viicheck.com/link3"
+                },
+                "style": "link",
+                "height": "sm",
+                "color": "#ffffff"
+              }
+            ],
+            "position": "absolute",
+            "cornerRadius": "xxl",
+            "offsetTop": "210px",
+            "offsetStart": "100px",
+            "backgroundColor": "#708090cc"
+          }
+        ],
+        "paddingAll": "0px",
+        "backgroundColor": "#000000"
+      }
+    },
+    {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img4",
+            "size": "full",
+            "aspectMode": "fit",
+            "aspectRatio": "1:1",
+            "gravity": "top"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "รายละเอียด",
+                  "uri": "https://www.viicheck.com/link4"
+                },
+                "style": "link",
+                "height": "sm",
+                "color": "#ffffff"
+              }
+            ],
+            "position": "absolute",
+            "cornerRadius": "xxl",
+            "offsetTop": "210px",
+            "offsetStart": "100px",
+            "backgroundColor": "#708090cc"
+          }
+        ],
+        "paddingAll": "0px",
+        "backgroundColor": "#000000"
+      }
+    },
+    {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img5",
+            "size": "full",
+            "aspectMode": "fit",
+            "aspectRatio": "1:1",
+            "gravity": "top"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "รายละเอียด",
+                  "uri": "https://www.viicheck.com/link5"
+                },
+                "style": "link",
+                "height": "sm",
+                "color": "#ffffff"
+              }
+            ],
+            "position": "absolute",
+            "cornerRadius": "xxl",
+            "offsetTop": "210px",
+            "offsetStart": "100px",
+            "backgroundColor": "#708090cc"
+          }
+        ],
+        "paddingAll": "0px",
+        "backgroundColor": "#000000"
+      }
+    },
+    {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img6",
+            "size": "full",
+            "aspectMode": "fit",
+            "aspectRatio": "1:1",
+            "gravity": "top"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "รายละเอียด",
+                  "uri": "https://www.viicheck.com/link6"
+                },
+                "style": "link",
+                "height": "sm",
+                "color": "#ffffff"
+              }
+            ],
+            "position": "absolute",
+            "cornerRadius": "xxl",
+            "offsetTop": "210px",
+            "offsetStart": "100px",
+            "backgroundColor": "#708090cc"
+          }
+        ],
+        "paddingAll": "0px",
+        "backgroundColor": "#000000"
+      }
+    },
+    {
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/stickerline/PNG/38.png",
+            "size": "5xl",
+            "aspectMode": "fit",
+            "aspectRatio": "1:1",
+            "gravity": "top",
+            "offsetTop": "lg"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ดูโปรโมชั่นเพิ่มเติม",
+                "action": {
+                  "type": "uri",
+                  "label": "action",
+                  "uri": "https://www.viicheck.com/promotion?pomo_type=carpromotion"
+                },
+                "size": "lg",
+                "align": "center",
+                "gravity": "center",
+                "offsetTop": "xl",
+                "weight": "bold"
+              }
+            ],
+            "backgroundColor": "#ffffff",
+            "height": "70px",
+            "offsetTop": "xxl"
+          }
+        ],
+        "paddingAll": "0px",
+        "backgroundColor": "#000000"
+      }
+    }
+  ]
+}
+}

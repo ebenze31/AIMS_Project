@@ -1,0 +1,289 @@
+{
+    "type": "flex",
+    "altText": "SOS",
+    "contents": {
+  "type": "bubble",
+  "size": "mega",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "text",
+            "text": "SOS",
+            "margin": "xxl",
+            "size": "4xl",
+            "style": "normal",
+            "weight": "bold",
+            "color": "#ff0101",
+            "flex": 2,
+            "gravity": "center"
+          },
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/logo/VII-check-LOGO-W-v1.png",
+            "size": "4xl",
+            "align": "center",
+            "aspectMode": "fit",
+            "action": {
+              "type": "uri",
+              "label": "viicheck",
+              "uri": "https://www.viicheck.com/"
+            },
+            "offsetEnd": "lg",
+            "gravity": "center",
+            "offsetTop": "xs"
+          },
+          {
+            "type": "separator",
+            "margin": "xxl",
+            "color": "#ff0101"
+          }
+        ],
+        "borderColor": "#ff0101"
+      },
+      {
+        "type": "separator",
+        "color": "#ff0101"
+      },
+      {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "เหตุด่วนเหตุร้าย",
+                    "align": "center",
+                    "weight": "bold"
+                  }
+                ],
+                "paddingBottom": "md"
+              },
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "📞 191 ",
+                  "uri": "https://www.viicheck.com/disaster2"
+                },
+                "style": "primary",
+                "height": "sm",
+                "gravity": "center",
+                "color": "#ff0101"
+              }
+            ],
+            "offsetStart": "sm",
+            "paddingAll": "md"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "ไฟไหม้รถ",
+                    "align": "center",
+                    "weight": "bold"
+                  }
+                ],
+                "paddingBottom": "md"
+              },
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "📞 199",
+                  "uri": "https://www.viicheck.com/car_fire"
+                },
+                "style": "primary",
+                "height": "sm",
+                "gravity": "center",
+                "color": "#ff0101"
+              }
+            ],
+            "paddingAll": "md"
+          }
+        ],
+        "height": "80px",
+        "margin": "md"
+      },
+      {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "หน่วยแพทย์กู้ชีวิต",
+                    "align": "center",
+                    "weight": "bold"
+                  }
+                ],
+                "paddingBottom": "md"
+              },
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "📞 1669",
+                  "uri": "https://www.viicheck.com/life_saving"
+                },
+                "style": "primary",
+                "height": "sm",
+                "gravity": "center",
+                "color": "#ff0101"
+              }
+            ],
+            "offsetStart": "sm",
+            "paddingAll": "md"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "จส.100",
+                    "align": "center",
+                    "weight": "bold"
+                  }
+                ],
+                "paddingBottom": "md"
+              },
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "📞 1137",
+                  "uri": "https://www.viicheck.com/js_100"
+                },
+                "style": "primary",
+                "height": "sm",
+                "gravity": "center",
+                "color": "#ff0101"
+              }
+            ],
+            "paddingAll": "md"
+          }
+        ],
+        "height": "80px",
+        "margin": "md"
+      },
+      {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "สายด่วนทางหลวง",
+                    "align": "center",
+                    "weight": "bold"
+                  }
+                ],
+                "paddingBottom": "md"
+              },
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "📞 1193",
+                  "uri": "https://www.viicheck.com/highway"
+                },
+                "style": "primary",
+                "height": "sm",
+                "gravity": "center",
+                "color": "#ff0101"
+              }
+            ],
+            "offsetStart": "sm",
+            "paddingAll": "md"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "ทนายอาสา",
+                    "align": "center",
+                    "weight": "bold"
+                  }
+                ],
+                "paddingBottom": "md"
+              },
+              {
+                "type": "button",
+                "action": {
+                  "type": "uri",
+                  "label": "📞 1167",
+                  "uri": "https://www.viicheck.com/lawyers"
+                },
+                "style": "primary",
+                "height": "sm",
+                "gravity": "center",
+                "color": "#ff0101"
+              },
+              {
+                "type": "box",
+                "layout": "baseline",
+                "contents": [],
+                "paddingBottom": "md"
+              }
+            ],
+            "paddingAll": "md"
+          }
+        ],
+        "height": "80px",
+        "margin": "md"
+      },
+      {
+        "type": "separator",
+        "margin": "xxl"
+      }
+    ],
+    "paddingAll": "0px",
+    "borderColor": "#ff0101",
+    "borderWidth": "bold",
+    "cornerRadius": "xl"
+  }
+}
+}

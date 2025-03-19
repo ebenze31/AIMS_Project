@@ -1,0 +1,50 @@
+{
+    "type": "flex",
+    "altText": "select language",
+    "contents": {
+  "type": "bubble",
+  "size": "giga",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "image",
+        "url": "https://www.peddyhub.com/peddyhub/images/flex-line/language/flexcn.png",
+        "size": "full",
+        "aspectRatio": "229:60",
+        "aspectMode": "cover"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [],
+        "width": "50%",
+        "position": "absolute",
+        "height": "100%",
+        "action": {
+          "type": "uri",
+          "label": "action",
+          "uri": "https://www.viicheck.com/api/change_language_fromline/zh-CN/user_id"
+        }
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [],
+        "width": "50%",
+        "position": "absolute",
+        "height": "100%",
+        "offsetStart": "50%",
+        "action": {
+          "type": "uri",
+          "label": "action",
+          "uri": "https://www.viicheck.com/api/change_language_fromline/zh-TW/user_id"
+        }
+      }
+    ],
+    "position": "relative",
+    "paddingAll": "0px"
+  }
+}
+}

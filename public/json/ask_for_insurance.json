@@ -1,0 +1,196 @@
+{
+    "type": "flex",
+    "altText": "ขอความช่วยเหลือด่วน",
+    "contents": {
+  "type": "bubble",
+  "size": "mega",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "image",
+        "url": "https://www.viicheck.com/img/logo/logo-flex-line.png",
+        "size": "xxl",
+        "aspectRatio": "16:9",
+        "aspectMode": "cover"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "color": "#07375D",
+            "text": "TNK",
+            "margin": "xl",
+            "size": "xl",
+            "align": "center",
+            "weight": "bold",
+            "wrap": true,
+            "offsetBottom": "md"
+          },
+          {
+            "type": "text",
+            "color": "#07375D",
+            "text": "ขอความช่วยเหลือด่วน",
+            "margin": "sm",
+            "size": "lg",
+            "align": "center",
+            "gravity": "bottom",
+            "wrap": true
+          },
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/stickerline/Flex/1.png",
+            "size": "xxl",
+            "aspectRatio": "1:1",
+            "aspectMode": "fit",
+            "margin": "xs",
+            "animated": true,
+            "align": "center",
+            "gravity": "center"
+          }
+        ],
+        "backgroundColor": "#FAEBD7",
+        "borderWidth": "bold",
+        "borderColor": "#ff0101",
+        "cornerRadius": "xxl"
+      },
+      {
+        "type": "separator",
+        "margin": "lg"
+      },
+      {
+        "type": "text",
+        "text": "หมายเลขทะเบียน",
+        "weight": "bold",
+        "size": "xl",
+        "margin": "xxl",
+        "color": "#FFFFFF",
+        "wrap": true
+      },
+      {
+        "type": "text",
+        "text": "กก9999",
+        "size": "lg",
+        "margin": "xxl",
+        "color": "#FFFFFF",
+        "contents": [
+          {
+            "type": "span",
+            "text": "กก9999",
+            "size": "xxl",
+            "weight": "bold"
+          },
+          {
+            "type": "span",
+            "text": " "
+          },
+          {
+            "type": "span",
+            "text": "กทม"
+          }
+        ]
+      },
+      {
+        "type": "separator",
+        "margin": "lg"
+      },
+      {
+        "type": "text",
+        "text": "เวลา",
+        "weight": "bold",
+        "size": "xl",
+        "margin": "xxl",
+        "color": "#FFFFFF",
+        "wrap": true
+      },
+      {
+        "type": "text",
+        "text": "datetime",
+        "size": "md",
+        "margin": "xxl",
+        "color": "#FFFFFF",
+        "wrap": true
+      },
+      {
+        "type": "separator",
+        "margin": "lg"
+      },
+      {
+        "type": "text",
+        "text": "จาก",
+        "weight": "bold",
+        "size": "xl",
+        "margin": "xxl",
+        "color": "#FFFFFF"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "name",
+            "size": "lg",
+            "margin": "lg",
+            "color": "#FFFFFF"
+          }
+        ],
+        "spacing": "sm"
+      },
+      {
+        "type": "separator",
+        "margin": "lg"
+      },
+      {
+        "type": "separator",
+        "margin": "lg",
+        "color": "#07375D"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "button",
+            "action": {
+              "type": "uri",
+              "label": "โทร 0999999999",
+              "uri": "tel:0999999999"
+            },
+            "height": "sm",
+            "style": "primary",
+            "color": "#76d128"
+          },
+          {
+            "type": "button",
+            "action": {
+              "type": "uri",
+              "label": "Google Map",
+              "uri": "https://www.google.co.th/maps/search/lat,lng/lat_mail,lng,16z"
+            },
+            "height": "sm",
+            "style": "primary",
+            "color": "#3AC0CE",
+            "margin": "md"
+          }
+        ],
+        "borderColor": "#FF0000",
+        "cornerRadius": "lg"
+      }
+    ],
+    "backgroundColor": "#07375D",
+    "borderColor": "#ff0101",
+    "borderWidth": "bold",
+    "cornerRadius": "xl"
+  },
+  "styles": {
+    "footer": {
+      "separator": false
+    }
+  }
+}
+}
+

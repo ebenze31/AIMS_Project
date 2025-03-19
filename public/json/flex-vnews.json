@@ -1,0 +1,158 @@
+{
+    "type": "flex",
+    "altText": "Vnews ยินดีให้บริการค่ะ",
+    "contents": {
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "spacing": "md",
+    "contents": [
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/logo/VII-check-LOGO-W-v1.png",
+            "size": "4xl",
+            "aspectRatio": "16:9",
+            "aspectMode": "fit",
+            "margin": "none",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/"
+            }
+          },
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/stickerline/PNG/1.png",
+            "size": "full",
+            "aspectRatio": "16:9",
+            "aspectMode": "fit",
+            "margin": "none",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/"
+            },
+            "offsetBottom": "md"
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "separator",
+            "margin": "xl",
+            "color": "#ff0101"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "icon",
+                "url": "https://www.viicheck.com/img/icon/newspaper.png",
+                "size": "3xl",
+                "margin": "none",
+                "offsetTop": "md"
+              },
+              {
+                "type": "text",
+                "text": "ข่าวทั้งหมด",
+                "weight": "bold",
+                "margin": "xl",
+                "action": {
+                  "type": "uri",
+                  "label": "ข่าวทั้งหมด",
+                  "uri": "https://www.viicheck.com/news?openExternalBrowser=1"
+                }
+              },
+              {
+                "type": "text",
+                "text": ">>>",
+                "size": "sm",
+                "align": "end",
+                "color": "#ff0101",
+                "action": {
+                  "type": "uri",
+                  "label": "ข่าวทั้งหมด",
+                  "uri": "https://www.viicheck.com/news"
+                }
+              }
+            ],
+            "height": "50px",
+            "action": {
+              "type": "uri",
+              "label": "ข่าวทั้งหมด",
+              "uri": "https://www.viicheck.com/news"
+            }
+          },
+          {
+            "type": "separator",
+            "margin": "xl",
+            "color": "#ff0101"
+          },
+          {
+            "type": "box",
+            "layout": "baseline",
+            "contents": [
+              {
+                "type": "icon",
+                "url": "https://www.viicheck.com/img/icon/microphone.png",
+                "size": "3xl",
+                "margin": "none",
+                "offsetTop": "md"
+              },
+              {
+                "type": "text",
+                "text": "เพิ่มข่าว",
+                "margin": "xl",
+                "action": {
+                  "type": "uri",
+                  "label": "เพิ่มข่าว",
+                  "uri": "https://www.viicheck.com/reporter"
+                },
+                "weight": "bold"
+              },
+              {
+                "type": "text",
+                "text": ">>>",
+                "size": "sm",
+                "align": "end",
+                "color": "#ff0101",
+                "action": {
+                  "type": "uri",
+                  "label": "เพิ่มข่าว",
+                  "uri": "https://www.viicheck.com/reporter"
+                }
+              }
+            ],
+            "height": "50px",
+            "action": {
+              "type": "uri",
+              "label": "เพิ่มข่าว",
+              "uri": "https://www.viicheck.com/reporter"
+            }
+          },
+          {
+            "type": "separator",
+            "margin": "xl",
+            "color": "#ff0101"
+          }
+        ],
+        "offsetBottom": "md"
+      }
+    ],
+    "borderColor": "#ff0101",
+    "borderWidth": "bold",
+    "cornerRadius": "xl"
+  }
+}
+
+}

@@ -1,0 +1,33 @@
+@extends('layouts.admin')
+
+@section('content')
+    <br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <h3 class="card-header">แก้ไขข้อมูล <span class="text-primary">{{ $partner->name }}</span></h3>
+                    <div class="card-body">
+
+                        @if ($errors->any())
+                            <ul class="alert alert-danger">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        @endif
+
+                        <form method="POST" action="{{ url('/partner_viicheck/' . $partner->id) }}" accept-charset="UTF-8" class="form-horizontal" enctype="multipart/form-data">
+                            {{ method_field('PATCH') }}
+                            {{ csrf_field() }}
+
+                            @include ('partner.form_edit', ['formMode' => 'edit'])
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection

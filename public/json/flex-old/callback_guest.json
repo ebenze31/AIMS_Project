@@ -1,0 +1,126 @@
+{
+    "type": "flex",
+    "altText": "ตัวอย่าง",
+    "contents": {
+  "type": "bubble",
+  "size": "mega",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "image",
+        "url": "https://www.viicheck.com/img/logo/logo-flex-line.png",
+        "size": "xxl",
+        "aspectRatio": "16:9",
+        "aspectMode": "cover"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "ขอบคุณ",
+            "size": "xxl",
+            "margin": "lg",
+            "color": "#07375D",
+            "align": "center",
+            "weight": "bold",
+            "wrap": true
+          },
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/stickerline/Flex/สติกเกอร์ไลน์.png",
+            "margin": "xs",
+            "size": "xxl",
+            "align": "center",
+            "gravity": "center",
+            "aspectRatio": "1:1",
+            "aspectMode": "fit",
+            "animated": true
+          }
+        ],
+        "borderColor": "#ff0101",
+        "borderWidth": "bold",
+        "cornerRadius": "xxl",
+        "backgroundColor": "#FAEBD7"
+      },
+      {
+        "type": "separator",
+        "margin": "lg"
+      },
+      {
+        "type": "text",
+        "text": "เวลาที่ตอบกลับ",
+        "weight": "bold",
+        "size": "xl",
+        "margin": "xxl",
+        "color": "#FFFFFF",
+        "wrap": true
+      },
+      {
+        "type": "text",
+        "text": "datetime",
+        "size": "md",
+        "margin": "xxl",
+        "color": "#FFFFFF",
+        "wrap": true
+      },
+      {
+        "type": "separator",
+        "margin": "lg"
+      },
+      {
+        "type": "text",
+        "text": "หมายเลขทะเบียน",
+        "weight": "bold",
+        "size": "xl",
+        "margin": "xxl",
+        "color": "#FFFFFF",
+        "wrap": true
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "margin": "lg",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "wrap": true,
+                "color": "#FFFFFF",
+                "size": "xl",
+                "flex": 6,
+                "text": "9กก9999 "
+              },
+              {
+                "type": "text",
+                "text": "กรุงเทพมหานคร",
+                "wrap": true,
+                "color": "#FFFFFF",
+                "size": "sm",
+                "flex": 8
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "backgroundColor": "#07375D",
+    "borderColor": "#ff0101",
+    "borderWidth": "bold",
+    "cornerRadius": "xl"
+  },
+  "styles": {
+    "footer": {
+      "separator": false
+    }
+  }
+}
+}

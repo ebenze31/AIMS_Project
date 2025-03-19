@@ -1,0 +1,196 @@
+{
+    "type": "flex",
+    "altText": "select language",
+    "contents": {
+      "type": "bubble",
+      "size": "giga",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://i.postimg.cc/MZCbNCCV/flex-line-language-01.png",
+            "size": "full",
+            "aspectRatio": "4:3",
+            "aspectMode": "cover"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "25%",
+            "position": "absolute",
+            "height": "33.3333%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/api/change_language_fromline/en/user_id"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "25%",
+            "position": "absolute",
+            "height": "33.3333%",
+            "offsetStart": "25%",
+            "action": {
+              "type": "postback",
+              "label": "Chinese",
+              "data": "Chinese"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "25%",
+            "position": "absolute",
+            "height": "33.3333%",
+            "offsetStart": "50%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/api/change_language_fromline/hi/user_id"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "25%",
+            "position": "absolute",
+            "height": "33.3333%",
+            "offsetStart": "75%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/api/change_language_fromline/ar/user_id"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "25%",
+            "position": "absolute",
+            "height": "33.3333%",
+            "offsetTop": "33.3333%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/api/change_language_fromline/ru/user_id"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "25%",
+            "position": "absolute",
+            "height": "33.3333%",
+            "offsetTop": "33.3333%",
+            "offsetStart": "25%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/api/change_language_fromline/es/user_id"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "25%",
+            "position": "absolute",
+            "height": "33.3333%",
+            "offsetTop": "33.3333%",
+            "offsetStart": "50%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/api/change_language_fromline/de/user_id"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "25%",
+            "position": "absolute",
+            "height": "33.3333%",
+            "offsetTop": "33.3333%",
+            "offsetStart": "75%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/api/change_language_fromline/ja/user_id"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "25%",
+            "position": "absolute",
+            "height": "33.3333%",
+            "offsetTop": "66.6666%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/api/change_language_fromline/ko/user_id"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "25%",
+            "position": "absolute",
+            "height": "33.3333%",
+            "offsetTop": "66.6666%",
+            "offsetStart": "25%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/api/change_language_fromline/th/user_id"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "25%",
+            "position": "absolute",
+            "height": "33.3333%",
+            "offsetTop": "66.6666%",
+            "offsetStart": "50%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/api/change_language_fromline/lo/user_id"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "25%",
+            "position": "absolute",
+            "height": "33.3333%",
+            "offsetTop": "66.6666%",
+            "offsetStart": "75%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "https://www.viicheck.com/api/change_language_fromline/my/user_id"
+            }
+          }
+        ],
+        "position": "relative",
+        "paddingAll": "0px"
+      }
+    }
+}

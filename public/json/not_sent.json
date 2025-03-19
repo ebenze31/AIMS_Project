@@ -1,0 +1,44 @@
+{
+    "type": "flex",
+    "altText": "ไม่สามารถทำการตอบกลับได้ค่ะ",
+    "contents": {
+      "type": "bubble",
+      "size": "mega",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/flex/not_sent.png",
+            "size": "full",
+            "aspectMode": "cover",
+            "aspectRatio": "2091:815",
+            "gravity": "center"
+          },
+          {
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+              {
+                "type": "text",
+                "text": "คุณได้ตอบกลับเรียบร้อยแล้ว",
+                "weight": "bold",
+                "wrap": true,
+                "align": "center",
+                "size": "md"
+              }
+            ],
+            "position": "absolute",
+            "width": "56.5%",
+            "height": "70%",
+            "offsetTop": "18.5%",
+            "offsetEnd": "7.5%",
+            "justifyContent": "center",
+            "alignItems": "center"
+          }
+        ],
+        "paddingAll": "0px"
+      }
+    }
+}

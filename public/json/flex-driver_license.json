@@ -1,0 +1,203 @@
+{
+    "type": "flex",
+    "altText": "ข้อมูลของคุณ",
+    "contents": {
+      "type": "bubble",
+      "size": "giga",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/flex/flex_driver_license_new.png",
+            "size": "full",
+            "aspectRatio": "1393:2321",
+            "aspectMode": "cover"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ใบขับขี่รถยนต์",
+                "color": "#db2d2e",
+                "weight": "bold"
+              }
+            ],
+            "width": "55%",
+            "position": "absolute",
+            "action": {
+              "type": "message",
+              "label": "รถยนต์",
+              "text": "รถยนต์"
+            },
+            "offsetTop": "18%",
+            "offsetStart": "25%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "กรุณาเพิ่มใบอนุญาตขับรถ",
+                    "weight": "bold",
+                    "wrap": true,
+                    "color": "#db2d2e",
+                    "align": "center"
+                  }
+                ],
+                "position": "absolute",
+                "width": "50%",
+                "offsetStart": "40%",
+                "height": "80%",
+                "alignItems": "center",
+                "justifyContent": "center",
+                "offsetTop": "10%"
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "image",
+                    "url": "https://www.viicheck.com/storage/ccaarr",
+                    "size": "full",
+                    "aspectMode": "fit",
+                    "aspectRatio": "160:94"
+                  },
+                  {
+                    "type": "box",
+                    "layout": "baseline",
+                    "contents": [
+                      {
+                        "type": "icon",
+                        "url": "https://www.viicheck.com/img/icon/zoom-in-1.png",
+                        "size": "xxl"
+                      }
+                    ],
+                    "position": "absolute",
+                    "offsetTop": "78%",
+                    "offsetStart": "88%"
+                  }
+                ],
+                "cornerRadius": "15px",
+                "width": "94.8%",
+                "height": "93.5%",
+                "offsetTop": "3.8%",
+                "offsetStart": "1.2%"
+              }
+            ],
+            "width": "85%",
+            "position": "absolute",
+            "height": "30.5%",
+            "action": {
+              "type": "uri",
+              "label": "driver license car",
+              "uri": "https://www.viicheck.com/storage/ccaarr"
+            },
+            "offsetTop": "22%",
+            "offsetStart": "8%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "กรุณาเพิ่มใบอนุญาตขับรถ",
+                    "weight": "bold",
+                    "wrap": true,
+                    "color": "#db2d2e",
+                    "align": "center"
+                  }
+                ],
+                "position": "absolute",
+                "width": "50%",
+                "offsetStart": "40%",
+                "height": "80%",
+                "alignItems": "center",
+                "justifyContent": "center",
+                "offsetTop": "10%"
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "image",
+                    "url": "https://www.viicheck.com/storage/mmotorcycle",
+                    "size": "full",
+                    "aspectMode": "fit",
+                    "aspectRatio": "160:94"
+                  },
+                  {
+                    "type": "box",
+                    "layout": "baseline",
+                    "contents": [
+                      {
+                        "type": "icon",
+                        "url": "https://www.viicheck.com/img/icon/zoom-in-2.png",
+                        "size": "xxl"
+                      }
+                    ],
+                    "position": "absolute",
+                    "offsetTop": "78%",
+                    "offsetStart": "88%"
+                  }
+                ],
+                "cornerRadius": "15px",
+                "width": "94.8%",
+                "height": "93%",
+                "offsetTop": "3.5%",
+                "offsetStart": "1.2%"
+              }
+            ],
+            "width": "85%",
+            "position": "absolute",
+            "height": "30.5%",
+            "action": {
+              "type": "uri",
+              "label": "driver license motorcycle",
+              "uri": "https://www.viicheck.com/storage/mmotorcycle"
+            },
+            "offsetTop": "62.2%",
+            "offsetStart": "8%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ใบขับขี่รถจักยานยนต์",
+                "color": "#db2d2e",
+                "weight": "bold"
+              }
+            ],
+            "width": "55%",
+            "position": "absolute",
+            "action": {
+              "type": "message",
+              "label": "รถยนต์",
+              "text": "รถยนต์"
+            },
+            "offsetTop": "58%",
+            "offsetStart": "25%"
+          }
+        ],
+        "position": "relative",
+        "paddingAll": "0px"
+      }
+    }
+}

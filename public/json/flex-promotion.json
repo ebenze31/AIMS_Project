@@ -1,0 +1,97 @@
+{
+    "type": "flex",
+    "altText": "โปรโมชั่น",
+    "contents": {
+      "type": "bubble",
+      "size": "giga",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/flex/flex_promotion.png",
+            "size": "full",
+            "aspectRatio": "1393:1182",
+            "aspectMode": "cover"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "รถยนต์",
+                    "size": "md",
+                    "wrap": false,
+                    "weight": "bold",
+                    "color": "#ffffff"
+                  }
+                ],
+                "position": "absolute",
+                "width": "70%",
+                "offsetTop": "78%",
+                "offsetStart": "12%",
+                "alignItems": "center",
+                "height": "15.5%",
+                "justifyContent": "center"
+              }
+            ],
+            "width": "43%",
+            "position": "absolute",
+            "height": "58%",
+            "action": {
+              "type": "message",
+              "label": "action",
+              "text": "โปรโมชั่นรถยนต์"
+            },
+            "offsetStart": "6%",
+            "offsetTop": "33%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "รถจักรยานยนต์",
+                    "size": "md",
+                    "wrap": false,
+                    "weight": "bold",
+                    "color": "#ffffff"
+                  }
+                ],
+                "position": "absolute",
+                "width": "90%",
+                "offsetTop": "77.5%",
+                "offsetStart": "5%",
+                "alignItems": "center",
+                "height": "15.5%",
+                "justifyContent": "center"
+              }
+            ],
+            "width": "43%",
+            "position": "absolute",
+            "height": "58%",
+            "action": {
+              "type": "message",
+              "label": "โปรโมชั่นรถจักรยานยนต์",
+              "text": "โปรโมชั่นรถจักรยานยนต์"
+            },
+            "offsetStart": "51%",
+            "offsetTop": "33%"
+          }
+        ],
+        "position": "relative",
+        "paddingAll": "0px"
+      }
+    }
+}

@@ -1,0 +1,191 @@
+{
+    "type": "flex",
+    "altText": "ตัวอย่าง",
+    "contents": {
+  "type": "bubble",
+  "size": "mega",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "image",
+        "url": "https://www.viicheck.com/img/logo/logo-flex-line.png",
+        "size": "xxl",
+        "aspectRatio": "16:9",
+        "aspectMode": "cover"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "color": "#07375D",
+            "text": "กรุณาเลื่อนรถด้วยค่ะ",
+            "margin": "lg",
+            "size": "xl",
+            "align": "center",
+            "weight": "bold",
+            "wrap": true
+          },
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/stickerline/Flex/สติกเกอร์ไลน์.png",
+            "margin": "xs",
+            "align": "center",
+            "gravity": "center",
+            "size": "xxl",
+            "aspectRatio": "1:1",
+            "aspectMode": "fit",
+            "animated": true
+          }
+        ],
+        "backgroundColor": "#FAEBD7",
+        "borderWidth": "bold",
+        "borderColor": "#ff0101",
+        "cornerRadius": "xxl"
+      },
+      {
+        "type": "separator",
+        "margin": "lg"
+      },
+      {
+        "type": "text",
+        "text": "เวลาที่ถูกแจ้ง",
+        "weight": "bold",
+        "size": "xl",
+        "margin": "xxl",
+        "color": "#FFFFFF",
+        "wrap": true
+      },
+      {
+        "type": "text",
+        "text": "datetime",
+        "size": "md",
+        "margin": "xxl",
+        "color": "#FFFFFF",
+        "wrap": true
+      },
+      {
+        "type": "separator",
+        "margin": "lg"
+      },
+      {
+        "type": "text",
+        "text": "หมายเลขทะเบียน",
+        "weight": "bold",
+        "size": "xl",
+        "margin": "xxl",
+        "color": "#FFFFFF"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "margin": "lg",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "baseline",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "text",
+                "wrap": true,
+                "color": "#FFFFFF",
+                "size": "xl",
+                "flex": 6,
+                "text": "7ยษ2944"
+              },
+              {
+                "type": "text",
+                "text": "กรุงเทพ",
+                "wrap": true,
+                "color": "#FFFFFF",
+                "size": "sm",
+                "flex": 8
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "separator",
+        "margin": "lg",
+        "color": "#07375D"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "spacing": "sm",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "button",
+                "height": "sm",
+                "action": {
+                  "type": "postback",
+                  "label": "ส่งข้อความตอบกลับ",
+                  "data": "การตอบกลับ?7ยษ2944/กรุงเทพ",
+                  "displayText": "ส่งข้อความตอบกลับ"
+                },
+                "color": "#3AC0CE",
+                "style": "primary"
+              }
+            ],
+            "cornerRadius": "lg"
+          },
+          {
+            "type": "separator",
+            "color": "#07375D",
+            "margin": "md"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "button",
+                "style": "primary",
+                "height": "sm",
+                "action": {
+                  "type": "uri",
+                  "label": "โทร 0999999999",
+                  "uri": "tel:0999999999"
+                },
+                "color": "#76d128"
+              }
+            ],
+            "borderColor": "#FF0000",
+            "background": {
+              "type": "linearGradient",
+              "startColor": "#00FA9A",
+              "endColor": "#ffffff",
+              "angle": "0deg",
+              "centerColor": "#00FA9A"
+            },
+            "margin": "none",
+            "cornerRadius": "lg"
+          }
+        ],
+        "flex": 0,
+        "borderColor": "#000000",
+        "backgroundColor": "#07375D"
+      }
+    ],
+    "backgroundColor": "#07375D",
+    "borderColor": "#ff0101",
+    "borderWidth": "bold",
+    "cornerRadius": "xl"
+  },
+  "styles": {
+    "footer": {
+      "separator": false
+    }
+  }
+}
+}

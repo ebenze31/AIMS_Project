@@ -1,0 +1,44 @@
+{
+    "type": "flex",
+    "altText": "ตัวอย่าง",
+    "contents": {
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": "สวัสดีค่ะคุณ",
+        "weight": "bold",
+        "size": "lg",
+        "wrap": true
+      },
+      {
+        "type": "text",
+        "text": "name_user",
+        "size": "xl",
+        "wrap": true
+      },
+      {
+        "type": "text",
+        "text": "ช่างไม่ได้ยืนยันการนัดของคุณ",
+        "margin": "md",
+        "wrap": true
+      },
+      {
+        "type": "text",
+        "text": "เนื่องจาก",
+        "margin": "md"
+      },
+      {
+        "type": "text",
+        "text": "annotation",
+        "margin": "md",
+        "wrap": true,
+        "weight": "bold"
+      }
+    ]
+  }
+}
+}

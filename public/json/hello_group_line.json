@@ -1,0 +1,77 @@
+{
+    "type": "flex",
+    "altText": "ตัวอย่าง",
+    "contents": {
+      "type": "bubble",
+      "size": "giga",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/flex/hello_group_line.png",
+            "size": "full",
+            "aspectRatio": "2090:2213",
+            "aspectMode": "cover"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "GROUP",
+                "weight": "bold",
+                "size": "md",
+                "color": "#244250",
+                "maxLines": 2,
+                "wrap": true
+              }
+            ],
+            "position": "absolute",
+            "width": "50%",
+            "offsetTop": "20.5%",
+            "offsetStart": "20%",
+            "alignItems": "flex-start",
+            "height": "13%",
+            "justifyContent": "center"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "position": "absolute",
+            "width": "82%",
+            "offsetTop": "66.5%",
+            "offsetStart": "7%",
+            "alignItems": "center",
+            "height": "11%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "mailto:contact.viicheck@gmail.com"
+            }
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "position": "absolute",
+            "width": "82%",
+            "offsetTop": "80.8%",
+            "offsetStart": "7%",
+            "alignItems": "center",
+            "height": "11%",
+            "action": {
+              "type": "uri",
+              "label": "action",
+              "uri": "tel:020277856"
+            }
+          }
+        ],
+        "position": "relative",
+        "paddingAll": "0px"
+      }
+    }
+}

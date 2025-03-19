@@ -1,0 +1,123 @@
+{
+    "type": "flex",
+    "altText": "ติดต่อ",
+    "contents": {
+      "type": "bubble",
+      "size": "giga",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/flex/flex_contact.png",
+            "size": "full",
+            "aspectRatio": "1080:900",
+            "aspectMode": "cover"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "ติดต่อเรา",
+                "color": "#ffffff",
+                "weight": "bold",
+                "size": "xxl"
+              }
+            ],
+            "position": "absolute",
+            "offsetTop": "9%",
+            "offsetStart": "35%",
+            "width": "60%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "โทร",
+                    "size": "lg",
+                    "wrap": false,
+                    "weight": "bold",
+                    "color": "#db2d2e"
+                  }
+                ],
+                "position": "absolute",
+                "width": "68%",
+                "offsetTop": "17%",
+                "offsetStart": "24%"
+              }
+            ],
+            "width": "81%",
+            "position": "absolute",
+            "height": "20%",
+            "action": {
+              "type": "uri",
+              "label": "phone number",
+              "uri": "tel:020277856"
+            },
+            "offsetStart": "10%",
+            "offsetTop": "27%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "อีเมล",
+                    "size": "lg",
+                    "wrap": false,
+                    "weight": "bold",
+                    "color": "#db2d2e"
+                  }
+                ],
+                "position": "absolute",
+                "width": "68%",
+                "offsetTop": "19%",
+                "offsetStart": "24%"
+              }
+            ],
+            "width": "81%",
+            "position": "absolute",
+            "height": "20%",
+            "offsetStart": "10%",
+            "action": {
+              "type": "uri",
+              "label": "email",
+              "uri": "mailto:contact.viicheck@gmail.com"
+            },
+            "offsetTop": "50%"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [],
+            "width": "81%",
+            "position": "absolute",
+            "height": "20%",
+            "offsetStart": "10%",
+            "action": {
+              "type": "uri",
+              "label": "facebook",
+              "uri": "https://m.me/viicheck.viicheck"
+            },
+            "offsetTop": "73%"
+          }
+        ],
+        "position": "relative",
+        "paddingAll": "0px"
+      }
+    }
+}

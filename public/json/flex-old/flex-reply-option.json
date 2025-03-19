@@ -1,0 +1,180 @@
+{
+    "type": "flex",
+    "altText": "เลือกการตอบกลับ",
+    "contents": {
+  "type": "bubble",
+  "size": "mega",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "image",
+        "url": "https://www.viicheck.com/img/logo/logo-flex-line.png",
+        "size": "3xl",
+        "aspectRatio": "16:9",
+        "aspectMode": "fit"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "image",
+            "url": "https://www.viicheck.com/img/icon/ป้ายทะเบียน.png",
+            "size": "full",
+            "aspectMode": "fit",
+            "aspectRatio": "18:9",
+            "offsetBottom": "xxl"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "7ยษ2944",
+                "color": "#000000",
+                "weight": "bold",
+                "size": "xl",
+                "align": "center",
+                "gravity": "center",
+                "offsetBottom": "sm"
+              }
+            ],
+            "position": "absolute",
+            "offsetTop": "18px",
+            "width": "250px"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "text",
+                "text": "กรุงเทพ",
+                "color": "#000000",
+                "weight": "bold",
+                "size": "lg",
+                "align": "center",
+                "gravity": "center",
+                "offsetBottom": "sm"
+              }
+            ],
+            "position": "absolute",
+            "offsetTop": "48px",
+            "width": "250px"
+          }
+        ],
+        "offsetTop": "md"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "* ตอบกลับได้เพียง 1 ข้อ เท่านั้น",
+            "color": "#ffffff",
+            "wrap": true,
+            "align": "center",
+            "gravity": "center"
+          }
+        ]
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "postback",
+                  "label": "ขอบคุณ",
+                  "data": "thx?7ยษ2944/กรุงเทพ",
+                  "displayText": "ขอบคุณ"
+                },
+                "style": "secondary",
+                "height": "sm",
+                "color": "#FFFFFF"
+              }
+            ],
+            "borderColor": "#0B9CFF",
+            "borderWidth": "semi-bold",
+            "cornerRadius": "lg",
+            "backgroundColor": "#ffffff"
+          },
+          {
+            "type": "separator",
+            "margin": "sm",
+            "color": "#07375D"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "postback",
+                  "label": "รอสักครู่",
+                  "data": "wait?7ยษ2944/กรุงเทพ",
+                  "displayText": "รอสักครู่"
+                },
+                "style": "secondary",
+                "height": "sm",
+                "color": "#FFFFFF"
+              }
+            ],
+            "borderColor": "#0B9CFF",
+            "borderWidth": "semi-bold",
+            "cornerRadius": "lg",
+            "backgroundColor": "#ffffff"
+          },
+          {
+            "type": "separator",
+            "margin": "sm",
+            "color": "#07375D"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "button",
+                "style": "secondary",
+                "height": "sm",
+                "color": "#FFFFFF",
+                "action": {
+                  "type": "uri",
+                  "label": "ฉันไม่สะดวก",
+                  "uri": "https://www.viicheck.com/not_comfor_login/license_plate_id"
+                }
+              }
+            ],
+            "borderColor": "#0B9CFF",
+            "borderWidth": "semi-bold",
+            "cornerRadius": "lg",
+            "backgroundColor": "#ffffff"
+          }
+        ],
+        "backgroundColor": "#07375D",
+        "margin": "md"
+      }
+    ],
+    "backgroundColor": "#07375D",
+    "borderColor": "#ff0101",
+    "borderWidth": "bold",
+    "cornerRadius": "xl"
+  },
+  "styles": {
+    "footer": {
+      "separator": false
+    }
+  }
+}
+}

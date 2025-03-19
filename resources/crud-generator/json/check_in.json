@@ -1,0 +1,24 @@
+{
+    "fields": [
+        {
+            "name": "user_id",
+            "type": "integer"
+        },
+        {
+            "name": "time_in",
+            "type": "datetime"
+        },
+        {
+            "name": "time_out",
+            "type": "datetime"
+        },
+        {
+            "name": "check_in_at",
+            "type": "string"
+        },
+        {
+            "name": "student_id",
+            "type": "string"
+        }
+    ]
+}

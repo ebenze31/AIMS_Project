@@ -1,0 +1,11 @@
+{
+    "type": "flex",
+    "altText": "ตัวอย่าง",
+    "contents": 
+    {
+      "type": "carousel",
+      "contents": [
+        <content>
+      ]
+    }
+}
