@@ -49,10 +49,6 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Wishlist', 'user_id','id');
     }
 
-    public function check_ins(){
-        return $this->hasMany('App\Models\Check_in', 'user_id');
-    }
-
     public function user_condo(){
         return $this->hasMany('App\Models\User_condo', 'user_id');
     }

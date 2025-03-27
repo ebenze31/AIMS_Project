@@ -34,11 +34,7 @@ class Sos_map extends Model
     public function user_helper(){
         return $this->belongsTo('App\User', 'helper_id' , 'id'); 
     }
-
-    public function Report_repair(){
-        return $this->hasOne('App\Models\Report_repair', 'sos_map_id');
-    }
-
+    
     public function Sos_map_wait_delete(){
         return $this->hasOne('App\Models\Sos_map_wait_delete', 'sos_map_id');
     }
