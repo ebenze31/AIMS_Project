@@ -1,0 +1,32 @@
+{
+    "fields": [
+        {
+            "name": "name_area",
+            "type": "string"
+        },
+        {
+            "name": "polygon",
+            "type": "longtext"
+        },
+        {
+            "name": "status",
+            "type": "string"
+        },
+        {
+            "name": "check_time_command",
+            "type": "string"
+        },
+        {
+            "name": "time_start_command",
+            "type": "datetime"
+        },
+        {
+            "name": "time_end_command",
+            "type": "datetime"
+        },
+        {
+            "name": "aims_partner_id",
+            "type": "string"
+        }
+    ]
+}

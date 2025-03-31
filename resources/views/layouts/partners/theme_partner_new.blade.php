@@ -863,45 +863,20 @@
 								</div>
 								<div class="menu-title">การจัดการ</div>
 							</a>
-							@if(Auth::user()->organization == "สพฉ" )
-								<ul>
-									<li>
-										<a href="{{ url('/all_name_user_partner') }}"><i class='fas fa-users-cog'></i> สมาชิกศูนย์สั่งการ</a>
-									</li>
-									<li>
-										<a href="{{ url('/data_1669_operating_unit') }}"><i class="fa-solid fa-user-plus"></i> หน่วยปฏิบัติการ </a>
-									</li>
-                                    <li>
-                                        <a href="{{ url('/view_map_officer_area') }}" target="blank"><i class="fa-solid fa-map-location-dot"></i> แผนที่ </a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url('/view_hospital_offices') }}" target="blank"><i class="fa-solid fa-hospital"></i> โรงพยาบาล </a>
-                                    </li>
-								</ul>
-							@else
-                                <ul class="d-none">
-                                    <li>
-                                        <a href="#"><i class="fa-duotone fa-sitemap"></i> จัดการข้อมูลองค์กร</a>
-                                    </li>
-                                </ul>
-								<ul>
-									<li>
-										<a href="{{ url('/manage_user_partner') }}"><i class='fas fa-users-cog'></i> จัดการผู้ใช้</a>
-									</li>
-								</ul>
-                                <ul>
-									<li>
-										<a href="{{ url('/sos_map_title') }}"><i class="fa-solid fa-list-ol"></i>
-										หัวข้อขอความช่วยเหลือ</a>
-									</li>
-								</ul>
-                                <ul>
-                                    <li>
-                                        <a href="{{ url('/sos_map_wait_delete') }}"><i class="fa-solid fa-trash-clock"></i>
-                                        คำขอลบเคส</a>
-                                    </li>
-                                </ul>
-							@endif
+							<ul>
+								<li>
+									<a href="{{ url('/all_name_user_partner') }}"><i class='fas fa-users-cog'></i> สมาชิกศูนย์ควบคุม</a>
+								</li>
+								<li>
+									<a href="{{ url('/data_1669_operating_unit') }}"><i class="fa-solid fa-user-plus"></i> หน่วยปฏิบัติการ </a>
+								</li>
+                                <li>
+                                    <a href="{{ url('/view_map_officer_area') }}" target="blank"><i class="fa-solid fa-map-location-dot"></i> แผนที่ </a>
+                                </li>
+                                <li>
+                                    <a href="#" ><i class="fa-solid fa-gear"></i> ตั้งค่า </a>
+                                </li>
+							</ul>
 						</li>
 					@endif
 				@endif
@@ -909,7 +884,7 @@
 
                 <!-- Dashboard Partner -->
                 @if(Auth::check())
-                    @if(Auth::user()->role == "admin-partner" and Auth::user()->organization != "สพฉ")
+                    @if(Auth::user()->role == "admin-partner")
                     <li id="div_ll_Dashboard" class="">
                         <a href="#" class="has-arrow">
                             <div class="parent-icon">
@@ -919,299 +894,19 @@
                         </a>
                         <ul>
                             <li>
-                                <a href="{{ url('/dashboard_index#dashboard_user') }}"><i class='fas fa-users-cog'></i>User</a>
+                                <a href="{{ url('/dashboard_index#dashboard_user') }}">
+                                    <i class='fas fa-users-cog'></i>User
+                                </a>
                             </li>
                             <li>
-                                <a href="{{ url('/dashboard_index#dashboard_viisos') }}"><i class='fas fa-siren-on'></i>ViiSOS</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/dashboard_index#dashboard_viinews') }}"><i class="fa-solid fa-newspaper"></i>ViiNews</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/dashboard_index#dashboard_viimove') }}"><i class="fa-duotone fa-car"></i>ViiMove</a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/dashboard_index#dashboard_boardcast') }}"><i class='fas fa-bullhorn'></i>Broadcast</a>
+                                <a href="{{ url('/dashboard_index#dashboard_viisos') }}">
+                                    <i class='fas fa-siren-on'></i>SOS
+                                </a>
                             </li>
                         </ul>
                     </li>
                     @endif
                 @endif
-
-				<!-- Broadcast -->
-				<!-- ใหม่ -->
-				<li id="div_menu_Broadcast" class="d-none">
-					<a class="has-arrow" href="javascript:;" >
-						<div class="parent-icon"><i class="fas fa-bullhorn"></i>
-						</div>
-						<div class="menu-title">Broadcast (LINE) </div>
-					</a>
-
-
-
-					<ul class="mm-collapse " style="">
-						<li>
-							<a id="li_menu_Dashboard" href="{{ url('/broadcast/dashboard') }}">
-								<i class='fas fa-users-cog'></i> Dashboard
-							</a>
-						</li>
-
-						<!--check in  -->
-						<li class="">
-							<a class="has-arrow" href="javascript:;">
-								<i class="bx bx-right-arrow-alt"></i>by Checkin
-							</a>
-							<ul class="mm-collapse " style="">
-								<li >
-									<!-- <li class="div-tooltip">
-										<a href="#" class="disabled">
-											<i class='fas fa-users-cog'></i> Dashboard Checkin
-										</a>
-										<span class="tooltip" style="font-size: 0.95em;">
-											<center><i class="fa-regular fa-triangle-exclamation"></i> ฟีเจอร์ยังไม่พร้อมใช้งานขณะนี้</center>
-										</span>
-									</li> -->
-									<li class="div-tooltip">
-										<a id="li_menu_Check_in" class="" href="{{ url('/broadcast/broadcast_by_check_in') }}">
-										<i class="fas fa-map-marker-check"></i> Boardcast Checkin
-										</a>
-										<span id="tip_check_in" class="tooltip d-none" style="font-size: 0.95em;">
-											<center><i class="fa-regular fa-triangle-exclamation"></i> อัพเกรดเพื่อใช้ฟีเจอร์นี้</center>
-												โปรดติดต่อ <a href="tel:020277856" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">02-027-7856</a> หรือ
-												<a href="mailto:contact.viicheck@gmail.com" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">contact.viicheck@gmail.com</a>
-										</span>
-									</li>
-								</li>
-							</ul>
-						</li>
-						<!-- check in -->
-
-						<!-- User -->
-						<li class=""> <a class="has-arrow" href="javascript:;" ><i class="bx bx-right-arrow-alt"></i>by User</a>
-							<ul class="mm-collapse " style="">
-								<li class="">
-									<!-- <li class="div-tooltip">
-										<a  href="#" class="disabled">
-											<i class='fas fa-users-cog'></i> Dashboard User
-										</a>
-										<span class="tooltip" style="font-size: 0.95em;">
-											<center><i class="fa-regular fa-triangle-exclamation"></i> ฟีเจอร์ยังไม่พร้อมใช้งานขณะนี้</center>
-										</span>
-									</li> -->
-									<li class="div-tooltip">
-										<a id="li_menu_User" class="" href="{{ url('/broadcast/broadcast_by_user') }}">
-											<i class='fas fa-users-cog'></i> Boardcast User
-										</a>
-										<span id="tip_user" class="tooltip d-none" style="font-size: 0.95em;">
-											<center><i class="fa-regular fa-triangle-exclamation"></i> อัพเกรดเพื่อใช้ฟีเจอร์นี้</center>
-												โปรดติดต่อ <a href="tel:020277856" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">02-027-7856</a> หรือ
-												<a href="mailto:contact.viicheck@gmail.com" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">contact.viicheck@gmail.com</a>
-										</span>
-									</li>
-								</li>
-							</ul>
-						</li>
-						<!-- User -->
-
-						<!-- Cars -->
-						<li class=""> <a class="has-arrow" href="javascript:;" ><i class="bx bx-right-arrow-alt"></i>by Cars</a>
-							<ul class="mm-collapse " style="">
-								<li class="">
-									<!-- <li class="div-tooltip">
-										<a href="#"class="disabled">
-											<i class='fas fa-users-cog'></i> Dashboard Cars
-
-										</a>
-										<span class="tooltip" style="font-size: 0.95em;">
-											<center><i class="fa-regular fa-triangle-exclamation"></i> ฟีเจอร์ยังไม่พร้อมใช้งานขณะนี้</center>
-										</span>
-									</li> -->
-									<li class="div-tooltip">
-										<a id="li_menu_Car" class="" href="{{ url('/broadcast/broadcast_by_car') }}">
-											<i class="fa-duotone fa-car"></i> Boardcast Cars
-										</a>
-										<span id="tip_car" class="tooltip d-none" style="font-size: 0.95em;">
-											<center><i class="fa-regular fa-triangle-exclamation"></i> อัพเกรดเพื่อใช้ฟีเจอร์นี้</center>
-												โปรดติดต่อ <a href="tel:020277856" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">02-027-7856</a> หรือ
-												<a href="mailto:contact.viicheck@gmail.com" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">contact.viicheck@gmail.com</a>
-										</span>
-									</li>
-								</li>
-							</ul>
-						</li>
-						<!-- Cars -->
-
-                        <!-- Sos -->
-						<li class=""> <a class="has-arrow" href="javascript:;" ><i class="bx bx-right-arrow-alt"></i>by Sos</a>
-							<ul class="mm-collapse " style="">
-								<li class="">
-									<!-- <li class="div-tooltip">
-										<a href="#"class="disabled">
-											<i class='fas fa-users-cog'></i> Dashboard Cars
-
-										</a>
-										<span class="tooltip" style="font-size: 0.95em;">
-											<center><i class="fa-regular fa-triangle-exclamation"></i> ฟีเจอร์ยังไม่พร้อมใช้งานขณะนี้</center>
-										</span>
-									</li> -->
-									<li class="div-tooltip">
-										<a id="li_menu_Car" class="" href="{{ url('/broadcast/broadcast_by_sos') }}">
-											<i class='fas fa-siren-on'></i> Boardcast Sos
-										</a>
-										<span id="tip_car" class="tooltip d-none" style="font-size: 0.95em;">
-											<center><i class="fa-regular fa-triangle-exclamation"></i> อัพเกรดเพื่อใช้ฟีเจอร์นี้</center>
-												โปรดติดต่อ <a href="tel:020277856" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">02-027-7856</a> หรือ
-												<a href="mailto:contact.viicheck@gmail.com" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">contact.viicheck@gmail.com</a>
-										</span>
-									</li>
-								</li>
-							</ul>
-						</li>
-						<!-- Sos -->
-					</ul>
-				</li>
-
-				<!-- เก่า -->
-				<!-- <li id="div_menu_Broadcast" class="d-none">
-					<a href="#" class="has-arrow">
-						<div class="parent-icon"><i class="fas fa-bullhorn"></i>
-						</div>
-						<div class="menu-title">Broadcast <span style="color: green;">LINE</span> </div>
-					</a>
-					<ul>
-						@if(Auth::user()->id == "1")
-							<li> <a id="li_menu_Dashboard" href="{{ url('/broadcast/dashboard') }}"><i class='fas fa-users-cog'></i> Dashboard</a>
-							</li>
-							<li class="div-tooltip">
-								<a id="li_menu_Check_in" href="{{ url('/broadcast/broadcast_by_check_in') }}"><i class="fas fa-map-marker-check"></i> by Check In</a>
-								<span id="tip_check_in" class="tooltip d-none" style="font-size: 0.95em;">
-									<center><i class="fa-regular fa-triangle-exclamation"></i> อัพเกรดเพื่อใช้ฟีเจอร์นี้</center>
-										โปรดติดต่อ <a href="tel:020277856" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">02-027-7856</a> หรือ
-										<a href="mailto:contact.viicheck@gmail.com" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">contact.viicheck@gmail.com</a>
-								</span>
-							</li>
-							<li class="div-tooltip">
-								<a id="li_menu_User"href="{{ url('/broadcast/broadcast_by_user') }}"><i class="fad fa-users"></i> by User</a>
-								<span  id="tip_user" class="tooltip d-none" style="font-size: 0.95em;">
-									<center><i class="fa-regular fa-triangle-exclamation"></i> อัพเกรดเพื่อใช้ฟีเจอร์นี้</center>
-									โปรดติดต่อ <a href="tel:020277856" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">02-027-7856</a> หรือ
-										<a href="mailto:contact.viicheck@gmail.com" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">contact.viicheck@gmail.com</a>
-								</span>
-							</li>
-						@endif
-							<li class="div-tooltip">
-								<a id="li_menu_Cars"href="{{ url('/broadcast/broadcast_by_car') }}"><i class="fad fa-car-bus"></i> by cars</a>
-								<span id="tip_car" class="tooltip d-none" style="font-size: 0.95em;">
-									<center><i class="fa-regular fa-triangle-exclamation"></i> อัพเกรดเพื่อใช้ฟีเจอร์นี้</center>
-									โปรดติดต่อ <a href="tel:020277856" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">02-027-7856</a> หรือ
-										<a href="mailto:contact.viicheck@gmail.com" class="p-0" style="display: inline;background-color: transparent;text-decoration: underline;color:red">contact.viicheck@gmail.com</a>
-								</span>
-							</li>
-					</ul>
-				</li> -->
-
-
-
-				<!-- Broadcast -->
-
-				<!-- care move sos -->
-				@if(Auth::check() && Auth::user()->organization != 'สพฉ')
-					@if( Auth::user()->role == "admin-partner" or Auth::user()->role == "partner" )
-                        <!-- Vii SOS -->
-                            <li class="main-submenu">
-                                <a href="#" class="has-arrow">
-                                    <div class="parent-icon"><i class="fas fa-siren-on"></i>
-                                    </div>
-                                    <div class="menu-title">Vii SOS</div>
-                                </a>
-                                <ul >
-                                    <li>
-                                        <a href="{{ url('/sos_partner') }}" data-submenu="{{ url('/sos_detail_partner') }}" data-submenu-2="{{ url('/sos_score_helper') }}" data-submenu-have-id="{{ url('/score_helper') }}/"class="d-block sub-menu">
-                                            <i class='fas fa-hands-helping'></i>
-
-                                            <span id="div_menu_help_1">
-                                                ให้ความช่วยเหลือ
-                                            </span>
-
-                                            <span id="div_menu_help" class="d-none">
-                                                <i  class="fas fa-exclamation-circle notify_alert float-end mt-1"></i>
-                                            </span>
-                                        </a>
-                                    </li>
-
-                                    @if(Auth::check())
-                                        @if(Auth::user()->role == "admin-partner" && Auth::user()->organization != "ชาลีกรุงเทพ")
-                                            <li>
-                                                <a href="{{ url('/add_area') }}" data-submenu="{{ url('/service_current') }}" data-submenu-2="{{ url('/service_pending') }}" data-submenu-3="{{ url('/service_area') }}" class="sub-menu">
-                                                    <i class='far fa-map'></i>
-
-                                                    <span>
-                                                        &nbsp;พื้นที่บริการ
-                                                    </span>
-                                                </a>
-                                            </li>
-                                        @endif
-                                    @endif
-
-                                    @if(Auth::user()->organization == "JS100 Radio" or Auth::user()->organization == "2บี กรีน จำกัด")
-                                        <li>
-
-                                            <a href="{{ url('/sos_emergency_js100') }}" data-submenu="{{ url('/sos_detail_js100') }}" class="d-block sub-menu">
-                                                <i class="fal fa-siren-on"></i>
-
-                                                <span id="div_menu_help_js100">
-                                                    SOS by calling
-                                                </span>
-
-                                                <span id="div_menu_alert_js100" class="d-none">
-                                                    <i  class="fas fa-exclamation-circle notify_alert float-end mt-1"></i>
-                                                </span>
-                                            </a>
-                                        </li>
-                                    @endif
-                                </ul>
-                            </li>
-                        <!-- Vii SOS -->
-
-						<!-- ViiCare -->
-							<li>
-								<a href="#" class="has-arrow">
-									<div class="parent-icon"><i class="fas fa-hand-holding-heart"></i>
-									</div>
-									<div class="menu-title">Vii Care</div>
-								</a>
-								<ul>
-									<li> <a href="{{ url('/check_in/view') }}"><i class="fas fa-map-marker-check"></i> ข้อมูลการเข้าออก</a>
-									</li>
-									<li> <a href="{{ url('/check_in/add_new_check_in') }}"><i class="fas fa-qrcode"></i> เพิ่มจุด Check in</a>
-									</li>
-									<li> <a href="{{ url('/check_in/gallery') }}"><i class="far fa-images"></i>คลังภาพ</a>
-									</li>
-								</ul>
-							</li>
-						<!-- ViiCare -->
-
-						<!-- ViiMove -->
-							<li>
-								<a href="#" class="has-arrow">
-									<div class="parent-icon"><i class="fas fa-car-crash"></i>
-									</div>
-									<div class="menu-title">Vii Move</div>
-								</a>
-								<ul>
-									<li> <a href="{{ url('/register_cars_partner') }}"><i class='fas fa-car'></i> รถลงทะเบียน</a>
-									</li>
-									<li> <a href="{{ url('/guest_partner') }}"><i class="fas fa-file-signature"></i> รถที่ถูกรายงาน</a>
-									</li>
-									<li> <a href="{{ url('/partner_guest_latest') }}"><i class="fas fa-history"></i> รถที่ถูกรายงานล่าสุด</a>
-									</li>
-								</ul>
-							</li>
-						<!-- ViiMove -->
-
-					@endif
-				@endif
-				<!-- end care move sos -->
 
 				<style>
                     .theme-notification-menu {
@@ -1248,52 +943,47 @@
 
 				<!-- SOS HELP CENTER 1669 -->
 				@if(Auth::check())
-					@if(Auth::user()->id == "1" or Auth::user()->id == "64" or Auth::user()->id == "2" or Auth::user()->organization == 'สพฉ')
-						<li>
-							<a id="menu_command_sos" href="#" class="has-arrow">
-								<div class="parent-icon">
-									<i class="fa-solid fa-truck-medical"></i>
-								</div>
-								<div class="menu-title">ขอความช่วยเหลือ</div>
-								<i id="i_noti_menu" class="fa-solid fa-circle-exclamation fa-bounce theme-notification-menu d-none"></i>
-							</a>
-							<ul>
-								<li>
-									<a href="{{ url('/help_center_admin') }}">
-										<i class="fa-solid fa-user-headset"></i> ควบคุมและสั่งการ
-										<i id="i_noti_call" class="fa-solid fa-phone-volume fa-shake theme-notification-call d-none"></i>
-										<i id="i_noti_refuse" class="fa-solid fa-triangle-exclamation fa-bounce theme-notification-refuse d-none"></i>
-									</a>
-								</li>
-								<li>
-								<!-- {{ url('/edit_and_summit_form_sos') }} <-ใส่ลิงค์อันนี้นะจ๊ะ-->
-									<a href="#">
-										<i class="fa-solid fa-file-pen"></i> ปรับปรุง / ยืนยัน
-									</a>
-								</li>
-								<li>
-								<!-- {{ url('/check_withdraw_form_sos') }} <-ใส่ลิงค์อันนี้นะจ๊ะ -->
-									<a href="#">
-										<i class="fa-solid fa-money-check-dollar-pen"></i> ตรวจสอบ / ตั้งเบิก
-									</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="#" class="has-arrow">
-								<div class="parent-icon">
-									<i class="fa-solid fa-chart-pie"></i>
-								</div>
-								<div class="menu-title">วิเคราะห์ข้อมูล</div>
-							</a>
-							<ul>
-								<li> <a href="{{ url('/dashboard_1669_index#command_center_info') }}"><i class='fad fa-book'></i> ข้อมูลเจ้าหน้าที่ศูนย์สั่งการ</a>
-                                </li>
-                                <li> <a href="{{ url('/dashboard_1669_index#sos_help') }}"><i class="fas fa-photo-video"></i> ข้อมูลการขอความช่วยเหลือ</a>
-                                </li>
-							</ul>
-						</li>
-					@endif
+					<li>
+						<a id="menu_command_sos" href="#" class="has-arrow">
+							<div class="parent-icon">
+								<i class="fa-solid fa-truck-medical"></i>
+							</div>
+							<div class="menu-title">ขอความช่วยเหลือ</div>
+							<i id="i_noti_menu" class="fa-solid fa-circle-exclamation fa-bounce theme-notification-menu d-none"></i>
+						</a>
+						<ul>
+							<li>
+								<a href="{{ url('/help_center_admin') }}">
+									<i class="fa-solid fa-user-headset"></i> ควบคุมและสั่งการ
+									<i id="i_noti_call" class="fa-solid fa-phone-volume fa-shake theme-notification-call d-none"></i>
+									<i id="i_noti_refuse" class="fa-solid fa-triangle-exclamation fa-bounce theme-notification-refuse d-none"></i>
+								</a>
+							</li>
+                            <li>
+                                <a href="{{ url('/add_area') }}" data-submenu="{{ url('/service_current') }}" data-submenu-2="{{ url('/service_pending') }}" data-submenu-3="{{ url('/service_area') }}" class="sub-menu">
+                                    <i class='far fa-map'></i>
+
+                                    <span>
+                                        &nbsp;พื้นที่บริการ
+                                    </span>
+                                </a>
+                            </li>
+						</ul>
+					</li>
+					<li>
+						<a href="#" class="has-arrow">
+							<div class="parent-icon">
+								<i class="fa-solid fa-chart-pie"></i>
+							</div>
+							<div class="menu-title">วิเคราะห์ข้อมูล</div>
+						</a>
+						<ul>
+							<li> <a href="{{ url('/dashboard_1669_index#command_center_info') }}"><i class='fad fa-book'></i> ข้อมูลเจ้าหน้าที่ศูนย์สั่งการ</a>
+                            </li>
+                            <li> <a href="{{ url('/dashboard_1669_index#sos_help') }}"><i class="fas fa-photo-video"></i> ข้อมูลการขอความช่วยเหลือ</a>
+                            </li>
+						</ul>
+					</li>
 				@endif
 				<!-- SOS HELP CENTER 1669 -->
 
@@ -1310,13 +1000,6 @@
                                 <i class='fad fa-book'></i> วิธีใช้งาน
                             </a>
 						</li>
-                        @if(Auth::user()->id == "1" or Auth::user()->id == "64" or Auth::user()->id == "2" or Auth::user()->organization == 'สพฉ')
-                        <li>
-                            <a href="{{ url('/video_how_to_use') }}">
-                                <i class="fa-solid fa-clapperboard-play"></i> วิดีโอสอนการใช้งาน
-                            </a>
-                        </li>
-                        @endif
 						<li>
                             <a href="{{ url('/partner_media?menu=all') }}">
                                 <i class="fas fa-photo-video"></i> สื่อประชาสัมพันธ์
@@ -1333,7 +1016,7 @@
 
 				<!-- FOR DEV -->
 				@if(Auth::check())
-					@if(Auth::user()->id == "1" or Auth::user()->id == "64" or Auth::user()->id == "2" or Auth::user()->id == "3" or Auth::user()->id == "4")
+					@if(Auth::user()->id == "1")
 						<li>
 							<a href="#" class="has-arrow">
 								<div class="parent-icon">
@@ -1358,8 +1041,6 @@
 								</li>
 							</ul>
 						</li>
-
-
 					@endif
 				@endif
 				<!-- END FOR DEV -->
@@ -1380,30 +1061,10 @@
 					</div>
 					<div class="top-menu-left d-none d-lg-block">
 						<ul class="nav">
-						  	<li class="nav-item">
-								<a class="nav-link" href="tel:020277856">
-									<i class='bx bx-phone'></i>
-                            	</a>
-						  	</li>
-                          	<li class="nav-item" style="margin-top:-3px;margin-left:-10px;">
-                            	<a class="nav-link" href="tel:020277856">
-                                	<span  style="font-size:15px;margin-top:15px;">02-0277856</span>
-                            	</a>
-						  	</li>
-						  	<li class="nav-item">
-								<a class="nav-link" href="mailto:contact.viicheck@gmail.com">
-									<i class='bx bx-envelope'></i>
-                            	</a>
-						  	</li>
-                          	<li class="nav-item" style="margin-top:-3px;margin-left:-10px;">
-                            	<a class="nav-link" href="mailto:contact.viicheck@gmail.com">
-                                	<span style="font-size:15px;">contact.viicheck@gmail.com</span>
-                            	</a>
-						  	</li>
+                            <!--  -->
 					  	</ul>
 				 	</div>
 
-					@if(Auth::user()->organization == "สพฉ" )
 					<style>
 
 					.tabsStatusOfficer {
@@ -1575,157 +1236,122 @@
 							<span class="glider"></span>
 						</div>
 					</div>
-                    @else
-                    <div class="containerStatusofficer ms-auto">
-                        <div class="tabsStatusOfficer">
-                            <!-- ปุ่ม modal -->
-                        </div>
-                    </div>
-					@endif
+                    
+			 		<!-- switch officer 1669 -->
+					<style>
+						.toggle-switch {
+						  position: relative;
+						  display: inline-block;
+						  width: 80px;
+						  height: 40px;
+						  cursor: pointer;
+						}
 
-				 		<!-- switch officer 1669 -->
-						@if(Auth::user()->organization == "สพฉ" )
-							<style>
-								.toggle-switch {
-								  position: relative;
-								  display: inline-block;
-								  width: 80px;
-								  height: 40px;
-								  cursor: pointer;
-								}
+						.toggle-switch input[type="checkbox"] {
+						  display: none;
+						}
 
-								.toggle-switch input[type="checkbox"] {
-								  display: none;
-								}
+						.toggle-switch-background {
+						  position: absolute;
+						  top: 0;
+						  left: 0;
+						  width: 100%;
+						  height: 100%;
+						  background-color: #ddd;
+						  border-radius: 20px;
+						  box-shadow: inset 0 0 0 2px #ccc;
+						  transition: background-color 0.3s ease-in-out;
+						}
 
-								.toggle-switch-background {
-								  position: absolute;
-								  top: 0;
-								  left: 0;
-								  width: 100%;
-								  height: 100%;
-								  background-color: #ddd;
-								  border-radius: 20px;
-								  box-shadow: inset 0 0 0 2px #ccc;
-								  transition: background-color 0.3s ease-in-out;
-								}
+						.toggle-switch-handle {
+						  position: absolute;
+						  top: 5px;
+						  left: 5px;
+						  width: 30px;
+						  height: 30px;
+						  background-color: #fff;
+						  border-radius: 50%;
+						  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+						  transition: transform 0.3s ease-in-out;
+						}
 
-								.toggle-switch-handle {
-								  position: absolute;
-								  top: 5px;
-								  left: 5px;
-								  width: 30px;
-								  height: 30px;
-								  background-color: #fff;
-								  border-radius: 50%;
-								  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-								  transition: transform 0.3s ease-in-out;
-								}
+						.toggle-switch::before {
+						  content: "";
+						  position: absolute;
+						  top: -25px;
+						  right: -35px;
+						  font-size: 12px;
+						  font-weight: bold;
+						  color: #aaa;
+						  text-shadow: 1px 1px #fff;
+						  transition: color 0.3s ease-in-out;
+						}
 
-								.toggle-switch::before {
-								  content: "";
-								  position: absolute;
-								  top: -25px;
-								  right: -35px;
-								  font-size: 12px;
-								  font-weight: bold;
-								  color: #aaa;
-								  text-shadow: 1px 1px #fff;
-								  transition: color 0.3s ease-in-out;
-								}
+						.toggle-switch input[type="checkbox"]:checked + .toggle-switch-handle {
+						  transform: translateX(45px);
+						  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 0 0 3px #05c46b;
+						}
 
-								.toggle-switch input[type="checkbox"]:checked + .toggle-switch-handle {
-								  transform: translateX(45px);
-								  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 0 0 3px #05c46b;
-								}
+						.toggle-switch input[type="checkbox"]:checked + .toggle-switch-background {
+						  background-color: #05c46b;
+						  box-shadow: inset 0 0 0 2px #04b360;
+						}
 
-								.toggle-switch input[type="checkbox"]:checked + .toggle-switch-background {
-								  background-color: #05c46b;
-								  box-shadow: inset 0 0 0 2px #04b360;
-								}
+						.toggle-switch input[type="checkbox"]:checked + .toggle-switch:before {
+						  content: "On";
+						  color: #05c46b;
+						  right: -15px;
+						}
 
-								.toggle-switch input[type="checkbox"]:checked + .toggle-switch:before {
-								  content: "On";
-								  color: #05c46b;
-								  right: -15px;
-								}
+						.toggle-switch input[type="checkbox"]:checked + .toggle-switch-background .toggle-switch-handle {
+						  transform: translateX(40px);
+						}
 
-								.toggle-switch input[type="checkbox"]:checked + .toggle-switch-background .toggle-switch-handle {
-								  transform: translateX(40px);
-								}
+					</style>
 
-							</style>
-							<!-- <div class="ms-auto">
-								<label class="toggle-switch">
-								<input type="checkbox" id="checkbox_switch_officer_1669" onclick="click_switch_officer_1669();">
-								<div class="toggle-switch-background">
-									<div class="toggle-switch-handle"></div>
-								</div>
-								</label>
-								<span id="show_text_status_officer">
-								</span>
-							</div> -->
-							<script>
+					<script>
 
-								document.addEventListener('DOMContentLoaded', (event) => {
-							        // console.log("START");
-							        fetch("{{ url('/') }}/api/check_status_officer_1669" + '/' + '{{ Auth::user()->id }}' + '/' + '{{ Auth::user()->sub_organization }}')
-							            .then(response => response.json())
-							            .then(result => {
-							            	// console.log(result)
-							            	change_switch_officer_to(result['status']);
-							        });
+						document.addEventListener('DOMContentLoaded', (event) => {
+					        // console.log("START");
+                            change_switch_officer_to("Standby");
+					    });
 
-							    });
-
-								function click_switch_officer_1669(){
-									let switch_officer = document.querySelector('#officerStandby');
-									let officer_helping = document.querySelector('#officerHelping');
+						function click_switch_officer_1669(){
+							let switch_officer = document.querySelector('#officerStandby');
+							let officer_helping = document.querySelector('#officerHelping');
 
 
-									if (switch_officer.checked) {
-							            change_switch_officer_to('Standby');
+							if (switch_officer.checked) {
+					            change_switch_officer_to('Standby');
 
-									} else if (officer_helping.checked){
-							            change_switch_officer_to('Helping');
-									}else{
-							            change_switch_officer_to('');
-									}
-								}
+							} else if (officer_helping.checked){
+					            change_switch_officer_to('Helping');
+							}else{
+					            change_switch_officer_to('');
+							}
+						}
 
-								function change_switch_officer_to(change_to){
+						function change_switch_officer_to(change_to){
 
-									if (change_to == 'Standby'){
-										document.querySelector('#officerStandby').checked = true ;
-										// document.querySelector('.toggle-switch-background').setAttribute('style' ,
-										// 'background-color: #05c46b;box-shadow: inset 0 0 0 2px #04b360;');
-										// document.querySelector('#show_text_status_officer').innerHTML = 'พร้อมช่วยเหลือ' ;
-									}else if(change_to == 'Helping'){
-										document.querySelector('#officerHelping').checked = true ;
-										// document.querySelector('.toggle-switch-background').setAttribute('style' ,
-										// 'background-color: #fac516;box-shadow: inset 0 0 0 2px #ffde70;');
-										// document.querySelector('#show_text_status_officer').innerHTML = 'กำลังช่วยเหลือ' ;
-									}else{
-										document.querySelector('#officerNAN').setAttribute("checked", "") ;
-										// document.querySelector('.toggle-switch-background').setAttribute('style' ,
-										// 'background-color: #ddd;box-shadow: inset 0 0 0 2px #ccc;');
-										// document.querySelector('#show_text_status_officer').innerHTML = 'ไม่อยู่' ;
-										change_to = 'null' ;
-									}
+							if (change_to == 'Standby'){
+								document.querySelector('#officerStandby').checked = true ;
+							}else if(change_to == 'Helping'){
+								document.querySelector('#officerHelping').checked = true ;
+							}else{
+								document.querySelector('#officerNAN').setAttribute("checked", "") ;
+								change_to = 'null' ;
+							}
 
-									fetch("{{ url('/') }}/api/change_status_officer_to" + '/' + '{{ Auth::user()->id }}' + '/' + '{{ Auth::user()->sub_organization }}' + '/' + change_to)
-							            .then(response => response.text())
-							            .then(result => {
-							            	// console.log(result)
-							        });
+							fetch("{{ url('/') }}/api/change_status_officer_to" + '/' + '{{ Auth::user()->id }}' + '/' + '{{ Auth::user()->sub_organization }}' + '/' + change_to)
+					            .then(response => response.text())
+					            .then(result => {
+					            	// console.log(result)
+					        });
 
-								}
-							</script>
+						}
+					</script>
 
-						@endif
-						<!-- END switch officer 1669 -->
-
-
+				    <!-- END switch officer 1669 -->
 
 					<div class="search-bar flex-grow-1 header-notifications-list header-message-list">
 						<div class="position-relative search-bar-box">
@@ -1740,11 +1366,6 @@
 
 					 <div class="user-box dropdown">
 						<a class="d-flex align-items-center nav-link dropdown-toggle dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        	@if(!empty(Auth::user()->photo))
-                                <img alt="" style="width:60px;" class="img-circle img-thumbnail isTooltip" src="{{ url('storage')}}/{{ Auth::user()->photo }}" data-original-title="Usuario">
-                            @else
-                                <img src="{{ asset('/partner/images/user/avatar-1.jpg') }}" style="width:60px;" class="img-radius" alt="User-Profile-Image">
-                            @endif
 							<div class="user-info ps-3">
 								<p class="user-name mb-0" style="max-width:200px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
                                     {{ Auth::user()->name }}
@@ -1787,181 +1408,12 @@
 		<!--end overlay-->
 		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
 		<!--End Back To Top Button-->
-		<!-- <footer class="page-footer"> -->
-			<!-- <p class="mb-0">Copyright © 2021. All right reserved.</p> -->
-		<!-- </footer> -->
+		<footer class="page-footer">
+			<p class="mb-0">Power By ViiCHECK</p>
+		</footer>
 	</div>
 	<!--end wrapper-->
-	<!--start switcher-->
-	<div class="switcher-wrapper">
-		@if(Auth::check())
-            @if(Auth::user()->role == "admin-partner")
-                @if(Auth::user()->organization != "สพฉ")
-				<div id="div_switcher" class="switcher-btn" onclick="change_color();" style="">
-					<i class='bx bx-cog bx-spin'></i>
-				</div>
-                @endif
-			@endif
-		@endif
-		<div class="switcher-body">
-			<div class="d-flex align-items-center">
-				<h5 class="mb-0 text-uppercase">เครื่องมือปรับแต่งธีม</h5>
-				<button type="button" class="btn-close ms-auto close-switcher" aria-label="Close"></button>
-			</div>
-			<hr/>
-			<h6 class="mb-0">
-				พื้นหลังส่วนหัว
-				<i class="fas fa-sync-alt btn" style="float: right;" onclick="random_color();"></i>
-			</h6>
-			<hr/>
-			<div class="header-colors-indigators">
-				<div class="row row-cols-auto g-3">
-					<div class="col">
-						<div class="indigator" id="color_item_1"></div>
-					</div>
-					<div class="col">
-						<div class="indigator" id="color_item_2"></div>
-					</div>
-					<div class="col">
-						<div class="indigator" id="color_item_3"></div>
-					</div>
-					<div class="col">
-						<div class="indigator" id="color_item_4"></div>
-					</div>
-					<div class="col">
-						<div class="indigator" id="color_item_5"></div>
-					</div>
-					<div class="col">
-						<div class="indigator" id="color_item_6"></div>
-					</div>
-					<div class="col">
-						<div class="indigator" id="color_item_7"></div>
-					</div>
-					<div class="col">
-						<div class="indigator" id="color_item_8"></div>
-					</div>
-					<div class="col">
-						<div class="row">
-							<div class="col-5">
-								<div style="float: right;" class="indigator" id="color_item_Ex"></div>
-							</div>
-							<div class="col-7">
-								<input style="margin-top:5px;" type="text" class="form-control" id="code_color" name="code_color" placeholder="color code" oninput="add_color_item_Ex();">
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<hr/>
-			<h6 class="mb-0">พื้นหลังแถบเมนู</h6>
-			<hr/>
-			<div class="header-colors-indigators">
-				<div class="row row-cols-auto g-3">
-					<div class="col">
-						<div class="indigator sidebarcolor1" id="sidebarcolor1" onclick="add_input_color_menu('1')"></div>
-					</div>
-					<div class="col">
-						<div class="indigator sidebarcolor2" id="sidebarcolor2" onclick="add_input_color_menu('2')"></div>
-					</div>
-					<div class="col">
-						<div class="indigator sidebarcolor3" id="sidebarcolor3" onclick="add_input_color_menu('3')"></div>
-					</div>
-					<div class="col">
-						<div class="indigator sidebarcolor4" id="sidebarcolor4" onclick="add_input_color_menu('4')"></div>
-					</div>
-					<div class="col">
-						<div class="indigator sidebarcolor5" id="sidebarcolor5" onclick="add_input_color_menu('5')"></div>
-					</div>
-					<div class="col">
-						<div class="indigator sidebarcolor6" id="sidebarcolor6" onclick="add_input_color_menu('6')"></div>
-					</div>
-					<div class="col">
-						<div class="indigator sidebarcolor7" id="sidebarcolor7" onclick="add_input_color_menu('7')"></div>
-					</div>
-					<div class="col">
-						<div class="indigator sidebarcolor8" id="sidebarcolor8" onclick="add_input_color_menu('8')"></div>
-					</div>
-				</div>
-			</div>
-			<hr/>
-			<hr/>
-			<h6 type="button" class="mb-0" data-toggle="collapse" data-target="#collapse_set_group_line" aria-expanded="false" aria-controls="collapse_set_group_line">
-				<i class="fab fa-line text-success" style="font-size: 25px;"></i> ตั้งค่ากลุ่มไลน์
-				<a type="button" style="float:right;" data-toggle="collapse" data-target="#collapse_set_group_line" aria-expanded="false" aria-controls="collapse_set_group_line">
-                <i class="fas fa-sort-down"></i>
-            </a>
-			</h6>
-            <div class="collapse" id="collapse_set_group_line">
-            	<br>
-                <ul id="ul_group_line" class="list-group">
 
-				</ul>
-            </div>
-			<hr/>
-		</div>
-	</div>
-	<!--end switcher-->
-
-	<!-- modal set_group_line -->
-
-	<button id="btn_modal_set_group_line" class="d-none" data-toggle="modal" data-target="#set_group_line">
-	</button>
-
-	<div class="modal fade" id="set_group_line" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-	  <div class="modal-dialog modal-dialog-centered">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h5 class="modal-title" id="staticBackdropLabel">
-	        	ตั้งค่ากลุ่มไลน์ <b><span id="span_name_line" class="text-info"></span></b>
-	        </h5>
-	        <button id="btn_close_set_group" type="button" class="close btn" data-dismiss="modal" aria-label="Close">
-	          <span aria-hidden="true">&times;</span>
-	        </button>
-	      </div>
-	      <div class="modal-body">
-	        <div class="col-12">
-	            <div class="row">
-	                <div class="col-12">
-	                    <label class="control-label">ชื่อกลุ่มไลน์</label>
-	                    <input class="form-control" type="text" name="input_name_group_line" id="input_name_group_line" value="">
-	                    <hr>
-	                </div>
-	                <div class="col-6">
-	                    <label id="label_old_language" class="control-label"></label>
-	                    <select class="form-control" name="input_language" id="input_language" required>
-	                        <option id="old_language" value="" selected>- เลือกภาษา -</option>
-	                        <option value="th" >ไทย (th)</option>
-	                        <option value="en" >English (en)</option>
-	                        <option value="zh-TW" >中國人 (zh-TW)</option>
-	                        <option value="ja" >日本 (ja)</option>
-	                        <option value="ko" >한국인 (ko)</option>
-	                        <option value="es" >Español (es)</option>
-	                        <option value="lo" >ພາສາລາວ (lo)</option>
-	                        <option value="my" >မြန်မာ (my)</option>
-	                        <option value="de" >Deutsch (de)</option>
-	                        <option value="hi" >हिन्दी (hi)</option>
-	                        <option value="ar" >عربي (ar)</option>
-	                        <option value="ru" >русский (ru)</option>
-	                        <option value="zh-CN" >中国人 (zh-CN)</option>
-	                    </select>
-	                </div>
-	                <div class="col-6">
-	                    <label id="label_old_time_zone" class="control-label"></label>
-	                    <select class="form-control" name="input_time_zone" id="input_time_zone" required>
-	                        <option id="old_time_zone" value="" selected>- เลือก Time zone -</option>
-
-	                    </select>
-	                </div>
-	            </div>
-	        </div>
-	      </div>
-	      <div class="modal-footer">
-	        <button id="btn_cf_set" type="button" class="btn btn-info text-white" data-dismiss="modal" >ยืนยัน</button>
-	      </div>
-	    </div>
-	  </div>
-	</div>
-	<!-- end modal set_group_line -->
 
     <!-- Button trigger modal -->
 	<button id="btn_modal_notify" type="button" class="btn btn-primary d-none" data-toggle="modal" data-target="#modal_notify">
@@ -2203,30 +1655,7 @@
 
                                 <!-- div tag a เพื่อไปสู่เคสหลัก -->
                                 <div id="div_tag_a_to_case_main" class="d-"></div>
-
-	                            <!-- <div class="data-officer p-3 mb-3 ps ps--active-y">
-	                                <div id="div_operating_id_1" onclick="joint_sos_view_data_marker(1,'กู้ภัยมืดแบบมืดเลยมืดมาก มืดจริงๆนะ ไม่ได้โม้ มืดตืดตื๋อ',2.07,'FR',14.187535,101.164581);">
-	                                    <div class="data-officer-item d-flex align-items-center border-top border-bottom p-2 cursor-pointer">
-	                                        <div class="d-md-flex align-items-center email-message px-3 py-1">
-	                                            <div class="d-flex align-items-center">
-	                                                <input class="form-check-input" id="test" type="checkbox" value="">
-	                                            </div>
-	                                            <div class="ms-auto">
-	                                                <div class="d-flex align-items-center p-2 cursor-pointer">
-	                                                    <div class="level FR d-flex align-items-center m-2">
-	                                                        <center> FR </center>
-	                                                    </div>
-	                                                    <div style="margin-left: 10px;">
-	                                                        <h6 class="mb-1 font-14">กู้ภัยมืดแบบมืดเลยมืดมาก มืดจริงๆนะ ไม่ได้โม้ มืดตืดตื๋อ (เรือ ป.1)</h6>
-	                                                        <p class="mb-0 font-14">เจ้าหน้าที่ : TEERASAK3</p>
-	                                                        <p class="mb-0 font-13 text-secondary">ระยะห่าง(รัศมี) ≈ 2.07 กม. </p>
-	                                                    </div>
-	                                                </div>
-	                                            </div>
-	                                        </div>
-	                                    </div>
-	                                </div>
-	                            </div> -->
+                                
 	                            <div class="div_bottom" style="margin-top: auto;">
 	                                <center>
 	                                    <p id="show_error_noselect_officer_ask_more" class="text-danger d-none">กรุณาเลือกหน่วยปฏิบัติการ</p>
@@ -2457,11 +1886,8 @@
 		        	}
 		        }, delayInMilliseconds);
 
-                if (result[0]['name'] === "สพฉ"){
-                	document.querySelector('#h4_name_partner').innerHTML = "ศูนย์สั่งการ";
-                }else{
-                	document.querySelector('#h4_name_partner').innerHTML = result[0]['name'];
-                }
+                
+                document.querySelector('#h4_name_partner').innerHTML = result[0]['name'];
 
                 document.querySelector('#color_of_partner').value = result[0]['name'];
                 document.querySelector('#check_name_partner').value = result[0]['name'];
@@ -2505,7 +1931,7 @@
                 }
         });
 
-        @if(Auth::check() && Auth::user()->organization != 'สพฉ')
+        @if(Auth::check())
 	        fetch("{{ url('/') }}/api/check_data_partner_premium/" + user_organization)
 	            .then(response => response.json())
 	            .then(result => {
@@ -2920,21 +2346,6 @@
             alert("ตั้งค่ากลุ่มไลน์ "+ input_name_group_line + " เรียบร้อยแล้ว");
         }, delay);
     }
-
-    // function check_sos_js100(){
-    //     // console.log("CHECK");
-    //     fetch("{{ url('/') }}/api/check_new_sos_js100_by_theme" )
-    //         .then(response => response.json())
-    //         .then(result => {
-    //             // console.log(result);
-
-    //             if (result['length'] > 0) {
-    //             	document.querySelector('#div_menu_alert_js100').classList.remove('d-none');
-    //             }else{
-    //             	document.querySelector('#div_menu_alert_js100').classList.add('d-none');
-    //             }
-    //     });
-    // }
 
 	function check_submenu(){
 		let menu = $('.sub-menu');

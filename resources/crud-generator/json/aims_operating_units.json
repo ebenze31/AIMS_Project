@@ -1,0 +1,28 @@
+{
+    "fields": [
+        {
+            "name": "name_unit",
+            "type": "string"
+        },
+        {
+            "name": "type_unit",
+            "type": "string"
+        },
+        {
+            "name": "status",
+            "type": "string"
+        },
+        {
+            "name": "creator",
+            "type": "string"
+        },
+        {
+            "name": "aims_partner_id",
+            "type": "string"
+        },
+        {
+            "name": "aims_area_id",
+            "type": "string"
+        }
+    ]
+}

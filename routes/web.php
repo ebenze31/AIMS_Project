@@ -813,3 +813,9 @@ Route::get('sos_partner_officers/create', 'Sos_partner_officersController@add_ne
 Route::get('register_new_officer_sos', 'Sos_partner_officersController@register_new_officer_sos'); // สำหรับลงทะเบียนเจ้าหน้าที่ by junior dear
 Route::get('register_new_officer_qr_code', 'Sos_partner_officersController@register_new_officer_qr_code'); // สำหรับลงทะเบียนเจ้าหน้าที่ by junior dear
 
+
+Route::resource('aims_partners', 'Aims_partnersController');
+Route::resource('aims_areas', 'Aims_areasController');
+Route::resource('aims_commands', 'Aims_commandsController');
+Route::resource('aims_operating_units', 'Aims_operating_unitsController');
+Route::resource('aims_operating_officers', 'Aims_operating_officersController');
