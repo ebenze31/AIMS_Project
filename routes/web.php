@@ -4,131 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QrCodeGeneratorController;
 use Illuminate\Support\Facades\Cookie;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
-
-Route::get('/clear-cookies', function (Request $request) {
-    // ลบคุกกี้จากโดเมนหลัก
-    Cookie::queue(Cookie::forget('laravel_session'));
-
-    // ลบคุกกี้จากโดเมนย่อย (เช่น .example.com)
-    Cookie::queue(Cookie::forget('laravel_session', '/', '.viicheck.com'));
-
-    return "Cookies cleared!";
-});
-
-
-//DEMO
-Route::get('/demo_sos_1669_api', 'Sos_help_centerController@demo');
-
-/*
-|--------------------------------------------------------------------------
-| ViiFix
-|--------------------------------------------------------------------------
-*/
-
-// Test รับเรื่องแจ้งซ่อม
-Route::get('/demo_repair_admin_index', function () {
-    return view('test_repair_admin/test_repair_admin_index');
-});
-Route::get('/demo_repair_admin_view', function () {
-    return view('test_repair_admin/test_repair_admin_view');
-});
-// Test การจัดการพื้นที่ดูแล
-Route::get('/demo_management_area', function () {
-    return view('test_repair_admin/test_management_area');
-});
-Route::get('/demo_management_view', function () {
-    return view('test_repair_admin/test_management_view');
-});
-
-// Test การจัดการหมวดหมู่และกลุ่มไลน์
-Route::get('/demo_categorie_repair_index', function () {
-    return view('test_repair_admin/test_categorie_repair_index');
-});
-Route::get('/demo_categorie_repair_create', function () {
-    return view('test_repair_admin/test_categorie_repair_create');
-});
-Route::get('/demo_categorie_repair_view', function () {
-    return view('test_repair_admin/test_categorie_repair_view');
-});
-// Test ดูช่วงเวลาการแจ้งซ่อมบำรุง
-Route::get('/demo_repair_timeline', function () {
-    return view('test_repair_admin/test_repair_timeline');
-});
-// Test ตรวจสอบคุณภาพการซ่อม
-Route::get('/demo_repair_quality_index', function () {
-    return view('test_repair_admin/test_repair_quality_index');
-});
-Route::get('/demo_repair_quality_view', function () {
-    return view('test_repair_admin/test_repair_quality_view');
-});
-Route::get('/demo_detail_repair_quality', function () {
-    return view('test_repair_admin/demo_detail_repair_quality');
-});
-// Test การจัดการวัสดุ / อุปกรณ์ที่ใช้ในการซ่อม
-Route::get('/demo_repair_mat_index', function () {
-    return view('test_repair_admin/test_repair_mat_index');
-});
-Route::get('/demo_repair_mat_view', function () {
-    return view('test_repair_admin/test_repair_mat_view');
-});
-// Test การซ่อมบำรุง
-Route::get('/demo_repair_maintenance_index', function () {
-    return view('test_repair_admin/test_repair_maintenance_index');
-});
-Route::get('/demo_repair_maintenance_view', function () {
-    return view('test_repair_admin/test_repair_maintenance_view');
-});
-
-
-//VIIFIX เจ้าหน้าที่
-Route::get('/demo_officer_maintain', 'Maintain_notisController@Maintain_officer');
-
-/*
-|--------------------------------------------------------------------------
-| End ViiFix
-|--------------------------------------------------------------------------
-*/
-
-
-// VIICHECK.COM
-// Route::get('/', 'Home_pageController@home_page');
-// Route::get('/home', 'Home_pageController@home_page');
-// Route::get('/member', 'ProfileController@member');
-
 //วิธีใช้
 Route::get('/how_to_use', function () {
     return view('how_to_use/how_to_use');
 });
 
-Route::get('/test_pdf_v1', function () {
-    return view('test_pdf_v1');
-});
-
-Route::get('/test_pdf_blade', function () {
-    return view('/report/PDF/test_export_pdf');
-});
-
-Route::get('/test_get_partners', function () {
-    return view('/test_get_partners');
-});
-
-Route::get('/check_user_from/{name}', 'PartnerController@check_user_from');
-
-
-Route::get('/share_1669', function () {
-    return view('share_to_facebook/share_1669');
-});
 
 // registe re-to line
 // https://www.viicheck.com/login/line/to_line_oa
@@ -432,21 +312,6 @@ Route::get('officers/switch_standby_login', 'Sos_help_centerController@switch_st
 Route::get('add_new_officers/{operating_unit_id}', 'Sos_help_centerController@add_new_officers');
 Route::get('register_new_officer', 'Sos_help_centerController@register_new_officer');
 
-//partner
-// Route::middleware(['auth', 'role:partner'])->group(function () {
-
-// 	Route::get('/partner_theme', 'PartnerController@partner_theme');
-
-// 	Route::get('/register_cars_partner', 'PartnerController@register_cars');
-// 	Route::get('/guest_partner', 'PartnerController@guest_partner');
-// 	Route::get('/partner_guest_latest', 'PartnerController@partner_guest_latest');
-// 	Route::get('/sos_partner', 'PartnerController@view_sos');
-// 	// Route::get('/sos_insurance', 'PartnerController@sos_insurance');
-// 	Route::get('/sos_detail_partner', 'PartnerController@sos_detail_chart');
-
-
-// });
-// end partner
 
 Route::middleware(['auth'])->group(function () {
 	Route::resource('register_car', 'Register_carController');
@@ -469,10 +334,6 @@ Route::middleware(['auth'])->group(function () {
 	    return view('check_in/check_in_finish');
 	});
 
-	// -------- CONDO ---------
-	Route::get('select_condo', 'Partner_condoController@select_condo');
-	Route::get('/data_user_of_condo', 'Partner_condoController@data_user_of_condo');
-	Route::resource('notify_repair', 'Notify_repairController')->except(['index','show','edit']);
 
 	// SOS MAP
 	Route::get('/sos_map/add_photo/{id_sos_map}', 'Sos_mapController@sos_map_add_photo');
@@ -505,28 +366,6 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
-Route::get('/edit_act_login/{car_id}', 'Register_carController@edit_act_login');
-Route::get('/sos_login', 'Sos_mapController@sos_login');
-Route::get('/insurance_login', 'Sos_mapController@insurance_login');
-Route::get('/sos_map/rate_help/{id_sos_map}', 'Sos_mapController@rate_help');
-Route::get('/log_in_sos_map_add_photo/{id_sos_map}', 'Sos_mapController@log_in_sos_map_add_photo');
-Route::get('/sos_thank_submit_score/{user_id}', 'Sos_mapController@sos_thank_submit_score');
-
-// Route::get('/sos_map/helper/{id_sos_map}/{organization}','API\SosmapController@sos_helper');
-// Route::get('/sos_map/helper_after_login/{id_sos_map}/{organization}','API\SosmapController@sos_helper_after_login');
-
-Route::get('/insurance_login_facebook', 'Sos_mapController@insurance_login_facebook');
-Route::get('/sos_login_facebook', 'Sos_mapController@sos_login_facebook');
-
-Route::get('/market', 'CarController@main');
-Route::get('/market/car', 'CarController@index');
-Route::get('/image/{id}','CarController@image');
-Route::get('/market/car/{id}','CarController@show');
-
-Route::get('/market/motercycle', 'MotercleyviewController@index');
-Route::get('/market/motercycle/{id}', 'MotercleyviewController@show');
-
-
 // AUTO LOHIN FROM FLEX LINE
 	Route::get('/edit_profile', 'ProfileController@edit_profile');
 	Route::get('/edit_profile2', 'ProfileController@edit_profile2');
@@ -557,89 +396,11 @@ Route::resource('mylog', 'MylogController');
 
 Route::get('/modal', 'GuestController@modal');
 
-Route::get('/menu', function () {
-    return view('3menu');
-});
-
-Route::get('/thx_guest', function () {
-    return view('guest/thx_guest');
-});
-
-Route::get('/thx_guest_google', function () {
-    return view('guest/thx_guest_google');
-});
-
-Route::get('/thx', function () {
-    return view('not_comfor/thx');
-});
-
-Route::resource('news', 'NewsController')->except(['create']);
-Route::get('/reporter', 'NewsController@reporter');
-Route::get('/near_news', 'NewsController@near_news');
-Route::get('/my_news/{user_id}', 'NewsController@my_news');
-Route::get('/report/{id}/{content}', 'NewsController@report');
-
-Route::resource('promotion', 'PromotionController');
-
-Route::get('/middle_price_motorcycle', 'Middle_price_carController@index_motor');
-Route::resource('middle_price_car', 'Middle_price_carController')->except(['create','show','edit']);
-// SosController
-// Route::resource('sos', 'SosController');
-
-//เหตุด่วนเหตุร้าย
-Route::get('/disaster2', 'SosController@disaster2');
-//ไฟไหม้รถ
-Route::get('/car_fire', 'SosController@car_fire');
-//หน่วยแพทย์กู้ชีวิต
-Route::get('/life_saving', 'SosController@life_saving');
-//จส100
-Route::get('/js_100', 'SosController@js_100');
-//สายด่วนทางหลวง
-Route::get('/highway', 'SosController@highway');
-//ตำรวจท่องเที่ยว
-Route::get('/tourist_police', 'SosController@tourist_police');
-//ทนายความ
-Route::get('/lawyers', 'SosController@lawyers');
-// ป่อเต็กตึ๊ง
-Route::get('/pok_tek_tung', 'SosController@pok_tek_tung');
-
-
 // END SosController
-
-Route::resource('organization', 'OrganizationController')->except(['index','show']);
-
-Route::get('/sos_thank', function () {
-
-    return view('sos_map/sos_thank');
-});
-
-Route::get('/sos_thank_area', function () {
-
-    return view('sos_map/sos_thank_area');
-});
-
-Route::get('/test_test', function () {
-
-    return view('test_test');
-});
-
-Route::get('/test_link_line', function () {
-
-    return view('test_link_line');
-});
-
-Route::resource('cancel_-profile', 'Cancel_ProfileController');
-
-Route::resource('cancel_after_6_month', 'Cancel_after_6_monthController');
-
 
 
 // CHECK IP
 Route::get('/check_ip', 'Home_pageController@check_ip');
-
-
-Route::resource('d-p_tu_student', 'DP_tu_studentController');
-Route::resource('mylog_fb', 'Mylog_fbController');
 
 Route::get('qr-code-g', function () {
 
@@ -651,14 +412,6 @@ Route::get('qr-code-g', function () {
 
 });
 
-Route::get('/select_register', function () {
-
-    return view('select_register');
-});
-
-// ------- CONDO -------
-Route::get('/login_line/notify_repair', 'Notify_repairController@login_line');
-Route::get('/notify_repair/{id}/NOCF', 'Notify_repairController@notify_repair_NOCF');
 
 //set_new_richMenu
 Route::get('set_new_richMenu', 'API\LineApiController@set_new_richMenu');
@@ -814,6 +567,9 @@ Route::get('register_new_officer_sos', 'Sos_partner_officersController@register_
 Route::get('register_new_officer_qr_code', 'Sos_partner_officersController@register_new_officer_qr_code'); // สำหรับลงทะเบียนเจ้าหน้าที่ by junior dear
 
 
+
+
+// ============> AIMS <============ //
 Route::resource('aims_partners', 'Aims_partnersController');
 Route::resource('aims_areas', 'Aims_areasController');
 Route::resource('aims_commands', 'Aims_commandsController');
