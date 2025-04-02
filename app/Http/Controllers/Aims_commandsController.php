@@ -7,6 +7,8 @@ use App\Http\Requests;
 
 use App\Models\Aims_command;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Aims_commandsController extends Controller
 {
@@ -123,5 +125,26 @@ class Aims_commandsController extends Controller
         Aims_command::destroy($id);
 
         return redirect('aims_commands')->with('flash_message', 'Aims_command deleted!');
+    }
+
+    public function all_name_user_partner(Request $request)
+    {
+        $data_user = Auth::user();
+
+        $partner_of_user = Aims_command::where('user_id' , $data_user->id)->first();
+        $member_commands = DB::table('aims_commands')
+            ->where('aims_commands.aims_partner_id', '=' ,$partner_of_user->aims_partner_id)
+            ->leftjoin('users', 'aims_commands.user_id', '=', 'users.id')
+            ->select(
+                'aims_commands.name_officer_command as name_officer_command',
+                'aims_commands.number as number',
+                'aims_commands.status as status',
+                'aims_commands.creator as creator',
+                'users.phone as user_phone',
+                'users.photo as user_photo',
+            )
+            ->get();
+        
+        return view('aims_commands.member_command', compact('member_commands'));
     }
 }

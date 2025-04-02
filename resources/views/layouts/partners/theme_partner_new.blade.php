@@ -17,13 +17,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 	<!--favicon-->
-	<link rel="shortcut icon" href="{{ asset('/img/logo/logo_x-icon.png') }}" type="image/x-icon" />
+	<link rel="shortcut icon" href="{{ asset('/partner_new/images/logo/aims full logo.png') }}" type="image/x-icon" />
 	<!--plugins-->
 	<link href="{{ asset('partner_new/plugins/simplebar/css/simplebar.css') }}" rel="stylesheet" />
 	<link href="{{ asset('partner_new/plugins/perfect-scrollbar/css/perfect-scrollbar.css') }}" rel="stylesheet" />
 	<link href="{{ asset('partner_new/plugins/metismenu/css/metisMenu.min.css') }}" rel="stylesheet" />
-	<link href="{{ asset('/partner_new/plugins/highcharts/css/highcharts.css') }}" rel="stylesheet" />
-	<link href="{{ asset('/partner_new/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" />
+	<link href="{{ asset('partner_new/plugins/highcharts/css/highcharts.css') }}" rel="stylesheet" />
+	<link href="{{ asset('partner_new/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" />
 	<link href="{{ asset('partner_new/plugins/smart-wizard/css/smart_wizard_all.min.css') }}" rel="stylesheet" type="text/css" />
 	<link rel="stylesheet" href="{{ asset('partner_new/plugins/notifications/css/lobibox.min.css') }}" />
 	<link href="{{ asset('/partner_new/plugins/datatable/css/dataTables.bootstrap5.min.css') }}" rel="stylesheet" />
@@ -59,7 +59,7 @@
     <!-- datatables -->
     {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" /> --}}
 
-	<title id="title_theme">Partner Viicheck</title>
+	<title id="title_theme">AIMS</title>
 
 	<style>
 		.main-shadow{
@@ -1023,7 +1023,7 @@
 								<div class="parent-icon">
 									<i class="fa-solid fa-code text-danger"></i>
 								</div>
-								<div class="menu-title">FOR DEV ViiCHECK</div>
+								<div class="menu-title">FOR DEV</div>
 							</a>
 							<ul>
 								<li>
@@ -1361,7 +1361,7 @@
 		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
 		<!--End Back To Top Button-->
 		<footer class="page-footer">
-			<p class="mb-0">Power By ViiCHECK</p>
+			<p class="mb-0">Power By 2B-Green</p>
 		</footer>
 	</div>
 	<!--end wrapper-->
@@ -1738,7 +1738,7 @@
         }
 
         let user_id = "{{ Auth::user()->id }}";
-        
+
         fetch("{{ url('/') }}/api/change_status_command" + '/' + change_to + '/' + user_id)
             .then(response => response.text())
             .then(result => {

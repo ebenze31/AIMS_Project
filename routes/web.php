@@ -159,9 +159,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 //admin-partner
 Route::middleware(['auth', 'role:admin-partner,partner'])->group(function () {
 
+	// ============> AIMS <============ //
 	Route::get('/', 'PartnerController@partner_index');
 	Route::get('/home', 'PartnerController@partner_index');
 	Route::get('/member', 'ProfileController@member');
+
+
+	Route::get('all_name_user_partner', 'Aims_commandsController@all_name_user_partner');
+	// ============> END AIMS <============ //
 
 	Route::get('/view_map_officer_all', 'API\PartnersController@view_map_officer_all');
 	Route::get('/view_map_officer_area', 'API\PartnersController@view_map_officer_area');
@@ -258,7 +263,6 @@ Route::middleware(['auth', 'role:admin-partner,partner'])->group(function () {
 	Route::get('sos_help_center/{sos_id}/rate_case', 'Sos_help_centerController@rate_case');
 	Route::get('sos_help_center/{sos_id}/give_rate_case', 'Sos_help_centerController@give_rate_case');
 
-	Route::get('all_name_user_partner', 'Sos_help_centerController@all_name_user_partner');
 	Route::resource('data_1669_officer_command', 'Data_1669_officer_commandController');
 	Route::get('case_officer', 'Sos_help_centerController@case_officer');
 	Route::get('officer_edit_form/{sos_id}', 'Sos_help_centerController@officer_edit_form');
@@ -570,8 +574,11 @@ Route::get('register_new_officer_qr_code', 'Sos_partner_officersController@regis
 
 
 // ============> AIMS <============ //
+
 Route::resource('aims_partners', 'Aims_partnersController');
 Route::resource('aims_areas', 'Aims_areasController');
 Route::resource('aims_commands', 'Aims_commandsController');
 Route::resource('aims_operating_units', 'Aims_operating_unitsController');
 Route::resource('aims_operating_officers', 'Aims_operating_officersController');
+
+// ============> END AIMS <============ //
