@@ -25,7 +25,7 @@ class Aims_operating_unit extends Model
      *
      * @var array
      */
-    protected $fillable = ['name_unit', 'type_unit', 'status', 'creator', 'aims_partner_id', 'aims_area_id'];
+    protected $fillable = ['name_unit', 'aims_type_unit_id', 'status', 'creator', 'aims_partner_id', 'aims_area_id'];
 
     
 }

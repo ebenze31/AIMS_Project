@@ -576,6 +576,9 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 	Route::get('/aims_edit_profile', 'ProfileController@aims_edit_profile');
 });
 
+// ==> Guest
+// Route::get('/aims_edit_profile', 'ProfileController@aims_edit_profile');
+
 Route::resource('aims_partners', 'Aims_partnersController');
 Route::resource('aims_areas', 'Aims_areasController');
 Route::resource('aims_commands', 'Aims_commandsController');
