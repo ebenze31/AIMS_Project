@@ -166,6 +166,7 @@ Route::middleware(['auth', 'role:admin-partner,partner'])->group(function () {
 
 
 	Route::get('all_name_user_partner', 'Aims_commandsController@all_name_user_partner');
+	Route::get('operating_unit', 'Aims_operating_unitsController@operating_unit');
 	// ============> END AIMS <============ //
 
 	Route::get('/view_map_officer_all', 'API\PartnersController@view_map_officer_all');
@@ -259,7 +260,6 @@ Route::middleware(['auth', 'role:admin-partner,partner'])->group(function () {
 	Route::get('help_center_admin', 'Sos_help_centerController@help_center_admin');
 	Route::get('sos_help_center/reply_select_2/{sos_id}', 'Sos_help_centerController@reply_select_2');
 	Route::get('sos_help_center/{sos_id}/show_case', 'Sos_help_centerController@show_case_sos');
-	Route::resource('data_1669_operating_unit', 'Data_1669_operating_unitController');
 	Route::get('sos_help_center/{sos_id}/rate_case', 'Sos_help_centerController@rate_case');
 	Route::get('sos_help_center/{sos_id}/give_rate_case', 'Sos_help_centerController@give_rate_case');
 
@@ -371,7 +371,6 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // AUTO LOHIN FROM FLEX LINE
-	Route::get('/edit_profile', 'ProfileController@edit_profile');
 	Route::get('/edit_profile2', 'ProfileController@edit_profile2');
 	Route::get('/change_language_from_line/{user_id}', 'ProfileController@change_language_from_line');
 
@@ -541,25 +540,6 @@ Route::resource('polygon_amphoe_th', 'Polygon_amphoe_thController');
 
 Route::resource('sos_by_organization', 'Sos_by_organizationController');
 
-//demo
-Route::get('/demo/maintain_index', function () {
-    return view('demo/maintain_index');
-});
-Route::get('/demo/maintain_form', function () {
-    return view('demo/maintain_form');
-});
-Route::get('/demo/maintain_show', function () {
-    return view('demo/maintain_show');
-});
-Route::get('/demo/maintain_rating', function () {
-    return view('demo/maintain_rating');
-});
-Route::get('/demo/set_group_line', function () {
-    return view('demo/set_group_line');
-});
-Route::get('/demo/register_organization', function () {
-    return view('demo/register_organization');
-});
 
 Route::resource('sos_phone_country', 'Sos_phone_countryController');
 
@@ -575,10 +555,42 @@ Route::get('register_new_officer_qr_code', 'Sos_partner_officersController@regis
 
 // ============> AIMS <============ //
 
+// ---------------------------------------------//
+// ROLE
+// admin-partner >> แอดมินองค์กร ดูแลรวมทั้งองค์กร
+// admin-area    >> แอดมินพื้นที่ ดูแลเฉพาะพื้นที่ย่อย
+// operator-area >> เจ้าหน้าที่สั่งการ เฉพาะพื้นที่ย่อย
+// officer-area  >> เจ้าหน้าที่ออกปฏิบัติการตามพื้นที่
+// ---------------------------------------------//
+
+// ==> admin-partner
+Route::middleware(['auth', 'role:admin-partner'])->group(function () {
+	
+});
+
+// ==> admin-area
+Route::middleware(['auth', 'role:admin-partner,admin-area'])->group(function () {
+	Route::get('all_name_user_partner', 'Aims_commandsController@all_name_user_partner');
+	Route::get('operating_unit', 'Aims_operating_unitsController@operating_unit');
+});
+
+// ==> operator-area
+Route::middleware(['auth', 'role:admin-partner,admin-area,operator-area'])->group(function () {
+	Route::get('/', 'PartnerController@partner_index');
+	Route::get('/home', 'PartnerController@partner_index');
+	Route::get('/member', 'ProfileController@member');
+});
+
+// ==> officer-area
+Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group(function () {
+	Route::get('/aims_edit_profile', 'ProfileController@aims_edit_profile');
+});
+
 Route::resource('aims_partners', 'Aims_partnersController');
 Route::resource('aims_areas', 'Aims_areasController');
 Route::resource('aims_commands', 'Aims_commandsController');
 Route::resource('aims_operating_units', 'Aims_operating_unitsController');
 Route::resource('aims_operating_officers', 'Aims_operating_officersController');
+Route::resource('aims_type_units', 'Aims_type_unitsController');
 
 // ============> END AIMS <============ //

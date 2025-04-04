@@ -1,0 +1,16 @@
+{
+    "fields": [
+        {
+            "name": "name_type_unit",
+            "type": "string"
+        },
+        {
+            "name": "aims_partner_id",
+            "type": "string"
+        },
+        {
+            "name": "aims_area_id",
+            "type": "string"
+        }
+    ]
+}

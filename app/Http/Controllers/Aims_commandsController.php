@@ -130,21 +130,52 @@ class Aims_commandsController extends Controller
     public function all_name_user_partner(Request $request)
     {
         $data_user = Auth::user();
-
         $partner_of_user = Aims_command::where('user_id' , $data_user->id)->first();
-        $member_commands = DB::table('aims_commands')
-            ->where('aims_commands.aims_partner_id', '=' ,$partner_of_user->aims_partner_id)
-            ->leftjoin('users', 'aims_commands.user_id', '=', 'users.id')
-            ->select(
-                'aims_commands.name_officer_command as name_officer_command',
-                'aims_commands.number as number',
-                'aims_commands.status as status',
-                'aims_commands.creator as creator',
-                'users.phone as user_phone',
-                'users.photo as user_photo',
-            )
-            ->get();
+        $officer_role = $partner_of_user->officer_role ;
+
+        if( $officer_role == "admin-partner" ){
+            $member_commands = DB::table('aims_commands')
+                ->where('aims_commands.aims_partner_id', '=' ,$partner_of_user->aims_partner_id)
+                ->where('aims_commands.officer_role', '!=' ,"admin-partner")
+                ->leftjoin('users', 'aims_commands.user_id', '=', 'users.id')
+                ->leftjoin('aims_areas', 'aims_commands.aims_area_id', '=', 'aims_areas.id')
+                ->select(
+                    'aims_commands.name_officer_command as name_officer_command',
+                    'aims_commands.number as number',
+                    'aims_commands.status as status',
+                    'aims_commands.creator as creator',
+                    'aims_commands.officer_role as officer_role',
+                    'users.phone as user_phone',
+                    'users.photo as user_photo',
+                    'aims_areas.name_area as name_area',
+                )
+                ->orderBy('aims_commands.aims_area_id', 'asc')
+                ->orderBy('aims_commands.number', 'asc')
+                ->get();
+        }
+        else if( $officer_role == "admin-area" || $officer_role == "operator-area" ){
+            $member_commands = DB::table('aims_commands')
+                ->where('aims_commands.aims_partner_id', '=' ,$partner_of_user->aims_partner_id)
+                ->where('aims_commands.officer_role', '!=' ,"admin-partner")
+                ->where('aims_commands.aims_area_id', '=' ,$partner_of_user->aims_area_id)
+                ->leftjoin('users', 'aims_commands.user_id', '=', 'users.id')
+                ->leftjoin('aims_areas', 'aims_commands.aims_area_id', '=', 'aims_areas.id')
+                ->select(
+                    'aims_commands.name_officer_command as name_officer_command',
+                    'aims_commands.number as number',
+                    'aims_commands.status as status',
+                    'aims_commands.creator as creator',
+                    'aims_commands.officer_role as officer_role',
+                    'users.phone as user_phone',
+                    'users.photo as user_photo',
+                    'aims_areas.name_area as name_area',
+                )
+                ->orderBy('aims_commands.aims_area_id', 'asc')
+                ->orderBy('aims_commands.number', 'asc')
+                ->get();
+        }
+
         
-        return view('aims_commands.member_command', compact('member_commands'));
+        return view('aims_commands.member_command', compact('member_commands','officer_role'));
     }
 }

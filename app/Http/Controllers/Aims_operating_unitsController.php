@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 
 use App\Models\Aims_operating_unit;
+use App\Models\Aims_command;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Aims_operating_unitsController extends Controller
 {
@@ -121,5 +124,25 @@ class Aims_operating_unitsController extends Controller
         Aims_operating_unit::destroy($id);
 
         return redirect('aims_operating_units')->with('flash_message', 'Aims_operating_unit deleted!');
+    }
+
+    function operating_unit(){
+        $data_user = Auth::user();
+        $partner_of_user = Aims_command::where('user_id' , $data_user->id)->first();
+
+        $operating_unit = DB::table('aims_operating_units')
+            ->where('aims_operating_units.aims_partner_id', '=' ,$partner_of_user->aims_partner_id)
+            ->leftjoin('aims_type_units', 'aims_operating_units.aims_type_unit_id', '=', 'aims_type_units.id')
+            ->leftjoin('aims_areas', 'aims_operating_units.aims_area_id', '=', 'aims_areas.id')
+            ->select(
+                'aims_operating_units.name_unit as name_unit',
+                'aims_operating_units.status as status',
+                'aims_operating_units.creator as creator_units',
+                'aims_type_units.name_type_unit as name_type_unit',
+                'aims_areas.name_area as name_area',
+            )
+            ->get();
+        
+        return view('aims_operating_units.operating_unit', compact('operating_unit'));
     }
 }

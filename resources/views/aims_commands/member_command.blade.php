@@ -178,15 +178,23 @@
         <table class="table mb-0">
             <thead>
                 <tr class="text-center">
+                    <th>พื้นที่</th>
                     <th>ลำดับ</th>
                     <th>เจ้าหน้าที่</th>
                     <th>สถานะ</th>
-                    <th>จัดการ</th>
+                    @if( $officer_role != "operator-area")
+                        <th>จัดการ</th>
+                    @endif
                 </tr>
             </thead>
             <tbody>
                 @foreach( $member_commands as $item )
                     <tr>
+                        <td>
+                            <div class="mt-3 d-flex align-items-center justify-content-center">
+                                <span class=""><b>{{ $item->name_area }}</b></span> 
+                            </div>
+                        </td>
                         <td>
                             <div class="mt-3 d-flex align-items-center justify-content-center">
                                 <span class="">{{ $item->number }}</span> 
@@ -199,11 +207,18 @@
                                         @if(!empty($item->user_photo))
                                             <img src="{{ url('/storage') .'/'. $item->user_photo  }}"  class="rounded-circle" width="46" height="46" alt="">
                                         @else
-                                            <img src="{{ url('/partner/images/user/avatar-1.jpg') }}"  class="rounded-circle" width="46" height="46" alt="">
+                                            <img src="{{ url('/partner/images/user/profile.png') }}"  class="rounded-circle" width="46" height="46" alt="">
                                         @endif
                                     </div>
                                     <div class="ms-2">
-                                        <h6 class="mb-1 font-14">{{ $item->name_officer_command }}</h6>
+                                        <h6 class="mb-1 font-15"><b>{{ $item->name_officer_command }}</b></h6>
+                                        <p class="mb-0 font-14 text-secondary">
+                                            @if( $item->officer_role == "admin-area" )
+                                                แอดมินพื้นที่
+                                            @elseif( $item->officer_role == "operator-area" )
+                                                เจ้าหน้าที่สั่งการ
+                                            @endif
+                                        </p>
                                         <p class="mb-0 font-13 text-secondary">{{ $item->user_phone }}</p>
                                     </div>
                                 </div>
@@ -231,11 +246,14 @@
                                 </div>
                             </td>
                         @endif
-                        <td class="text-center">
+
+                        @if( $officer_role != "operator-area")
+                        <td style="width: 1%; white-space: nowrap;" class="text-center">
                             <button class="btn-outline-delete">
                                 <i class="fa-solid fa-trash-can"></i> ยกเลิกสถานะ
                             </button>
                         </td>
+                        @endif
                     </tr>
                 @endforeach
             </tbody>

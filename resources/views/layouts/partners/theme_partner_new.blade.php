@@ -1,6 +1,6 @@
 
 <!doctype html>
-<html lang="en" class="color-sidebar sidebarcolor1 color-header headercolor1">
+<html lang="en" class="color-sidebar sidebarcolor4 color-header headercolor4">
 
 
 <head>
@@ -43,7 +43,7 @@
 	<link rel="stylesheet" href="{{ asset('partner_new/css/header-colors.css') }}" />
 	<!-- fontawesome icon -->
     <link rel="stylesheet" href="{{ asset('/partner/fonts/fontawesome/css/fontawesome-all.min.css') }}">
- 	<link href="https://kit-pro.fontawesome.com/releases/v6.4.2/css/pro.min.css" rel="stylesheet">
+ 	<link href="https://kit-pro.fontawesome.com/releases/v6.7.2/css/pro.min.css" rel="stylesheet">
 
 	<!-- carousel -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
@@ -641,61 +641,92 @@
     box-shadow: 0 0 0 2px white;
   }
 }
-        .notification_group{
-			position: fixed;
-			bottom: 20px;
-  			left: 60px;
-			float: right;
-			z-index: 99999;
+    .notification_group{
+		position: fixed;
+		bottom: 20px;
+			left: 60px;
+		float: right;
+		z-index: 99999;
 
-		}
-		.notification-icon {
-			position: relative;
-			margin-right: 10px;
-			width: 50px;
-			height: 50px;
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			cursor: pointer;
-			z-index: 99999;
-			/* animation: border-flash 1s infinite; */
-		}
-		.notification-count {
-			position: absolute;
-			top: -12px;
-			right: -12px;
-			/* background-color: red; */
-			color: white;
-			width: 24px;
-			height: 24px;
-			font-size: 16px;
-			border-radius: 50%;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-		.count-danger{
-			background-color: red;
-		}
+	}
+	.notification-icon {
+		position: relative;
+		margin-right: 10px;
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		z-index: 99999;
+		/* animation: border-flash 1s infinite; */
+	}
+	.notification-count {
+		position: absolute;
+		top: -12px;
+		right: -12px;
+		/* background-color: red; */
+		color: white;
+		width: 24px;
+		height: 24px;
+		font-size: 16px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.count-danger{
+		background-color: red;
+	}
 
-		.count-blue{
-			background-color: blue;
-		}
+	.count-blue{
+		background-color: blue;
+	}
 
-		.notification-danger{
-			background-color: #fc6d6d;
-			animation: border-flash-danger 1s infinite;
-		}
-		.notification-primary{
-			background-color: #4e73ff;
-			animation: border-flash-blue 1s infinite;
-		}.badge-pill{
-			font-size: .8rem;
-		}
+	.notification-danger{
+		background-color: #fc6d6d;
+		animation: border-flash-danger 1s infinite;
+	}
+	.notification-primary{
+		background-color: #4e73ff;
+		animation: border-flash-blue 1s infinite;
+	}.badge-pill{
+		font-size: .8rem;
+	}
 
-    </style>
+    .theme-notification-menu {
+        position: absolute;
+        top: 10px;
+        left: 78% !important;
+        color: #f5950f;
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+        border-radius: 50%;
+        z-index: 999999!important;
+    }
+    .theme-notification-call {
+        position: absolute;
+        left: 85% !important;
+        color: #ADFF2F;
+        width: 20px;
+        height: 20px;
+        font-size: 18px;
+        z-index: 9999;
+    }
+    .theme-notification-refuse {
+        position: absolute;
+        left: 75% !important;
+        color: red;
+        width: 20px;
+        height: 20px;
+        font-size: 18px;
+        z-index: 9999;
+    }
+
+</style>
+
 </head>
 
 <body>
@@ -859,192 +890,82 @@
 
 				<!-- Admin -->
 				@if(Auth::check())
-                    @if(Auth::user()->role == "admin-partner")
+                    @if(Auth::user()->role == "admin-partner" || Auth::user()->role == "admin-area")
 						<li>
 							<a href="#" class="has-arrow">
-								<div class="parent-icon"><i class="fas fa-user-shield"></i>
+								<div class="parent-icon">
+                                    <i class="fas fa-user-shield"></i>
 								</div>
 								<div class="menu-title">การจัดการ</div>
 							</a>
 							<ul>
 								<li>
-									<a href="{{ url('/all_name_user_partner') }}"><i class='fas fa-users-cog'></i> สมาชิกศูนย์ควบคุม</a>
+									<a href="{{ url('/all_name_user_partner') }}">
+                                        <i class='fas fa-users-cog'></i> สมาชิกศูนย์ควบคุม
+                                    </a>
 								</li>
 								<li>
-									<a href="{{ url('/data_1669_operating_unit') }}"><i class="fa-solid fa-user-plus"></i> หน่วยปฏิบัติการ </a>
+									<a href="{{ url('/operating_unit') }}">
+                                        <i class="fa-solid fa-user-plus"></i> หน่วยปฏิบัติการ
+                                    </a>
 								</li>
                                 <li>
-                                    <a href="{{ url('/view_map_officer_area') }}" target="blank"><i class="fa-solid fa-map-location-dot"></i> แผนที่ </a>
+                                    <a href="{{ url('/') }}">
+                                        <i class="fas fa-photo-video"></i> ประเภทหน่วยปฏิบัติการ
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        
+                        <li>
+                            <a href="#" class="has-arrow">
+                                <div class="parent-icon">
+                                    <i class="fa-solid fa-gear"></i>
+                                </div>
+                                <div class="menu-title">ตั้งค่า</div>
+                            </a>
+                            <ul>
+                                @if(Auth::user()->role == "admin-partner")
+                                <li>
+                                    <a href="{{ url('/') }}">
+                                        <i class="fa-solid fa-building-magnifying-glass"></i> ข้อมูลองค์กร
+                                    </a>
+                                </li>
+                                @endif
+                                <li>
+                                    <a href="{{ url('/') }}">
+                                        <i class='far fa-map'></i><span> พื้นที่</span>
+                                    </a>
                                 </li>
                                 <li>
-                                    <a href="#" ><i class="fa-solid fa-gear"></i> ตั้งค่า </a>
+                                    <a href="{{ url('/') }}">
+                                        <i class="fa-regular fa-calendar-clock"></i>
+                                        <span> เวลาทำการ</span>
+                                    </a>
                                 </li>
-							</ul>
-						</li>
+                            </ul>
+                        </li>
 					@endif
 				@endif
 				<!-- Admin -->
 
-                <!-- Dashboard Partner -->
-                @if(Auth::check())
-                    @if(Auth::user()->role == "admin-partner")
-                    <li id="div_ll_Dashboard" class="">
-                        <a href="#" class="has-arrow">
-                            <div class="parent-icon">
-                                <i class="fa-solid fa-chart-line"></i>
-                            </div>
-                            <div class="menu-title">Dashboard</div>
-                        </a>
-                        <ul>
-                            <li>
-                                <a href="{{ url('/dashboard_index#dashboard_user') }}">
-                                    <i class='fas fa-users-cog'></i>User
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/dashboard_index#dashboard_viisos') }}">
-                                    <i class='fas fa-siren-on'></i>SOS
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    @endif
-                @endif
+                <li>
+                    <a href="{{ url('/') }}">
+                        <div class="parent-icon">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div class="menu-title">Dashboard</div>
+                    </a>
+                </li>
 
-				<style>
-                    .theme-notification-menu {
-                        position: absolute;
-                        top: 10px;
-                        left: 78% !important;
-                        color: #f5950f;
-                        width: 30px;
-                        height: 30px;
-                        font-size: 18px;
-                        border-radius: 50%;
-                        z-index: 999999!important;
-                    }
-                    .theme-notification-call {
-                        position: absolute;
-                        left: 85% !important;
-                        color: #ADFF2F;
-                        width: 20px;
-                        height: 20px;
-                        font-size: 18px;
-                        z-index: 9999;
-                    }
-                    .theme-notification-refuse {
-                        position: absolute;
-                        left: 75% !important;
-                        color: red;
-                        width: 20px;
-                        height: 20px;
-                        font-size: 18px;
-                        z-index: 9999;
-                    }
-
-                </style>
-
-				@if(Auth::check())
-					<li>
-						<a id="menu_command_sos" href="#" class="has-arrow">
-							<div class="parent-icon">
-								<i class="fa-solid fa-truck-medical"></i>
-							</div>
-							<div class="menu-title">ขอความช่วยเหลือ</div>
-							<i id="i_noti_menu" class="fa-solid fa-circle-exclamation fa-bounce theme-notification-menu d-none"></i>
-						</a>
-						<ul>
-							<li>
-								<a href="{{ url('/help_center_admin') }}">
-									<i class="fa-solid fa-user-headset"></i> ควบคุมและสั่งการ
-									<i id="i_noti_call" class="fa-solid fa-phone-volume fa-shake theme-notification-call d-none"></i>
-									<i id="i_noti_refuse" class="fa-solid fa-triangle-exclamation fa-bounce theme-notification-refuse d-none"></i>
-								</a>
-							</li>
-                            <li>
-                                <a href="{{ url('/add_area') }}" data-submenu="{{ url('/service_current') }}" data-submenu-2="{{ url('/service_pending') }}" data-submenu-3="{{ url('/service_area') }}" class="sub-menu">
-                                    <i class='far fa-map'></i>
-
-                                    <span>
-                                        &nbsp;พื้นที่บริการ
-                                    </span>
-                                </a>
-                            </li>
-						</ul>
-					</li>
-					<li>
-						<a href="#" class="has-arrow">
-							<div class="parent-icon">
-								<i class="fa-solid fa-chart-pie"></i>
-							</div>
-							<div class="menu-title">วิเคราะห์ข้อมูล</div>
-						</a>
-						<ul>
-							<li> <a href="{{ url('/dashboard_1669_index#command_center_info') }}"><i class='fad fa-book'></i> ข้อมูลเจ้าหน้าที่ศูนย์สั่งการ</a>
-                            </li>
-                            <li> <a href="{{ url('/dashboard_1669_index#sos_help') }}"><i class="fas fa-photo-video"></i> ข้อมูลการขอความช่วยเหลือ</a>
-                            </li>
-						</ul>
-					</li>
-				@endif
-
-				<!-- Other -->
-				<li>
-					<a href="#" class="has-arrow">
-						<div class="parent-icon"><i class="fas fa-braille"></i>
-						</div>
-						<div class="menu-title">อื่นๆ</div>
-					</a>
-					<ul>
-						<li>
-                            <a href="{{ url('/how_to_use') }}">
-                                <i class='fad fa-book'></i> วิธีใช้งาน
-                            </a>
-						</li>
-						<li>
-                            <a href="{{ url('/partner_media?menu=all') }}">
-                                <i class="fas fa-photo-video"></i> สื่อประชาสัมพันธ์
-                            </a>
-						</li>
-						<li>
-                            <a href="{{ url('/problem_report') }}">
-                                <i class="fa-solid fa-message-exclamation"></i> แจ้งปัญหาการใช้งาน
-                            </a>
-						</li>
-					</ul>
-				</li>
-				<!-- Other -->
-
-				<!-- FOR DEV -->
-				@if(Auth::check())
-					@if(Auth::user()->id == "1")
-						<li>
-							<a href="#" class="has-arrow">
-								<div class="parent-icon">
-									<i class="fa-solid fa-code text-danger"></i>
-								</div>
-								<div class="menu-title">FOR DEV</div>
-							</a>
-							<ul>
-								<li>
-									<a href="#" onclick="tetetetfttfg();">
-										<i class="fa-solid fa-siren-on"></i> Test new sos 1669
-									</a>
-								</li>
-								<li>
-									<a href="#" onclick="reset_count_sos_1669();">
-										<i class="fa-solid fa-repeat"></i> reset count 1669
-									</a>
-								</li>
-								<li class="d-none" id="spinner_of_reset_count_sos_1669">
-									<div class="spinner-border text-success" role="status" ></div>
-									<span class="text-white">Loading...</span>
-								</li>
-							</ul>
-						</li>
-					@endif
-				@endif
-				<!-- END FOR DEV -->
+                <li>
+                    <a href="{{ url('/') }}">
+                        <div class="parent-icon">
+                            <i class="fa-solid fa-user-headset"></i>
+                        </div>
+                        <div class="menu-title">ควบคุมและสั่งการ</div>
+                    </a>
+                </li>
 
 				<br>
 
@@ -1055,7 +976,7 @@
 
 		<!--start header -->
 		<header style="font-family: 'Baloo Bhaijaan 2', cursive;font-family: 'Prompt', sans-serif;">
-			<div id="div_color_navbar" class="topbar d-flex align-items-center header_nav-background" style="background-color: #195591;">
+			<div id="div_color_navbar" class="topbar d-flex align-items-center header_nav-background" style="background-color: #250c37;">
 				<nav class="navbar navbar-expand d-flex">
 					<div class="mobile-toggle-menu">
 						<i class='bx bx-menu'></i>
@@ -1219,7 +1140,7 @@
 					</style>
 
 					<div class="containerStatusofficer ms-auto">
-						<div class="tabsStatusOfficer">
+						<div id="switcher_status_command" class="tabsStatusOfficer d-none">
 							<!-- ปุ่ม modal -->
 							<input type="radio" id="officerHelping" name="tabsStatusOfficer"  onclick="click_switch_officer_1669();">
 							<label class="tabOfficer radio-1" for="officerHelping">
@@ -1335,10 +1256,17 @@
 							</div>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="{{ url('/aims_edit_profile') }}">
+                                    <i class="fa-solid fa-user-pen"></i><span>แก้ไขโปรไฟล์</span>
+                                </a>
+                            </li>
 							<li>
-                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class='bx bx-log-out-circle'></i><span>Logout</span></a>
+                                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                    <i class='bx bx-log-out-circle'></i><span>ออกจากระบบ</span>
+                                </a>
                                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                @csrf
+                                    @csrf
                                 </form>
 							</li>
 						</ul>
@@ -1667,12 +1595,23 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgrxXDgk1tgXngalZF3eWtcTWI-LPdeus&language=th" ></script>
 
 
-
+@php
+    $user_id = Auth::user()->id ;
+    $partner_of_user = App\Models\Aims_command::where('user_id' , $user_id)->first();
+    $officer_role = $partner_of_user->officer_role ;
+@endphp
 <script>
 
     document.addEventListener('DOMContentLoaded', (event) => {
         // console.log("START");
         check_data_partner();
+
+        if("{{ $officer_role }}" == "admin-partner"){
+            document.querySelector('#switcher_status_command').classList.add('d-none');
+        }
+        else{
+            document.querySelector('#switcher_status_command').classList.remove('d-none');
+        }
     });
 
     function check_data_partner(){
@@ -1694,12 +1633,15 @@
                     command_name.innerHTML = result[0].command_name ;
                     partner_full_name.innerHTML = result[0].partner_name + " - " + result[0].partner_full_name ;
                     // h4_name_partner.innerHTML = result[0].partner_name ;
-                    
-                    if (result[0].command_role == "partner") {
-                        command_role.innerHTML = "เจ้าหน้าที่" ;
+
+                    if (result[0].command_role == "operator-area") {
+                        command_role.innerHTML = "เจ้าหน้าที่สั่งการ" ;
                     }
-                    else if(result[0].command_role == "admin-partner" || result[0].command_role == "admin" ){
-                        command_role.innerHTML = "แอดมิน" ;
+                    else if(result[0].command_role == "admin-area"){
+                        command_role.innerHTML = "แอดมินพื้นที่" ;
+                    }
+                    else if(result[0].command_role == "admin-partner"){
+                        command_role.innerHTML = "แอดมินองค์กร" ;
                     }
 
                     change_switch_officer_to(result[0].status_command);
