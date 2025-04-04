@@ -159,23 +159,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 //admin-partner
 Route::middleware(['auth', 'role:admin-partner,partner'])->group(function () {
 
-	// ============> AIMS <============ //
-	Route::get('/', 'PartnerController@partner_index');
-	Route::get('/home', 'PartnerController@partner_index');
-	Route::get('/member', 'ProfileController@member');
-
-
-	Route::get('all_name_user_partner', 'Aims_commandsController@all_name_user_partner');
-	Route::get('operating_unit', 'Aims_operating_unitsController@operating_unit');
-	// ============> END AIMS <============ //
-
 	Route::get('/view_map_officer_all', 'API\PartnersController@view_map_officer_all');
 	Route::get('/view_map_officer_area', 'API\PartnersController@view_map_officer_area');
 	Route::get('/video_how_to_use', 'API\PartnersController@video_how_to_use');
 
 	Route::resource('ads_content', 'Ads_contentController')->except(['show','edit','index']);
 	// Route::get('/partner_theme', 'PartnerController@partner_theme');
-	Route::get('/partner_index', 'PartnerController@partner_index');
 	Route::get('/how_to_use_partner', function () {
 		return view('partner/partner_how_to_use');
 	});
@@ -576,9 +565,10 @@ Route::middleware(['auth', 'role:admin-partner,admin-area'])->group(function () 
 
 // ==> operator-area
 Route::middleware(['auth', 'role:admin-partner,admin-area,operator-area'])->group(function () {
-	Route::get('/', 'PartnerController@partner_index');
-	Route::get('/home', 'PartnerController@partner_index');
-	Route::get('/member', 'ProfileController@member');
+	Route::get('/', 'PartnerController@go_to_partner_index');
+	Route::get('/home', 'PartnerController@go_to_partner_index');
+	Route::get('/partner_index', 'PartnerController@partner_index');
+	// Route::get('/member', 'ProfileController@member');
 });
 
 // ==> officer-area

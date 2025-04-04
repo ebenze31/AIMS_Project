@@ -448,6 +448,10 @@ class PartnerController extends Controller
         return view('partner.partner_media', compact('media_menu'));
     }
 
+    function go_to_partner_index(){
+        return redirect('/partner_index');
+    }
+
     public function partner_index()
     {
         $data_user = Auth::user();
