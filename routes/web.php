@@ -578,6 +578,13 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 
 // ==> Guest
 // Route::get('/aims_edit_profile', 'ProfileController@aims_edit_profile');
+Route::get('/aims_sos', function () {
+    return view('demo/aims_sos');
+})->name('form_sos');
+
+
+
+
 
 Route::resource('aims_partners', 'Aims_partnersController');
 Route::resource('aims_areas', 'Aims_areasController');

@@ -216,6 +216,13 @@
         แจ้งเหตุฉุกเฉิน
     </div>
 </nav>
+<form>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" value="{{ session('webhook_data.name', '') }}">
+    <br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" value="{{ session('webhook_data.email', '') }}">
+</form>
 <div class=" m-auto">
     <div class="content">
         <div class="map-container">
