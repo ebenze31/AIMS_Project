@@ -217,9 +217,19 @@
     </div>
 </nav>
 
-<h3>ข้อมูลจาก Third Party:</h3>
-<p>ชื่อ: {{ request('name') }}</p>
-<p>อีเมล: {{ request('email') }}</p>
+<form method="POST" action="/submit">
+    @csrf
+    <div class="form-group">
+        <label for="name">ชื่อ:</label>
+        <input type="text" name="name" id="name" value="{{ session('webhook_data.name') }}" class="form-control">
+    </div>
+    <div class="form-group">
+        <label for="email">อีเมล:</label>
+        <input type="email" name="email" id="email" value="{{ session('webhook_data.email') }}" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">ส่ง</button>
+</form>
+
 
 
 <div class=" m-auto">
