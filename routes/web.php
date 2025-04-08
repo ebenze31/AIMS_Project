@@ -596,7 +596,7 @@ Route::resource('aims_type_units', 'Aims_type_unitsController');
 // ============> END AIMS <============ //
 
 // ============> demo aims <============//
-Route::get('/demo/aims_sos', function () {
-    return view('demo/aims_sos');
-});
+// Route::get('/demo/aims_sos', function () {
+//     return view('demo/aims_sos');
+// });
 // ============> end demo aims <============//
