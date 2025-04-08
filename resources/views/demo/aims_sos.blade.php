@@ -227,6 +227,12 @@
     <input type="email" name="email" value="{{ session('webhook_data.email') }}">
 </form>
 
+@if (session('webhook_data'))
+    <input type="text" value="{{ session('webhook_data.name') }}">
+@else
+    <p>ไม่มีข้อมูลจาก Third Party</p>
+@endif
+
 <div class=" m-auto">
     <div class="content">
         <div class="map-container">
