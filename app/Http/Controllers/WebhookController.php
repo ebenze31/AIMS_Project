@@ -11,8 +11,8 @@ class WebhookController extends Controller
         // รับข้อมูลจาก Third Party
         $data = $request->all();
 
-        // บันทึกลง session เพื่อให้ frontend นำไปใช้
-        session(['webhook_data' => $data]);
+        // บันทึกลง session อยู่แค่ 1 request
+        session()->flash('webhook_data', $data);
 
         return redirect()->route('form_sos');
     }

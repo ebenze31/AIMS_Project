@@ -216,13 +216,17 @@
         แจ้งเหตุฉุกเฉิน
     </div>
 </nav>
+
+<h3>ข้อมูลจาก Third Party:</h3>
+
+<p>ชื่อ: {{ session('webhook_data.name') }}</p>
+<p>อีเมล: {{ session('webhook_data.email') }}</p>
+
 <form>
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" value="{{ session('webhook_data.name', '') }}">
-    <br>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" value="{{ session('webhook_data.email', '') }}">
+    <input type="text" name="name" value="{{ session('webhook_data.name') }}">
+    <input type="email" name="email" value="{{ session('webhook_data.email') }}">
 </form>
+
 <div class=" m-auto">
     <div class="content">
         <div class="map-container">
