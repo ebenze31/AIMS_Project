@@ -218,20 +218,9 @@
 </nav>
 
 <h3>ข้อมูลจาก Third Party:</h3>
+<p>ชื่อ: {{ request('name') }}</p>
+<p>อีเมล: {{ request('email') }}</p>
 
-<p>ชื่อ: {{ session('webhook_data.name') }}</p>
-<p>อีเมล: {{ session('webhook_data.email') }}</p>
-
-<form>
-    <input type="text" name="name" value="{{ session('webhook_data.name') }}">
-    <input type="email" name="email" value="{{ session('webhook_data.email') }}">
-</form>
-
-@if (session('webhook_data'))
-    <input type="text" value="{{ session('webhook_data.name') }}">
-@else
-    <p>ไม่มีข้อมูลจาก Third Party</p>
-@endif
 
 <div class=" m-auto">
     <div class="content">
