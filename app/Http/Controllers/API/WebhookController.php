@@ -15,10 +15,10 @@ class WebhookController extends Controller
         // บันทึกลง session อยู่แค่ 1 request
         session()->flash('webhook_data', $data);
 
-        // return redirect()->route('form_sos');
-        return response()->json([
-            'redirect_url' => route('form_sos')  // ส่ง URL ที่ต้องการให้ทำการ redirect
-        ]);
+        return redirect()->route('form_sos');
+        // return response()->json([
+        //     'redirect_url' => route('form_sos')  // ส่ง URL ที่ต้องการให้ทำการ redirect
+        // ]);
 
     }
 }
