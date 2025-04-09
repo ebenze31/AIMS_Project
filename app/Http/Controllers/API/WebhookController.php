@@ -21,4 +21,24 @@ class WebhookController extends Controller
         // ]);
 
     }
+
+    public function handle(Request $request)
+    {
+        // รับข้อมูลจาก third-party
+        $data = $request->all();
+
+        // ตัวอย่าง: ดึงข้อมูลที่คาดว่าจะได้รับ (ปรับตามโครงสร้างข้อมูลจริง)
+        $report_platform = $data['report_platform'] ?? '';
+        $name_reporter = $data['name_reporter'] ?? 'Guest';
+        $type_reporter = $data['type_reporter'] ?? '';
+        $phone_reporter = $data['phone_reporter'] ?? '';
+
+        // redirect ไปยังหน้า form_sos พร้อมส่งข้อมูลผ่าน session
+        return redirect()->route('form.sos')->with([
+            'report_platform' => $report_platform,
+            'name_reporter' => $name_reporter,
+            'type_reporter' => $type_reporter,
+            'phone_reporter' => $phone_reporter,
+        ]);
+    }
 }
