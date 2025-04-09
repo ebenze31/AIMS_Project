@@ -34,7 +34,7 @@ class WebhookController extends Controller
         $phone_reporter = $data['phone_reporter'] ?? '';
 
         // redirect ไปยังหน้า form_sos พร้อมส่งข้อมูลผ่าน session
-        return redirect()->route('form.sos')->with([
+        return redirect()->route('form_sos')->with([
             'report_platform' => $report_platform,
             'name_reporter' => $name_reporter,
             'type_reporter' => $type_reporter,
