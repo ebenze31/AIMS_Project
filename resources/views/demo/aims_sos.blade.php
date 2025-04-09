@@ -216,7 +216,7 @@
         แจ้งเหตุฉุกเฉิน
     </div>
 </nav>
-{{ $_REQUEST['report_platform'] }}
+
 <div class=" m-auto">
     <div class="content">
         <div class="map-container">
