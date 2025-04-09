@@ -216,22 +216,7 @@
         แจ้งเหตุฉุกเฉิน
     </div>
 </nav>
-
-<form method="POST" action="/submit">
-    @csrf
-    <div class="form-group">
-        <label for="name">ชื่อ:</label>
-        <input type="text" name="name" id="name" value="{{ session('webhook_data.name') }}" class="form-control">
-    </div>
-    <div class="form-group">
-        <label for="email">อีเมล:</label>
-        <input type="email" name="email" id="email" value="{{ session('webhook_data.email') }}" class="form-control">
-    </div>
-    <button type="submit" class="btn btn-primary">ส่ง</button>
-</form>
-
-
-
+{{ $_REQUEST['report_platform'] }}
 <div class=" m-auto">
     <div class="content">
         <div class="map-container">
