@@ -217,10 +217,12 @@
     </div>
 </nav>
 
+------------------------------
 {{ session('report_platform') }}
 {{ session('name_reporter') }}
 {{ session('type_reporter') }}
 {{ session('phone_reporter') }}
+------------------------------
 
 <div class=" m-auto">
     <div class="content">
