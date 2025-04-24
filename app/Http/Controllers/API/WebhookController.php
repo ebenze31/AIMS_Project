@@ -30,4 +30,18 @@ class WebhookController extends Controller
             'phone_reporter' => $phone_reporter,
         ]);
     }
+
+    public function submit(Request $request)
+    {
+        // ดึงข้อมูลจาก session หรือ request
+        $formData = $request->session()->get('form_data');
+
+        // ทำอะไรกับข้อมูล เช่น บันทึกในฐานข้อมูล
+        // เช่น \App\Models\FormData::create($formData);
+
+        // ลบ session หลังจากใช้งานเสร็จ
+        $request->session()->forget('form_data');
+
+        return redirect()->route('form.page')->with('success', 'ข้อมูลถูกส่งเรียบร้อยแล้ว!');
+    }
 }

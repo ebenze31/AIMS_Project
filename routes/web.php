@@ -582,6 +582,8 @@ Route::get('/aims_sos', function () {
     return view('demo/aims_sos');
 })->name('form_sos');
 
+// routes/web.php
+Route::post('/form/submit', [WebhookController::class, 'submit'])->name('submit.form');
 
 
 
