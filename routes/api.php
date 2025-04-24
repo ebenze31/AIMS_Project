@@ -518,6 +518,5 @@ Route::post('/create_data_time_repair', 'Maintain_notisController@create_data_ti
 Route::get('/theme/check_data_partner/{user_id}', 'Aims_adminController@check_data_partner');
 Route::get('/change_status_command/{change_to}/{user_id}', 'Aims_adminController@change_status_command');
 // Route::post('/receive-data', 'API\WebhookController@handle');
-Route::post('/receive-data', 'API\WebhookController@handle')
-    ->middleware('session');
+Route::post('/form-sos', 'API\WebhookController@handle')->middleware('session');
 // ============> END AIMS <============ //

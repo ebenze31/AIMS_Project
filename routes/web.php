@@ -583,17 +583,6 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 //     return view('demo/aims_sos');
 // })->name('form.sos');
 
-Route::get('/form-sos', function () {
-    $formData = session('formData', []);
-    
-    // Debug: ดูข้อมูลใน session
-    \Log::info('Session data in /form-sos:', session()->all());
-    \Log::info('FormData in /form-sos:', $formData);
-
-    return view('demo.aims_sos', compact('formData'));
-})->name('form.sos');
-
-
 Route::resource('aims_partners', 'Aims_partnersController');
 Route::resource('aims_areas', 'Aims_areasController');
 Route::resource('aims_commands', 'Aims_commandsController');
