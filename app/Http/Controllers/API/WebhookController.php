@@ -37,10 +37,10 @@ class WebhookController extends Controller
         \Log::info('Storing in session:', $sessionData);
 
         // เก็บข้อมูลลง session
-        session()->flash('report_platform', $report_platform);
-        session()->flash('name_reporter', $name_reporter);
-        session()->flash('type_reporter', $type_reporter);
-        session()->flash('phone_reporter', $phone_reporter);
+        session()->put('report_platform', $report_platform);
+        session()->put('name_reporter', $name_reporter);
+        session()->put('type_reporter', $type_reporter);
+        session()->put('phone_reporter', $phone_reporter);
 
         return redirect()->route('form.sos');
     }
