@@ -585,6 +585,11 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 
 Route::get('/form-sos', function () {
     $formData = session('formData', []);
+    
+    // Debug: ดูข้อมูลใน session
+    \Log::info('Session data in /form-sos:', session()->all());
+    \Log::info('FormData in /form-sos:', $formData);
+
     return view('demo.aims_sos', compact('formData'));
 })->name('form.sos');
 
