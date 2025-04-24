@@ -216,9 +216,13 @@
         แจ้งเหตุฉุกเฉิน
     </div>
 </nav>
-<pre>{{ print_r(session()->all()) }}</pre>
+
+
 <form method="POST" action="/submit-sos">
     @csrf
+    <!-- Debug: แสดงข้อมูลทั้งหมดใน session -->
+    <pre>Session Data: {{ print_r(session()->all(), true) }}</pre>
+
     <div>
         <label for="report_platform">report_platform:</label>
         <input type="text" name="report_platform" id="report_platform" value="{{ session('report_platform') }}" placeholder="Enter report_platform">
@@ -237,6 +241,7 @@
     </div>
     <button type="submit">Submit</button>
 </form>
+
 
 <div class=" m-auto">
     <div class="content">
