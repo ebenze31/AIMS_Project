@@ -217,12 +217,22 @@
     </div>
 </nav>
 
-------------------------------
-{{ session('report_platform') }}
-{{ session('name_reporter') }}
-{{ session('type_reporter') }}
-{{ session('phone_reporter') }}
-------------------------------
+<form method="POST" action="{{ route('submit.form_sos') }}">
+    @csrf
+    <label for="report_platform">แพลตฟอร์ม:</label>
+    <input type="text" name="report_platform" value="{{ session('report_platform') }}" readonly><br>
+
+    <label for="name_reporter">ชื่อผู้รายงาน:</label>
+    <input type="text" name="name_reporter" value="{{ session('name_reporter') }}" readonly><br>
+
+    <label for="type_reporter">ประเภทผู้รายงาน:</label>
+    <input type="text" name="type_reporter" value="{{ session('type_reporter') }}" readonly><br>
+
+    <label for="phone_reporter">เบอร์โทรผู้รายงาน:</label>
+    <input type="text" name="phone_reporter" value="{{ session('phone_reporter') }}" readonly><br>
+
+    <button type="submit">ยืนยัน</button>
+</form>
 
 <div class=" m-auto">
     <div class="content">

@@ -7,21 +7,6 @@ use Illuminate\Http\Request;
 
 class WebhookController extends Controller
 {
-    // public function handle(Request $request)
-    // {
-    //     // รับข้อมูลจาก Third Party
-    //     $data = $request->all();
-
-    //     // บันทึกลง session อยู่แค่ 1 request
-    //     session()->flash('webhook_data', $data);
-
-    //     return redirect()->route('form_sos');
-    //     // return response()->json([
-    //     //     'redirect_url' => route('form_sos')  // ส่ง URL ที่ต้องการให้ทำการ redirect
-    //     // ]);
-
-    // }
-
     public function handle(Request $request)
     {
         // รับข้อมูลจาก third-party
@@ -33,7 +18,11 @@ class WebhookController extends Controller
         $type_reporter = $data['type_reporter'] ?? '';
         $phone_reporter = $data['phone_reporter'] ?? '';
 
-        // redirect ไปยังหน้า form_sos พร้อมส่งข้อมูลผ่าน session
+        // ตรวจสอบและแปลงข้อมูลภาษาไทยให้แน่ใจว่า encoding ถูกต้อง
+        $name_reporter = mb_convert_encoding($name_reporter, 'UTF-8', 'auto');
+        $type_reporter = mb_convert_encoding($type_reporter, 'UTF-8', 'auto');
+
+        // เก็บข้อมูลใน session โดยใช้ with() เพื่อส่งไปยังหน้า form_sos
         return redirect()->route('form_sos')->with([
             'report_platform' => $report_platform,
             'name_reporter' => $name_reporter,
