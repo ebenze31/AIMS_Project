@@ -220,9 +220,6 @@
 
 <form method="POST" action="/submit-sos">
     @csrf
-    <!-- Debug: แสดงข้อมูลทั้งหมดใน session -->
-    <pre>Session Data: {{ print_r(session()->all(), true) }}</pre>
-
     <div>
         <label for="report_platform">report_platform:</label>
         <input type="text" name="report_platform" id="report_platform" value="{{ $formData['report_platform'] }}" placeholder="Enter report_platform">
