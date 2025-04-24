@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QrCodeGeneratorController;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Http\Request;
 
 //วิธีใช้
 Route::get('/how_to_use', function () {

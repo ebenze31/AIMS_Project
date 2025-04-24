@@ -12,7 +12,7 @@ class WebhookController extends Controller
         $data = $request->all();
         $formData = $data['form-sos'] ?? [];
 
-        $report_platform = $formData['report_platform'] ?? 'LINE OA Hello';
+        $report_platform = $formData['report_platform'] ?? '';
         $name_reporter = $formData['name_reporter'] ?? 'Guest';
         $type_reporter = $formData['type_reporter'] ?? '';
         $phone_reporter = $formData['phone_reporter'] ?? '';
