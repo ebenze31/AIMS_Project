@@ -217,21 +217,21 @@
     </div>
 </nav>
 
-<form method="POST" action="{{ route('submit.form_sos') }}">
+<form method="POST" action="/submit-sos">
     @csrf
-    <label for="report_platform">แพลตฟอร์ม:</label>
-    <input type="text" name="report_platform" value="{{ session('report_platform') }}" readonly><br>
-
-    <label for="name_reporter">ชื่อผู้รายงาน:</label>
-    <input type="text" name="name_reporter" value="{{ session('name_reporter') }}" readonly><br>
-
-    <label for="type_reporter">ประเภทผู้รายงาน:</label>
-    <input type="text" name="type_reporter" value="{{ session('type_reporter') }}" readonly><br>
-
-    <label for="phone_reporter">เบอร์โทรผู้รายงาน:</label>
-    <input type="text" name="phone_reporter" value="{{ session('phone_reporter') }}" readonly><br>
-
-    <button type="submit">ยืนยัน</button>
+    <div>
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" value="{{ session('name') }}" placeholder="Enter name">
+    </div>
+    <div>
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" value="{{ session('email') }}" placeholder="Enter email">
+    </div>
+    <div>
+        <label for="phone">Phone:</label>
+        <input type="text" name="phone" id="phone" value="{{ session('phone') }}" placeholder="Enter phone">
+    </div>
+    <button type="submit">Submit</button>
 </form>
 
 <div class=" m-auto">

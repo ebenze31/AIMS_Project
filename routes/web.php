@@ -578,27 +578,10 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 
 // ==> Guest
 // Route::get('/aims_edit_profile', 'ProfileController@aims_edit_profile');
-Route::get('/aims_sos', function () {
-    return view('demo/aims_sos');
-})->name('form_sos');
 
-// เพิ่ม route สำหรับการ submit ฟอร์ม
-Route::post('/aims_sos/submit', function () {
-    // ดึงข้อมูลจาก session หรือ request เพื่อดำเนินการต่อ
-    $formData = session()->get([
-        'report_platform',
-        'name_reporter',
-        'type_reporter',
-        'phone_reporter'
-    ]);
-
-    // ตัวอย่าง: บันทึกข้อมูลหรือดำเนินการเพิ่มเติม
-    // \App\Models\SosData::create($formData);
-
-    return redirect()->route('form_sos')->with('success', 'ข้อมูลถูกส่งเรียบร้อยแล้ว!');
-})->name('submit.form_sos');
-
-
+Route::get('/form-sos', function () {
+    return view('form_sos');
+})->name('form.sos');
 
 
 Route::resource('aims_partners', 'Aims_partnersController');

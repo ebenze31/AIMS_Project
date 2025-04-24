@@ -13,35 +13,15 @@ class WebhookController extends Controller
         $data = $request->all();
 
         // ตัวอย่าง: ดึงข้อมูลที่คาดว่าจะได้รับ (ปรับตามโครงสร้างข้อมูลจริง)
-        $report_platform = $data['report_platform'] ?? '';
-        $name_reporter = $data['name_reporter'] ?? 'Guest';
-        $type_reporter = $data['type_reporter'] ?? '';
-        $phone_reporter = $data['phone_reporter'] ?? '';
+        $name = $data['name'] ?? 'Guest';
+        $email = $data['email'] ?? '';
+        $phone = $data['phone'] ?? ''; // เพิ่มตามข้อมูลที่ third-party ส่งมา
 
-        // ตรวจสอบและแปลงข้อมูลภาษาไทยให้แน่ใจว่า encoding ถูกต้อง
-        $name_reporter = mb_convert_encoding($name_reporter, 'UTF-8', 'auto');
-        $type_reporter = mb_convert_encoding($type_reporter, 'UTF-8', 'auto');
-
-        // เก็บข้อมูลใน session โดยใช้ with() เพื่อส่งไปยังหน้า form_sos
-        return redirect()->route('form_sos')->with([
-            'report_platform' => $report_platform,
-            'name_reporter' => $name_reporter,
-            'type_reporter' => $type_reporter,
-            'phone_reporter' => $phone_reporter,
+        // redirect ไปยังหน้า form_sos พร้อมส่งข้อมูลผ่าน session
+        return redirect()->route('form.sos')->with([
+            'name' => $name,
+            'email' => $email,
+            'phone' => $phone,
         ]);
-    }
-
-    public function submit(Request $request)
-    {
-        // ดึงข้อมูลจาก session หรือ request
-        $formData = $request->session()->get('form_data');
-
-        // ทำอะไรกับข้อมูล เช่น บันทึกในฐานข้อมูล
-        // เช่น \App\Models\FormData::create($formData);
-
-        // ลบ session หลังจากใช้งานเสร็จ
-        $request->session()->forget('form_data');
-
-        return redirect()->route('form.page')->with('success', 'ข้อมูลถูกส่งเรียบร้อยแล้ว!');
     }
 }
