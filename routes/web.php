@@ -580,7 +580,7 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 // Route::get('/aims_edit_profile', 'ProfileController@aims_edit_profile');
 
 Route::get('/form-sos', function () {
-    return view('form_sos');
+    return view('demo/aims_sos');
 })->name('form.sos');
 
 
