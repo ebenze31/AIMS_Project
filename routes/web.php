@@ -583,10 +583,6 @@ Route::get('/form-sos', function () {
     return view('demo/aims_sos');
 })->name('form.sos');
 
-Route::get('/form-sos', function () {
-    return view('demo/aims_sos');
-})->name('form.sos');
-
 
 Route::resource('aims_partners', 'Aims_partnersController');
 Route::resource('aims_areas', 'Aims_areasController');
