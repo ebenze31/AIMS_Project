@@ -11,17 +11,21 @@ class WebhookController extends Controller
     {
         // รับข้อมูลจาก third-party
         $data = $request->all();
-        $formData = $data;
 
         // Debug: ตรวจสอบข้อมูลดิบที่ได้รับ
         \Log::info('Raw request data:', $data);
+
+        // ตรวจสอบโครงสร้างข้อมูล: ถ้ามี form-sos ให้ดึงจาก form-sos, ถ้าไม่มีให้ใช้ $data ตรง ๆ
+        $formData = isset($data['form-sos']) ? $data['form-sos'] : $data;
+
+        // Debug: ตรวจสอบข้อมูลที่ดึงมาได้
         \Log::info('Received form-sos data:', $formData);
 
-        // ดึงข้อมูลจากฟิลด์ โดยไม่ override ถ้ามีข้อมูล
-        $report_platform = isset($formData['report_platform']) ? $formData['report_platform'] : '';
-        $name_reporter = isset($formData['name_reporter']) ? $formData['name_reporter'] : 'Guest';
-        $type_reporter = isset($formData['type_reporter']) ? $formData['type_reporter'] : '';
-        $phone_reporter = isset($formData['phone_reporter']) ? $formData['phone_reporter'] : '';
+        // ดึงข้อมูลจากฟิลด์
+        $report_platform = $formData['report_platform'] ?? '';
+        $name_reporter = $formData['name_reporter'] ?? '';
+        $type_reporter = $formData['type_reporter'] ?? '';
+        $phone_reporter = $formData['phone_reporter'] ?? '';
 
         // Debug: ตรวจสอบข้อมูลที่เก็บใน session
         $sessionData = [
