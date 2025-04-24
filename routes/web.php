@@ -578,6 +578,7 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 
 // ==> Guest
 // Route::get('/aims_edit_profile', 'ProfileController@aims_edit_profile');
+Route::post('/receive-data', 'API\WebhookController@handle');
 
 Route::get('/form-sos', function () {
     return view('demo/aims_sos');
