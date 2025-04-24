@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QrCodeGeneratorController;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Http\Request;
 
 //วิธีใช้
 Route::get('/how_to_use', function () {
@@ -580,14 +579,12 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 // ==> Guest
 // Route::get('/aims_edit_profile', 'ProfileController@aims_edit_profile');
 
+Route::get('/form-sos', function () {
+    return view('demo/aims_sos');
+})->name('form.sos');
 
-Route::get('/form-sos', function (Request $request) {
-    return view('demo/aims_sos', [
-        'report_platform' => $request->query('report_platform'),
-        'name_reporter' => $request->query('name_reporter'),
-        'type_reporter' => $request->query('type_reporter'),
-        'phone_reporter' => $request->query('phone_reporter'),
-    ]);
+Route::get('/form-sos', function () {
+    return view('demo/aims_sos');
 })->name('form.sos');
 
 

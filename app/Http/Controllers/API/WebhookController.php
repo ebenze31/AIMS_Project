@@ -9,16 +9,18 @@ class WebhookController extends Controller
 {
     public function handle(Request $request)
     {
+        // รับข้อมูลจาก third-party
         $data = $request->all();
         $formData = $data['form-sos'] ?? [];
 
+        // ดึงข้อมูลจากฟิลด์
         $report_platform = $formData['report_platform'] ?? '';
-        $name_reporter = $formData['name_reporter'] ?? 'Guest';
+        $name_reporter = $formData['name_reporter'] ?? '';
         $type_reporter = $formData['type_reporter'] ?? '';
         $phone_reporter = $formData['phone_reporter'] ?? '';
 
-        // Redirect พร้อมส่งข้อมูลใน query string
-        return redirect()->route('form.sos', [
+        // เก็บข้อมูลลง session
+        return redirect()->route('form.sos')->with([
             'report_platform' => $report_platform,
             'name_reporter' => $name_reporter,
             'type_reporter' => $type_reporter,
