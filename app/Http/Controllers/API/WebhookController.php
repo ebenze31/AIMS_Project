@@ -11,7 +11,7 @@ class WebhookController extends Controller
     {
         // รับข้อมูลจาก third-party
         $data = $request->all();
-        $formData = $data['form-sos'] ?? [];
+        $formData = $data;
 
         // Debug: ตรวจสอบข้อมูลดิบที่ได้รับ
         \Log::info('Raw request data:', $data);
