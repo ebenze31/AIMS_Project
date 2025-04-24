@@ -222,22 +222,23 @@
     @csrf
     <div>
         <label for="report_platform">report_platform:</label>
-        <input type="text" name="report_platform" id="report_platform" value="{{ $formData['report_platform'] }}" placeholder="Enter report_platform">
+        <input type="text" name="report_platform" id="report_platform" value="{{ htmlspecialchars($formData['report_platform'] ?? '') }}" placeholder="Enter report_platform">
     </div>
     <div>
         <label for="name_reporter">name_reporter:</label>
-        <input type="text" name="name_reporter" id="name_reporter" value="{{ $formData['name_reporter'] }}" placeholder="Enter name_reporter">
+        <input type="text" name="name_reporter" id="name_reporter" value="{{ htmlspecialchars($formData['name_reporter'] ?? '') }}" placeholder="Enter name_reporter">
     </div>
     <div>
         <label for="type_reporter">type_reporter:</label>
-        <input type="text" name="type_reporter" id="type_reporter" value="{{ $formData['type_reporter'] }}" placeholder="Enter type_reporter">
+        <input type="text" name="type_reporter" id="type_reporter" value="{{ htmlspecialchars($formData['type_reporter'] ?? '') }}" placeholder="Enter type_reporter">
     </div>
     <div>
         <label for="phone_reporter">phone_reporter:</label>
-        <input type="text" name="phone_reporter" id="phone_reporter" value="{{ $formData['phone_reporter'] }}" placeholder="Enter phone_reporter">
+        <input type="text" name="phone_reporter" id="phone_reporter" value="{{ htmlspecialchars($formData['phone_reporter'] ?? '') }}" placeholder="Enter phone_reporter">
     </div>
     <button type="submit">Submit</button>
 </form>
+
 
 
 <div class=" m-auto">
