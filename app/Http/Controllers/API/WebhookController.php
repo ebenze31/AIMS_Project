@@ -21,6 +21,11 @@ class WebhookController extends Controller
         // Debug: ตรวจสอบข้อมูลที่ดึงมาได้
         \Log::info('Received form-sos data:', $formData);
 
+        echo "<pre>";
+        print_r($formData);
+        echo "<pre>";
+        exit();
+
         // ดึงข้อมูลจากฟิลด์
         $report_platform = $formData['report_platform'] ?? '';
         $name_reporter = $formData['name_reporter'] ?? '';
