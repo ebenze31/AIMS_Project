@@ -220,16 +220,20 @@
 <form method="POST" action="/submit-sos">
     @csrf
     <div>
-        <label for="name">Name:</label>
-        <input type="text" name="name" id="name" value="{{ session('name') }}" placeholder="Enter name">
+        <label for="report_platform">report_platform:</label>
+        <input type="text" name="report_platform" id="report_platform" value="{{ session('report_platform') }}" placeholder="Enter report_platform">
     </div>
     <div>
-        <label for="email">Email:</label>
-        <input type="email" name="email" id="email" value="{{ session('email') }}" placeholder="Enter email">
+        <label for="name_reporter">name_reporter:</label>
+        <input type="text" name="name_reporter" id="name_reporter" value="{{ session('name_reporter') }}" placeholder="Enter name_reporter">
     </div>
     <div>
-        <label for="phone">Phone:</label>
-        <input type="text" name="phone" id="phone" value="{{ session('phone') }}" placeholder="Enter phone">
+        <label for="type_reporter">type_reporter:</label>
+        <input type="text" name="type_reporter" id="type_reporter" value="{{ session('type_reporter') }}" placeholder="Enter type_reporter">
+    </div>
+    <div>
+        <label for="phone_reporter">phone_reporter:</label>
+        <input type="text" name="phone_reporter" id="phone_reporter" value="{{ session('phone_reporter') }}" placeholder="Enter phone_reporter">
     </div>
     <button type="submit">Submit</button>
 </form>
