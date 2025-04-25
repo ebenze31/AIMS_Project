@@ -270,6 +270,9 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgrxXDgk1tgXngalZF3eWtcTWI-LPdeus&language=th" ></script>
 
 <script>
+
+    var aims_marker = "{{ url('/img/icon/operating_unit/aims/aims_marker.png') }}";
+
     document.addEventListener("DOMContentLoaded", function () {
         // ขออนุญาตตำแหน่งผู้ใช้
         if (navigator.geolocation) {
@@ -294,6 +297,10 @@
         new google.maps.Marker({
             position: userLatLng,
             map: map,
+            icon: {
+                url: aims_marker,
+                scaledSize: new google.maps.Size(40, 40),
+            },
         });
 
         // เบอร์ฉุกเฉินตามประเทศ
