@@ -3,9 +3,11 @@
 @section('content')
 
 <style>
-    .gmnoprint * , .gm-style-mtc-bbw *{
+    .gmnoprint *,
+    .gm-style-mtc-bbw * {
         display: none !important;
     }
+
     body {
         width: 100%;
         height: 100dvh;
@@ -83,6 +85,13 @@
         background: #fff;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+    }
+
+    .map {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
     }
 
     @media (max-width: 900px) {
@@ -212,12 +221,68 @@
 
         }
 
-        .gmnoprint, .gm-style-mtc-bbw, .gm-style-mtc{
-            display: none!important;
+        .gmnoprint,
+        .gm-style-mtc-bbw,
+        .gm-style-mtc {
+            display: none !important;
         }
     }
 </style>
 
+<style>
+    .container {
+        --uib-size: 40px;
+        --uib-color: white;
+        --uib-speed: 2s;
+        --uib-bg-opacity: 0;
+        height: var(--uib-size);
+        width: var(--uib-size);
+        transform-origin: center;
+        animation: rotate var(--uib-speed) linear infinite;
+        will-change: transform;
+        overflow: visible;
+    }
+
+    .car {
+        fill: none;
+        stroke: var(--uib-color);
+        stroke-dasharray: 1, 200;
+        stroke-dashoffset: 0;
+        stroke-linecap: round;
+        animation: stretch calc(var(--uib-speed) * 0.75) ease-in-out infinite;
+        will-change: stroke-dasharray, stroke-dashoffset;
+        transition: stroke 0.5s ease;
+    }
+
+    .track {
+        fill: none;
+        stroke: var(--uib-color);
+        opacity: var(--uib-bg-opacity);
+        transition: stroke 0.5s ease;
+    }
+
+    @keyframes rotate {
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes stretch {
+        0% {
+            stroke-dasharray: 0, 150;
+            stroke-dashoffset: 0;
+        }
+
+        50% {
+            stroke-dasharray: 75, 150;
+            stroke-dashoffset: -25;
+        }
+
+        100% {
+            stroke-dashoffset: -100;
+        }
+    }
+</style>
 <nav class="nav-top">
     <div class="">
         แจ้งเหตุฉุกเฉิน
@@ -237,7 +302,39 @@
 <div class=" m-auto">
     <div class="content">
         <div class="map-container">
-            <div class="map" id="map"></div>
+            <div class="map" id="map">
+
+                <div class="block justify-center">
+                    <div class="flex justify-center mb-3" id="spin_alert_map">
+                        <svg
+                            class="container"
+                            viewBox="0 0 40 40"
+                            height="40"
+                            width="40">
+                            <circle
+                                class="track"
+                                cx="20"
+                                cy="20"
+                                r="17.5"
+                                pathlength="100"
+                                stroke-width="5px"
+                                fill="none" />
+                            <circle
+                                class="car"
+                                cx="20"
+                                cy="20"
+                                r="17.5"
+                                pathlength="100"
+                                stroke-width="5px"
+                                fill="none" />
+                        </svg>
+                    </div>
+                    
+                    <p id="text_alert_map" class="text-center">กำลังค้นหาตำแหน่ง...</p>
+                </div>
+
+
+            </div>
         </div>
         <div class="container-phone-number ">
             <div>
@@ -267,13 +364,12 @@
 </div>
 
 
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgrxXDgk1tgXngalZF3eWtcTWI-LPdeus&language=th" ></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgrxXDgk1tgXngalZF3eWtcTWI-LPdeus&language=th"></script>
 
 <script>
-
     var aims_marker = "{{ url('/img/icon/operating_unit/aims/aims_marker.png') }}";
 
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function() {
         // ขออนุญาตตำแหน่งผู้ใช้
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(success, error);
@@ -287,7 +383,10 @@
         const lng = position.coords.longitude;
 
         // สร้าง MAP
-        const userLatLng = { lat: lat, lng: lng };
+        const userLatLng = {
+            lat: lat,
+            lng: lng
+        };
         const map = new google.maps.Map(document.getElementById("map"), {
             center: userLatLng,
             zoom: 15
@@ -309,7 +408,7 @@
             .then(response => response.json())
             .then(data => {
                 // console.log("Country Code:", data.countryCode);
-                if(data.countryCode){
+                if (data.countryCode) {
                     get_data_phone_emergency(data.countryCode);
                 }
             })
@@ -320,26 +419,28 @@
 
     function error(err) {
         console.warn("ไม่สามารถดึงตำแหน่งได้:", err.message);
+        document.getElementById("spin_alert_map").classList.add('hidden');
+        document.getElementById("text_alert_map").innerHTML = `ไม่สามารถดึงตำแหน่งได้ <br> กรุณาเปิดตำแหน่งที่ตั้งและลองใหม่อีกครั้ง`;
     }
 
-    function get_data_phone_emergency(countryCode){
+    function get_data_phone_emergency(countryCode) {
         // console.log("Country Code:", countryCode);
 
         fetch("{{ url('/') }}/api/get_data_phone_emergency/" + countryCode)
             .then(response => response.json())
             .then(result => {
                 // console.log(result);
-                if(result){
+                if (result) {
                     let phone_content = document.querySelector('#phone_content');
 
                     for (let i = 0; i < result.length; i++) {
                         let html = `
                             <div class="number-item">
                                 <div class="contect">
-                                    <p class="name">`+result[i]['name']+`</p>
-                                    <p class="m-0 number">`+result[i]['phone']+`</p>
+                                    <p class="name">` + result[i]['name'] + `</p>
+                                    <p class="m-0 number">` + result[i]['phone'] + `</p>
                                 </div>
-                                <a href="tel:`+result[i]['phone']+`" class="btn-call">
+                                <a href="tel:` + result[i]['phone'] + `" class="btn-call">
                                     <i class="fa-solid fa-phone"></i>
                                 </a>
                             </div>
