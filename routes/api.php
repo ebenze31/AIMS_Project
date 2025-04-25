@@ -519,4 +519,5 @@ Route::get('/theme/check_data_partner/{user_id}', 'Aims_adminController@check_da
 Route::get('/change_status_command/{change_to}/{user_id}', 'Aims_adminController@change_status_command');
 // Route::post('/receive-data', 'API\WebhookController@handle');
 Route::post('/form-sos', 'API\WebhookController@handle')->middleware('session');
+Route::get('/get_data_phone_emergency/{countryCode}', 'Aims_phone_emergencysController@get_data_phone_emergency');
 // ============> END AIMS <============ //

@@ -15,6 +15,6 @@ class WebhookController extends Controller
         // ตรวจสอบโครงสร้างข้อมูล: ถ้ามี form-sos ให้ดึงจาก form-sos, ถ้าไม่มีให้ใช้ $data ตรง ๆ
         $formData = isset($data['form-sos']) ? $data['form-sos'] : $data;
 
-        return view('demo.aims_sos', compact('formData'));
+        return view('aims_emergencys.aims_sos', compact('formData'));
     }
 }

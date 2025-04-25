@@ -1,0 +1,128 @@
+{
+    "fields": [
+        {
+            "name": "aims_partner_id",
+            "type": "string"
+        },
+        {
+            "name": "aims_area_id",
+            "type": "string"
+        },
+        {
+            "name": "report_platform",
+            "type": "string"
+        },
+        {
+            "name": "name_reporter",
+            "type": "string"
+        },
+        {
+            "name": "type_reporter",
+            "type": "string"
+        },
+        {
+            "name": "phone_reporter",
+            "type": "string"
+        },
+        {
+            "name": "emergency_type",
+            "type": "string"
+        },
+        {
+            "name": "emergency_detail",
+            "type": "longtext"
+        },
+        {
+            "name": "emergency_lat",
+            "type": "string"
+        },
+        {
+            "name": "emergency_lng",
+            "type": "string"
+        },
+        {
+            "name": "emergency_location",
+            "type": "longtext"
+        },
+        {
+            "name": "emergency_photo",
+            "type": "string"
+        },
+        {
+            "name": "score_impression",
+            "type": "float"
+        },
+        {
+            "name": "score_period",
+            "type": "float"
+        },
+        {
+            "name": "score_total",
+            "type": "float"
+        },
+        {
+            "name": "comment_help",
+            "type": "longtext"
+        },
+        {
+            "name": "patient_name",
+            "type": "string"
+        },
+        {
+            "name": "patient_birth",
+            "type": "date"
+        },
+        {
+            "name": "patient_identification",
+            "type": "string"
+        },
+        {
+            "name": "patient_gender",
+            "type": "string"
+        },
+        {
+            "name": "patient_blood_type",
+            "type": "string"
+        },
+        {
+            "name": "patient_phone",
+            "type": "string"
+        },
+        {
+            "name": "patient_address",
+            "type": "longtext"
+        },
+        {
+            "name": "patient_congenital_disease",
+            "type": "string"
+        },
+        {
+            "name": "patient_allergic_drugs",
+            "type": "string"
+        },
+        {
+            "name": "patient_regularly_medications",
+            "type": "string"
+        },
+        {
+            "name": "symptom",
+            "type": "longtext"
+        },
+        {
+            "name": "symptom_other",
+            "type": "longtext"
+        },
+        {
+            "name": "idc",
+            "type": "string"
+        },
+        {
+            "name": "rc",
+            "type": "string"
+        },
+        {
+            "name": "rc_black_text",
+            "type": "string"
+        }
+    ]
+}

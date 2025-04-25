@@ -577,11 +577,13 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 });
 
 // ==> Guest
+Route::get('/form-sos', function () {
+    return view('aims_emergencys/aims_sos');
+})->name('form.sos');
 // Route::get('/aims_edit_profile', 'ProfileController@aims_edit_profile');
 
-// Route::get('/form-sos', function () {
-//     return view('demo/aims_sos');
-// })->name('form.sos');
+
+
 
 Route::resource('aims_partners', 'Aims_partnersController');
 Route::resource('aims_areas', 'Aims_areasController');
@@ -589,6 +591,8 @@ Route::resource('aims_commands', 'Aims_commandsController');
 Route::resource('aims_operating_units', 'Aims_operating_unitsController');
 Route::resource('aims_operating_officers', 'Aims_operating_officersController');
 Route::resource('aims_type_units', 'Aims_type_unitsController');
+Route::resource('aims_emergencys', 'Aims_emergencysController');
+Route::resource('aims_emergency_operations', 'Aims_emergency_operationsController');
 
 // ============> END AIMS <============ //
 
@@ -597,3 +601,4 @@ Route::resource('aims_type_units', 'Aims_type_unitsController');
 //     return view('demo/aims_sos');
 // });
 // ============> end demo aims <============//
+Route::resource('aims_phone_emergencys', 'Aims_phone_emergencysController');
