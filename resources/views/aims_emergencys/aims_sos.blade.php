@@ -320,13 +320,6 @@
 
     function error(err) {
         console.warn("ไม่สามารถดึงตำแหน่งได้:", err.message);
-
-        const defaultLatLng = { lat: 13.7563, lng: 100.5018 }; // Bangkok
-
-        const map = new google.maps.Map(document.getElementById("map"), {
-            center: defaultLatLng,
-            zoom: 12
-        });
     }
 
     function get_data_phone_emergency(countryCode){
