@@ -565,7 +565,7 @@
         fetch("{{ url('/') }}/api/get_polygon_all")
             .then(response => response.json())
             .then(result => {
-                // console.log(result);
+                console.log(result);
 
                 if (result && Array.isArray(result)) {
                     let found = false;
@@ -583,7 +583,7 @@
 
                         // ตรวจสอบว่าจุดอยู่ในโพลีกอนนี้หรือไม่
                         if (polygon && isPointInPolygon(point, polygon)) {
-                            // console.log(`อยู่ในพื้นที่: ${area.name_area}`);
+                            console.log(`อยู่ในพื้นที่: ${area.name_area}`);
                             found = true;
 
                             // หารายละเอียดสถานที่
