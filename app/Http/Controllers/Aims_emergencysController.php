@@ -175,11 +175,11 @@ class Aims_emergencysController extends Controller
     {
         $requestData = $request->all();
 
-        echo "<pre>";
-        print_r($requestData);
-        echo "<pre>";
-        exit();
+        // echo "<pre>";
+        // print_r($requestData);
+        // echo "<pre>";
+        // exit();
 
-        // return "success" ;
+        return "success" ;
     }
 }
