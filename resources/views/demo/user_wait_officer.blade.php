@@ -3,6 +3,11 @@
 @section('content')
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
+    .gmnoprint *,
+    .gm-style-mtc-bbw * {
+        display: none !important;
+    }
+    
     body {
         width: 100%;
         height: 100dvh;
@@ -93,6 +98,19 @@
         overflow: visible;
     }
 
+    .container-loader-location {
+        --uib-size: 40px;
+        --uib-color: #ffffff;
+        --uib-speed: 2s;
+        --uib-bg-opacity: 0;
+        height: var(--uib-size);
+        width: var(--uib-size);
+        transform-origin: center;
+        animation: rotate var(--uib-speed) linear infinite;
+        will-change: transform;
+        overflow: visible;
+    }
+
     .car {
         fill: none;
         stroke: var(--uib-color);
@@ -157,7 +175,36 @@
 
 
 <div>
-    <div class="map"></div>
+    <div class="map" id="map">
+        <div class="block justify-center p-5">
+            <div class="flex justify-center mb-3" id="spin_alert_map">
+                <svg
+                    class="container-loader-location mb-3 mx-auto mt-5"
+                    viewBox="0 0 40 40"
+                    height="40"
+                    width="40">
+                    <circle
+                        class="track"
+                        cx="20"
+                        cy="20"
+                        r="17.5"
+                        pathlength="100"
+                        stroke-width="5px"
+                        fill="none" />
+                    <circle
+                        class="car"
+                        cx="20"
+                        cy="20"
+                        r="17.5"
+                        pathlength="100"
+                        stroke-width="5px"
+                        fill="none" />
+                </svg>
+            </div>
+            
+            <p id="text_alert_map" class="text-center mt-5" style="color: #ffffff;">กำลังค้นหาตำแหน่ง...</p>
+        </div>
+    </div>
 
     <div class="menu">
         <div>
@@ -195,5 +242,52 @@
     </div>
 </div>
 
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgrxXDgk1tgXngalZF3eWtcTWI-LPdeus&language=th"></script>
+
+<script>
+    var aims_marker = "{{ url('/img/icon/operating_unit/aims/aims_marker.png') }}";
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // ขออนุญาตตำแหน่งผู้ใช้
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(location_success, error);
+        } else {
+            console.log("Geolocation ไม่รองรับในเบราว์เซอร์นี้");
+        }
+    });
+
+    function location_success(position) {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        // สร้าง MAP
+        const userLatLng = {
+            lat: lat,
+            lng: lng
+        };
+        const map = new google.maps.Map(document.getElementById("map"), {
+            center: userLatLng,
+            zoom: 15
+        });
+
+        // Marker ตำแหน่งผู้ใช้
+        new google.maps.Marker({
+            position: userLatLng,
+            map: map,
+            icon: {
+                url: aims_marker,
+                scaledSize: new google.maps.Size(40, 40),
+            },
+        });
+
+    }
+
+    function error(err) {
+        console.warn("ไม่สามารถดึงตำแหน่งได้:", err.message);
+        document.getElementById("spin_alert_map").classList.add('hidden');
+        document.getElementById("text_alert_map").innerHTML = `ไม่สามารถดึงตำแหน่งได้ <br> กรุณาเปิดตำแหน่งที่ตั้งและลองใหม่อีกครั้ง`;
+    }
+</script>
 
 @endsection
