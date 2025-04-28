@@ -236,8 +236,9 @@
                     <h5 class="text-center font-extrabold mt-4">กำลังค้นหาเจ้าหน้าที่ใกล้คุณ</h5>
                     <h5 class="text-center mb-3">โปรดรอซักครู่...</h5>
                 </div>
-                <button class="btn-call-officer btn" onclick="test_api();">test api</button>
                 <a href="#" class="btn-call-officer btn">ติดต่อเจ้าหน้าที่</a>
+
+                <!-- <button class="btn-call-officer btn" onclick="test_api();">test api</button> -->
             </div>
         </div>
     </div>
