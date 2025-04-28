@@ -7,6 +7,8 @@ use App\Http\Requests;
 
 use App\Models\Aims_emergency;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class Aims_emergencysController extends Controller
 {
@@ -146,5 +148,38 @@ class Aims_emergencysController extends Controller
         Aims_emergency::destroy($id);
 
         return redirect('aims_emergencys')->with('flash_message', 'Aims_emergency deleted!');
+    }
+
+    function get_polygon_all(){
+
+        $polygon = DB::table('aims_areas')
+            ->join('aims_partners', 'aims_areas.aims_partner_id', '=', 'aims_partners.id')
+            ->select(
+                'aims_areas.*',
+                'aims_partners.name as name_partner',
+                'aims_partners.full_name as full_name_partner',
+                'aims_partners.logo as logo',
+                'aims_partners.color as color',
+                'aims_partners.province as province',
+                'aims_partners.district as district',
+                'aims_partners.sub_district as sub_district',
+            )
+            ->where('aims_areas.status', "show")
+            ->get();
+
+        return $polygon ;
+
+    }
+
+    function send_emergency(Request $request)
+    {
+        $requestData = $request->all();
+
+        echo "<pre>";
+        print_r($requestData);
+        echo "<pre>";
+        exit();
+
+        // return "success" ;
     }
 }

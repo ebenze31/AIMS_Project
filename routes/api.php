@@ -520,4 +520,6 @@ Route::get('/change_status_command/{change_to}/{user_id}', 'Aims_adminController
 // Route::post('/receive-data', 'API\WebhookController@handle');
 Route::post('/form-sos', 'API\WebhookController@handle')->middleware('session');
 Route::get('/get_data_phone_emergency/{countryCode}', 'Aims_phone_emergencysController@get_data_phone_emergency');
+Route::get('/get_polygon_all', 'Aims_emergencysController@get_polygon_all');
+Route::post('/send_emergency', 'Aims_emergencysController@send_emergency');
 // ============> END AIMS <============ //

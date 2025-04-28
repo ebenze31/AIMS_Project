@@ -289,16 +289,6 @@
     </div>
 </nav>
 
-<!-- Date API -->
-<div class="hidden">
-    <input type="text" name="report_platform" id="report_platform" value="{{ htmlspecialchars($formData['report_platform'] ?? '') }}" placeholder="Enter report_platform">
-    <input type="text" name="name_reporter" id="name_reporter" value="{{ htmlspecialchars($formData['name_reporter'] ?? '') }}" placeholder="Enter name_reporter">
-    <input type="text" name="type_reporter" id="type_reporter" value="{{ htmlspecialchars($formData['type_reporter'] ?? '') }}" placeholder="Enter type_reporter">
-    <input type="text" name="phone_reporter" id="phone_reporter" value="{{ htmlspecialchars($formData['phone_reporter'] ?? '') }}" placeholder="Enter phone_reporter">
-</div>
-<!-- END Date API -->
-
-
 <div class=" m-auto">
     <div class="content">
         <div class="map-container">
@@ -346,15 +336,15 @@
                 </div>
             </div>
 
-            <div class="btn-sos-aims">
+            <div id="btn_help" class="btn-sos-aims hidden">
                 <div class="backdrop"></div>
-                <button>
+                <button onclick="openModal();">
                     <div>
-                        <img src="{{ asset('/partner_new/images/logo/aims logo.png') }}" alt="" width="60" height="60">
+                        <img id="btn_help_img" src="{{ asset('/partner_new/images/logo/aims logo.png') }}" alt="" width="60" height="60">
                     </div>
                     <div class="w-full block text-[#fff]">
                         <p class="text-[16px] font-extrabold">ขอความช่วยเหลือ</p>
-                        <p class="text-[12px] font-light">ตำรวจท่องเที่ยว</p>
+                        <p id="btn_help_name" class="text-[12px] font-light">ตำรวจท่องเที่ยว</p>
                     </div>
                 </button>
             </div>
@@ -362,6 +352,90 @@
         </div>
     </div>
 </div>
+
+
+
+
+<!-- Modal -->
+<div id="myModal" class="fixed inset-0 p-3 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+    <h2 class="text-xl font-bold mb-4">การขอความช่วยเหลือ</h2>
+    <div class="row">
+        <!-- Date API -->
+        <div class="col-12">
+            <p>ข้อมูลจาก API (เดี๋ยวซ่อนไว้)</p>
+            <label>platform (เดี๋ยวซ่อนไว้)</label>
+            <input type="text" class="data_for_ask" name="report_platform" id="report_platform" value="{{ htmlspecialchars($formData['report_platform'] ?? '') }}" placeholder="Enter report_platform">
+
+            <br>
+            <label>ชื่อผู้ขอความช่วยเหลือ</label>
+            <input type="text" class="data_for_ask" name="name_reporter" id="name_reporter" value="{{ htmlspecialchars($formData['name_reporter'] ?? '') }}" placeholder="Enter name_reporter">
+            <br>
+            <label>เบอร์ผู้ขอความช่วยเหลือ</label>
+            <input type="text" class="data_for_ask" name="phone_reporter" id="phone_reporter" value="{{ htmlspecialchars($formData['phone_reporter'] ?? '') }}" placeholder="Enter phone_reporter">
+            <br>
+            <label>ประเภทผู้ขอความช่วยเหลือ</label>
+            <input type="text" class="data_for_ask" name="type_reporter" id="type_reporter" value="{{ htmlspecialchars($formData['type_reporter'] ?? '') }}" placeholder="Enter type_reporter">
+
+            <hr>
+        </div>
+        <!-- END Date API -->
+        <div class="col-12">
+            <label>partner id</label>
+            <input type="text" class="data_for_ask form-control" name="aims_partner_id" id="aims_partner_id" value="" placeholder="aims_partner_id">
+            <br>
+            <label>area id</label>
+            <input type="text" class="data_for_ask form-control" name="aims_area_id" id="aims_area_id" value="" placeholder="aims_area_id">
+            <br>
+            <label>lat</label>
+            <input type="text" class="data_for_ask" name="emergency_lat" id="emergency_lat" value="" placeholder="emergency_lat">
+            <br>
+            <label>lng</label>
+            <input type="text" class="data_for_ask" name="emergency_lng" id="emergency_lng" value="" placeholder="emergency_lng">
+            <br>
+            <label>text location</label>
+            <br>
+            <textarea type="text" class="data_for_ask form-control" name="emergency_location" id="emergency_location" placeholder="emergency_location"></textarea>
+            <br>
+            <label>emergency type</label>
+            <br>
+            <select class="data_for_ask form-control" name="emergency_type" id="emergency_type">
+                <option selected value="">กรุณเลือก</option>
+                <option value="เหตุด่วนเหตุร้าย">เหตุด่วนเหตุร้าย</option>
+                <option value="อุบัติเหตุ">อุบัติเหตุ</option>
+                <option value="ไฟไหม้">ไฟไหม้</option>
+            </select>
+            <br>
+            <label>emergency detail</label>
+            <br>
+            <textarea type="text" class="data_for_ask form-control" name="emergency_detail" id="emergency_detail" placeholder="emergency_detail"></textarea>
+            <br>
+            <label>photo</label>
+            <input type="file" class="data_for_ask" name="emergency_photo" id="emergency_photo" value="" placeholder="emergency_photo">
+        </div>
+
+        <hr>
+
+        <div class="col-12">
+            <button class="" onclick="send_emergency();">
+                ปุ่ม -> ขอความช่วยเหลือ
+            </button>
+        </div>
+    </div>
+    
+    <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-xl font-bold">&times;</button>
+  </div>
+</div>
+
+<script>
+    function openModal() {
+        document.getElementById('myModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').classList.add('hidden');
+    }
+</script>
 
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgrxXDgk1tgXngalZF3eWtcTWI-LPdeus&language=th"></script>
@@ -372,13 +446,13 @@
     document.addEventListener("DOMContentLoaded", function() {
         // ขออนุญาตตำแหน่งผู้ใช้
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(success, error);
+            navigator.geolocation.getCurrentPosition(location_success, error);
         } else {
             console.log("Geolocation ไม่รองรับในเบราว์เซอร์นี้");
         }
     });
 
-    function success(position) {
+    function location_success(position) {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
 
@@ -402,6 +476,9 @@
             },
         });
 
+        // เช็คพื้นที่
+        check_area(lat,lng);
+
         // เบอร์ฉุกเฉินตามประเทศ
         const apiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`;
         fetch(apiUrl)
@@ -417,10 +494,121 @@
             });
     }
 
+    // หารายละเอียดสถานที่
+    const geocoder = new google.maps.Geocoder();
+    const infowindow = new google.maps.InfoWindow();
+
+    async function geocodeLatLng(geocoder, map, infowindow, lat, lng) {
+        const latlng = {
+            lat: parseFloat(lat),
+            lng: parseFloat(lng),
+        };
+        
+        try {
+            const response = await geocoder.geocode({ location: latlng });
+            if (response.results[0]) {
+                return response.results[0].formatted_address;
+            } else {
+                // window.alert("No results found");
+                return null; // หรือจัดการตามที่ต้องการ
+            }
+        } catch (e) {
+            // window.alert("Geocoder failed due to: " + e);
+            return null; // หรือจัดการตามที่ต้องการ
+        }
+    }
+
+    var formatted_address ;
+    async function getFormattedAddress(lat, lng) {
+    formatted_address = await geocodeLatLng(geocoder, map, infowindow, lat, lng);
+        if (formatted_address) {
+            // console.log("ที่อยู่: ", formatted_address);
+            document.querySelector('#emergency_location').value = formatted_address;
+        } else {
+            // console.log("ไม่มีข้อมูลที่อยู่");
+        }
+    }
+
     function error(err) {
         console.warn("ไม่สามารถดึงตำแหน่งได้:", err.message);
         document.getElementById("spin_alert_map").classList.add('hidden');
         document.getElementById("text_alert_map").innerHTML = `ไม่สามารถดึงตำแหน่งได้ <br> กรุณาเปิดตำแหน่งที่ตั้งและลองใหม่อีกครั้ง`;
+
+        get_data_phone_emergency('TH');
+    }
+
+    // ฟังก์ชัน Ray Casting เพื่อตรวจสอบว่าจุดอยู่ในโพลีกอนหรือไม่
+    function isPointInPolygon(point, polygon) {
+        const x = point.lng;
+        const y = point.lat;
+        let inside = false;
+
+        for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+            const xi = polygon[i].lng;
+            const yi = polygon[i].lat;
+            const xj = polygon[j].lng;
+            const yj = polygon[j].lat;
+
+            const intersect =
+                yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi;
+            if (intersect) inside = !inside;
+        }
+
+        return inside;
+    }
+
+    function check_area(lat, lng) {
+        // สร้าง object สำหรับจุด
+        let point = { lat: lat, lng: lng };
+
+        // ดึงข้อมูลโพลีกอนจาก API
+        fetch("{{ url('/') }}/api/get_polygon_all")
+            .then(response => response.json())
+            .then(result => {
+                // console.log(result);
+
+                if (result && Array.isArray(result)) {
+                    let found = false;
+
+                    // วนลูปตรวจสอบแต่ละ polygon
+                    result.forEach(area => {
+
+                        let polygon ;
+                        if(area.polygon){
+                            polygon = JSON.parse(area.polygon);
+                        }
+                        else{
+                            polygon = null;
+                        }
+
+                        // ตรวจสอบว่าจุดอยู่ในโพลีกอนนี้หรือไม่
+                        if (polygon && isPointInPolygon(point, polygon)) {
+                            // console.log(`อยู่ในพื้นที่: ${area.name_area}`);
+                            found = true;
+
+                            // หารายละเอียดสถานที่
+                            getFormattedAddress(lat, lng);
+                            document.querySelector('#aims_partner_id').value = area.aims_partner_id;
+                            document.querySelector('#aims_area_id').value = area.id;
+                            document.querySelector('#emergency_lat').value = lat;
+                            document.querySelector('#emergency_lng').value = lng;
+                            document.querySelector('#btn_help_img').setAttribute('src',`{{ url('/storage') }}/${area.logo}`)
+                            document.querySelector('#btn_help_name').innerHTML = `${area.name_partner}` ;
+                            document.querySelector('#btn_help').classList.remove('hidden');
+                        }
+                    });
+
+                    // ถ้าไม่พบโพลีกอนใดเลย
+                    if (!found) {
+                        console.log(`ไม่อยู่ในพื้นที่ใดเลย`);
+                    }
+                } else {
+                    console.error("ไม่มีข้อมูลโพลีกอนหรือข้อมูลไม่ถูกต้อง");
+                }
+            })
+            .catch(error => {
+                console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+            });
     }
 
     function get_data_phone_emergency(countryCode) {
@@ -451,6 +639,35 @@
                 }
             });
     }
+
+    function send_emergency(){
+        const elements = document.querySelectorAll('.data_for_ask');
+        const data = {};
+
+        elements.forEach((element, index) => {
+            // ใช้ name หรือ id เป็น key หรือใช้ index ถ้าไม่มี name/id
+            const key = element.name || element.id || `field_${index}`;
+            data[key] = element.value;
+        });
+
+        console.log(data);
+
+        fetch("{{ url('/') }}/api/send_emergency", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.text())
+        .then(result => {
+                if (result == "success") {
+                    window.location.href = "{{ url('/demo/user_wait_officer') }}";
+                }
+            })
+        .catch(error => console.error('Error:', error));
+    }
+
 </script>
 
 

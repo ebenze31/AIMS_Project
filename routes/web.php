@@ -597,9 +597,9 @@ Route::resource('aims_emergency_operations', 'Aims_emergency_operationsControlle
 // ============> END AIMS <============ //
 
 // ============> demo aims <============//
-// Route::get('/demo/aims_sos', function () {
-//     return view('demo/aims_sos');
-// });
+Route::get('/demo/user_wait_officer', function () {
+    return view('demo/user_wait_officer');
+});
 
 Route::get('/demo/login', function () {
     return view('demo/login');
