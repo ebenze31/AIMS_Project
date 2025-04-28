@@ -14,5 +14,6 @@ class VerifyCsrfToken extends Middleware
     protected $except = [
         'facebook_messenger_api',
         '/api/form-sos',
+        'api/sos_device',
     ];
 }

@@ -236,6 +236,7 @@
                     <h5 class="text-center font-extrabold mt-4">กำลังค้นหาเจ้าหน้าที่ใกล้คุณ</h5>
                     <h5 class="text-center mb-3">โปรดรอซักครู่...</h5>
                 </div>
+                <button class="btn-call-officer btn" onclick="test_api();">test api</button>
                 <a href="#" class="btn-call-officer btn">ติดต่อเจ้าหน้าที่</a>
             </div>
         </div>
@@ -287,6 +288,59 @@
         console.warn("ไม่สามารถดึงตำแหน่งได้:", err.message);
         document.getElementById("spin_alert_map").classList.add('hidden');
         document.getElementById("text_alert_map").innerHTML = `ไม่สามารถดึงตำแหน่งได้ <br> กรุณาเปิดตำแหน่งที่ตั้งและลองใหม่อีกครั้ง`;
+    }
+
+    function test_api() {
+        const data = {
+            report_platform: "WLS",
+            name_reporter: "Benz",
+            type_reporter: "ญาติ",
+            phone_reporter: "0999999999",
+            emergency_type: "ฉุกเฉิน",
+            emergency_detail: "รายละเอียด",
+            emergency_lat: "13.7563",
+            emergency_lng: "100.5018",
+            emergency_location: "Bangkok, Thailand",
+            emergency_photo_url: "https://www.aims.viicheck.com/partner_new/images/logo/aims%20logo.png",
+            patient_name: "นายจิตใจ ดีงาม",
+            patient_birth: "1998-08-31",
+            patient_identification: "1234567891234",
+            patient_gender: "ชาย",
+            patient_blood_type: "O",
+            patient_phone: "09876543211",
+            patient_address: "Bangkok, Thailand",
+            patient_congenital_disease: "",
+            patient_allergic_drugs: "",
+            patient_regular_medications: ""
+        };
+
+        fetch("{{ url('/') }}/api/sos_device", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(result => {
+            if (result.status === "success") {
+                console.log("SOS request sent successfully:", result);
+                alert("ส่งคำขอ SOS สำเร็จ!");
+            } else {
+                console.error("SOS request failed:", result.message);
+                alert("เกิดข้อผิดพลาด: " + result.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("เกิดข้อผิดพลาดในการส่งคำขอ: " + error.message);
+        });
     }
 </script>
 
