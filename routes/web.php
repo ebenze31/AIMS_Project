@@ -600,5 +600,12 @@ Route::resource('aims_emergency_operations', 'Aims_emergency_operationsControlle
 // Route::get('/demo/aims_sos', function () {
 //     return view('demo/aims_sos');
 // });
+
+Route::get('/demo/login', function () {
+    return view('demo/login');
+});
+Route::get('/demo/user_wait_officer', function () {
+    return view('demo/user_wait_officer');
+});
 // ============> end demo aims <============//
 Route::resource('aims_phone_emergencys', 'Aims_phone_emergencysController');
