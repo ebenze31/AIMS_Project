@@ -283,7 +283,12 @@
         }
     }
 </style>
-<nav class="nav-top">
+<nav class="nav-top">   
+    <div style="width: 55px;height: 55px;padding: 5px;background-color: #fff;border-radius: 50px;" class="mr-3" >
+
+        <img src="{{ asset('/partner_new/images/logo/aims full logo.png') }}" height="60" width="60"  alt="" >
+    </div>
+
     <div class="">
         แจ้งเหตุฉุกเฉิน
     </div>
@@ -397,7 +402,7 @@
 </style>
 <!-- Modal -->
 <div id="myModal" class="fixed inset-0 p-3 bg-backdrop flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
         <h2 class="text-xl font-bold ">การขอความช่วยเหลือ</h2>
         <div class="row ">
             <div class="container-data-api">
@@ -411,10 +416,10 @@
 
                 <br>
                 <label>ชื่อผู้ขอความช่วยเหลือ <span class="text-[#db2d2e]">*</span></label>
-                <input type="text" class="data_for_ask" name="name_reporter" id="name_reporter" value="{{ htmlspecialchars($formData['name_reporter'] ?? '') }}" placeholder="กรอกชื่อผู้ขอความช่วยเหลือ">
+                <input type="text" class="data_for_ask" name="name_reporter" id="name_reporter" value="{{ htmlspecialchars($formData['name_reporter'] ?? '') }}" placeholder="กรอกชื่อผู้ขอความช่วยเหลือ" required>
                 <br>
                 <label>เบอร์ผู้ขอความช่วยเหลือ <span class="text-[#db2d2e]">*</span></label>
-                <input type="text" class="data_for_ask" name="phone_reporter" id="phone_reporter" value="{{ htmlspecialchars($formData['phone_reporter'] ?? '') }}" placeholder="กรอกเบอร์ผู้ขอความช่วยเหลือ">
+                <input type="text" class="data_for_ask" name="phone_reporter" id="phone_reporter" value="{{ htmlspecialchars($formData['phone_reporter'] ?? '') }}" placeholder="กรอกเบอร์ผู้ขอความช่วยเหลือ" required>
                 <br>
                 <!-- <label>ประเภทผู้ขอความช่วยเหลือ <span></span></label> -->
                 <input type="text" class="data_for_ask hidden" name="type_reporter" id="type_reporter" value="{{ htmlspecialchars($formData['type_reporter'] ?? '') }}" placeholder="Enter type_reporter">
@@ -437,7 +442,7 @@
                 <br>
                 <label>รายละเอียดสถานที่</label>
                 <br>
-                <textarea type="text" class="data_for_ask form-control" name="emergency_location" id="emergency_location" placeholder="emergency_location"></textarea>
+                <textarea type="text" class="data_for_ask form-control" name="emergency_location" id="emergency_location" placeholder="กรอกรายละเอียดสถานที่"></textarea>
                 <br>
                 <label>ประเภทการขอความช่วยเหลือ</label>
                 <br>
@@ -450,7 +455,7 @@
                 <br>
                 <label>รายละเอียดเหตุ</label>
                 <br>
-                <textarea type="text" class="data_for_ask form-control" name="emergency_detail" id="emergency_detail" placeholder="emergency_detail"></textarea>
+                <textarea type="text" class="data_for_ask form-control" name="emergency_detail" id="emergency_detail" placeholder="กรอกรายละเอียดของเหตุ"></textarea>
                 <br>
                 <label>รูปภาพ</label>
                 <input type="file" class="data_for_ask" name="emergency_photo" id="emergency_photo" value="" placeholder="emergency_photo">
