@@ -319,7 +319,7 @@
                                 fill="none" />
                         </svg>
                     </div>
-                    
+
                     <p id="text_alert_map" class="text-center">กำลังค้นหาตำแหน่ง...</p>
                 </div>
 
@@ -355,76 +355,118 @@
 
 
 
+<style>
+    .bg-backdrop {
+        background-color: rgba(0, 0, 0, .8);
+    }
 
+    input.data_for_ask ,textarea.data_for_ask ,select.data_for_ask{
+        padding: 10px;
+        width: 100%;
+        border: #dde1eb 1px solid;
+        border-radius: 10px;
+        color: #3f3939;
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+
+    #myModal label {
+        color: #3f3939;
+    }
+
+    .container-data-api {
+        max-height: calc(80dvh - 20px) !important;
+        overflow: auto !important;
+    }
+    .btn-sos{
+        
+    }
+    .btn-sos {
+        background: var(--background_primary);
+        width: 100%;
+        height: 50px;
+        border-radius: 10px;
+        z-index: 3;
+        position: relative;
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        color: #fff;
+        margin-top: 10px;
+    }
+</style>
 <!-- Modal -->
-<div id="myModal" class="fixed inset-0 p-3 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-  <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-    <h2 class="text-xl font-bold mb-4">การขอความช่วยเหลือ</h2>
-    <div class="row">
-        <!-- Date API -->
-        <div class="col-12">
-            <p>ข้อมูลจาก API (เดี๋ยวซ่อนไว้)</p>
-            <label>platform (เดี๋ยวซ่อนไว้)</label>
-            <input type="text" class="data_for_ask" name="report_platform" id="report_platform" value="{{ htmlspecialchars($formData['report_platform'] ?? '') }}" placeholder="Enter report_platform">
+<div id="myModal" class="fixed inset-0 p-3 bg-backdrop flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <h2 class="text-xl font-bold ">การขอความช่วยเหลือ</h2>
+        <div class="row ">
+            <div class="container-data-api">
 
-            <br>
-            <label>ชื่อผู้ขอความช่วยเหลือ</label>
-            <input type="text" class="data_for_ask" name="name_reporter" id="name_reporter" value="{{ htmlspecialchars($formData['name_reporter'] ?? '') }}" placeholder="Enter name_reporter">
-            <br>
-            <label>เบอร์ผู้ขอความช่วยเหลือ</label>
-            <input type="text" class="data_for_ask" name="phone_reporter" id="phone_reporter" value="{{ htmlspecialchars($formData['phone_reporter'] ?? '') }}" placeholder="Enter phone_reporter">
-            <br>
-            <label>ประเภทผู้ขอความช่วยเหลือ</label>
-            <input type="text" class="data_for_ask" name="type_reporter" id="type_reporter" value="{{ htmlspecialchars($formData['type_reporter'] ?? '') }}" placeholder="Enter type_reporter">
+            
+            <!-- Date API -->
+            <div class="col-12">
+                <p class="hidden">ข้อมูลจาก API (เดี๋ยวซ่อนไว้)</p>
+                <label class="hidden">platform (เดี๋ยวซ่อนไว้)</label>
+                <input type="text" class="data_for_ask hidden" name="report_platform" id="report_platform" value="{{ htmlspecialchars($formData['report_platform'] ?? '') }}" placeholder="Enter report_platform">
 
+                <br>
+                <label>ชื่อผู้ขอความช่วยเหลือ <span class="text-[#db2d2e]">*</span></label>
+                <input type="text" class="data_for_ask" name="name_reporter" id="name_reporter" value="{{ htmlspecialchars($formData['name_reporter'] ?? '') }}" placeholder="กรอกชื่อผู้ขอความช่วยเหลือ">
+                <br>
+                <label>เบอร์ผู้ขอความช่วยเหลือ <span class="text-[#db2d2e]">*</span></label>
+                <input type="text" class="data_for_ask" name="phone_reporter" id="phone_reporter" value="{{ htmlspecialchars($formData['phone_reporter'] ?? '') }}" placeholder="กรอกเบอร์ผู้ขอความช่วยเหลือ">
+                <br>
+                <!-- <label>ประเภทผู้ขอความช่วยเหลือ <span></span></label> -->
+                <input type="text" class="data_for_ask hidden" name="type_reporter" id="type_reporter" value="{{ htmlspecialchars($formData['type_reporter'] ?? '') }}" placeholder="Enter type_reporter">
+
+                <hr>
+            </div>
+            <!-- END Date API -->
+            <div class="col-12">
+                <!-- <label>partner id</label> -->
+                <input type="text" class="data_for_ask form-control hidden" name="aims_partner_id" id="aims_partner_id" value="" placeholder="aims_partner_id">
+                <!-- <br> -->
+                <!-- <label>area id</label> -->
+                <input type="text" class="data_for_ask form-control hidden" name="aims_area_id" id="aims_area_id" value="" placeholder="aims_area_id">
+                <!-- <br> -->
+                <!-- <label>lat</label> -->
+                <input type="text" class="data_for_ask hidden" name="emergency_lat" id="emergency_lat" value="" placeholder="emergency_lat">
+                <!-- <br> -->
+                <!-- <label>lng</label> -->
+                <input type="text" class="data_for_ask hidden" name="emergency_lng" id="emergency_lng" value="" placeholder="emergency_lng">
+                <br>
+                <label>รายละเอียดสถานที่</label>
+                <br>
+                <textarea type="text" class="data_for_ask form-control" name="emergency_location" id="emergency_location" placeholder="emergency_location"></textarea>
+                <br>
+                <label>ประเภทการขอความช่วยเหลือ</label>
+                <br>
+                <select class="data_for_ask form-control" name="emergency_type" id="emergency_type">
+                    <option selected value="">กรุณเลือก</option>
+                    <option value="เหตุด่วนเหตุร้าย">เหตุด่วนเหตุร้าย</option>
+                    <option value="อุบัติเหตุ">อุบัติเหตุ</option>
+                    <option value="ไฟไหม้">ไฟไหม้</option>
+                </select>
+                <br>
+                <label>รายละเอียดเหตุ</label>
+                <br>
+                <textarea type="text" class="data_for_ask form-control" name="emergency_detail" id="emergency_detail" placeholder="emergency_detail"></textarea>
+                <br>
+                <label>รูปภาพ</label>
+                <input type="file" class="data_for_ask" name="emergency_photo" id="emergency_photo" value="" placeholder="emergency_photo">
+            </div>
+            </div>
             <hr>
-        </div>
-        <!-- END Date API -->
-        <div class="col-12">
-            <label>partner id</label>
-            <input type="text" class="data_for_ask form-control" name="aims_partner_id" id="aims_partner_id" value="" placeholder="aims_partner_id">
-            <br>
-            <label>area id</label>
-            <input type="text" class="data_for_ask form-control" name="aims_area_id" id="aims_area_id" value="" placeholder="aims_area_id">
-            <br>
-            <label>lat</label>
-            <input type="text" class="data_for_ask" name="emergency_lat" id="emergency_lat" value="" placeholder="emergency_lat">
-            <br>
-            <label>lng</label>
-            <input type="text" class="data_for_ask" name="emergency_lng" id="emergency_lng" value="" placeholder="emergency_lng">
-            <br>
-            <label>text location</label>
-            <br>
-            <textarea type="text" class="data_for_ask form-control" name="emergency_location" id="emergency_location" placeholder="emergency_location"></textarea>
-            <br>
-            <label>emergency type</label>
-            <br>
-            <select class="data_for_ask form-control" name="emergency_type" id="emergency_type">
-                <option selected value="">กรุณเลือก</option>
-                <option value="เหตุด่วนเหตุร้าย">เหตุด่วนเหตุร้าย</option>
-                <option value="อุบัติเหตุ">อุบัติเหตุ</option>
-                <option value="ไฟไหม้">ไฟไหม้</option>
-            </select>
-            <br>
-            <label>emergency detail</label>
-            <br>
-            <textarea type="text" class="data_for_ask form-control" name="emergency_detail" id="emergency_detail" placeholder="emergency_detail"></textarea>
-            <br>
-            <label>photo</label>
-            <input type="file" class="data_for_ask" name="emergency_photo" id="emergency_photo" value="" placeholder="emergency_photo">
+
+            <div class="col-12">
+                <button class="btn-sos" onclick="send_emergency();">
+                   <p class="text-center">ขอความช่วยเหลือ</p>
+                </button>
+            </div>
         </div>
 
-        <hr>
-
-        <div class="col-12">
-            <button class="" onclick="send_emergency();">
-                ปุ่ม -> ขอความช่วยเหลือ
-            </button>
-        </div>
+        <button onclick="closeModal()" class="absolute top-2 right-3 text-gray-500 hover:text-red-500 text-xl font-bold">&times;</button>
     </div>
-    
-    <button onclick="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-red-500 text-xl font-bold">&times;</button>
-  </div>
 </div>
 
 <script>
@@ -477,7 +519,7 @@
         });
 
         // เช็คพื้นที่
-        check_area(lat,lng);
+        check_area(lat, lng);
 
         // เบอร์ฉุกเฉินตามประเทศ
         const apiUrl = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`;
@@ -503,9 +545,11 @@
             lat: parseFloat(lat),
             lng: parseFloat(lng),
         };
-        
+
         try {
-            const response = await geocoder.geocode({ location: latlng });
+            const response = await geocoder.geocode({
+                location: latlng
+            });
             if (response.results[0]) {
                 return response.results[0].formatted_address;
             } else {
@@ -518,9 +562,9 @@
         }
     }
 
-    var formatted_address ;
+    var formatted_address;
     async function getFormattedAddress(lat, lng) {
-    formatted_address = await geocodeLatLng(geocoder, map, infowindow, lat, lng);
+        formatted_address = await geocodeLatLng(geocoder, map, infowindow, lat, lng);
         if (formatted_address) {
             // console.log("ที่อยู่: ", formatted_address);
             document.querySelector('#emergency_location').value = formatted_address;
@@ -559,7 +603,10 @@
 
     function check_area(lat, lng) {
         // สร้าง object สำหรับจุด
-        let point = { lat: lat, lng: lng };
+        let point = {
+            lat: lat,
+            lng: lng
+        };
 
         // ดึงข้อมูลโพลีกอนจาก API
         fetch("{{ url('/') }}/api/get_polygon_all")
@@ -573,11 +620,10 @@
                     // วนลูปตรวจสอบแต่ละ polygon
                     result.forEach(area => {
 
-                        let polygon ;
-                        if(area.polygon){
+                        let polygon;
+                        if (area.polygon) {
                             polygon = JSON.parse(area.polygon);
-                        }
-                        else{
+                        } else {
                             polygon = null;
                         }
 
@@ -592,8 +638,8 @@
                             document.querySelector('#aims_area_id').value = area.id;
                             document.querySelector('#emergency_lat').value = lat;
                             document.querySelector('#emergency_lng').value = lng;
-                            document.querySelector('#btn_help_img').setAttribute('src',`{{ url('/storage') }}/${area.logo}`)
-                            document.querySelector('#btn_help_name').innerHTML = `${area.name_partner}` ;
+                            document.querySelector('#btn_help_img').setAttribute('src', `{{ url('/storage') }}/${area.logo}`)
+                            document.querySelector('#btn_help_name').innerHTML = `${area.name_partner}`;
                             document.querySelector('#btn_help').classList.remove('hidden');
                         }
                     });
@@ -640,7 +686,7 @@
             });
     }
 
-    function send_emergency(){
+    function send_emergency() {
         const elements = document.querySelectorAll('.data_for_ask');
         const data = {};
 
@@ -653,21 +699,20 @@
         console.log(data);
 
         fetch("{{ url('/') }}/api/send_emergency", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
-        .then(response => response.text())
-        .then(result => {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.text())
+            .then(result => {
                 if (result == "success") {
                     window.location.href = "{{ url('/demo/user_wait_officer') }}";
                 }
             })
-        .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error:', error));
     }
-
 </script>
 
 
