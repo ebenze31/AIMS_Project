@@ -1605,6 +1605,10 @@
     document.addEventListener('DOMContentLoaded', (event) => {
         // console.log("START");
         check_data_partner();
+        check_sos_alarm();
+
+        // ตั้งให้ทำซ้ำทุก 5 วินาที
+        setInterval(check_sos_alarm, 5000);
 
         if("{{ $officer_role }}" == "admin-partner"){
             document.querySelector('#switcher_status_command').classList.add('d-none');
@@ -1687,6 +1691,23 @@
                 // console.log(result)
         });
 
+    }
+
+    function check_sos_alarm(){
+
+        console.log("check_sos_alarm");
+        var audio = new Audio("{{ asset('sound/Alarm Clock.mp3') }}");
+
+        fetch("{{ url('/') }}/api/check_sos_alarm/" + "{{ Auth::user()->id }}")
+            .then(response => response.json())
+            .then(result => {
+
+                if(result['status'] == "alarm"){
+                    console.log(result);
+                    audio.play();
+                    alert("รับแจ้งเหตุ SOS ID : " + result['data'].aims_emergency_id);
+                }
+        });
     }
 
 </script>

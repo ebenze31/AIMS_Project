@@ -4,11 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests;
+use Carbon\Carbon;
 
 use App\Models\Aims_emergency;
+use App\Models\Aims_emergency_operation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Aims_command;
+use App\Models\Aims_area;
+use App\User;
 
 class Aims_emergencysController extends Controller
 {
@@ -173,13 +178,90 @@ class Aims_emergencysController extends Controller
 
     function send_emergency(Request $request)
     {
+        $current_time = Carbon::now();
         $requestData = $request->all();
+        $emergency = Aims_emergency::create($requestData);
 
-        // echo "<pre>";
-        // print_r($requestData);
-        // echo "<pre>";
-        // exit();
+        // เช็คสถานะเปิดทำการของ Partner
+        $status_message = 'ไม่เปิดทำการ';
+        $check_open_partner = Aims_area::where('id' , $requestData['aims_area_id'])->first();
+
+        if ($check_open_partner) {
+            if ($check_open_partner->check_time_command === 'No') {
+                $status_message = 'เปิดทำการ';
+            } elseif ($check_open_partner->check_time_command === 'Yes') {
+                // แปลงเวลาเริ่มต้นและเวลาสิ้นสุดเป็น Carbon
+                $start_time = Carbon::createFromFormat('H:i:s', $check_open_partner->time_start_command);
+                $end_time = Carbon::createFromFormat('H:i:s', $check_open_partner->time_end_command);
+
+                // ตรวจสอบว่าเวลาอยู่ในช่วงหรือไม่
+                if ($current_time->between($start_time, $end_time)) {
+                    $status_message = 'เปิดทำการ';
+                }
+            }
+        }
+
+        // ข้อมูล สำหรับสั่งการ
+        $data_operation = [];
+        $data_operation['aims_emergency_id'] = $emergency->id ;
+        $data_operation['operating_code'] = "1111-2222-3333" ;
+
+        // -->> เปิดทำการ
+        if($status_message == 'เปิดทำการ'){
+            $aims_commands = Aims_command::where('status' , 'Standby')
+                ->where('aims_partner_id' , $requestData['aims_partner_id'])
+                ->where('aims_area_id' , $requestData['aims_area_id'])
+                ->orderByRaw('CAST(number AS UNSIGNED) ASC')
+                ->first();
+
+            $data_operation['notify'] = "command_id-" . $aims_commands->id ;
+            $data_operation['status'] = "รับแจ้งเหตุ" ;
+            $data_operation['time_create_sos'] = $current_time;
+        }
+        // -->> ไม่เปิดทำการ
+        else if($status_message == 'ไม่เปิดทำการ'){
+            $data_operation['notify'] = "finished-" . "auto" ;
+            $data_operation['command_by'] = "auto" ;
+            $data_operation['status'] = "สั่งการ (auto)" ;
+            $data_operation['time_create_sos'] = $current_time;
+            $data_operation['time_command'] = $current_time; 
+
+            // ค้นหาเจ้าหน้าที่ของพื้นที่ที่ใกล้จุดเกิดเหตุ
+        }
+        
+        
+        $emergency_operation = Aims_emergency_operation::create($data_operation);
 
         return "success" ;
+        // return $aims_commands ;
     }
+
+    function check_sos_alarm($user_id){
+
+        $check_data = Aims_emergency_operation::where('notify', 'command_id-' . $user_id)->first();
+        $data_return = [];
+
+        if ($check_data) {
+            // สำเนาค่าปัจจุบันก่อนอัปเดต
+            $original_data = clone $check_data;
+
+            // อัปเดต notify
+            $check_data->notify = 'finished-' . $user_id;
+            $check_data->save();
+
+            $emergency = Aims_emergency::where('id' , $original_data->aims_emergency_id)->first();
+
+            $data_return['status'] = "alarm" ;
+            $data_return['data'] = $original_data ;
+            $data_return['emergency'] = $emergency ;
+
+            return $data_return;
+        }
+        else{
+            $data_return['status'] = "empty" ;
+            return $data_return;
+        }
+
+    }
+
 }

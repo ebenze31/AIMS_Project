@@ -701,7 +701,7 @@
             data[key] = element.value;
         });
 
-        console.log(data);
+        // console.log(data);
 
         fetch("{{ url('/') }}/api/send_emergency", {
                 method: 'POST',
@@ -712,6 +712,8 @@
             })
             .then(response => response.text())
             .then(result => {
+                // console.log(result);
+
                 if (result == "success") {
                     window.location.href = "{{ url('/demo/user_wait_officer') }}";
                 }

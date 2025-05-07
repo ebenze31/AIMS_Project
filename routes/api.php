@@ -205,8 +205,8 @@ Route::get('/sos_map/update_helper_id/{admin_id}/{sos_map_id}','Sos_mapControlle
 Route::post('/sos_map/submit_remark_command','Sos_mapController@submit_remark_command');
 Route::get('/sos_map/request_delete_case/{sos_map_id}/{officer_id}','Sos_mapController@request_delete_case');
 
-Route::get('/check_sos_alarm/{check_name_partner}','API\PartnersController@check_sos_alarm');
-Route::get('/check_sos_alarm/notify/{check_name_partner}','API\PartnersController@check_sos_alarm_notify');
+// Route::get('/check_sos_alarm/{check_name_partner}','API\PartnersController@check_sos_alarm');
+// Route::get('/check_sos_alarm/notify/{check_name_partner}','API\PartnersController@check_sos_alarm_notify');
 
 Route::get('/search_std/{student_id_covid}/{check_in_at}/{name_area}','API\PartnersController@search_std');
 Route::get('/search_name/{student_name_covid}/{check_in_at}/{name_area}','API\PartnersController@search_name');
@@ -523,4 +523,5 @@ Route::post('/sos_device', 'API\WebhookController@sos_device');
 Route::get('/get_data_phone_emergency/{countryCode}', 'Aims_phone_emergencysController@get_data_phone_emergency');
 Route::get('/get_polygon_all', 'Aims_emergencysController@get_polygon_all');
 Route::post('/send_emergency', 'Aims_emergencysController@send_emergency');
+Route::get('/check_sos_alarm/{user_id}', 'Aims_emergencysController@check_sos_alarm');
 // ============> END AIMS <============ //
