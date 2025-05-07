@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+
+class CreateAimsEmergencyTypesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('aims_emergency_types', function (Blueprint $table) {
+            $table->increments('id');
+            $table->timestamps();
+            $table->string('name_emergency_type')->nullable();
+            $table->string('aims_partner_id')->nullable();
+            $table->string('aims_area_id')->nullable();
+            $table->string('status')->nullable();
+            });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('aims_emergency_types');
+    }
+}

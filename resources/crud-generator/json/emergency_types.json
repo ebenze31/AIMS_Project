@@ -1,0 +1,20 @@
+{
+    "fields": [
+        {
+            "name": "name_emergency_type",
+            "type": "string"
+        },
+        {
+            "name": "aims_partner_id",
+            "type": "string"
+        },
+        {
+            "name": "aims_area_id",
+            "type": "string"
+        },
+        {
+            "name": "status",
+            "type": "string"
+        }
+    ]
+}

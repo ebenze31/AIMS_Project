@@ -523,5 +523,8 @@ Route::post('/sos_device', 'API\WebhookController@sos_device');
 Route::get('/get_data_phone_emergency/{countryCode}', 'Aims_phone_emergencysController@get_data_phone_emergency');
 Route::get('/get_polygon_all', 'Aims_emergencysController@get_polygon_all');
 Route::post('/send_emergency', 'Aims_emergencysController@send_emergency');
+Route::post('/cf_add_emergency_type', 'Aims_emergency_typesController@cf_add_emergency_type');
 Route::get('/check_sos_alarm/{user_id}', 'Aims_emergencysController@check_sos_alarm');
+Route::get('/get_emergency_types/{area_id}/{partner_id}', 'Aims_emergency_typesController@get_emergency_types');
+Route::get('/change_status_emergency_type/{id}/{old_status}', 'Aims_emergency_typesController@change_status_emergency_type');
 // ============> END AIMS <============ //

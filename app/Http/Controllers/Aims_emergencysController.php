@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Aims_command;
 use App\Models\Aims_area;
 use App\User;
+use Illuminate\Support\Str;
 
 class Aims_emergencysController extends Controller
 {
@@ -204,7 +205,23 @@ class Aims_emergencysController extends Controller
         // ข้อมูล สำหรับสั่งการ
         $data_operation = [];
         $data_operation['aims_emergency_id'] = $emergency->id ;
-        $data_operation['operating_code'] = "1111-2222-3333" ;
+
+        // operating code
+        $partner_id = $emergency->aims_partner_id ;
+        $area_id = $emergency->aims_area_id ;
+        $run_number = $check_open_partner->for_gen_code ;
+
+        $yearMonth = $current_time->format('y') . $current_time->format('m');
+        $formattedPartnerId = str_pad($partner_id, 4, '0', STR_PAD_LEFT);
+        $formattedAreaId = str_pad($area_id, 5, '0', STR_PAD_LEFT);
+        $new_run_number = $run_number + 1;
+        $formattedRunNumber = str_pad($new_run_number, 4, '0', STR_PAD_LEFT);
+        $final_code = "{$yearMonth}-{$formattedPartnerId}-{$formattedAreaId}-{$formattedRunNumber}";
+
+        $check_open_partner->for_gen_code = $new_run_number;
+        $check_open_partner->save();
+
+        $data_operation['operating_code'] = $final_code ;
 
         // -->> เปิดทำการ
         if($status_message == 'เปิดทำการ'){

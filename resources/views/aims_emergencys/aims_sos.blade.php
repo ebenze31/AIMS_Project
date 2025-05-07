@@ -448,9 +448,6 @@
                 <br>
                 <select class="data_for_ask form-control" name="emergency_type" id="emergency_type">
                     <option selected value="">กรุณเลือก</option>
-                    <option value="เหตุด่วนเหตุร้าย">เหตุด่วนเหตุร้าย</option>
-                    <option value="อุบัติเหตุ">อุบัติเหตุ</option>
-                    <option value="ไฟไหม้">ไฟไหม้</option>
                 </select>
                 <br>
                 <label>รายละเอียดเหตุ</label>
@@ -646,6 +643,25 @@
                             document.querySelector('#btn_help_img').setAttribute('src', `{{ url('/storage') }}/${area.logo}`)
                             document.querySelector('#btn_help_name').innerHTML = `${area.name_partner}`;
                             document.querySelector('#btn_help').classList.remove('hidden');
+
+                            fetch("{{ url('/') }}/api/get_emergency_types/" + area.id + "/" + area.aims_partner_id)
+                                .then(response => response.json())
+                                .then(result => {
+                                    // console.log("get_emergency_types");
+
+                                    if(result.length > 0){
+                                        // console.log(result);
+                                        let emergency_type = document.querySelector('#emergency_type');
+
+                                        for (let i = 0; i < result.length; i++) {
+                                            let option = document.createElement("option");
+                                                option.text = result[i].name_emergency_type;
+                                                option.value = result[i].name_emergency_type;
+                                                emergency_type.add(option);
+                                        }
+                                    }
+                            });
+
                         }
                     });
 

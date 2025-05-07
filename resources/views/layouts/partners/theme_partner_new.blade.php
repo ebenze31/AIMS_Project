@@ -904,16 +904,21 @@
                                         <i class='fas fa-users-cog'></i> สมาชิกศูนย์ควบคุม
                                     </a>
 								</li>
-								<li>
-									<a href="{{ url('/operating_unit') }}">
-                                        <i class="fa-solid fa-user-plus"></i> หน่วยปฏิบัติการ
-                                    </a>
-								</li>
                                 <li>
-                                    <a href="{{ url('/') }}">
-                                        <i class="fas fa-photo-video"></i> ประเภทหน่วยปฏิบัติการ
+                                    <a href="{{ url('/aims_emergency_types') }}">
+                                        <i class="fa-solid fa-messages-question"></i> ประเภทการช่วยเหลือ
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="{{ url('/aims_type_units') }}">
+                                        <i class="fa-solid fa-house-medical-circle-exclamation"></i> ประเภทหน่วยปฏิบัติการ
+                                    </a>
+                                </li>
+								<li>
+									<a href="{{ url('/operating_unit') }}">
+                                        <i class="fa-solid fa-truck-medical"></i> หน่วยปฏิบัติการ
+                                    </a>
+								</li>
                             </ul>
                         </li>
                         

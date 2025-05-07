@@ -561,6 +561,8 @@ Route::middleware(['auth', 'role:admin-partner'])->group(function () {
 Route::middleware(['auth', 'role:admin-partner,admin-area'])->group(function () {
 	Route::get('all_name_user_partner', 'Aims_commandsController@all_name_user_partner');
 	Route::get('operating_unit', 'Aims_operating_unitsController@operating_unit');
+	Route::resource('aims_emergency_types', 'Aims_emergency_typesController');
+	Route::resource('aims_type_units', 'Aims_type_unitsController');
 });
 
 // ==> operator-area
@@ -590,10 +592,9 @@ Route::resource('aims_areas', 'Aims_areasController');
 Route::resource('aims_commands', 'Aims_commandsController');
 Route::resource('aims_operating_units', 'Aims_operating_unitsController');
 Route::resource('aims_operating_officers', 'Aims_operating_officersController');
-Route::resource('aims_type_units', 'Aims_type_unitsController');
 Route::resource('aims_emergencys', 'Aims_emergencysController');
 Route::resource('aims_emergency_operations', 'Aims_emergency_operationsController');
-
+Route::resource('aims_phone_emergencys', 'Aims_phone_emergencysController');
 // ============> END AIMS <============ //
 
 // ============> demo aims <============//
@@ -608,4 +609,3 @@ Route::get('/demo/user_wait_officer', function () {
     return view('demo/user_wait_officer');
 });
 // ============> end demo aims <============//
-Route::resource('aims_phone_emergencys', 'Aims_phone_emergencysController');

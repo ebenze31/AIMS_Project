@@ -25,7 +25,7 @@ class Aims_area extends Model
      *
      * @var array
      */
-    protected $fillable = ['name_area', 'polygon', 'status', 'check_time_command', 'time_start_command', 'time_end_command', 'aims_partner_id'];
+    protected $fillable = ['name_area', 'polygon', 'status', 'check_time_command', 'time_start_command', 'time_end_command', 'aims_partner_id','for_gen_code'];
 
     
 }
