@@ -219,7 +219,6 @@
                 เข้าสู่ระบบ
             </button>
         </form>
-Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo quibusdam dolorem voluptatum consectetur dolor modi dicta ullam iure veniam nobis tempore facilis, cupiditate tenetur enim ipsam alias assumenda et amet.
         <div class="">
             <p  class="text-[#C8C8C8] text-center my-5">or connect with</p>
 
