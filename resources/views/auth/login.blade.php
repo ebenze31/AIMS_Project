@@ -1,254 +1,272 @@
-@extends('layouts.viicheck')
+@extends('layouts.theme_aims')
 
 @section('content')
-<br><br><br><br><br><br>
-<div class="container">
-    <div class="row justify-content-center" >
-        <div class="col-md-12">
-            <div class="card main-shadow">
-                <!-- แสดงเฉพาะคอม -->
-                <!-- <img class="d-none d-md-block" style="position: absolute; width: 100%; height: 100%;"  src="{{ asset('/img/more/bg_login.png') }}"> -->
+<style>
+    .term-and-privicypolicy {
+        background: -webkit-linear-gradient(45deg, #A11C67, #C68561 80%);
+        -webkit-background-clip: text;
+        /* apply background clip */
+        -webkit-text-fill-color: transparent;
 
-                <video class="d-none d-md-block" id="background-video" style="position: absolute; width: 100%; height: 100%;object-fit: cover;" autoplay loop muted poster="{{ asset('/img/more/bg_login_v2.mp4') }}">
-                    <source src="{{ asset('/img/more/bg_login_v2.mp4') }}" type="video/mp4">
-                </video>
+    }
 
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-md-6">
-                            <div class="col-12 col-md-8 offset-md-2">
-                                <center>
-                                    <h5 style="padding : 7px;">ยินดีต้อนรับสู่</h5>
-                                    <img width="40%" src="{{ asset('/img/more/logo_.png') }}">
-                                    <br><br>
-                                    <form method="POST" id="from_login" action="{{ route('login') }}">
-                                        @csrf
+    .wave-group {
+        position: relative;
+        width: calc(100dvw - 100px);
+        max-width: 500px;
+    }
 
-                                        <div class="form-group row">
-                                            <!-- <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('ชื่อผู้ใช้') }}</label> -->
-                                            <div class="col-md-12">
-                                                <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" placeholder="ชื่อผู้ใช้" required autocomplete="username">
+    .wave-group .input {
+        font-size: 16px;
+        padding: 10px 10px 5px 5px;
+        display: block;
+        width: 100%;
+        border: none;
+        /* border-bottom: 1px solid #C8C8C8; */
+        background: transparent;
+        margin-left: 50px;
+    }
 
-                                                @error('username')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
+    .wave-group .input:focus {
+        outline: none;
+    }
 
-                                        <div class="form-group row">
-                                            <!-- <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('รหัสผ่าน') }}</label> -->
-                                            <div class="col-md-12">
-                                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="รหัสผ่าน" required autocomplete="current-password">
+    .wave-group .icon-input {
+        color: #C8C8C8;
+        font-size: 22px;
+        font-weight: normal;
+        position: absolute;
+        top: 55%;
+        left: 20px;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
 
-                                                @error('password')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                            <div class="col-md-2"></div>
-                                        </div>
-                                        
-                                        <div class="form-group row">
-                                            <div class="col-md-12">
-                                                <center>
-                                                    <button style="padding-top: 10px; padding-bottom: 10px;color: #ffff;" type="submit" class="col-12 btn btn-danger main-shadow main-radius" >
-                                                        {{ __('เข้าสู่ระบบ') }}
-                                                    </button>
-                                                </center>
-                                                @if (Route::has('password.request'))
-                                                    <a class="btn btn-link text-muted float-right" href="{{ route('password.request') }}">
-                                                        {{ __('ลืมรหัสผ่าน ?') }}
-                                                    </a>
-                                                @endif
-                                            </div>
-                                        </div>
-                                         <!-- แสดงเฉพาะคอม -->
-                                        <div class="form-group row ">
-                                            <div style="height: 1px;width: 100%;background-color: #dbdbdb;" class="col-md-5 d-none d-lg-block"></div>
-                                            <span style="margin-top: -13px;color: #ccc;text-transform: uppercase;text-align: center;" class="col-md-2 d-none d-lg-block"> หรือ </span>
-                                            <div style="height: 1px;width: 100%;background-color: #dbdbdb;" class="col-md-5 d-none d-lg-block"></div>
-                                        </div>
-                                         <!-- แสดงเฉพาะมือถือ -->
-                                        <div class="form-group row ">
-                                            <div style="height: 1px;width: 100%;background-color: #dbdbdb;" class="col-4 d-block d-md-none"></div>
-                                            <span style="margin-top: -13px;color: #ccc;text-transform: uppercase;text-align: center;" class="col-4 d-block d-md-none"> หรือ </span>
-                                            <div style="height: 1px;width: 100%;background-color: #dbdbdb;" class="col-4 d-block d-md-none"></div>
-                                        </div>
+    }
 
-                                        <div class="col-12 col-md-12">
-                                            <div class="row">
-                                                <div class="col-12 main-shadow main-radius" style="background-color: #28A745;">
-                                                    <a href="{{ route('login.line') }}?redirectTo={{ request('redirectTo') }}">
-                                                        <button style="padding-top: 10px; padding-bottom: 10px;color: #ffff;" type="button" class="btn">
-                                                            <img width="15%" class="main-shadow" style="border-radius: 20px;background-color: #ffff;" src="{{ asset('/img/icon_login/icon-line.png') }}">&nbsp;&nbsp; Login with LINE
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <br>
-                                            <div class="row">
-                                                <div class="col-12 main-shadow main-radius" style="background-color: #DC3545;">
-                                                    <a href="{{ route('login.google') }}?redirectTo={{ request('redirectTo') }}">
-                                                        <button style="padding-top: 10px; padding-bottom: 10px;color: #ffff;" type="button" class="btn">
-                                                            <img width="15%" class="main-shadow" style="border-radius: 20px;background-color: #ffff;" src="{{ asset('/img/icon_login/icon-gg.png') }}">&nbsp;&nbsp; Login GOOGLE&nbsp;
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <br>
-                                            <div class="row">
-                                                <div class="col-12 main-shadow main-radius" style="background-color: #007BFF;">
-                                                    <a href="{{ route('login.facebook') }}">
-                                                        <button style="padding-top: 10px; padding-bottom: 10px;color: #ffff;" type="button" class="btn">
-                                                            <img width="15%" class="main-shadow" style="border-radius: 20px;background-color: #ffff;" src="{{ asset('/img/icon_login/icon-fb.png') }}">&nbsp; Login FACEBOOK
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                            <!-- <a href="{{ route('login.line') }}?redirectTo={{ request('redirectTo') }}"><img width="160" height="60" src="{{ asset('/img/icon/line.png') }}"></a>
-                                            <br>
-                                            <a href="{{ route('login.facebook') }}"><img width="160" height="60" src="{{ asset('/img/icon/fb.png') }}"></a>
-                                            <br>
-                                            <a href="{{ route('login.google') }}?redirectTo={{ request('redirectTo') }}"><img width="160" height="60" src="{{ asset('/img/icon/gg.png') }}"></a> -->
-                                            <br>
-                                        </div>
-                                        <br>
+    .wave-group .label {
+        color: #C8C8C8;
+        font-size: 16px;
+        font-weight: normal;
+        position: absolute;
+        pointer-events: none;
+        left: 50px;
+        top: 10px;
+        display: flex;
+    }
 
-                                        <div class="form-group row">
-                                            <span style="font-size: 15px; margin-top: -13px;color: #ccc;text-align: center;" class="col-md-12"> เข้ามาใช้บริการ ViiCHECK ครั้งแรก ? <br class="d-block d-md-none">
-                                                <a class="text-danger" href="{{ route('register') }}"><b>สมัครใหม่</b></a> 
-                                            </span>
-                                        </div>
-                                        <hr>
-                                    </form>
-                                </center>
-                            </div>
-                            <div class="col-12 col-md-12 ">
-                                <center>
-                                    <p><b>การลงชื่อเข้าใช้หมายความว่าคุณยอมรับ</b><br></p> 
-                                    <a class="btn btn-link" style="font-size: 13px;" target="bank" href="{{ url('/privacy_policy') }}"> 
-                                        <span style="color:red"><b>นโยบายเกี่ยวกับข้อมูลส่วนบุคคล</b></span>
-                                    </a>
-                                    <a class="btn btn-link" style="font-size: 13px;" target="bank" href="{{ url('/terms_of_service') }}"> 
-                                        <span style="color:red"><b>ข้อกำหนดและเงื่อนไขการใช้บริการบน เว็บไซต์ Viicheck.com</b></span>
-                                    </a>
-                                </center>
-                            </div>
-                        </div>
-                        <style>
-                            img.login-w-120{
-                                width: 120% !important;
-                            }
-                            .partner_2_row_login {
-                              margin-top: 100px!important;
-                            }
-                        </style>
-                        <div class="col-12 col-md-6 text-center d-none d-md-block">
-                            <div style="position: absolute; width: 100%; height: 100%;z-index: 99999;top: 25%;right: 1%;">
-                                <img width="40%" src="{{ asset('/img/logo/logo-flex-line.png') }}">
-                                <h3 class="text-white" style="font-family: 'Kanit', sans-serif;">ขอขอบคุณ</h3>
-                                <div style="padding: 0px 5px 0px 5px;font-size: 30px!important;">
-                                    @include ('layouts.partner_2_row')
-                                </div>
-                                <center>
-                                    <hr class="main-shadow main-radius text-white" style="width:70%;border: 2px solid white;margin-top: 100px">
-                                </center>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    .wave-group .label-char {
+        transition: 0.2s ease all;
+        transition-delay: calc(var(--index) * .05s);
+    }
+
+    .wave-group .input:focus~label .label-char,
+    .wave-group .input:valid~label .label-char,
+    .wave-group .input:-webkit-autofill~label .label-char {
+        transform: translateY(-20px);
+        font-size: 14px;
+        background: -webkit-linear-gradient(45deg, #A11C67, #C68561 80%);
+        -webkit-background-clip: text;
+        /* apply background clip */
+        -webkit-text-fill-color: transparent;
+    }
+
+    .wave-group .input:focus~.icon-input,
+    .wave-group .input:valid~.icon-input {
+        background: -webkit-linear-gradient(45deg, #A11C67, #C68561 80%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .wave-group .input:-webkit-autofill,
+    .wave-group .input:-webkit-autofill:hover,
+    .wave-group .input:-webkit-autofill:focus,
+    .wave-group .input:-webkit-autofill:active {
+        background: -webkit-linear-gradient(45deg, #A11C67, #C68561 80%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: #000;
+
+    }
+
+    .wave-group .input:-webkit-autofill~.icon-input{
+        background: -webkit-linear-gradient(45deg, #A11C67, #C68561 80%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .wave-group .input:-webkit-autofill~.bar:before {
+        width: 100%;
+    }
+    
+    .wave-group .bar {
+        position: relative;
+        display: block;
+        border-bottom: 1px solid #C8C8C8;
+        width: 100%;
+    }
+
+    .wave-group .bar:before {
+        content: '';
+        height: 2px;
+        width: 0;
+        /* bottom: 1px; */
+        position: absolute;
+        background: linear-gradient(260deg, #A11C67 0%, #C68561 100%);
+
+        transition: 0.2s ease all;
+        -moz-transition: 0.2s ease all;
+        -webkit-transition: 0.2s ease all;
+    }
+
+    .wave-group .bar:before {
+        left: 0%;
+    }
+
+
+    .wave-group .input:focus~.bar:before {
+        width: 100%;
+    }
+
+    .container-bs {
+        width: 100% !important;
+        margin-right: auto !important;
+        margin-left: auto !important;
+        padding-right: 15px !important;
+        padding-left: 15px !important;
+    }
+
+    @media (min-width: 576px) {
+        .container-bs {
+            max-width: 540px !important;
+        }
+    }
+
+    @media (min-width: 768px) {
+        .container-bs {
+            max-width: 720px !important;
+        }
+    }
+
+    @media (min-width: 992px) {
+        .container-bs {
+            max-width: 960px !important;
+        }
+    }
+
+    @media (min-width: 1200px) {
+        .container-bs {
+            max-width: 1140px !important;
+        }
+    }
+    .btn-login{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border-radius: 10px;
+        color: #fff;
+        background: linear-gradient(45deg, #A11C67 0%, #C68561 100%);
+       justify-content: center;
+       font-size: 14px;
+       margin-top: 50px;
+    }
+
+   
+</style>
+<div class="container-bs flex items-center h-[100dvh] justify-center">
+    <!-- ... -->
+    <div>
+        <div class="flex justify-center">
+            <img src="{{ asset('/partner_new/images/logo/aims full logo.png') }}" alt="" width="150" height="150">
         </div>
 
-        <!-- <div class="col-md-6">
-        <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
+        <p class="mt-4 mb-0 text-center font-bold text-[24px] text-[#585757]">
+            Login
+        </p>
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
+        <div class="mt-5 mb-0 text-center font-bold text-[14px] text-[#9E9E9E] ">
+            การลงชื่อหมายความว่าคุณ <br>
+            ยอมรับ
+            <a href="#" class="term-and-privicypolicy">Term and privicy policy</a>
+        </div>
 
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Username') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="username" type="text" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username">
-
-                                @error('username')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+        <form method="POST" id="from_login" action="{{ route('login') }}">
+        @csrf
+            <div class="flex justify-center mb-4">
+                <div class="wave-group">
+                    <input id="username" type="text" class="input @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username">
+                    <span class="bar"></span>
+                    <div class="icon-input"><i class="fa-solid fa-envelope"></i></div>
+                    <label class="label">
+                        <span class="label-char" style="--index: 0">U</span>
+                        <span class="label-char" style="--index: 1">s</span>
+                        <span class="label-char" style="--index: 2">e</span>
+                        <span class="label-char" style="--index: 3">r</span>
+                        <span class="label-char" style="--index: 4">n</span>
+                        <span class="label-char" style="--index: 5">a</span>
+                        <span class="label-char" style="--index: 6">m</span>
+                        <span class="label-char" style="--index: 7">e</span>
+                    </label>
                 </div>
             </div>
-        </div> -->
+            <div class="flex justify-center mb-4">
+                <div class="wave-group " class="mx-auto">
+                    <input id="password" type="password" class="input @error('password') is-invalid @enderror" name="password"  required autocomplete="current-password">
+                    <span class="bar"></span>
+                    <div class="icon-input"><i class="fa-solid fa-lock"></i></div>
+
+                    <label class="label">
+                        <span class="label-char" style="--index: 0">P</span>
+                        <span class="label-char" style="--index: 1">a</span>
+                        <span class="label-char" style="--index: 2">s</span>
+                        <span class="label-char" style="--index: 3">s</span>
+                        <span class="label-char" style="--index: 4">w</span>
+                        <span class="label-char" style="--index: 5">o</span>
+                        <span class="label-char" style="--index: 6">r</span>
+                        <span class="label-char" style="--index: 7">d</span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn btn-login">
+                เข้าสู่ระบบ
+            </button>
+        </form>
+        <div class="">
+            <p  class="text-[#C8C8C8] text-center my-5">or connect with</p>
+
+            <style>
+                .btn-line-login{
+                    width: 100%;
+                    display: flex;
+                    align-items: center;
+                    border-radius: 10px;
+                    color: #fff;
+                    background: #06c755;
+                    font-size: 14px;
+                    padding: 1px;
+                }
+                .btn-line-login:hover{
+                    background: #05b34c;
+                }
+                .btn-line-login:focus{
+                    background: #048b3b;
+                }
+                .icon-line{
+                    border-right: 1px solid rgba(0, 0, 0, .08);
+                }
+            </style>
+        <a href="{{ route('login.line') }}?redirectTo={{ request('redirectTo') }}" class="btn btn-line-login">
+                <div class="flex items-center w-full">
+                    <img src="{{ asset('/img/icon/line_60.png') }}" alt="" width="50" class="icon-line">
+                    <div class="w-full flex items-center justify-center" style="width: 100%;margin-left: -50px;">
+                        เข้าสู่ระบบ
+                    </div>
+                </div>
+            </a>
+        </div>
     </div>
 </div>
-<br>
+
 
 <script>
     

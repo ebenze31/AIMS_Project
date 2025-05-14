@@ -60,7 +60,8 @@
     }
 
     .wave-group .input:focus~label .label-char,
-    .wave-group .input:valid~label .label-char {
+    .wave-group .input:valid~label .label-char,
+    .wave-group .input:-webkit-autofill~label .label-char {
         transform: translateY(-20px);
         font-size: 14px;
         background: -webkit-linear-gradient(45deg, #A11C67, #C68561 80%);
@@ -82,10 +83,20 @@
     .wave-group .input:-webkit-autofill:active {
         background: -webkit-linear-gradient(45deg, #A11C67, #C68561 80%);
         -webkit-background-clip: text;
+        -webkit-text-fill-color: #000;
+
+    }
+
+    .wave-group .input:-webkit-autofill~.icon-input{
+        background: -webkit-linear-gradient(45deg, #A11C67, #C68561 80%);
+        -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
-
+    .wave-group .input:-webkit-autofill~.bar:before {
+        width: 100%;
+    }
+    
     .wave-group .bar {
         position: relative;
         display: block;
@@ -178,10 +189,11 @@
             <a href="#" class="term-and-privicypolicy">Term and privicy policy</a>
         </div>
 
-        <form action="" class="mt-8 mx-auto w-fit">
+        <form method="POST" id="from_login" action="{{ route('login') }}">
+        @csrf
             <div class="flex justify-center mb-4">
                 <div class="wave-group">
-                    <input required="" type="username" class="input">
+                    <input id="username" type="text" class="input @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" placeholder="ชื่อผู้ใช้" required autocomplete="username">
                     <span class="bar"></span>
                     <div class="icon-input"><i class="fa-solid fa-envelope"></i></div>
                     <label class="label">
@@ -198,7 +210,7 @@
             </div>
             <div class="flex justify-center mb-4">
                 <div class="wave-group " class="mx-auto">
-                    <input required="" type="" class="input">
+                    <input id="password" type="password" class="input @error('password') is-invalid @enderror" name="password" placeholder="รหัสผ่าน" required autocomplete="current-password">
                     <span class="bar"></span>
                     <div class="icon-input"><i class="fa-solid fa-lock"></i></div>
 
@@ -243,14 +255,14 @@
                     border-right: 1px solid rgba(0, 0, 0, .08);
                 }
             </style>
-        <button class="btn btn-line-login">
+        <a href="{{ route('login.line') }}?redirectTo={{ request('redirectTo') }}" class="btn btn-line-login">
                 <div class="flex items-center w-full">
                     <img src="{{ asset('/img/icon/line_60.png') }}" alt="" width="50" class="icon-line">
                     <div class="w-full flex items-center justify-center" style="width: 100%;margin-left: -50px;">
                         เข้าสู่ระบบ
                     </div>
                 </div>
-            </button>
+            </a>
         </div>
     </div>
 </div>
