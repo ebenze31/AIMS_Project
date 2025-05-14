@@ -76,6 +76,15 @@
         -webkit-text-fill-color: transparent;
     }
 
+    .wave-group .input:-webkit-autofill,
+    .wave-group .input:-webkit-autofill:hover,
+    .wave-group .input:-webkit-autofill:focus,
+    .wave-group .input:-webkit-autofill:active {
+        background: -webkit-linear-gradient(45deg, #A11C67, #C68561 80%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
 
     .wave-group .bar {
         position: relative;
@@ -149,6 +158,8 @@
        font-size: 14px;
        margin-top: 50px;
     }
+
+   
 </style>
 <div class="container-bs flex items-center h-[100dvh] justify-center">
     <!-- ... -->
