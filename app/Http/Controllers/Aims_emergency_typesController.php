@@ -20,7 +20,6 @@ class Aims_emergency_typesController extends Controller
      */
     public function index(Request $request)
     {
-        // $aims_emergency_types = Aims_emergency_type::where('name_emergency_type' , '!=' , null)->get();
         $data_user = Auth::user();
 
         $aims_commands = Aims_command::where('user_id' , $data_user->id)->first();

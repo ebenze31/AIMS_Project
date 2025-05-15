@@ -7,6 +7,9 @@ use App\Http\Requests;
 
 use App\Models\Aims_type_unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\Models\Aims_command;
 
 class Aims_type_unitsController extends Controller
 {
@@ -17,19 +20,50 @@ class Aims_type_unitsController extends Controller
      */
     public function index(Request $request)
     {
-        $keyword = $request->get('search');
-        $perPage = 25;
+        $data_user = Auth::user();
 
-        if (!empty($keyword)) {
-            $aims_type_units = Aims_type_unit::where('name_type_unit', 'LIKE', "%$keyword%")
-                ->orWhere('aims_partner_id', 'LIKE', "%$keyword%")
-                ->orWhere('aims_area_id', 'LIKE', "%$keyword%")
-                ->latest()->paginate($perPage);
-        } else {
-            $aims_type_units = Aims_type_unit::latest()->paginate($perPage);
+        $aims_commands = Aims_command::where('user_id' , $data_user->id)->first();
+        $officer_role = $aims_commands->officer_role ;
+        $aims_partner_id = $aims_commands->aims_partner_id ;
+        $aims_area_id = $aims_commands->aims_area_id ;
+
+        if($officer_role == "admin-partner"){
+            $aims_type_units = DB::table('aims_type_units')
+                ->where('aims_type_units.aims_partner_id', '=' ,$aims_partner_id)
+                ->leftjoin('aims_areas', 'aims_type_units.aims_area_id', '=', 'aims_areas.id')
+                ->select(
+                    'aims_areas.name_area as name_area',
+                    'aims_type_units.*',
+                )
+                ->get();
+        }
+        else if($officer_role == "admin-area"){
+            $aims_type_units = DB::table('aims_type_units')
+                ->where('aims_type_units.aims_partner_id', '=' ,$aims_partner_id)
+                ->where('aims_type_units.aims_area_id', '=' ,$aims_area_id)
+                ->leftjoin('aims_areas', 'aims_type_units.aims_area_id', '=', 'aims_areas.id')
+                ->select(
+                    'aims_areas.name_area as name_area',
+                    'aims_type_units.*',
+                )
+                ->get();
         }
 
-        return view('aims_type_units.index', compact('aims_type_units'));
+        $data_for_add = DB::table('aims_areas')
+                ->where('aims_areas.id', '=' ,$aims_area_id)
+                ->leftjoin('aims_partners', 'aims_areas.aims_partner_id', '=', 'aims_partners.id')
+                ->select(
+                    'aims_areas.name_area as name_area',
+                    'aims_partners.name as name_partner',
+                )
+                ->first();
+
+        $emergency_types = DB::table('aims_emergency_types')
+                ->where('aims_partner_id', '=' ,$aims_partner_id)
+                ->where('aims_area_id', '=' ,$aims_area_id)
+                ->get();
+
+        return view('aims_type_units.index', compact('aims_type_units','officer_role','aims_partner_id','aims_area_id','data_for_add','emergency_types'));
     }
 
     /**
@@ -118,5 +152,14 @@ class Aims_type_unitsController extends Controller
         Aims_type_unit::destroy($id);
 
         return redirect('aims_type_units')->with('flash_message', 'Aims_type_unit deleted!');
+    }
+
+    function cf_add_type_units(Request $request)
+    {
+        $requestData = $request->all();
+        $requestData['emergency_type'] = json_encode($requestData['emergency_type']);
+        Aims_type_unit::create($requestData);
+
+        return "success" ;
     }
 }

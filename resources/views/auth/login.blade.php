@@ -186,7 +186,7 @@
             Login
         </p>
 
-        <div class="mt-5 mb-0 text-center font-bold text-[14px] text-[#9E9E9E] ">
+        <div class="mt-5 mb-5 text-center font-bold text-[14px] text-[#9E9E9E] ">
             การลงชื่อหมายความว่าคุณ <br>
             ยอมรับ
             <a href="#" class="term-and-privicypolicy">Term and privicy policy</a>
@@ -230,8 +230,12 @@
                 </div>
             </div>
 
-            <button class="btn btn-login">
+            <button class="btn btn-login" onclick="handleLoginClick(this)">
                 เข้าสู่ระบบ
+            </button>
+
+            <button id="btn_login" class="btn btn-login" style="display: none;">
+                d-none
             </button>
         </form>
         <div class="">
@@ -291,6 +295,14 @@
         }
 
     });
+
+    function handleLoginClick(button) {
+        // ปิดปุ่มเพื่อไม่ให้กดซ้ำ
+        button.disabled = true;
+        document.querySelector('#btn_login').click();
+
+        // console.log("กำลังเข้าสู่ระบบ...");
+    }
 
 </script>
 @endsection

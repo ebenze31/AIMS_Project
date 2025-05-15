@@ -17,6 +17,16 @@
                         </div>
                         <hr>
                         <div class="row mb-3">
+                            <label for="status" class="col-sm-3 col-form-label">พื้นที่</label>
+                            <div class="col-sm-9">
+                                <h6 class="mt-2">
+                                    {{ $data_for_add->name_partner }} : {{ $data_for_add->name_area }}
+                                </h6>
+                            </div>
+                            <input type="text" class="d-none form-control add_data" id="aims_area_id" name="aims_area_id" readonly value="{{ $aims_area_id }}">
+                                <input type="text" class="d-none form-control add_data" id="aims_partner_id" name="aims_partner_id" readonly value="{{ $aims_partner_id }}">
+                        </div>
+                        <div class="row mb-3">
                             <label for="name_emergency_type" class="col-sm-3 col-form-label">หัวข้อ</label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control add_data" id="name_emergency_type" name="name_emergency_type" placeholder="เพิ่มหัวข้อ" oninput="check_title();">
@@ -30,16 +40,6 @@
                                     <option value="Inactive">Inactive</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="row mb-3">
-                            <label for="status" class="col-sm-3 col-form-label">พื้นที่</label>
-                            <div class="col-sm-9">
-                                <h6 class="mt-2">
-                                    {{ $data_for_add->name_partner }} : {{ $data_for_add->name_area }}
-                                </h6>
-                            </div>
-                            <input type="text" class="d-none form-control add_data" id="aims_area_id" name="aims_area_id" readonly value="{{ $aims_area_id }}">
-                                <input type="text" class="d-none form-control add_data" id="aims_partner_id" name="aims_partner_id" readonly value="{{ $aims_partner_id }}">
                         </div>
 
                         <div class="text-center mt-4">
@@ -84,6 +84,20 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <tr>
+                                <td><h6><b>ผู้ใช้ไม่ได้กรอก</b></h6></td>
+                                <td><h6>{{ $data_for_add->name_area }}</h6></td>
+                                <td style="white-space: nowrap;width: 13%;">
+                                    <center>
+                                        <span class="text-success"><b>Active</b></span>
+                                    </center>
+                                </td>
+                                <td style="text-align: right; white-space: nowrap;width: 1%;">
+                                   <button class="btn btn-info btn-sm">
+                                        <i class="fa-solid fa-list-ol"></i> Priority
+                                    </button>
+                                </td>
+                            </tr>
                             @foreach($aims_emergency_types as $item)
                                 <tr>
                                     <td><h6><b>{{ $item->name_emergency_type }}</b></h6></td>
@@ -102,6 +116,9 @@
                                             {{ csrf_field() }}
                                             <button type="submit" class="btn btn-danger btn-sm" title="Delete Aims_emergency_type" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa-solid fa-delete-right"></i> Delete</button>
                                         </form>
+                                        <button class="btn btn-info btn-sm">
+                                            <i class="fa-solid fa-list-ol"></i> Priority
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
