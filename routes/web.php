@@ -608,4 +608,12 @@ Route::get('/demo/login', function () {
 Route::get('/demo/user_wait_officer', function () {
     return view('demo/user_wait_officer');
 });
+
+Route::get('/demo/aims_sos', function () {
+    return view('demo/aims_sos');
+});
+
+Route::get('/demo/aims_sos_officer', function () {
+    return view('demo/aims_sos_officer');
+});
 // ============> end demo aims <============//
