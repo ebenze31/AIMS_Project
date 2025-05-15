@@ -169,7 +169,10 @@
        font-size: 14px;
        margin-top: 50px;
     }
-
+    .btn-login:hover{
+      cursor: pointer;
+      opacity: .9;
+    }
    
 </style>
 <div class="container-bs flex items-center h-[100dvh] justify-center">
