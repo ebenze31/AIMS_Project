@@ -55,78 +55,74 @@
     </div>
 </div>
 
-<div class="card radius-10 d-none d-lg-block">
-    <div class="card-header border-bottom-0 bg-transparent">
-        <div class="d-flex align-items-center">
-            <div class="col-12 mt-3">
-                <span class="font-weight-bold h4 mb-0">
-                    ประเภทการช่วยเหลือ
-                </span>
-                @if( $officer_role == "admin-area")
-                <button class="btn btn-success btn-sm float-end float-right mb-0" data-toggle="modal" data-target="#add_emergency_types">
+<div class="card radius-10 border-top border-0 border-4 border-primary">
+    <div class="card-body p-3">
+        <div class="card-title d-flex align-items-center">
+            <div>
+                <i class='fa-solid fa-messages-question me-1 font-22'></i>
+            </div>
+            <h5 class="mb-0">
+                ประเภทการช่วยเหลือ
+            </h5>
+            @if( $officer_role == "admin-area")
+                <button style="margin-left: 10px;margin-right: 10px;" type="button" class="btn btn-success radius-10 float-end ms-auto" data-toggle="modal" data-target="#add_emergency_types">
                     <i class="fa fa-plus"></i> เพิ่มหัวข้อ
                 </button>
-                @endif
-            </div>
+            @endif
         </div>
-    </div>
-    <div class="card-body">
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th style="text-align: center;">หัวข้อ</th>
-                                <th style="text-align: center;">พื้นที่</th>
-                                <th style="text-align: center;">สถานะ</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><h6><b>ผู้ใช้ไม่ได้กรอก</b></h6></td>
-                                <td><h6>{{ $data_for_add->name_area }}</h6></td>
-                                <td style="white-space: nowrap;width: 13%;">
-                                    <center>
-                                        <span class="text-success"><b>Active</b></span>
-                                    </center>
-                                </td>
-                                <td style="text-align: right; white-space: nowrap;width: 1%;">
-                                   <button class="btn btn-info btn-sm">
-                                        <i class="fa-solid fa-list-ol"></i> Priority
-                                    </button>
-                                </td>
-                            </tr>
-                            @foreach($aims_emergency_types as $item)
-                                <tr>
-                                    <td><h6><b>{{ $item->name_emergency_type }}</b></h6></td>
-                                    <td><h6>{{ $item->name_area }}</h6></td>
-                                    <td id="text_status_{{ $item->id }}" style="white-space: nowrap;width: 13%;">
-                                        <i class="btn fa-regular fa-arrows-repeat" onclick="change_status('{{ $item->id }}','{{ $item->status }}')"></i>
-                                        @if($item->status == "Active")
-                                            <span class="text-success"><b>{{ $item->status }}</b></span>
-                                        @else
-                                            <span class="text-danger"><b>{{ $item->status }}</b></span>
-                                        @endif
-                                    </td>
-                                    <td style="text-align: right; white-space: nowrap;width: 1%;">
-                                        <form method="POST" action="{{ url('/aims_emergency_types' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
-                                            {{ method_field('DELETE') }}
-                                            {{ csrf_field() }}
-                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete Aims_emergency_type" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa-solid fa-delete-right"></i> Delete</button>
-                                        </form>
-                                        <button class="btn btn-info btn-sm">
-                                            <i class="fa-solid fa-list-ol"></i> Priority
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>   
+        <hr>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">หัวข้อ</th>
+                        <th style="text-align: center;">พื้นที่</th>
+                        <th style="text-align: center;">สถานะ</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><h6><b>ผู้ใช้ไม่ได้กรอก</b></h6></td>
+                        <td><h6>{{ $data_for_add->name_area }}</h6></td>
+                        <td style="white-space: nowrap;width: 13%;">
+                            <center>
+                                <span class="text-success"><b>Active</b></span>
+                            </center>
+                        </td>
+                        <td style="text-align: right; white-space: nowrap;width: 1%;">
+                           <button class="btn btn-info btn-sm">
+                                <i class="fa-solid fa-list-ol"></i> Priority
+                            </button>
+                        </td>
+                    </tr>
+                    @foreach($aims_emergency_types as $item)
+                        <tr>
+                            <td><h6><b>{{ $item->name_emergency_type }}</b></h6></td>
+                            <td><h6>{{ $item->name_area }}</h6></td>
+                            <td id="text_status_{{ $item->id }}" style="white-space: nowrap;width: 13%;">
+                                <i class="btn fa-regular fa-arrows-repeat" onclick="change_status('{{ $item->id }}','{{ $item->status }}')"></i>
+                                @if($item->status == "Active")
+                                    <span class="text-success"><b>{{ $item->status }}</b></span>
+                                @else
+                                    <span class="text-danger"><b>{{ $item->status }}</b></span>
+                                @endif
+                            </td>
+                            <td style="text-align: right; white-space: nowrap;width: 1%;">
+                                <form method="POST" action="{{ url('/aims_emergency_types' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                                    {{ method_field('DELETE') }}
+                                    {{ csrf_field() }}
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Delete Aims_emergency_type" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa-solid fa-delete-right"></i> Delete</button>
+                                </form>
+                                <button class="btn btn-info btn-sm">
+                                    <i class="fa-solid fa-list-ol"></i> Priority
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

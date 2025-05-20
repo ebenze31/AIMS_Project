@@ -161,103 +161,105 @@
     }
 </style>
 
-<div class="card radius-10">
-    <div class="card-header bg-transparent row">
-        <div class="col-6">
-            <h4 class="mb-0 my-2 font-weight-bold">
+<div class="card radius-10 border-top border-0 border-4 border-primary">
+    <div class="card-body p-3">
+        <div class="card-title d-flex align-items-center">
+            <div>
+                <i class='fas fa-users-cog me-1 font-22'></i>
+            </div>
+            <h5 class="mb-0">
                 สมาชิกศูนย์ควบคุม
-            </h4>
-        </div>
-        <div class="col-6">
-            <button style="margin-left: 10px;margin-right: 10px;" type="button" class="btn btn-white radius-10 float-end ms-auto" data-toggle="modal" data-target="#exampleModal">
+            </h5>
+            <button style="margin-left: 10px;margin-right: 10px;" type="button" class="btn btn-success radius-10 float-end ms-auto" data-toggle="modal" data-target="#exampleModal">
                 <i class="bx bx-user-plus"></i>สร้างบัญชีผู้ใช้ใหม่
             </button>
         </div>
-    </div>
-    <div class="table-responsive p-3">
-        <table class="table mb-0">
-            <thead>
-                <tr class="text-center">
-                    <th>พื้นที่</th>
-                    <th>ลำดับ</th>
-                    <th>เจ้าหน้าที่</th>
-                    <th>สถานะ</th>
-                    @if( $officer_role != "operator-area")
-                        <th>จัดการ</th>
-                    @endif
-                </tr>
-            </thead>
-            <tbody>
-                @foreach( $member_commands as $item )
-                    <tr>
-                        <td>
-                            <div class="mt-3 d-flex align-items-center justify-content-center">
-                                <span class=""><b>{{ $item->name_area }}</b></span> 
-                            </div>
-                        </td>
-                        <td>
-                            <div class="mt-3 d-flex align-items-center justify-content-center">
-                                <span class="">{{ $item->number }}</span> 
-                            </div>
-                        </td>
-                        <td>
-                            <div class="customers-list">
-                                <div class="customers-list-item d-flex align-items-center p-2 cursor-pointer">
-                                    <div class="">
-                                        @if(!empty($item->user_photo))
-                                            <img src="{{ url('/storage') .'/'. $item->user_photo  }}"  class="rounded-circle" width="46" height="46" alt="">
-                                        @else
-                                            <img src="{{ url('/partner/images/user/profile.png') }}"  class="rounded-circle" width="46" height="46" alt="">
-                                        @endif
-                                    </div>
-                                    <div class="ms-2">
-                                        <h6 class="mb-1 font-15"><b>{{ $item->name_officer_command }}</b></h6>
-                                        <p class="mb-0 font-14 text-secondary">
-                                            @if( $item->officer_role == "admin-area" )
-                                                แอดมินพื้นที่
-                                            @elseif( $item->officer_role == "operator-area" )
-                                                เจ้าหน้าที่สั่งการ
-                                            @endif
-                                        </p>
-                                        <p class="mb-0 font-13 text-secondary">{{ $item->user_phone }}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        @if( $item->status == "Standby" )
-                            <td>
-                                <div class="mt-3 d-flex align-items-center justify-content-center">
-                                    <div class="badge-online"></div> 
-                                    <span class="textStatusOffilcer">พร้อมช่วยเหลือ</span> 
-                                </div>
-                            </td>
-                        @elseif( $item->status == "Helping" )
-                            <td>
-                                <div class="mt-3 d-flex align-items-center justify-content-center">
-                                    <div class="badge-busy"></div> 
-                                    <span class="textStatusOffilcer" style="color: #f5424e;">กำลังช่วยเหลือ</span> 
-                                </div>
-                            </td>
-                        @else
-                            <td>
-                                <div class="mt-3 d-flex align-items-center justify-content-center">
-                                    <div class="badge-offline"></div> 
-                                    <span class="textStatusOffilcer">ไม่อยู่</span> 
-                                </div>
-                            </td>
-                        @endif
-
+        <hr>
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr class="text-center">
+                        <th>พื้นที่</th>
+                        <th>ลำดับ</th>
+                        <th>เจ้าหน้าที่</th>
+                        <th>สถานะ</th>
                         @if( $officer_role != "operator-area")
-                        <td style="width: 1%; white-space: nowrap;" class="text-center">
-                            <button class="btn-outline-delete">
-                                <i class="fa-solid fa-trash-can"></i> ยกเลิกสถานะ
-                            </button>
-                        </td>
+                            <th>จัดการ</th>
                         @endif
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach( $member_commands as $item )
+                        <tr>
+                            <td>
+                                <div class="mt-3 d-flex align-items-center justify-content-center">
+                                    <span class=""><b>{{ $item->name_area }}</b></span> 
+                                </div>
+                            </td>
+                            <td>
+                                <div class="mt-3 d-flex align-items-center justify-content-center">
+                                    <span class="">{{ $item->number }}</span> 
+                                </div>
+                            </td>
+                            <td>
+                                <div class="customers-list">
+                                    <div class="customers-list-item d-flex align-items-center p-2 cursor-pointer">
+                                        <div class="">
+                                            @if(!empty($item->user_photo))
+                                                <img src="{{ url('/storage') .'/'. $item->user_photo  }}"  class="rounded-circle" width="46" height="46" alt="">
+                                            @else
+                                                <img src="{{ url('/partner/images/user/profile.png') }}"  class="rounded-circle" width="46" height="46" alt="">
+                                            @endif
+                                        </div>
+                                        <div class="ms-2">
+                                            <h6 class="mb-1 font-15"><b>{{ $item->name_officer_command }}</b></h6>
+                                            <p class="mb-0 font-14 text-secondary">
+                                                @if( $item->officer_role == "admin-area" )
+                                                    แอดมินพื้นที่
+                                                @elseif( $item->officer_role == "operator-area" )
+                                                    เจ้าหน้าที่สั่งการ
+                                                @endif
+                                            </p>
+                                            <p class="mb-0 font-13 text-secondary">{{ $item->user_phone }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            @if( $item->status == "Standby" )
+                                <td>
+                                    <div class="mt-3 d-flex align-items-center justify-content-center">
+                                        <div class="badge-online"></div> 
+                                        <span class="textStatusOffilcer">พร้อมช่วยเหลือ</span> 
+                                    </div>
+                                </td>
+                            @elseif( $item->status == "Helping" )
+                                <td>
+                                    <div class="mt-3 d-flex align-items-center justify-content-center">
+                                        <div class="badge-busy"></div> 
+                                        <span class="textStatusOffilcer" style="color: #f5424e;">กำลังช่วยเหลือ</span> 
+                                    </div>
+                                </td>
+                            @else
+                                <td>
+                                    <div class="mt-3 d-flex align-items-center justify-content-center">
+                                        <div class="badge-offline"></div> 
+                                        <span class="textStatusOffilcer">ไม่อยู่</span> 
+                                    </div>
+                                </td>
+                            @endif
+
+                            @if( $officer_role != "operator-area")
+                            <td style="width: 1%; white-space: nowrap;" class="text-center">
+                                <button class="btn-outline-delete">
+                                    <i class="fa-solid fa-trash-can"></i> ยกเลิกสถานะ
+                                </button>
+                            </td>
+                            @endif
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 

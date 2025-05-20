@@ -116,9 +116,21 @@ class Aims_type_unitsController extends Controller
      */
     public function edit($id)
     {
+        $data_user = Auth::user();
+
+        $aims_commands = Aims_command::where('user_id' , $data_user->id)->first();
+        $officer_role = $aims_commands->officer_role ;
+        $aims_partner_id = $aims_commands->aims_partner_id ;
+        $aims_area_id = $aims_commands->aims_area_id ;
+
         $aims_type_unit = Aims_type_unit::findOrFail($id);
 
-        return view('aims_type_units.edit', compact('aims_type_unit'));
+        $emergency_types = DB::table('aims_emergency_types')
+                ->where('aims_partner_id', '=' ,$aims_partner_id)
+                ->where('aims_area_id', '=' ,$aims_area_id)
+                ->get();
+
+        return view('aims_type_units.edit', compact('aims_type_unit','emergency_types'));
     }
 
     /**
@@ -159,6 +171,16 @@ class Aims_type_unitsController extends Controller
         $requestData = $request->all();
         $requestData['emergency_type'] = json_encode($requestData['emergency_type']);
         Aims_type_unit::create($requestData);
+
+        return "success" ;
+    }
+
+    function cf_edit_type_units(Request $request, $type_unit_id)
+    {
+        $requestData = $request->all();
+        
+        $aims_type_unit = Aims_type_unit::findOrFail($type_unit_id);
+        $aims_type_unit->update($requestData);
 
         return "success" ;
     }

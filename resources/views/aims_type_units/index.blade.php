@@ -93,62 +93,61 @@
     </div>
 </div>
 
-<div class="card radius-10 d-none d-lg-block">
-    <div class="card-header border-bottom-0 bg-transparent">
-        <div class="d-flex align-items-center">
-            <div class="col-12 mt-3">
-                <span class="font-weight-bold h4 mb-0">
-                    ประเภทหน่วยปฏิบัติการ
-                </span>
-                @if( $officer_role == "admin-area")
-                <button class="btn btn-success btn-sm float-end float-right mb-0" data-toggle="modal" data-target="#add_emergency_types">
+<div class="card radius-10 border-top border-0 border-4 border-primary">
+    <div class="card-body p-3">
+        <div class="card-title d-flex align-items-center">
+            <div>
+                <i class='fa-solid fa-house-medical-circle-exclamation me-1 font-22'></i>
+            </div>
+            <h5 class="mb-0">
+                ประเภทหน่วยปฏิบัติการ
+            </h5>
+            @if( $officer_role == "admin-area")
+                <button style="margin-left: 10px;margin-right: 10px;" type="button" class="btn btn-success radius-10 float-end ms-auto" data-toggle="modal" data-target="#add_emergency_types">
                     <i class="fa fa-plus"></i> เพิ่มประเภทใหม่
                 </button>
-                @endif
-            </div>
+            @endif
         </div>
-    </div>
-    <div class="card-body">
-        @foreach($aims_type_units as $item)
-            <div class="d-flex align-items-center mt-3">
-                <div class="flex-grow-1 ms-3">
-                    <h4 class="font-weight-bold mb-0">
-                        ประเภท : {{ $item->name_type_unit }}
-                    </h4>
-                    <p class="font-weight-bold mb-0">
-                        พื้นที่ : {{ $item->name_area }}
-                    </p>
-                    @php
-                        $type_list = json_decode($item->emergency_type, true);
-                    @endphp
-
-                    <p class="mb-0 mt-2">
-                        @if(is_array($type_list))
-                            @foreach ($type_list as $type)
-                                <span class="badge badge-pill bg-light-danger text-danger">
-                                    <span style="font-size:15px;">#{{ $type['name_emergency_type'] }}</span> (priority : {{ $type['priority'] ? $type['priority'] : 'สุดท้าย' }})
-                                </span>
-                            @endforeach
-                        @endif
-                    </p>
-
+        <hr>
+        <div>
+            @foreach($aims_type_units as $item)
+                <div class="d-flex align-items-center mt-3">
+                    <div class="flex-grow-1 ms-3">
+                        <h4 class="font-weight-bold mb-0">
+                            ประเภท : {{ $item->name_type_unit }}
+                        </h4>
+                        <p class="font-weight-bold mb-0">
+                            พื้นที่ : {{ $item->name_area }}
+                        </p>
+                        @php
+                            $type_list = json_decode($item->emergency_type, true);
+                        @endphp
+                        <p class="mb-0 mt-2">
+                            @if(is_array($type_list))
+                                @foreach ($type_list as $type)
+                                    <span class="badge badge-pill bg-light-danger text-danger">
+                                        <span style="font-size:15px;">#{{ $type['name_emergency_type'] }}</span> (priority : {{ $type['priority'] ? $type['priority'] : 'สุดท้าย' }})
+                                    </span>
+                                @endforeach
+                            @endif
+                        </p>
+                    </div>
+                    <a href="{{ url('/aims_type_units/' . $item->id . '/edit') }}" title="Edit Aims_type_unit">
+                        <button class="btn btn-sm btn-outline-primary radius-10 mx-1">
+                            <i class="fa-solid fa-pen"></i> Edit
+                        </button>
+                    </a>
+                    <form method="POST" action="{{ url('/aims_type_units' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
+                        {{ method_field('DELETE') }}
+                        {{ csrf_field() }}
+                        <button type="submit" class="btn btn-sm btn-danger radius-10 mx-1" title="Delete Aims_type_unit" onclick="return confirm(&quot;Confirm delete?&quot;)">
+                            <i class="fa-solid fa-delete-right"></i> Delete
+                        </button>
+                    </form>
                 </div>
-
-                <a href="{{ url('/aims_type_units/' . $item->id . '/edit') }}" title="Edit Aims_type_unit">
-                    <button class="btn btn-sm btn-outline-primary radius-10 mx-1">
-                        <i class="fa-solid fa-pen"></i> Edit
-                    </button>
-                </a>
-                <form method="POST" action="{{ url('/aims_type_units' . '/' . $item->id) }}" accept-charset="UTF-8" style="display:inline">
-                    {{ method_field('DELETE') }}
-                    {{ csrf_field() }}
-                    <button type="submit" class="btn btn-sm btn-danger radius-10 mx-1" title="Delete Aims_type_unit" onclick="return confirm(&quot;Confirm delete?&quot;)">
-                        <i class="fa-solid fa-delete-right"></i> Delete
-                    </button>
-                </form>
-            </div>
-            <hr>
-        @endforeach
+                <hr>
+            @endforeach
+        </div>
     </div>
 </div>
 

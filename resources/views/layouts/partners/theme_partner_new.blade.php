@@ -1110,256 +1110,10 @@
 						justify-content: center;
 					}
 				</style>
-				<div class="container">
+
+				<!-- <div class="container">
 					<button onclick="toast('การขอความช่วยเหลือใหม่')">Show Toast</button>
-				</div>
-				<script>
-					class ShadToastDisplay extends HTMLElement {
-						constructor() {
-							super();
-							this.attachShadow({
-								mode: "open"
-							});
-							this.shadowRoot.innerHTML = `
-							<style>
-								:host {
-									display: absolute;
-									justify-content: center;
-									flex-direction: column;
-									gap: .5em;
-									position: fixed;
-									top: 20px; 
-									left: 50%;
-									transform: translateX(-50%); 
-									width: 100%;
-									max-width: 500px;
-									z-index: 1000;
-									perspective: 100px;
-									transition: all .25s;
-									color: white;
-
-								}
-								:host(.hidden) {
-									opacity: 0;
-									visibility: hidden;
-									pointer-events: none;
-									transform: translate(-50%,-50%);
-
-								}
-								:host(:hover) {
-									height: 70px;
-								}
-								:host(:hover) ::slotted(shad-toast) {
-									transition-duration: .4s;
-								}
-							
-								:host(:hover) ::slotted([order="1"]) {
-									translate: 0 calc(100% + .5em) 0;
-								}
-								:host(:hover) ::slotted([order="2"]) {
-									translate: 0 calc(200% + 1.0em) 0;
-								}
-								:host(:hover) ::slotted([order="3"]) {
-									translate: 0 calc(300% + 1.5em) 0;
-								}
-							</style>
-							<slot></slot>
-						`;
-							this.timeoutId = null;
-							this.addEventListener("mouseenter", () => {
-								this.show();
-							});
-							this.addEventListener("mouseleave", () => {
-								this.hide();
-							});
-						}
-						show() {
-							clearTimeout(this.timeoutId);
-							this.classList.remove("hidden");
-							this.removeAttribute("collapse");
-						}
-						hide() {
-							this.setAttribute("collapse", "");
-							this.timeoutId = setTimeout(() => {
-								if (this.hasAttribute("collapse")) {
-									this.classList.add("hidden");
-								}
-							}, 200000);
-						}
-						assignOrder() {
-							const children = this.children;
-							for (let i = 0; i < 4 && i < this.children.length; i++) {
-								children[i].setAttribute("order", i);
-								void children[i].offsetHeight; //force repaint on safari
-							}
-						}
-					}
-					customElements.define("shad-toast-display", ShadToastDisplay);
-
-					class ShadToast extends HTMLElement {
-						constructor() {
-							super();
-							this.attachShadow({
-								mode: "open"
-							});
-							this.shadowRoot.innerHTML = `
-            <style>
-                :host {
-                    font-size: 14px;
-                    position: absolute;
-                    flex-shrink: 0;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-evenly;
-                    gap; 2em;
-                    width:100%;
-					max-width:500px;
-                    height: fit-content;
-                    border-radius: 10px;
-                    background-color: #F2F2F2;
-                    padding: 0 2em;
-                    transition: all .25s;
-					box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.36);
-					-webkit-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.36);
-					-moz-box-shadow: 0px 5px 5px 0px rgba(0,0,0,0.36);
-					color:#000;
-					padding: .8em;
-                }
-                :host(.new) {
-                    opacity: 0;
-                    transform: translateY(-50px);
-                }
-                :host(:first-child[remove]) {
-                    transform: translateY(-100%);
-                }
-                .content {
-                    font-size: 18px;
-					            font-weight: bold;
-
-                }
-                .date {
-                    color: #B4B4B4;
-                }
-                .close-button {
-                    border-radius: 8px;
-                    padding:  .6em 0;
-                    color: black;
-                    background-color: white;
-                    cursor: pointer;
-					max-width:100px;
-					width:100%;
-					margin-right:15px;
-					text-align: center;
-					            border: 1px #DADADA solid;
-
-                    &:active {
-                        background-color: black;
-                        border: 1px solid white;
-                        color: white;
-                    }
-                }
-                :host([order="0"]) {
-                    z-index: 3;
-                }
-                :host([order="1"]) {
-                    z-index: 2;
-                    translate: 0 calc(20% + 10%) -10px;
-                }
-                :host([order="2"]) {
-                    z-index: 1;
-                    translate: 0 calc(20% + 40%) -20px;
-                }
-                :host([order="3"]) {
-                    z-index: 0;
-                    translate: 0 calc(20% + 60%) -30px;
-                    opacity: 0;
-                }
-				.accept-btn{
-				    background: linear-gradient(60deg, #a61968 0%, #c78764 100%);
-					width: 100%;
-					border-radius:8px;
-					z-index: 3;
-					position: relative;
-					display: flex;
-					justify-content:center;
-					align-items:center;
-					color:#fff;
-					cursor: pointer;
-					}
-
-            </style>
-			<div class="content">การช่วยเหลือใหม่</div>
-			<div style="display:flex;margin-top:5px">
-				<div>	
-					<diV style="width:100px;height:100px;background-color: #000;margin-right:15px;border-radius:10px"></diV>
-				</div>
-				<div >
-					<div class="name">ชื่อ</div>
-					<div class="phone">เบอร์</div>
-					<div class="asd"></div>
-				</div>
-				</div>
-				<div style=" display: flex; margin-top:15px">
-					<div class="close-button">ปิด</div>
-					<div class="accept-btn">รับเคส</div>
-				</div>
-		
-         
-        `;
-							this.shadowRoot.querySelector(".close-button").addEventListener("click", () => {
-								this.setAttribute("remove", "");
-								this.style.zIndex = "-1";
-								this.style.opacity = "0";
-								const children = Array.from(this.parentElement.children);
-								const index = children.indexOf(this);
-								for (let i = index; i < 4 && i < children.length; i++) {
-									const newOrder = parseInt(children[i].getAttribute("order") - 1);
-									children[i].setAttribute("order", newOrder);
-								}
-							});
-							this.addEventListener("transitionend", () => {
-								if (this.hasAttribute("remove")) {
-									this.remove();
-								}
-							});
-						}
-						connectedCallback() {
-							this.shadowRoot.querySelector(".content").textContent = this.getAttribute("event");
-							this.shadowRoot.querySelector(".phone").textContent = this.getAttribute("phone");
-							this.shadowRoot.querySelector(".name").textContent = this.getAttribute("name");
-							this.shadowRoot.querySelector(".asd").textContent = this.getAttribute("asd");
-						}
-					}
-					customElements.define("shad-toast", ShadToast);
-
-					const shadToastDisplay = document.createElement("shad-toast-display");
-					shadToastDisplay.classList.add("hidden");
-					document.addEventListener("DOMContentLoaded", () => {
-						document.body.appendChild(shadToastDisplay);
-					});
-
-
-
-					function toast(message) {
-
-						const toast = document.createElement("shad-toast");
-
-						toast.setAttribute("event", message.trim());
-
-						toast.setAttribute("name", 'nameasd');
-						toast.setAttribute("phone", 'phoneasd');
-						toast.setAttribute("asd", 'test');
-
-						toast.classList.add("new");
-						shadToastDisplay.show();
-						shadToastDisplay.prepend(toast);
-						requestAnimationFrame(() => {
-							toast.classList.remove("new");
-						});
-						shadToastDisplay.assignOrder();
-						shadToastDisplay.hide();
-					}
-				</script>
+				</div> -->
 				<br>
 
 			</ul>
@@ -2105,11 +1859,250 @@
 					if (result['status'] == "alarm") {
 						console.log(result);
 						audio.play();
-						alert("รับแจ้งเหตุ SOS ID : " + result['data'].aims_emergency_id);
+						toast(result);
+						// alert("รับแจ้งเหตุ SOS ID : " + result['data'].aims_emergency_id);
 					}
 				});
 		}
 	</script>
+
+<script>
+	class ShadToastDisplay extends HTMLElement {
+		constructor() {
+			super();
+			this.attachShadow({ mode: "open" });
+			this.shadowRoot.innerHTML = `
+				<style>
+					:host {
+						display: flex;
+						justify-content: center;
+						flex-direction: column;
+						gap: .5em;
+						position: fixed;
+						top: 20px; 
+						left: 50%;
+						transform: translateX(-50%); 
+						width: 100%;
+						max-width: 500px;
+						z-index: 1000;
+						transition: all .25s;
+						color: white;
+					}
+					:host(.hidden) {
+						opacity: 0;
+						visibility: hidden;
+						pointer-events: none;
+						transform: translate(-50%, -50%);
+					}
+					:host(:hover) ::slotted([order="1"]) {
+						translate: 0 calc(100% + .5em) 0;
+					}
+					:host(:hover) ::slotted([order="2"]) {
+						translate: 0 calc(200% + 1em) 0;
+					}
+					:host(:hover) ::slotted([order="3"]) {
+						translate: 0 calc(300% + 1.5em) 0;
+					}
+				</style>
+				<slot></slot>
+			`;
+			this.timeoutId = null;
+			this.addEventListener("mouseenter", () => this.show());
+			this.addEventListener("mouseleave", () => this.hide());
+		}
+		show() {
+			clearTimeout(this.timeoutId);
+			this.classList.remove("hidden");
+			this.removeAttribute("collapse");
+		}
+		hide() {
+			this.setAttribute("collapse", "");
+			this.timeoutId = setTimeout(() => {
+				if (this.hasAttribute("collapse")) {
+					this.classList.add("hidden");
+				}
+			}, 200000); // 200 seconds
+		}
+		assignOrder() {
+			const children = this.children;
+			for (let i = 0; i < 4 && i < children.length; i++) {
+				children[i].setAttribute("order", i);
+				void children[i].offsetHeight;
+			}
+		}
+	}
+	customElements.define("shad-toast-display", ShadToastDisplay);
+
+	class ShadToast extends HTMLElement {
+		constructor() {
+			super();
+			this.attachShadow({ mode: "open" });
+			this.shadowRoot.innerHTML = `
+				<style>
+					:host {
+						font-size: 14px;
+						position: relative;
+						display: flex;
+						flex-direction: column;
+						gap: 1em;
+						width: 100%;
+						max-width: 500px;
+						background-color: #F2F2F2;
+						border-radius: 10px;
+						padding: 1em;
+						box-shadow: 0px 5px 5px rgba(0,0,0,0.36);
+						color: #000;
+						transition: all .25s;
+					}
+					:host(.new) {
+						opacity: 0;
+						transform: translateY(-50px);
+					}
+					:host(:first-child[remove]) {
+						transform: translateY(-100%);
+					}
+					.content {
+						font-size: 18px;
+						font-weight: bold;
+					}
+					.photo-img {
+						width: 100px;
+						height: auto;
+						border-radius: 10px;
+						object-fit: cover;
+						background-color: #000;
+						margin-right: 15px;
+					}
+					.close-button {
+						border-radius: 8px;
+						padding: .6em 0;
+						color: black;
+						background-color: white;
+						cursor: pointer;
+						max-width: 100px;
+						width: 100%;
+						text-align: center;
+						border: 1px #DADADA solid;
+					}
+					.accept-btn {
+						background: linear-gradient(60deg, #a61968 0%, #c78764 100%);
+						width: 100%;
+						border-radius: 8px;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						color: white;
+						cursor: pointer;
+						text-align: center;
+						padding: .6em;
+						margin-left: 15px;
+					}
+				</style>
+				<div class="content">
+					<i class="fa-regular fa-triangle-exclamation fa-beat-fade" style="color: #d83131;"></i>
+					การขอความช่วยเหลือใหม่
+				</div>
+				<div style="display:flex;align-items:flex-start">
+					<img class="photo-img" id="photo-img" src="">
+					<div>
+						<div><b class="name">ชื่อ</b></div>
+						<div class="phone">เบอร์</div>
+						<hr>
+						<div><b class="emergency_type">ประเภทการขอความช่วยเหลือ</b></div>
+						<div class="emergency_detail">รายละเอียดเหตุ</div>
+					</div>
+				</div>
+				<div style="display:flex;margin-top:15px">
+					<div class="close-button">ปิด</div>
+					<div class="accept-btn">รับเคส</div>
+				</div>
+			`;
+
+			this.shadowRoot.querySelector(".close-button").addEventListener("click", () => {
+				this.setAttribute("remove", "");
+				this.style.zIndex = "-1";
+				this.style.opacity = "0";
+				const siblings = Array.from(this.parentElement.children);
+				const index = siblings.indexOf(this);
+				for (let i = index + 1; i < siblings.length; i++) {
+					const newOrder = parseInt(siblings[i].getAttribute("order")) - 1;
+					siblings[i].setAttribute("order", newOrder);
+				}
+			});
+
+			this.addEventListener("transitionend", () => {
+				if (this.hasAttribute("remove")) {
+					this.remove();
+				}
+			});
+		}
+
+		connectedCallback() {
+			const set = (selector, value) => {
+				const el = this.shadowRoot.querySelector(selector);
+				if (el) el.textContent = value || "ไม่ได้ระบุ";
+			};
+
+			set(".name", this.getAttribute("name"));
+			set(".phone", this.getAttribute("phone"));
+			set(".emergency_type", this.getAttribute("emergency_type"));
+			set(".emergency_detail", this.getAttribute("emergency_detail"));
+
+			const photoImg = this.shadowRoot.getElementById("photo-img");
+			const emergencyPhoto = this.getAttribute("emergency_photo");
+			if (photoImg && emergencyPhoto && emergencyPhoto !== "ไม่ได้ระบุ") {
+				photoImg.src = emergencyPhoto;
+			}else{
+				photoImg.remove();
+			}
+
+			const acceptBtn = this.shadowRoot.querySelector(".accept-btn");
+			if (acceptBtn) {
+				const id = this.getAttribute("id");
+				acceptBtn.addEventListener("click", () => {
+					window.location.href = `{{ url('/command_operations') }}/${id}`;
+				});
+			}
+		}
+	}
+	customElements.define("shad-toast", ShadToast);
+
+	// Mount shad-toast-display to DOM on load
+	const shadToastDisplay = document.createElement("shad-toast-display");
+	shadToastDisplay.classList.add("hidden");
+	document.addEventListener("DOMContentLoaded", () => {
+		document.body.appendChild(shadToastDisplay);
+	});
+
+	// Show toast
+	function toast(message) {
+		const toast = document.createElement("shad-toast");
+
+		const getSafe = (obj, key) => obj?.[key] ? obj[key] : "ไม่ได้ระบุ";
+
+		toast.setAttribute("name", getSafe(message.emergency, "name_reporter"));
+		toast.setAttribute("phone", getSafe(message.emergency, "phone_reporter"));
+		toast.setAttribute("emergency_type", getSafe(message.emergency, "emergency_type"));
+		toast.setAttribute("emergency_detail", getSafe(message.emergency, "emergency_detail"));
+
+		const photo = message.emergency?.emergency_photo;
+		if (photo && photo !== "ไม่ได้ระบุ") {
+			toast.setAttribute("emergency_photo", `{{ url('/storage') }}/${photo}`);
+		}
+
+		toast.setAttribute("id", getSafe(message.emergency, "id"));
+
+		toast.classList.add("new");
+		shadToastDisplay.show();
+		shadToastDisplay.prepend(toast);
+		requestAnimationFrame(() => {
+			toast.classList.remove("new");
+		});
+		shadToastDisplay.assignOrder();
+		shadToastDisplay.hide();
+	}
+</script>
+
 
 </body>
 

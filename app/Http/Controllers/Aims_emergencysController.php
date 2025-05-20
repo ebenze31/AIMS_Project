@@ -15,6 +15,7 @@ use App\Models\Aims_command;
 use App\Models\Aims_area;
 use App\User;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 
 class Aims_emergencysController extends Controller
 {
@@ -181,6 +182,12 @@ class Aims_emergencysController extends Controller
     {
         $current_time = Carbon::now();
         $requestData = $request->all();
+
+        if ($request->hasFile('emergency_photo')) {
+            $requestData['emergency_photo'] = $request->file('emergency_photo')
+                ->store('uploads', 'public');
+        }
+
         $emergency = Aims_emergency::create($requestData);
 
         // เช็คสถานะเปิดทำการของ Partner
@@ -279,6 +286,28 @@ class Aims_emergencysController extends Controller
             return $data_return;
         }
 
+    }
+
+    function command_operations($id){
+
+        $columns = Schema::getColumnListing('aims_emergency_operations');
+
+        $selects = array_map(function ($col) {
+            return "aims_emergency_operations.$col as op_$col";
+        }, $columns);
+
+        $emergency = DB::table('aims_emergencys')
+            ->where('aims_emergencys.id', '=', $id)
+            ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
+            ->select(array_merge(['aims_emergencys.*'], $selects))
+            ->first();
+
+        // echo "<pre>";
+        // print_r($emergency);
+        // echo "<pre>";
+        // exit();
+
+        return view('aims_emergencys.command_operations', compact('emergency')); 
     }
 
 }

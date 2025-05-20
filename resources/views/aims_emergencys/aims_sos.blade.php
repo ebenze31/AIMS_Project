@@ -709,33 +709,33 @@
 
     function send_emergency() {
         const elements = document.querySelectorAll('.data_for_ask');
-        const data = {};
+        const formData = new FormData();
 
         elements.forEach((element, index) => {
-            // ใช้ name หรือ id เป็น key หรือใช้ index ถ้าไม่มี name/id
             const key = element.name || element.id || `field_${index}`;
-            data[key] = element.value;
+
+            if (element.type === "file") {
+                if (element.files[0]) {
+                    formData.append(key, element.files[0]);
+                }
+            } else {
+                formData.append(key, element.value);
+            }
         });
 
-        // console.log(data);
-
         fetch("{{ url('/') }}/api/send_emergency", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data),
-            })
-            .then(response => response.text())
-            .then(result => {
-                // console.log(result);
-
-                if (result == "success") {
-                    window.location.href = "{{ url('/demo/user_wait_officer') }}";
-                }
-            })
-            .catch(error => console.error('Error:', error));
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.text())
+        .then(result => {
+            if (result == "success") {
+                // window.location.href = "{{ url('/demo/user_wait_officer') }}";
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
+
 </script>
 
 
