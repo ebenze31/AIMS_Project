@@ -136,11 +136,14 @@
         box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.15);
         -webkit-box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.15);
         -moz-box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
     }
 
     .content .body {
         padding: 15px;
-
+        max-height: calc(100dvh - 200px);
+        overflow: auto;
     }
 
     .backdrop {
@@ -181,31 +184,37 @@
         background-color: #2856FA;
         color: #fff;
     }
+
     @-webkit-keyframes slide-top {
-  0% {
-    -webkit-transform: translateY(100%);
+        0% {
+            -webkit-transform: translateY(100%);
             transform: translateY(100%);
             opacity: 0;
-  }
-  100% {
-    -webkit-transform: translateY(0);
+        }
+
+        100% {
+            -webkit-transform: translateY(0);
             transform: translateY(0);
             opacity: 1;
 
-  }
-}
-.status{
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 10px;
-}
-.btn-prev{
-    cursor: pointer;
-}
-.header{
-    font-weight: bolder;
-}
+        }
+    }
+
+    .status {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .btn-prev {
+        cursor: pointer;
+        margin-right: 10px;
+    }
+
+    .header {
+        font-weight: bolder;
+    }
 </style>
 
 <div>
@@ -252,12 +261,12 @@
         <div class="section-1">
             <div class="content">
                 <div class="body">
-                    <button class="btn-edit"  style="--index: 0">แก้ไขข้อมูลผู้ป่วย</button>
+                    <button class="btn-edit" style="--index: 0">แก้ไขข้อมูลผู้ป่วย</button>
                     <button class="btn-call-more" style="--index: 1">ปฎิบัติการร่วม / หมู่</button>
                 </div>
             </div>
         </div>
-        
+
         <div class="section-2">
             <div class="content">
                 <div class="body">
@@ -277,27 +286,75 @@
                 </div>
             </div>
         </div>
-<style>
-    .input-officer{
-        padding: 10px;
-        border: #DDE1EB 1px solid;
-        border-radius: 10px;
-        width: 100%;
-    }
-    .btn-next{
-        padding: 20px;
-            background: #06A2FD;
-        background: -webkit-linear-gradient(90deg, rgba(6, 162, 253, 1) 0%, rgba(40, 86, 250, 1) 100%);
-        background: -moz-linear-gradient(90deg, rgba(6, 162, 253, 1) 0%, rgba(40, 86, 250, 1) 100%);
-        background: linear-gradient(90deg, rgba(6, 162, 253, 1) 0%, rgba(40, 86, 250, 1) 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#06A2FD", endColorstr="#2856FA", GradientType=1);
-        border: none !important;
-        border-radius: 10px;
-        color: #fff;
-        margin: 0 5px;
-        
-    }
-</style>
+        <style>
+            .input-officer {
+                padding: 5px 10px;
+                border: #DDE1EB 1px solid;
+                border-radius: 10px;
+                width: 100%;
+            }
+
+            .btn-next {
+                padding: 15px 20px;
+                background: #06A2FD;
+                background: -webkit-linear-gradient(90deg, rgba(6, 162, 253, 1) 0%, rgba(40, 86, 250, 1) 100%);
+                background: -moz-linear-gradient(90deg, rgba(6, 162, 253, 1) 0%, rgba(40, 86, 250, 1) 100%);
+                background: linear-gradient(90deg, rgba(6, 162, 253, 1) 0%, rgba(40, 86, 250, 1) 100%);
+                filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#06A2FD", endColorstr="#2856FA", GradientType=1);
+                border: none !important;
+                border-radius: 10px;
+                color: #fff;
+                margin: 0 5px;
+
+            }
+
+            .btn-next:disabled {
+                opacity: .8;
+            }
+
+            .idc-group,
+            .treatment-group,
+            .no-treatment-group {
+                flex-wrap: wrap;
+                display: flex;
+            }
+
+            .idc-group button,
+            .treatment-group,
+            .no-treatment-group {
+                background: unset;
+                margin: 10px 0;
+                width: 100%;
+                padding: 20px;
+            }
+
+            .btn-black {
+                background-color: #000 !important;
+                color: #fff !important;
+            }
+
+            .btn-primary {
+                background-color: #1371FD !important;
+                color: #fff !important;
+            }
+
+            .btn-green {
+                background-color: #12BA09 !important;
+                color: #fff !important;
+
+            }
+
+            .btn-yellow {
+                background-color: #FFC517 !important;
+                color: #fff !important;
+
+            }
+
+            .btn-red {
+                background-color: #DE2525 !important;
+                color: #fff !important;
+            }
+        </style>
         <div class="section-3">
             <div class="content">
                 <div class="header">
@@ -313,78 +370,271 @@
                 </div>
             </div>
             <div class="content">
-                <div class="header">
+                <div class="header flex items-center">
                     <div class="back btn-prev">
                         <p><i class="fa-solid fa-chevron-left"></i></p>
                     </div>
+                    <div>เลข กม. รถ <u>ถึงที่เกิดเหตุ</u></div>
                 </div>
 
-                <div class="body">
-                    asd2<button class="btn-next">asd</button>
+                <div class="body flex">
+                    <input type="text" class="input-officer">
+                    <button class="btn-next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
             <div class="content">
-                <div class="header">
+                <div class="header flex items-center">
                     <div class="back btn-prev">
                         <p><i class="fa-solid fa-chevron-left"></i></p>
                     </div>
+                    <div>ระดับความรุนแรง</div>
+                    <button class="btn-next">asd</button>
                 </div>
 
-                <div class="body">
-                    asd3<button class="btn-next">asd</button>
+                <div class="body flex idc-group">
+                    <div class="px-2 w-[50%]">
+                        <button class="btn-next btn-black">อื่นๆ</button>
+                    </div>
+                    <div class="px-2 w-[50%]">
+                        <button class="btn-next btn-primary">ทั่วไป</button>
+                    </div>
+                    <div class="px-2 w-[50%]">
+                        <button class="btn-next btn-green">ไม่รุนแรง</button>
+                    </div>
+                    <div class="px-2 w-[50%]">
+                        <button class="btn-next btn-yellow">เร่งด่วน</button>
+                    </div>
+                    <div class="px-2 w-[100%]">
+                        <button class="btn-next btn-red">ฉุกเฉิน</button>
+                    </div>
                 </div>
             </div>
             <div class="content">
-                <div class="header">
+                <div class="header flex items-center">
                     <div class="back btn-prev">
                         <p><i class="fa-solid fa-chevron-left"></i></p>
                     </div>
+                    <div>ระดับความรุนแรง</div>
+                    <button class="btn-next">asd</button>
                 </div>
 
+                <style>
+                    .btn-treatment,
+                    .btn-no-treatment {
+                        background: unset;
+                        margin: 10px 0;
+                        width: 100%;
+                        height: 65px;
+                        border-radius: 5px;
+                        transition: all .15s ease-in-out;
+                        display: flex;
+                        justify-content: center;
+                        font-weight: bolder;
+                        text-align: center;
+                        align-items: center;
+
+                    }
+
+                    .btn-treatment {
+                        border: 1px solid #DB2F2F !important;
+                        color: #DB2F2F;
+                    }
+
+                    .btn-no-treatment {
+                        border: 1px solid #1371FD !important;
+                        color: #1371FD;
+                    }
+
+                    .btn-treatment:hover,
+                    input:checked~label.btn-treatment {
+                        background-color: #DB2F2F;
+                        color: #fff;
+                    }
+
+                    .btn-no-treatment:hover,
+                    input:checked~label.btn-no-treatment {
+
+                        background-color: #1371FD;
+                        color: #fff;
+                    }
+
+                    .treatment-group,
+                    .no-treatment-group {
+
+                        flex-wrap: wrap;
+                        display: flex;
+
+                    }
+
+                    .hidden {
+                        display: none !important;
+                    }
+
+                    .p-0 {
+                        padding: 0 !important;
+                    }
+                </style>
                 <div class="body">
-                    asd4<button class="btn-next">asd</button>
+
+                    <div class="flex mb-0 w-[100%]">
+                        <div class="px-2 w-[100%]">
+                            <input type="radio" name="treatment_type" id="has_treatment" class="hidden">
+                            <label for="has_treatment" class="btn btn-treatment">มีการรักษา</label>
+                        </div>
+                        <div class="px-2 w-[100%]">
+                            <input type="radio" name="treatment_type" id="no_treatment" class="hidden">
+                            <label for="no_treatment" class="btn btn-no-treatment">ไม่มีการรักษา</label>
+                        </div>
+                    </div>
+                    <!-- <div class="flex mb-5 w-[100%]">
+                        <div class="px-2 w-[100%]">
+                            <input type="radio" name="treatment_header" id="header_treatment" class="hidden">
+                            <label class="btn-next btn-treatment " for="header_treatment">มีการรักษา</label>
+                        </div>
+
+                        <div class="px-2 w-[100%]">
+                            <input type="radio" name="treatment_header" id="header_no_treatment" class="hidden">
+                            <label class="btn-next btn-no-treatment " for="header_no_treatment">ไม่มีการรักษา</label>
+                        </div>
+
+                    </div> -->
+
+                    <div class=" flex treatment-group hidden p-0">
+                        <div class="px-2 w-[100%]">
+                            <input type="radio" name="treatment_datail" id="treatment_1" class="hidden">
+                            <label for="treatment_1" id="" class="btn-next btn-treatment">ส่งโรงพยาบาล</label>
+                        </div>
+                        <div class="px-2 w-[50%]">
+                            <input type="radio" name="treatment_datail" id="treatment_2" class="hidden">
+                            <label for="treatment_2" id="" class="btn-next btn-treatment">ส่งต่อหน่วยอื่น</label>
+                        </div>
+                        <div class="px-2 w-[50%]">
+                            <input type="radio" name="treatment_datail" id="treatment_3" class="hidden">
+                            <label for="treatment_3" id="" class="btn-next btn-treatment">ไม่นำส่ง</label>
+                        </div>
+                        <div class="px-2 w-[50%]">
+                            <input type="radio" name="treatment_datail" id="treatment_4" class="hidden">
+                            <label for="treatment_4" id="" class="btn-next btn-treatment">เสียชีวิตขณะนำส่ง</label>
+                        </div>
+                        <div class="px-2 w-[50%]">
+                            <input type="radio" name="treatment_datail" id="treatment_5" class="hidden">
+                            <label for="treatment_5" id="" class="btn-next btn-treatment">เสียชีวิต ณ จุดเกิดเหตุ</label>
+                        </div>
+                    </div>
+
+                    <div class=" flex no-treatment-group hidden p-0">
+
+                        <div class="px-2 w-[50%]">
+                            <input type="radio" name="no_treatment_datail" id="no_treatment_1" class="hidden">
+                            <label for="no_treatment_1" id="" class="btn-next btn-no-treatment">ผู้ป่วยปฎิเสธการรักษา</label>
+                        </div>
+                        <div class="px-2 w-[50%]">
+                            <input type="radio" name="no_treatment_datail" id="no_treatment_2" class="hidden">
+                            <label for="no_treatment_2" id="" class="btn-next btn-no-treatment">เสียชีวิต ก่อนชุดปฎิบัติการไปถึง</label>
+                        </div>
+                        <div class="px-2 w-[50%]">
+                            <input type="radio" name="no_treatment_datail" id="no_treatment_3" class="hidden">
+                            <label for="no_treatment_3" id="" class="btn-next btn-no-treatment">ยกเลิก</label>
+                        </div>
+                        <div class="px-2 w-[50%]">
+                            <input type="radio" name="no_treatment_datail" id="no_treatment_4" class="hidden">
+                            <label for="no_treatment_4" id="" class="btn-next btn-no-treatment">ไม่พบเหตุ</label>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="content">
-                <div class="header">
+                <div class="content">
+                <div class="header flex items-center">
                     <div class="back btn-prev">
                         <p><i class="fa-solid fa-chevron-left"></i></p>
                     </div>
+                    <div>เลข กม. รถ <u>ถึงรพ.</u></div>
                 </div>
-                <div class="body">
-                    asd5<button class="btn-next">asd</button>
+
+                <div class="body flex">
+                    <input type="text" class="input-officer">
+                    <button class="btn-next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
-            <div class="content">
-                <div class="header">
+
+                <div class="content">
+                <div class="header flex items-center">
                     <div class="back btn-prev">
                         <p><i class="fa-solid fa-chevron-left"></i></p>
                     </div>
-                </div>
-                <div class="body">
-                    asd6<button class="btn-next">asd</button>
+                    <div>เลข กม. รถ <u>ถึงฐาน</u></div>
                 </div>
 
-            </div>
-            <div class="content">
-                <div class="header">
-                    <div class="back btn-prev">
-
-                        <p><i class="fa-solid fa-chevron-left"></i></p>
-                    </div>
-                </div>
-
-                <div class="body">
-                    asd7
+                <div class="body flex">
+                    <input type="text" class="input-officer">
+                    <button class="btn-next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
         </div>
-        <div class="section-4">
-            <div class="content">
-                <div class="body"></div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const hasTreatmentRadio = document.getElementById("has_treatment");
+                const noTreatmentRadio = document.getElementById("no_treatment");
+
+                const treatmentGroup = document.querySelector(".treatment-group");
+                const noTreatmentGroup = document.querySelector(".no-treatment-group");
+
+                hasTreatmentRadio.addEventListener("change", function() {
+                    if (this.checked) {
+                        treatmentGroup.classList.remove("hidden");
+                        noTreatmentGroup.classList.add("hidden");
+                    }
+                });
+
+                noTreatmentRadio.addEventListener("change", function() {
+                    if (this.checked) {
+                        noTreatmentGroup.classList.remove("hidden");
+                        treatmentGroup.classList.add("hidden");
+                    }
+                });
+            });
+        </script>
+
+        <div class="content">
+            <div class="header">
+                <div class="back btn-prev">
+                    <p><i class="fa-solid fa-chevron-left"></i></p>
+                </div>
+            </div>
+            <div class="body">
+                asd5<button class="btn-next">asd</button>
+            </div>
+        </div>
+        <div class="content">
+            <div class="header">
+                <div class="back btn-prev">
+                    <p><i class="fa-solid fa-chevron-left"></i></p>
+                </div>
+            </div>
+            <div class="body">
+                asd6<button class="btn-next">asd</button>
+            </div>
+
+        </div>
+        <div class="content">
+            <div class="header">
+                <div class="back btn-prev">
+
+                    <p><i class="fa-solid fa-chevron-left"></i></p>
+                </div>
+            </div>
+
+            <div class="body">
+                asd7
             </div>
         </div>
     </div>
+    <div class="section-4">
+        <div class="content">
+            <div class="body"></div>
+        </div>
+    </div>
+</div>
 </div>
 
 <script>

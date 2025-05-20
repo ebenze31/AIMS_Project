@@ -1296,7 +1296,8 @@
 				<div >
 					<div class="name">ชื่อ</div>
 					<div class="phone">เบอร์</div>
-						</div>
+					<div class="asd"></div>
+				</div>
 				</div>
 				<div style=" display: flex; margin-top:15px">
 					<div class="close-button">ปิด</div>
@@ -1321,26 +1322,12 @@
 									this.remove();
 								}
 							});
-
-							// const now = new Date(); // Your example date
-							// const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-							// const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-							// const weekday = weekdays[now.getDay()];
-							// const month = months[now.getMonth()];
-							// const day = String(now.getDate()).padStart(2, '0');
-							// const year = now.getFullYear();
-							// const hours = now.getHours();
-							// const minutes = String(now.getMinutes()).padStart(2, '0');
-							// const period = hours >= 12 ? 'PM' : 'AM';
-							// const hour12 = hours % 12 || 12;
-
-							// const formattedDate = `${weekday}, ${month} ${day}, ${year} at ${hour12}:${minutes} ${period}`;
-
-							// this.shadowRoot.querySelector(".date").textContent = formattedDate;
 						}
 						connectedCallback() {
 							this.shadowRoot.querySelector(".content").textContent = this.getAttribute("event");
+							this.shadowRoot.querySelector(".phone").textContent = this.getAttribute("phone");
+							this.shadowRoot.querySelector(".name").textContent = this.getAttribute("name");
+							this.shadowRoot.querySelector(".asd").textContent = this.getAttribute("asd");
 						}
 					}
 					customElements.define("shad-toast", ShadToast);
@@ -1351,9 +1338,18 @@
 						document.body.appendChild(shadToastDisplay);
 					});
 
+
+
 					function toast(message) {
+
 						const toast = document.createElement("shad-toast");
+
 						toast.setAttribute("event", message.trim());
+
+						toast.setAttribute("name", 'nameasd');
+						toast.setAttribute("phone", 'phoneasd');
+						toast.setAttribute("asd", 'test');
+
 						toast.classList.add("new");
 						shadToastDisplay.show();
 						shadToastDisplay.prepend(toast);

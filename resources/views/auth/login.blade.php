@@ -240,7 +240,6 @@
         </form>
         <div class="">
             <p  class="text-[#C8C8C8] text-center my-5">or connect with</p>
-
             <style>
                 .btn-line-login{
                     width: 100%;
@@ -262,7 +261,7 @@
                     border-right: 1px solid rgba(0, 0, 0, .08);
                 }
             </style>
-        <a href="{{ route('login.line') }}?redirectTo={{ request('redirectTo') }}" class="btn btn-line-login">
+            <a href="{{ route('login.line') }}?redirectTo={{ request('redirectTo') }}" class="btn btn-line-login">
                 <div class="flex items-center w-full">
                     <img src="{{ asset('/img/icon/line_60.png') }}" alt="" width="50" class="icon-line">
                     <div class="w-full flex items-center justify-center" style="width: 100%;margin-left: -50px;">
