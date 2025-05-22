@@ -144,7 +144,7 @@
 
     function select_officer(){
 
-        let data = [];
+        let data = {};
             data['emergency_id'] = "{{ $emergency->id }}";
             data['aims_operating_officers'] = "Officer Benz";
 
