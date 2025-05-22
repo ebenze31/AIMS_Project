@@ -111,7 +111,7 @@
 <script>
 
     document.addEventListener("DOMContentLoaded", function() {
-        document.querySelector('#btn_order').click();
+        // document.querySelector('#btn_order').click();
         open_map_operating_unit();
     });
 
