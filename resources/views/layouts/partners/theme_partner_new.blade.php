@@ -1111,9 +1111,9 @@
 					}
 				</style>
 
-				<!-- <div class="container">
-					<button onclick="toast('การขอความช่วยเหลือใหม่')">Show Toast</button>
-				</div> -->
+				<div class="container">
+					<button onclick="test_toast();">Show Toast</button>
+				</div>
 				<br>
 
 			</ul>
@@ -1938,6 +1938,8 @@
 			super();
 			this.attachShadow({ mode: "open" });
 			this.shadowRoot.innerHTML = `
+				<link rel="stylesheet" href="{{ asset('/partner/fonts/fontawesome/css/fontawesome-all.min.css') }}">
+				<link href="https://kit-pro.fontawesome.com/releases/v6.7.2/css/pro.min.css" rel="stylesheet">
 				<style>
 					:host {
 						font-size: 14px;
@@ -1962,6 +1964,10 @@
 						transform: translateY(-100%);
 					}
 					.content {
+						font-size: 22px;
+						font-weight: bold;
+					}
+					.title{
 						font-size: 18px;
 						font-weight: bold;
 					}
@@ -1999,16 +2005,16 @@
 					}
 				</style>
 				<div class="content">
-					<i class="fa-regular fa-triangle-exclamation fa-beat-fade" style="color: #d83131;"></i>
+					<i class="fa-regular fa-triangle-exclamation fa-beat-fade fa-xl" style="color: #d83131;"></i>
 					การขอความช่วยเหลือใหม่
 				</div>
 				<div style="display:flex;align-items:flex-start">
 					<img class="photo-img" id="photo-img" src="">
 					<div>
-						<div><b class="name">ชื่อ</b></div>
+						<div><b class="name title">ชื่อ</b></div>
 						<div class="phone">เบอร์</div>
 						<hr>
-						<div><b class="emergency_type">ประเภทการขอความช่วยเหลือ</b></div>
+						<div><b class="emergency_type title">ประเภทการขอความช่วยเหลือ</b></div>
 						<div class="emergency_detail">รายละเอียดเหตุ</div>
 					</div>
 				</div>
@@ -2100,6 +2106,23 @@
 		});
 		shadToastDisplay.assignOrder();
 		shadToastDisplay.hide();
+	}
+
+	function test_toast(){
+
+		let data = [];
+		let sub_data = [];
+
+			sub_data['name_reporter'] = 'Benz' ;
+			sub_data['phone_reporter'] = '0998823219' ;
+			sub_data['emergency_type'] = 'เหตุด่วนเหตุร้าย' ;
+			sub_data['emergency_detail'] = 'พระภิกษุ มีอาการปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้อง ที่วัดบ้านแหน2' ;
+			sub_data['emergency_photo'] = 'uploads/ICSOilzxguFQf2Dw66XUm9ureeiESzRigtNwh3DB.jpg' ;
+			sub_data['id'] = '58' ;
+
+		data['emergency'] = sub_data ;
+
+		toast(data);
 	}
 </script>
 

@@ -522,6 +522,7 @@ Route::post('/form-sos', 'API\WebhookController@handle')->middleware('session');
 Route::post('/sos_device', 'API\WebhookController@sos_device');
 Route::get('/get_data_phone_emergency/{countryCode}', 'Aims_phone_emergencysController@get_data_phone_emergency');
 Route::get('/get_polygon_all', 'Aims_emergencysController@get_polygon_all');
+Route::post('/send_sos_to_officer', 'Aims_emergencysController@send_sos_to_officer');
 Route::post('/send_emergency', 'Aims_emergencysController@send_emergency');
 Route::post('/cf_add_emergency_type', 'Aims_emergency_typesController@cf_add_emergency_type');
 Route::post('/cf_add_type_units', 'Aims_type_unitsController@cf_add_type_units');
