@@ -25,7 +25,7 @@ class Aims_operating_officer extends Model
      *
      * @var array
      */
-    protected $fillable = ['name_officer', 'type', 'level', 'amount_help', 'status', 'lat', 'lng', 'user_id', 'aims_operating_unit_id', 'aims_partner_id', 'aims_area_id','vehicle_type'];
+    protected $fillable = ['name_officer', 'level', 'amount_help', 'status', 'lat', 'lng', 'user_id', 'aims_operating_unit_id', 'aims_partner_id', 'aims_area_id','vehicle_type'];
 
     
 }

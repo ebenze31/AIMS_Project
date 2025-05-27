@@ -314,17 +314,100 @@ class Aims_emergencysController extends Controller
 
     function send_sos_to_officer(Request $request)
     {
-        $requestData = $request->all();
+        $date_now =  date("d-m-Y");
+        $time_now =  date("H:i");
+        $text_at = '@' ;
 
-        $template_path = storage_path('../public/json/text_success.json');
+        $requestData = $request->all();
+        $officer_id = $requestData['aims_operating_officers_id'];
+        $emergency_id = $requestData['emergency_id'];
+
+        $columns = Schema::getColumnListing('aims_emergency_operations');
+        $selects = array_map(function ($col) {
+            return "aims_emergency_operations.$col as op_$col";
+        }, $columns);
+
+        $emergency = DB::table('aims_emergencys')
+            ->where('aims_emergencys.id', '=', $emergency_id)
+            ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
+            ->leftJoin('aims_areas', 'aims_emergencys.aims_area_id', '=', 'aims_areas.id')
+            ->select(array_merge(
+                ['aims_emergencys.*'],
+                $selects,
+                ['aims_areas.name_area as area_name_area']
+            ))
+            ->first();
+
+        $lat_user = $emergency->emergency_lat;
+        $lng_user = $emergency->emergency_lng;
+
+        // ดึงชื่อคอลัมน์ของ aims_operating_units
+        $unitColumns = Schema::getColumnListing('aims_operating_units');
+        $unitSelects = array_map(function ($col) {
+            return "aims_operating_units.$col as unit_$col";
+        }, $unitColumns);
+
+        // ดึงชื่อคอลัมน์ของ aims_type_units
+        $typeUnitColumns = Schema::getColumnListing('aims_type_units');
+        $typeUnitSelects = array_map(function ($col) {
+            return "aims_type_units.$col as unit_$col";
+        }, $typeUnitColumns);
+
+        // รวมทั้งหมด
+        $unit_selects = array_merge(
+            ['aims_operating_officers.*'],
+            $unitSelects,
+            $typeUnitSelects,
+            ['users.provider_id as user_provider_id']
+        );
+
+        $officer = DB::table('aims_operating_officers')
+            ->where('aims_operating_officers.id', '=', $officer_id)
+            ->leftJoin('aims_operating_units', 'aims_operating_officers.aims_operating_unit_id', '=', 'aims_operating_units.id')
+            ->leftJoin('aims_type_units', 'aims_operating_units.aims_type_unit_id', '=', 'aims_type_units.id')
+            ->leftJoin('users', 'aims_operating_officers.user_id', '=', 'users.id')
+            ->select($unit_selects)
+            ->first();
+
+        // $test_return = [];
+        // $test_retur['emergency'] = $emergency;
+        // $test_retur['officer'] = $officer;
+        // $test_retur['photo'] = $emergency->emergency_photo;
+
+        // return $test_retur;
+
+        $template_path = storage_path('../public/json/aims/send_sos.json');
         $string_json = file_get_contents($template_path);
 
-        $string_json = str_replace("ระบบได้รับการตอบกลับของท่านแล้ว ขอบคุณค่ะ","การขอความช่วยเหลือใหม่",$string_json);
+        $string_json = str_replace("ตัวอย่าง","การขอความช่วยเหลือ",$string_json);
+
+        if (!empty( $emergency->emergency_photo )) {
+            $string_json = str_replace("photo_sos.png",$emergency->emergency_photo,$string_json);
+        }
+
+        $string_json = str_replace("name_user",$emergency->name_reporter,$string_json);
+        $string_json = str_replace("area",$emergency->area_name_area,$string_json);
+        $string_json = str_replace("หัวข้อขอความช่วยเหลือ",$emergency->emergency_type,$string_json);
+        $string_json = str_replace("รายละเอียดขอความช่วยเหลือ",$emergency->emergency_detail,$string_json);
+
+        $string_json = str_replace("png_language","",$string_json);
+        $string_json = str_replace("png_national","",$string_json);
+        $string_json = str_replace("0999999999","",$string_json);
+
+        $string_json = str_replace("วันที่แจ้ง",$date_now,$string_json);
+        $string_json = str_replace("เวลาที่แจ้ง",$time_now,$string_json);
+
+        $string_json = str_replace("emergency_id",$emergency_id,$string_json);
+        $string_json = str_replace("aims_area_id",$emergency->aims_area_id,$string_json);
+
+        $string_json = str_replace("gg_lat_mail",$text_at.$lat_user,$string_json);
+        $string_json = str_replace("gg_lat",$lat_user,$string_json);
+        $string_json = str_replace("lng",$lng_user,$string_json);
 
         $messages = [ json_decode($string_json, true) ];
 
         $body = [
-            "to" => "U912994894c449f2237f73f18b5703e89",
+            "to" => $officer->user_provider_id,
             "messages" => $messages,
         ];
 
@@ -344,10 +427,12 @@ class Aims_emergencysController extends Controller
 
         // SAVE LOG
         $data = [
-            "title" => "การขอความช่วยเหลือใหม่",
-            "content" => "To >> " . $requestData['aims_operating_officers'],
+            "title" => "การขอความช่วยเหลือใหม่ ID : " . $emergency_id,
+            "content" => "To Officer id >> " . $officer_id,
         ];
         MyLog::create($data);
+
+        return "send success";
 
     }
 

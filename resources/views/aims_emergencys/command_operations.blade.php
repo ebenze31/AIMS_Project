@@ -68,12 +68,47 @@
                 </div>
                 
                 <div class="list_officer card radius-10">
+
+                    <div class="btn-group-round w-100 mb-2 mt-2 p-2">
+                        <div class="btn-group w-100" role="group">
+                            <button type="button" class="btn btn-info w-100" onclick="select_for_search(this)">
+                                ทั้งหมด
+                            </button>
+                            <button type="button" class="btn btn-white w-100" onclick="select_for_search(this)">
+                                ประเภท
+                            </button>
+                            <button type="button" class="btn btn-white w-100" onclick="select_for_search(this)">
+                                ชื่อ
+                            </button>
+                            <button type="button" class="btn btn-white w-100" onclick="select_for_search(this)">
+                                หน่วย
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ค้นหาจาก ประเภท -->
+                    <div id="search_by_type" class="px-2 d-none">
+                        <select class="form-select" name="input_search_by_type" id="input_search_by_type">
+                            <option>เลือกประเภท</option>
+                        </select>
+                    </div>
+
+                    <!-- ค้นหาจาก ชื่อ -->
+                    <div id="search_by_name" class="px-2 d-none">
+                        <input type="text" class="form-control" name="input_search_by_name" id="input_search_by_name" placeholder="กรอกชื่อเจ้าหน้าที่">
+                    </div>
+
+                    <!-- ค้นหาจาก หน่วย -->
+                    <div id="search_by_unit" class="px-2 d-none">
+                        <select class="form-select" name="input_search_by_unit" id="input_search_by_unit">
+                            <option>เลือกหน่วย</option>
+                        </select>
+                    </div>
+
+                    <!-- -------------- แสดงผลรายชื่อเจ้าหน้าที่ -------------- -->
                     <div id="div_list_officer" class="card-body p-3">
 
                         <div class="d-flex align-items-center">
-                            <div class="level ALS d-flex align-items-center ">
-                                <center> ALS</center>
-                            </div>
                             <div class="ps-3">
                                 <h6 class="mb-0 font-weight-bold">
                                     <b>Thanakorn Tungkasopa</b>
@@ -146,7 +181,7 @@
 
         let data = {};
             data['emergency_id'] = "{{ $emergency->id }}";
-            data['aims_operating_officers'] = "Officer Benz";
+            data['aims_operating_officers_id'] = 1;
 
         fetch("{{ url('/') }}/api/send_sos_to_officer", {
             method: 'POST',
@@ -189,6 +224,41 @@
         document.getElementById('data_case').classList.remove('d-none');
         document.getElementById('card_map').classList.add('d-none');
     });
+
+    function select_for_search(button) {
+        const selectedText = button.textContent.trim();
+        // console.log("ผู้ใช้เลือก:", selectedText);
+
+        // จัดการปุ่ม: ลบ class btn-info และใส่ btn-white กับทุกปุ่มในกลุ่ม
+        const buttons = button.parentElement.querySelectorAll('button');
+        buttons.forEach(btn => {
+            btn.classList.remove('btn-info');
+            btn.classList.add('btn-white');
+        });
+
+        // ใส่ class btn-info ให้ปุ่มที่ถูกคลิก
+        button.classList.remove('btn-white');
+        button.classList.add('btn-info');
+
+        // จัดการแสดงผลช่องค้นหา
+        const typeDiv = document.getElementById('search_by_type');
+        const nameDiv = document.getElementById('search_by_name');
+        const unitDiv = document.getElementById('search_by_unit');
+
+        // ซ่อนทั้งหมดก่อน
+        typeDiv.classList.add('d-none');
+        nameDiv.classList.add('d-none');
+        unitDiv.classList.add('d-none');
+
+        // เงื่อนไขการแสดงตามปุ่ม
+        if (selectedText === 'ประเภท') {
+            typeDiv.classList.remove('d-none');
+        } else if (selectedText === 'ชื่อ') {
+            nameDiv.classList.remove('d-none');
+        } else if (selectedText === 'หน่วย') {
+            unitDiv.classList.remove('d-none');
+        }
+    }
 
 </script>
         
