@@ -369,6 +369,13 @@ class Aims_emergencysController extends Controller
             ->select($unit_selects)
             ->first();
 
+        $test_return = [];
+        $test_retur['emergency'] = $emergency;
+        $test_retur['officer'] = $officer;
+        $test_retur['photo'] = $emergency->emergency_photo;
+
+        return $test_retur;
+
         $template_path = storage_path('../public/json/aims/send_sos.json');
         $string_json = file_get_contents($template_path);
 

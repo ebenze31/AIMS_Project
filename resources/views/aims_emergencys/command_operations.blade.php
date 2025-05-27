@@ -191,7 +191,7 @@
             },
             body: JSON.stringify(data),
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(result => {
             console.log(result);
         })
