@@ -20,24 +20,6 @@
         "layout": "vertical",
         "contents": [
           {
-            "type": "image",
-            "url": "https://www.viicheck.com/storage/photo_profile_user",
-            "aspectRatio": "1:1",
-            "aspectMode": "cover"
-          }
-        ],
-        "position": "absolute",
-        "offsetTop": "4.5%",
-        "offsetStart": "8.5%",
-        "cornerRadius": "8px",
-        "width": "15.5%",
-        "height": "11%"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
             "type": "text",
             "text": "name_user",
             "color": "#ffffff",
@@ -64,7 +46,7 @@
           }
         ],
         "position": "absolute",
-        "offsetTop": "10%",
+        "offsetTop": "10.5%",
         "offsetStart": "27%",
         "width": "55%",
         "alignItems": "flex-start"
@@ -150,7 +132,7 @@
         "contents": [
           {
             "type": "image",
-            "url": "https://www.viicheck.com/img/national-flag/flag/png_language.png",
+            "url": "https://www.aims.viicheck.com/img/national-flag/flag/png_language.png",
             "aspectRatio": "149:100",
             "size": "45px"
           }
@@ -185,12 +167,12 @@
         "contents": [
           {
             "type": "image",
-            "url": "https://www.viicheck.com/storage/photo_sos.png",
+            "url": "https://www.aims.viicheck.com/storage/photo_sos.png",
             "aspectRatio": "5:9",
             "aspectMode": "cover",
             "action": {
               "type": "uri",
-              "uri": "https://www.viicheck.com/storage/photo_sos.png"
+              "uri": "https://www.aims.viicheck.com/storage/photo_sos.png"
             }
           }
         ],
@@ -200,7 +182,7 @@
         "width": "25%",
         "action": {
           "type": "uri",
-          "uri": "https://www.viicheck.com/storage/photo_sos.png"
+          "uri": "https://www.aims.viicheck.com/storage/photo_sos.png"
         },
         "offsetEnd": "15.5%",
         "height": "26.7%"
@@ -216,7 +198,7 @@
         "height": "5%",
         "action": {
           "type": "uri",
-          "uri": "https://www.viicheck.com/storage/photo_sos.png"
+          "uri": "https://www.aims.viicheck.com/storage/photo_sos.png"
         },
         "offsetEnd": "9%"
       },
