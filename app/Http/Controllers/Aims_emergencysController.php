@@ -387,8 +387,8 @@ class Aims_emergencysController extends Controller
 
         $string_json = str_replace("name_user",$emergency->name_reporter,$string_json);
         $string_json = str_replace("area",$emergency->area_name_area,$string_json);
-        // $string_json = str_replace("หัวข้อขอความช่วยเหลือ",$emergency->emergency_type,$string_json);
-        // $string_json = str_replace("รายละเอียดขอความช่วยเหลือ",$emergency->emergency_detail,$string_json);
+        $string_json = str_replace("หัวข้อขอความช่วยเหลือ",$emergency->emergency_type,$string_json);
+        $string_json = str_replace("รายละเอียดขอความช่วยเหลือ",$emergency->emergency_detail,$string_json);
 
         // $string_json = str_replace("png_language","-",$string_json);
         // $string_json = str_replace("png_national","-",$string_json);
