@@ -385,24 +385,34 @@ class Aims_emergencysController extends Controller
             $string_json = str_replace("photo_sos.png",$emergency->emergency_photo,$string_json);
         }
 
+        $emergency_type = "หัวข้อ : ไม่ได้ระบุ" ;
+        if (!empty( $emergency->emergency_type )) {
+            $emergency_type = $emergency->emergency_type ;
+        }
+
+        $emergency_detail = "รายละเอียด : ไม่ได้ระบุ" ;
+        if (!empty( $emergency->emergency_detail )) {
+            $emergency_detail = $emergency->emergency_detail ;
+        }
+
         $string_json = str_replace("name_user",$emergency->name_reporter,$string_json);
         $string_json = str_replace("area",$emergency->area_name_area,$string_json);
-        $string_json = str_replace("หัวข้อขอความช่วยเหลือ",$emergency->emergency_type,$string_json);
-        $string_json = str_replace("รายละเอียดขอความช่วยเหลือ",$emergency->emergency_detail,$string_json);
+        $string_json = str_replace("หัวข้อขอความช่วยเหลือ",$emergency_type,$string_json);
+        $string_json = str_replace("รายละเอียดขอความช่วยเหลือ",$emergency_detail,$string_json);
 
-        // $string_json = str_replace("png_language","-",$string_json);
-        // $string_json = str_replace("png_national","-",$string_json);
-        // $string_json = str_replace("0999999999","-",$string_json);
+        $string_json = str_replace("png_language","-",$string_json);
+        $string_json = str_replace("png_national","-",$string_json);
+        $string_json = str_replace("0999999999","-",$string_json);
 
-        // $string_json = str_replace("วันที่แจ้ง",$date_now,$string_json);
-        // $string_json = str_replace("เวลาที่แจ้ง",$time_now,$string_json);
+        $string_json = str_replace("วันที่แจ้ง",$date_now,$string_json);
+        $string_json = str_replace("เวลาที่แจ้ง",$time_now,$string_json);
 
-        // $string_json = str_replace("emergency_id",$emergency_id,$string_json);
-        // $string_json = str_replace("aims_area_id",$emergency->aims_area_id,$string_json);
+        $string_json = str_replace("emergency_id",$emergency_id,$string_json);
+        $string_json = str_replace("aims_area_id",$emergency->aims_area_id,$string_json);
 
-        // $string_json = str_replace("gg_lat_mail",$text_at.$lat_user,$string_json);
-        // $string_json = str_replace("gg_lat",$lat_user,$string_json);
-        // $string_json = str_replace("lng",$lng_user,$string_json);
+        $string_json = str_replace("gg_lat_mail",$text_at.$lat_user,$string_json);
+        $string_json = str_replace("gg_lat",$lat_user,$string_json);
+        $string_json = str_replace("lng",$lng_user,$string_json);
 
         $messages = [ json_decode($string_json, true) ];
 
