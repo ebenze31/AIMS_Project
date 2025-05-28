@@ -88,19 +88,19 @@
 
                     <!-- ค้นหาจาก ประเภท -->
                     <div id="search_by_type" class="px-2 d-none">
-                        <select class="form-select" name="input_search_by_type" id="input_search_by_type">
+                        <select class="form-select" name="input_search_by_type" id="input_search_by_type" onchange="filter_officers();">
                             <option>เลือกประเภท</option>
                         </select>
                     </div>
 
                     <!-- ค้นหาจาก ชื่อ -->
                     <div id="search_by_name" class="px-2 d-none">
-                        <input type="text" class="form-control" name="input_search_by_name" id="input_search_by_name" placeholder="กรอกชื่อเจ้าหน้าที่">
+                        <input type="text" class="form-control" name="input_search_by_name" id="input_search_by_name" placeholder="กรอกชื่อเจ้าหน้าที่" oninput="filter_officers(true)">
                     </div>
 
                     <!-- ค้นหาจาก หน่วย -->
                     <div id="search_by_unit" class="px-2 d-none">
-                        <select class="form-select" name="input_search_by_unit" id="input_search_by_unit">
+                        <select class="form-select" name="input_search_by_unit" id="input_search_by_unit" onchange="filter_officers();">
                             <option>เลือกหน่วย</option>
                         </select>
                     </div>
@@ -137,8 +137,8 @@
     var emergency_Lat = parseFloat("{{ $emergency->emergency_lat }}");
     var emergency_Lng = parseFloat("{{ $emergency->emergency_lng }}");
 
-    console.log(emergency_Lat);
-    console.log(emergency_Lng);
+    // console.log(emergency_Lat);
+    // console.log(emergency_Lng);
 
     function open_map_operating_unit() {
         const emergency_LatLng = {
@@ -171,12 +171,16 @@
         fetch("{{ url('/') }}/api/get_data_officer/" + "{{ $emergency->aims_area_id }}")
             .then(response => response.json())
             .then(result => {
-                console.log(result);
+                // console.log(result);
 
                 if (result) {
 
                     let div_list_officer = document.querySelector('#div_list_officer');
                         div_list_officer.innerHTML = '';
+
+                    // เก็บประเภทและหน่วยไม่ให้ซ้ำ
+                    let typeSet = new Set();
+                    let unitSet = new Set();
 
                     for (let i = 0; i < result.length; i++) {
 
@@ -187,6 +191,10 @@
                         if (!isNaN(officerLat) && !isNaN(officerLng)) {
                             let distance = calculateDistance(let_emergency, lng_emergency, officerLat, officerLng);
                             let distanceText = distance.toFixed(2);
+
+                            // เพิ่มค่าประเภทและหน่วยลง Set
+                            typeSet.add(result[i].unit_name_type_unit);
+                            unitSet.add(result[i].unit_name_unit);
 
                             // ปักหมุดเจ้าหน้าที่
                             new google.maps.Marker({
@@ -200,7 +208,7 @@
                             });
 
                             let html = `
-                                <div class="d-flex align-items-center">
+                                <div class="d-flex align-items-center officer-card" type="${result[i].unit_name_type_unit}" name_officer="${result[i].name_officer}" unit="${result[i].unit_name_unit}">
                                     <div class="ps-3">
                                         <h6 class="mb-0 font-weight-bold">
                                             <b>${result[i].name_officer}</b>
@@ -223,6 +231,21 @@
                             div_list_officer.insertAdjacentHTML('beforeend',html); // แทรกล่างสุด
                         }
                     }
+
+                    // สร้าง option สำหรับประเภท (เรียงตามตัวอักษร)
+                    let typeSelect = document.getElementById('input_search_by_type');
+                    typeSelect.innerHTML = `<option>เลือกประเภท</option>`;
+                    [...typeSet].sort().forEach(type => {
+                        typeSelect.insertAdjacentHTML('beforeend', `<option value="${type}">${type}</option>`);
+                    });
+
+                    // สร้าง option สำหรับหน่วย (เรียงตามตัวอักษร)
+                    let unitSelect = document.getElementById('input_search_by_unit');
+                    unitSelect.innerHTML = `<option>เลือกหน่วย</option>`;
+                    [...unitSet].sort().forEach(unit => {
+                        unitSelect.insertAdjacentHTML('beforeend', `<option value="${unit}">${unit}</option>`);
+                    });
+
                 }
             });
 
@@ -294,39 +317,105 @@
         document.getElementById('card_map').classList.add('d-none');
     });
 
-    function select_for_search(button) {
-        const selectedText = button.textContent.trim();
-        // console.log("ผู้ใช้เลือก:", selectedText);
-
-        // จัดการปุ่ม: ลบ class btn-info และใส่ btn-white กับทุกปุ่มในกลุ่ม
-        const buttons = button.parentElement.querySelectorAll('button');
-        buttons.forEach(btn => {
-            btn.classList.remove('btn-info');
-            btn.classList.add('btn-white');
+    function select_for_search(btn) {
+        // เปลี่ยนคลาสของปุ่มให้เฉพาะปุ่มที่ถูกเลือกเป็น active (btn-info)
+        document.querySelectorAll('.btn-group .btn').forEach(b => {
+            b.classList.remove('btn-info');
+            b.classList.add('btn-white');
         });
+        btn.classList.remove('btn-white');
+        btn.classList.add('btn-info');
 
-        // ใส่ class btn-info ให้ปุ่มที่ถูกคลิก
-        button.classList.remove('btn-white');
-        button.classList.add('btn-info');
+        // ซ่อน input ทั้งหมดก่อน แล้วค่อยโชว์อันที่ต้องการ
+        document.getElementById('search_by_type').classList.add('d-none');
+        document.getElementById('search_by_name').classList.add('d-none');
+        document.getElementById('search_by_unit').classList.add('d-none');
 
-        // จัดการแสดงผลช่องค้นหา
-        const typeDiv = document.getElementById('search_by_type');
-        const nameDiv = document.getElementById('search_by_name');
-        const unitDiv = document.getElementById('search_by_unit');
+        // รีเซ็ตค่าของ input ทุกตัว
+        document.getElementById('input_search_by_type').selectedIndex = 0;
+        document.getElementById('input_search_by_unit').selectedIndex = 0;
+        document.getElementById('input_search_by_name').value = '';
 
-        // ซ่อนทั้งหมดก่อน
-        typeDiv.classList.add('d-none');
-        nameDiv.classList.add('d-none');
-        unitDiv.classList.add('d-none');
+        // ตรวจสอบว่าผู้ใช้กดค้นหาจากอะไร
+        const selectedText = btn.textContent.trim();
 
-        // เงื่อนไขการแสดงตามปุ่ม
         if (selectedText === 'ประเภท') {
-            typeDiv.classList.remove('d-none');
+            document.getElementById('search_by_type').classList.remove('d-none');
         } else if (selectedText === 'ชื่อ') {
-            nameDiv.classList.remove('d-none');
+            const input = document.getElementById('search_by_name');
+            input.classList.remove('d-none');
+            document.getElementById('input_search_by_name').focus(); // ใส่ focus ให้เลย
         } else if (selectedText === 'หน่วย') {
-            unitDiv.classList.remove('d-none');
+            document.getElementById('search_by_unit').classList.remove('d-none');
         }
+
+        // เรียก filter_officers เพื่อแสดงผลใหม่หลังจากรีเซ็ต
+        filter_officers();
+    }
+
+
+    let nameSearchTimeout = null;
+
+    function filter_officers(delaySearch = false) {
+        const selectedFilter = document.querySelector('.btn-group .btn-info').textContent.trim();
+
+        const allOfficerCards = document.querySelectorAll('.officer-card');
+
+        const selectedType = document.getElementById('input_search_by_type').value.trim();
+        const inputName = document.getElementById('input_search_by_name').value.trim().toLowerCase();
+        const selectedUnit = document.getElementById('input_search_by_unit').value.trim();
+
+        // Delay การค้นหาชื่อ
+        if (delaySearch && selectedFilter === 'ชื่อ') {
+            clearTimeout(nameSearchTimeout);
+            nameSearchTimeout = setTimeout(() => {
+                filter_officers(false); // เรียกใหม่แบบไม่มี delay
+            }, 500);
+            return;
+        }
+
+        // ถ้าเลือก "ทั้งหมด" ให้แสดงทุกอัน
+        if (selectedFilter === 'ทั้งหมด') {
+            allOfficerCards.forEach(card => {
+                card.classList.remove('d-none');
+                const hr = card.nextElementSibling;
+                if (hr && hr.tagName === 'HR') {
+                    hr.classList.remove('d-none');
+                }
+            });
+            return;
+        }
+
+        // เงื่อนไขกรณีอื่น ๆ
+        allOfficerCards.forEach(card => {
+            const cardType = card.getAttribute('type') || '';
+            const cardName = card.getAttribute('name_officer') || '';
+            const cardUnit = card.getAttribute('unit') || '';
+
+            let isVisible = true;
+
+            if (selectedFilter === 'ประเภท') {
+                isVisible = (selectedType === 'เลือกประเภท' || selectedType === '') ? true : (cardType === selectedType);
+            } else if (selectedFilter === 'ชื่อ') {
+                isVisible = cardName.toLowerCase().includes(inputName);
+            } else if (selectedFilter === 'หน่วย') {
+                isVisible = (selectedUnit === 'เลือกหน่วย' || selectedUnit === '') ? true : (cardUnit === selectedUnit);
+            }
+
+            if (isVisible) {
+                card.classList.remove('d-none');
+                const hr = card.nextElementSibling;
+                if (hr && hr.tagName === 'HR') {
+                    hr.classList.remove('d-none');
+                }
+            } else {
+                card.classList.add('d-none');
+                const hr = card.nextElementSibling;
+                if (hr && hr.tagName === 'HR') {
+                    hr.classList.add('d-none');
+                }
+            }
+        });
     }
 
 </script>
