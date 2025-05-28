@@ -7,6 +7,11 @@ use App\Http\Requests;
 
 use App\Models\Aims_operating_officer;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use App\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 
 class Aims_operating_officersController extends Controller
 {
@@ -126,5 +131,39 @@ class Aims_operating_officersController extends Controller
         Aims_operating_officer::destroy($id);
 
         return redirect('aims_operating_officers')->with('flash_message', 'Aims_operating_officer deleted!');
+    }
+
+    function get_data_officer($area_id){
+
+        // ดึงชื่อคอลัมน์ของ aims_operating_units
+        $unitColumns = Schema::getColumnListing('aims_operating_units');
+        $unitSelects = array_map(function ($col) {
+            return "aims_operating_units.$col as unit_$col";
+        }, $unitColumns);
+
+        // ดึงชื่อคอลัมน์ของ aims_type_units
+        $typeUnitColumns = Schema::getColumnListing('aims_type_units');
+        $typeUnitSelects = array_map(function ($col) {
+            return "aims_type_units.$col as unit_$col";
+        }, $typeUnitColumns);
+
+        // รวมทั้งหมด
+        $unit_selects = array_merge(
+            ['aims_operating_officers.*'],
+            $unitSelects,
+            $typeUnitSelects,
+            ['users.provider_id as user_provider_id']
+        );
+
+        $data_officer = DB::table('aims_operating_officers')
+            ->where('aims_operating_officers.aims_area_id', '=', $area_id)
+            ->leftJoin('aims_operating_units', 'aims_operating_officers.aims_operating_unit_id', '=', 'aims_operating_units.id')
+            ->leftJoin('aims_type_units', 'aims_operating_units.aims_type_unit_id', '=', 'aims_type_units.id')
+            ->leftJoin('users', 'aims_operating_officers.user_id', '=', 'users.id')
+            ->select($unit_selects)
+            ->get();
+
+        return $data_officer ;
+
     }
 }

@@ -234,7 +234,7 @@ Route::get('/show_logo_partner', 'API\PartnersController@show_logo_partner');
 Route::get('/view_map_officer_all/{select_area}/draw_select_area', 'API\PartnersController@draw_select_area');
 Route::get('/get_sos_help_center_success/{area}', 'API\PartnersController@get_sos_help_center_success');
 Route::get('/get_polygon_all_amphoe', 'API\LocationController@get_polygon_all_amphoe');
-Route::get('/get_data_officer_all/{area}', 'API\PartnersController@get_data_officer_all');
+// Route::get('/get_data_officer_all/{area}', 'API\PartnersController@get_data_officer_all');
 Route::get('/get_let_lng_district/{area}/{select_area_district}', 'API\LocationController@get_let_lng_district');
 
 
@@ -530,4 +530,6 @@ Route::post('/cf_edit_type_units/{type_unit_id}', 'Aims_type_unitsController@cf_
 Route::get('/check_sos_alarm/{user_id}', 'Aims_emergencysController@check_sos_alarm');
 Route::get('/get_emergency_types/{area_id}/{partner_id}', 'Aims_emergency_typesController@get_emergency_types');
 Route::get('/change_status_emergency_type/{id}/{old_status}', 'Aims_emergency_typesController@change_status_emergency_type');
+Route::get('/get_data_officer/{area_id}', 'Aims_operating_officersController@get_data_officer');
+
 // ============> END AIMS <============ //

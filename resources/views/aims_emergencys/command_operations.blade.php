@@ -107,26 +107,7 @@
 
                     <!-- -------------- แสดงผลรายชื่อเจ้าหน้าที่ -------------- -->
                     <div id="div_list_officer" class="card-body p-3">
-
-                        <div class="d-flex align-items-center">
-                            <div class="ps-3">
-                                <h6 class="mb-0 font-weight-bold">
-                                    <b>Thanakorn Tungkasopa</b>
-                                </h6>
-                                <span class="mt-2 text-secondary">
-                                    <b>ViiCHECK</b>
-                                    <br>
-                                    อาสาสมัคร
-                                    <br>
-                                    ระยะห่าง(รัศมี) ≈ 1.28 กม. 
-                                </span>
-                            </div>
-                            <button class="btn btn-sm btn-success radius-30 ms-auto mb-0" onclick="select_officer();">
-                                <span class="mx-2">เลือก</span>
-                            </button>
-                        </div>
-                        <hr>
-
+                        <!-- content By Javascript -->
                     </div>
                 </div>
             </div>
@@ -150,7 +131,9 @@
         open_map_operating_unit();
     });
 
+    var map ;
     var aims_marker = "{{ url('/img/icon/operating_unit/aims/aims_marker.png') }}";
+    var officer_marker = "{{ url('/img/icon/operating_unit/aims/officer.png') }}";
     var emergency_Lat = parseFloat("{{ $emergency->emergency_lat }}");
     var emergency_Lng = parseFloat("{{ $emergency->emergency_lng }}");
 
@@ -162,7 +145,8 @@
             lat: emergency_Lat,
             lng: emergency_Lng
         };
-        const map = new google.maps.Map(document.getElementById("map_operations"), {
+        
+        map = new google.maps.Map(document.getElementById("map_operations"), {
             center: emergency_LatLng,
             zoom: 15
         });
@@ -172,16 +156,101 @@
             map: map,
             icon: {
                 url: aims_marker,
-                scaledSize: new google.maps.Size(40, 40),
+                scaledSize: new google.maps.Size(45, 45),
             },
         });
+
+        get_data_officer();
     }
 
-    function select_officer(){
+    function get_data_officer(){
+
+        let let_emergency = parseFloat("{{ $emergency->emergency_lat }}");
+        let lng_emergency = parseFloat("{{ $emergency->emergency_lng }}");
+
+        fetch("{{ url('/') }}/api/get_data_officer/" + "{{ $emergency->aims_area_id }}")
+            .then(response => response.json())
+            .then(result => {
+                console.log(result);
+
+                if (result) {
+
+                    let div_list_officer = document.querySelector('#div_list_officer');
+                        div_list_officer.innerHTML = '';
+
+                    for (let i = 0; i < result.length; i++) {
+
+                        let officerLat = parseFloat(result[i].lat);
+                        let officerLng = parseFloat(result[i].lng);
+
+                        // เช็คว่ามีค่าพิกัดหรือไม่
+                        if (!isNaN(officerLat) && !isNaN(officerLng)) {
+                            let distance = calculateDistance(let_emergency, lng_emergency, officerLat, officerLng);
+                            let distanceText = distance.toFixed(2);
+
+                            // ปักหมุดเจ้าหน้าที่
+                            new google.maps.Marker({
+                                position: { lat: officerLat, lng: officerLng },
+                                map: map,
+                                title: result[i].name_officer,
+                                icon: {
+                                    url: officer_marker,
+                                    scaledSize: new google.maps.Size(40, 40),
+                                }
+                            });
+
+                            let html = `
+                                <div class="d-flex align-items-center">
+                                    <div class="ps-3">
+                                        <h6 class="mb-0 font-weight-bold">
+                                            <b>${result[i].name_officer}</b>
+                                        </h6>
+                                        <span class="mt-2 text-secondary">
+                                            <b>${result[i].unit_name_unit}</b>
+                                            <br>
+                                            ${result[i].unit_name_type_unit}
+                                            <br>
+                                            ระยะห่าง(รัศมี) ≈ ${distanceText} กม. 
+                                        </span>
+                                    </div>
+                                    <button class="btn btn-sm btn-success radius-30 ms-auto mb-0" onclick="select_officer('`+ result[i].id +`');">
+                                        <span class="mx-2">เลือก</span>
+                                    </button>
+                                </div>
+                                <hr>
+                            `;
+
+                            div_list_officer.insertAdjacentHTML('beforeend',html); // แทรกล่างสุด
+                        }
+                    }
+                }
+            });
+
+    }
+
+    function calculateDistance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // รัศมีโลก (กม.)
+        const toRad = x => x * Math.PI / 180;
+
+        const dLat = toRad(lat2 - lat1);
+        const dLon = toRad(lon2 - lon1);
+
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                  Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                  Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        return R * c; // ระยะทางเป็นกิโลเมตร
+    }
+
+
+
+
+    function select_officer(officer_id){
 
         let data = {};
             data['emergency_id'] = "{{ $emergency->id }}";
-            data['aims_operating_officers_id'] = 1;
+            data['aims_operating_officers_id'] = officer_id;
 
         fetch("{{ url('/') }}/api/send_sos_to_officer", {
             method: 'POST',
