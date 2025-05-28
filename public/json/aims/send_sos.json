@@ -123,7 +123,7 @@
           }
         ],
         "position": "absolute",
-        "offsetTop": "51%",
+        "offsetTop": "50%",
         "offsetStart": "12%",
         "width": "45%",
         "alignItems": "flex-start"
@@ -142,7 +142,7 @@
           }
         ],
         "position": "absolute",
-        "offsetTop": "54%",
+        "offsetTop": "53%",
         "offsetStart": "12%",
         "width": "45%",
         "alignItems": "flex-start"
@@ -162,7 +162,7 @@
           }
         ],
         "position": "absolute",
-        "offsetTop": "58%",
+        "offsetTop": "57%",
         "offsetStart": "12%",
         "width": "45%",
         "alignItems": "flex-start"
@@ -212,39 +212,47 @@
           {
             "type": "image",
             "url": "https://www.aims.viicheck.com/storage/photo_sos.png",
-            "aspectRatio": "5:7.5",
             "aspectMode": "cover",
             "action": {
               "type": "uri",
               "uri": "https://www.aims.viicheck.com/storage/photo_sos.png"
-            }
+            },
+            "size": "full",
+            "aspectRatio": "5.1:6.7"
           }
         ],
         "position": "absolute",
-        "offsetTop": "44%",
+        "offsetTop": "44.3%",
         "cornerRadius": "5px",
-        "width": "25%",
+        "width": "29%",
         "action": {
           "type": "uri",
           "uri": "https://www.aims.viicheck.com/storage/photo_sos.png"
         },
-        "offsetEnd": "11.2%",
-        "height": "26.7%"
+        "offsetEnd": "8.9%",
+        "height": "27%"
       },
       {
         "type": "box",
         "layout": "vertical",
-        "contents": [],
+        "contents": [
+          {
+            "type": "text",
+            "text": "icon_photo"
+          }
+        ],
         "position": "absolute",
         "offsetTop": "66%",
         "cornerRadius": "15px",
-        "width": "8%",
-        "height": "5%",
+        "width": "30px",
+        "height": "30px",
         "action": {
           "type": "uri",
           "uri": "https://www.aims.viicheck.com/storage/photo_sos.png"
         },
-        "offsetEnd": "9%"
+        "offsetEnd": "9%",
+        "justifyContent": "center",
+        "alignItems": "center"
       },
       {
         "type": "box",
@@ -313,5 +321,4 @@
     "paddingAll": "0px"
   }
 }
-
 }
