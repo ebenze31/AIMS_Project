@@ -384,8 +384,10 @@ class Aims_emergencysController extends Controller
 
         $string_json = str_replace("ตัวอย่าง","การขอความช่วยเหลือ",$string_json);
 
+        $text_icon = "" ;
         if (!empty( $emergency->emergency_photo )) {
             $string_json = str_replace("photo_sos.png",$emergency->emergency_photo,$string_json);
+            $text_icon = "🔍" ;
         }
 
         $emergency_type = "หัวข้อ : ไม่ได้ระบุ" ;
@@ -427,6 +429,7 @@ class Aims_emergencysController extends Controller
         $string_json = str_replace("type_reporter",$type_reporter,$string_json);
         $string_json = str_replace("0999999999",$phone_reporter,$string_json);
         $string_json = str_replace("emergency_location",$emergency_location,$string_json);
+        $string_json = str_replace("icon_photo",$text_icon,$string_json);
 
         $string_json = str_replace("วันที่แจ้ง",$date_now,$string_json);
         $string_json = str_replace("เวลาที่แจ้ง",$time_now,$string_json);
