@@ -21,7 +21,7 @@
         "contents": [
           {
             "type": "text",
-            "text": "name_user",
+            "text": "name_partner",
             "color": "#ffffff",
             "size": "xl",
             "wrap": false
@@ -94,6 +94,83 @@
         "contents": [
           {
             "type": "text",
+            "text": "ผู้ขอความช่วยเหลือ",
+            "color": "#ffffff",
+            "size": "13px",
+            "maxLines": 1,
+            "wrap": true
+          }
+        ],
+        "position": "absolute",
+        "offsetTop": "45%",
+        "offsetStart": "12%",
+        "width": "45%",
+        "alignItems": "flex-start"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "name_user",
+            "color": "#ffffff",
+            "size": "13px",
+            "maxLines": 1,
+            "wrap": true
+          }
+        ],
+        "position": "absolute",
+        "offsetTop": "51%",
+        "offsetStart": "12%",
+        "width": "45%",
+        "alignItems": "flex-start"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "type_reporter",
+            "color": "#ffffff",
+            "size": "10px",
+            "maxLines": 1,
+            "wrap": true
+          }
+        ],
+        "position": "absolute",
+        "offsetTop": "54%",
+        "offsetStart": "12%",
+        "width": "45%",
+        "alignItems": "flex-start"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": "emergency_location",
+            "color": "#ffffff",
+            "size": "13px",
+            "maxLines": 4,
+            "wrap": true,
+            "scaling": true
+          }
+        ],
+        "position": "absolute",
+        "offsetTop": "58%",
+        "offsetStart": "12%",
+        "width": "45%",
+        "alignItems": "flex-start"
+      },
+      {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
             "text": "วันที่แจ้ง",
             "color": "#ffffff",
             "size": "md",
@@ -101,7 +178,7 @@
           }
         ],
         "position": "absolute",
-        "offsetTop": "45.1%",
+        "offsetTop": "75%",
         "offsetStart": "16%",
         "width": "31%",
         "alignItems": "center",
@@ -120,46 +197,11 @@
           }
         ],
         "position": "absolute",
-        "offsetTop": "45.1%",
+        "offsetTop": "75%",
         "offsetStart": "48%",
         "width": "36%",
         "alignItems": "center",
         "justifyContent": "center"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "image",
-            "url": "https://www.aims.viicheck.com/img/national-flag/flag/png_language.png",
-            "aspectRatio": "149:100",
-            "size": "45px"
-          }
-        ],
-        "position": "absolute",
-        "offsetTop": "58.5%",
-        "offsetStart": "22.8%"
-      },
-      {
-        "type": "box",
-        "layout": "vertical",
-        "contents": [
-          {
-            "type": "text",
-            "text": "png_national",
-            "color": "#ffffff",
-            "wrap": false,
-            "size": "lg",
-            "weight": "bold"
-          }
-        ],
-        "position": "absolute",
-        "offsetTop": "72.5%",
-        "offsetStart": "10%",
-        "width": "38.5%",
-        "justifyContent": "center",
-        "alignItems": "center"
       },
       {
         "type": "box",
@@ -177,14 +219,14 @@
           }
         ],
         "position": "absolute",
-        "offsetTop": "52.5%",
+        "offsetTop": "44%",
         "cornerRadius": "5px",
         "width": "25%",
         "action": {
           "type": "uri",
           "uri": "https://www.aims.viicheck.com/storage/photo_sos.png"
         },
-        "offsetEnd": "15.5%",
+        "offsetEnd": "11.2%",
         "height": "26.7%"
       },
       {
@@ -192,7 +234,7 @@
         "layout": "vertical",
         "contents": [],
         "position": "absolute",
-        "offsetTop": "73.5%",
+        "offsetTop": "66%",
         "cornerRadius": "15px",
         "width": "8%",
         "height": "5%",
