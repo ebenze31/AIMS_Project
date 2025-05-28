@@ -98,7 +98,8 @@
             "color": "#ffffff",
             "size": "13px",
             "maxLines": 1,
-            "wrap": true
+            "wrap": true,
+            "weight": "bold"
           }
         ],
         "position": "absolute",
