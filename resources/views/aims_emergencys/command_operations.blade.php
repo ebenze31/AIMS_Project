@@ -122,12 +122,53 @@
     </div>
 </div>
 
+<!-- Modal เลือกเจ้าหน้าที่ -->
+<div class="modal fade" id="modal_view_select_officer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal_view_select_officerLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_view_select_officerLabel">Modal title</h5>
+            </div>
+            <div class="modal-body">
+                <!-- เนื้อหา modal -->
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary me-2" style="width: 20%;" data-bs-dismiss="modal">
+                    ยกเลิก
+                </button>
+                <button type="button" class="btn btn-success" style="width: 20%;" id="btn_confirm_select">
+                    ยืนยัน
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="wait_officer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="wait_officerLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="wait_officerLabel">Modal title</h5>
+            </div>
+            <div class="modal-body">
+                <!-- เนื้อหา modal -->
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button id="btn_select_officer_again" type="button" class="btn btn-secondary me-2" style="width: 20%;" data-bs-dismiss="modal">
+                    เลือกใหม่
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgrxXDgk1tgXngalZF3eWtcTWI-LPdeus&language=th"></script>
 
 <script>
 
     document.addEventListener("DOMContentLoaded", function() {
-        // document.querySelector('#btn_order').click();
+        document.querySelector('#btn_order').click();
         open_map_operating_unit();
     });
 
@@ -208,7 +249,7 @@
                             });
 
                             let html = `
-                                <div class="d-flex align-items-center officer-card" type="${result[i].unit_name_type_unit}" name_officer="${result[i].name_officer}" unit="${result[i].unit_name_unit}">
+                                <div id="div_officer_id_${result[i].id}" class="d-flex align-items-center officer-card" type="${result[i].unit_name_type_unit}" name_officer="${result[i].name_officer}" unit="${result[i].unit_name_unit}" data-distance="${distanceText}">
                                     <div class="ps-3">
                                         <h6 class="mb-0 font-weight-bold">
                                             <b>${result[i].name_officer}</b>
@@ -221,7 +262,7 @@
                                             ระยะห่าง(รัศมี) ≈ ${distanceText} กม. 
                                         </span>
                                     </div>
-                                    <button class="btn btn-sm btn-success radius-30 ms-auto mb-0" onclick="select_officer('`+ result[i].id +`');">
+                                    <button class="btn btn-sm btn-success radius-30 ms-auto mb-0" onclick="view_select_officer('${result[i].id}');">
                                         <span class="mx-2">เลือก</span>
                                     </button>
                                 </div>
@@ -267,13 +308,45 @@
     }
 
 
+    function view_select_officer(officer_id) {
+        const officerDiv = document.getElementById(`div_officer_id_${officer_id}`);
+        if (!officerDiv) return;
+
+        const name_officer = officerDiv.getAttribute('name_officer') || '';
+        const unit_type = officerDiv.getAttribute('type') || '';
+        const unit_name = officerDiv.getAttribute('unit') || '';
+        const distanceText = officerDiv.getAttribute('data-distance') || '';
+
+        // อ้างอิงส่วนต่างๆ ใน modal ใหม่
+        const modalTitle = document.getElementById('modal_view_select_officerLabel');
+        const modalBody = document.querySelector('#modal_view_select_officer .modal-body');
+        const confirmButton = document.getElementById('btn_confirm_select');
+
+        // เคลียร์และใส่เนื้อหาใหม่
+        modalTitle.textContent = "ยืนยันการเลือกเจ้าหน้าที่";
+        modalBody.innerHTML = `
+            <p><strong>ชื่อ:</strong> ${name_officer}</p>
+            <p><strong>หน่วย:</strong> ${unit_name}</p>
+            <p><strong>ประเภท:</strong> ${unit_type}</p>
+            <p><strong>ระยะห่าง:</strong> ${distanceText} กม.</p>
+            <p class="text-danger">คุณต้องการเลือกเจ้าหน้าที่คนนี้ใช่หรือไม่?</p>
+        `;
+
+        // ตั้งค่า onclick ปุ่มยืนยัน
+        confirmButton.setAttribute('onclick', `select_officer('${officer_id}', '${name_officer}', '${unit_name}', '${unit_type}')`);
+
+        // เปิด modal
+        $('#modal_view_select_officer').modal('show');
+    }
 
 
-    function select_officer(officer_id){
+    let waitOfficerInterval = null;
 
-        let data = {};
-            data['emergency_id'] = "{{ $emergency->id }}";
-            data['aims_operating_officers_id'] = officer_id;
+    function select_officer(officer_id, name, unit, type) {
+        let data = {
+            emergency_id: "{{ $emergency->id }}",
+            aims_operating_officers_id: officer_id
+        };
 
         fetch("{{ url('/') }}/api/send_sos_to_officer", {
             method: 'POST',
@@ -286,10 +359,70 @@
         .then(response => response.text())
         .then(result => {
             console.log(result);
-        })
-        .catch(error => console.error('Error:', error));
 
+            if (result === "send success") {
+                // ปิด modal เดิม
+                $('#modal_view_select_officer').modal('hide');
+
+                // เคลียร์ตัวจับเวลาถ้ามี
+                if (waitOfficerInterval) {
+                    clearInterval(waitOfficerInterval);
+                    waitOfficerInterval = null;
+                }
+
+                // ล้างเนื้อหาเก่า
+                document.querySelector('#wait_officer .modal-body').innerHTML = '';
+                document.querySelector('#wait_officerLabel').innerText = 'กำลังรอเจ้าหน้าที่ตอบรับ';
+
+                // สร้างเนื้อหาใหม่
+                const infoHTML = `
+                    <p><strong>ชื่อ:</strong> ${name}</p>
+                    <p><strong>หน่วย:</strong> ${unit}</p>
+                    <p><strong>ประเภท:</strong> ${type}</p>
+                    <p><strong>ระยะเวลา:</strong> <span id="timer_text">00:00</span></p>
+                `;
+                document.querySelector('#wait_officer .modal-body').innerHTML = infoHTML;
+
+                // เริ่มจับเวลา
+                let secondsPassed = 0;
+                waitOfficerInterval = setInterval(() => {
+                    secondsPassed++;
+                    const minutes = String(Math.floor(secondsPassed / 60)).padStart(2, '0');
+                    const seconds = String(secondsPassed % 60).padStart(2, '0');
+                    document.getElementById('timer_text').innerText = `${minutes}:${seconds}`;
+                }, 1000);
+
+                // ตั้งค่าปุ่ม "เลือกใหม่"
+                const againButton = document.querySelector('#btn_select_officer_again');
+                againButton.setAttribute('onclick', `select_officer_again(${data.emergency_id}, ${officer_id})`);
+
+                // เปิด modal รอเจ้าหน้าที่
+                $('#wait_officer').modal('show');
+            } else {
+                console.warn("ส่งข้อมูลไม่สำเร็จ:", result);
+            }
+        })
+        .catch(error => {
+            console.error('เกิดข้อผิดพลาด:', error);
+        });
     }
+
+    function select_officer_again(emergency_id, officer_id) {
+        console.log("เลือกใหม่:", emergency_id, officer_id);
+
+        // ปิด modal ปัจจุบัน
+        $('#wait_officer').modal('hide');
+
+        // เคลียร์ตัวจับเวลา
+        if (waitOfficerInterval) {
+            clearInterval(waitOfficerInterval);
+            waitOfficerInterval = null;
+        }
+
+        // เพิ่ม logic อื่น ๆ เช่น รีเซ็ตการเลือก officer หรือโหลด modal อื่นได้ตามต้องการ
+    }
+
+
 
     document.getElementById('btn_order').addEventListener('click', function () {
         // ปรับปุ่ม
