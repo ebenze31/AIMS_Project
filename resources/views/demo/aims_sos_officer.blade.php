@@ -257,6 +257,33 @@
         </div>
     </div>
 
+    <style>
+        .status {
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .status-normal {
+            background-color: rgb(19, 113, 253, .13);
+            color: #1371fd;
+        }
+
+        .status-success {
+            background-color: rgb(28, 208, 83, .15);
+            color: rgb(28, 208, 83);
+        }
+
+        .status-warning {
+            background-color: rgb(255, 197, 23, .13);
+            color: rgb(255, 197, 23);
+        }
+
+        .status-danger {
+            background-color: rgb(255, 0, 0, .15);
+            color: rgb(255, 0, 0);
+        }
+    </style>
     <div class="container-content">
         <div class="section-1">
             <div class="content">
@@ -272,15 +299,23 @@
                 <div class="body">
                     <div>
                         <div class="label">ศูนย์สั่งการ</div>
-                        <div class="status ">
+                        <div class="status status-normal">
                             <i class="fa-solid fa-circle fa-2xs me-2"></i>
-                            <span>asd</span>
+                            <span>ทั่วไป</span>
                         </div>
                     </div>
                     <div>
                         <div class="label">เจ้าหน้าที่</div>
-                        <button class="status ">
+                        <button class="status status-success flex justify-between">
+                            <div>
 
+                                <i class="fa-solid fa-circle fa-2xs me-2"></i>
+                                <span>ไม่รุนแรง</span>
+                            </div>
+
+                            <div>
+                                <i class="fa-solid fa-chevron-right"></i>
+                            </div>
                         </button>
                     </div>
                 </div>
@@ -294,7 +329,8 @@
                 width: 100%;
             }
 
-            .btn-next {
+            .btn-next,
+            .btn-to-base {
                 padding: 15px 20px;
                 background: #06A2FD;
                 background: -webkit-linear-gradient(90deg, rgba(6, 162, 253, 1) 0%, rgba(40, 86, 250, 1) 100%);
@@ -305,10 +341,12 @@
                 border-radius: 10px;
                 color: #fff;
                 margin: 0 5px;
+                cursor: pointer;
 
             }
 
-            .btn-next:disabled {
+            .btn-next:disabled,
+            .btn-to-base:disabled {
                 opacity: .8;
             }
 
@@ -365,7 +403,7 @@
                 </div>
 
                 <div class="body flex">
-                    <input type="text" class="input-officer">
+                    <input type="text" name="km_before" class="input-officer">
                     <button class="btn-next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
@@ -378,7 +416,7 @@
                 </div>
 
                 <div class="body flex">
-                    <input type="text" class="input-officer">
+                    <input type="text" name="km_to_the_scene" class="input-officer">
                     <button class="btn-next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
@@ -388,7 +426,6 @@
                         <p><i class="fa-solid fa-chevron-left"></i></p>
                     </div>
                     <div>ระดับความรุนแรง</div>
-                    <button class="btn-next">asd</button>
                 </div>
 
                 <div class="body flex idc-group">
@@ -407,6 +444,7 @@
                     <div class="px-2 w-[100%]">
                         <button class="btn-next btn-red">ฉุกเฉิน</button>
                     </div>
+                    <input type="hidden" id="idc" name="idc" value="">
                 </div>
             </div>
             <div class="content">
@@ -415,7 +453,6 @@
                         <p><i class="fa-solid fa-chevron-left"></i></p>
                     </div>
                     <div>ระดับความรุนแรง</div>
-                    <button class="btn-next">asd</button>
                 </div>
 
                 <style>
@@ -432,17 +469,20 @@
                         font-weight: bolder;
                         text-align: center;
                         align-items: center;
+                        cursor: pointer;
 
                     }
 
                     .btn-treatment {
                         border: 1px solid #DB2F2F !important;
                         color: #DB2F2F;
+                        cursor: pointer;
                     }
 
                     .btn-no-treatment {
                         border: 1px solid #1371FD !important;
                         color: #1371FD;
+                        cursor: pointer;
                     }
 
                     .btn-treatment:hover,
@@ -478,46 +518,41 @@
 
                     <div class="flex mb-0 w-[100%]">
                         <div class="px-2 w-[100%]">
-                            <input type="radio" name="treatment_type" id="has_treatment" class="hidden">
-                            <label for="has_treatment" class="btn btn-treatment">มีการรักษา</label>
+
+                            <input type="radio" name="treatment" id="has_treatment" value="มีการรักษา" class="hidden">
+                            <label for="has_treatment" class="btn btn-treatment test">มีการรักษา</label>
+
+
+
+                            <!-- <input type="radio" name="treatment" id="has_treatment" class="hidden">
+                            <label for="has_treatment" class="btn btn-treatment">มีการรักษา</label> -->
                         </div>
                         <div class="px-2 w-[100%]">
-                            <input type="radio" name="treatment_type" id="no_treatment" class="hidden">
-                            <label for="no_treatment" class="btn btn-no-treatment">ไม่มีการรักษา</label>
+
+                            <input type="radio" name="treatment" id="no_treatment" value="ไม่มีการรักษา" class="hidden">
+                            <label for="no_treatment" class="btn btn-no-treatment test">ไม่มีการรักษา</label>
                         </div>
                     </div>
-                    <!-- <div class="flex mb-5 w-[100%]">
-                        <div class="px-2 w-[100%]">
-                            <input type="radio" name="treatment_header" id="header_treatment" class="hidden">
-                            <label class="btn-next btn-treatment " for="header_treatment">มีการรักษา</label>
-                        </div>
-
-                        <div class="px-2 w-[100%]">
-                            <input type="radio" name="treatment_header" id="header_no_treatment" class="hidden">
-                            <label class="btn-next btn-no-treatment " for="header_no_treatment">ไม่มีการรักษา</label>
-                        </div>
-
-                    </div> -->
 
                     <div class=" flex treatment-group hidden p-0">
                         <div class="px-2 w-[100%]">
-                            <input type="radio" name="treatment_datail" id="treatment_1" class="hidden">
+                            <input type="radio" name="sub_treatment" id="treatment_1" class="hidden" value="ส่งโรงพยาบาล">
                             <label for="treatment_1" id="" class="btn-next btn-treatment">ส่งโรงพยาบาล</label>
                         </div>
                         <div class="px-2 w-[50%]">
-                            <input type="radio" name="treatment_datail" id="treatment_2" class="hidden">
+                            <input type="radio" name="sub_treatment" id="treatment_2" class="hidden" value="ส่งต่อหน่วยอื่น">
                             <label for="treatment_2" id="" class="btn-next btn-treatment">ส่งต่อหน่วยอื่น</label>
                         </div>
                         <div class="px-2 w-[50%]">
-                            <input type="radio" name="treatment_datail" id="treatment_3" class="hidden">
+                            <input type="radio" name="sub_treatment" id="treatment_3" class="hidden" value="ไม่นำส่ง">
                             <label for="treatment_3" id="" class="btn-next btn-treatment">ไม่นำส่ง</label>
                         </div>
                         <div class="px-2 w-[50%]">
-                            <input type="radio" name="treatment_datail" id="treatment_4" class="hidden">
+                            <input type="radio" name="sub_treatment" id="treatment_4" class="hidden" value="เสียชีวิตขณะนำส่ง">
                             <label for="treatment_4" id="" class="btn-next btn-treatment">เสียชีวิตขณะนำส่ง</label>
                         </div>
                         <div class="px-2 w-[50%]">
-                            <input type="radio" name="treatment_datail" id="treatment_5" class="hidden">
+                            <input type="radio" name="sub_treatment" id="treatment_5" class="hidden" value="เสียชีวิต ณ จุดเกิดเหตุ">
                             <label for="treatment_5" id="" class="btn-next btn-treatment">เสียชีวิต ณ จุดเกิดเหตุ</label>
                         </div>
                     </div>
@@ -525,25 +560,25 @@
                     <div class=" flex no-treatment-group hidden p-0">
 
                         <div class="px-2 w-[50%]">
-                            <input type="radio" name="no_treatment_datail" id="no_treatment_1" class="hidden">
+                            <input type="radio" name="sub_treatment" id="no_treatment_1" class="hidden" value="ผู้ป่วยปฎิเสธการรักษา">
                             <label for="no_treatment_1" id="" class="btn-next btn-no-treatment">ผู้ป่วยปฎิเสธการรักษา</label>
                         </div>
                         <div class="px-2 w-[50%]">
-                            <input type="radio" name="no_treatment_datail" id="no_treatment_2" class="hidden">
+                            <input type="radio" name="sub_treatment" id="no_treatment_2" class="hidden" value="เสียชีวิต ก่อนชุดปฎิบัติการไปถึง">
                             <label for="no_treatment_2" id="" class="btn-next btn-no-treatment">เสียชีวิต ก่อนชุดปฎิบัติการไปถึง</label>
                         </div>
                         <div class="px-2 w-[50%]">
-                            <input type="radio" name="no_treatment_datail" id="no_treatment_3" class="hidden">
+                            <input type="radio" name="sub_treatment" id="no_treatment_3" class="hidden" value="ยกเลิก">
                             <label for="no_treatment_3" id="" class="btn-next btn-no-treatment">ยกเลิก</label>
                         </div>
                         <div class="px-2 w-[50%]">
-                            <input type="radio" name="no_treatment_datail" id="no_treatment_4" class="hidden">
+                            <input type="radio" name="sub_treatment" id="no_treatment_4" class="hidden" value="ไม่พบเหตุ">
                             <label for="no_treatment_4" id="" class="btn-next btn-no-treatment">ไม่พบเหตุ</label>
                         </div>
                     </div>
                 </div>
             </div>
-                <div class="content">
+            <div class="content">
                 <div class="header flex items-center">
                     <div class="back btn-prev">
                         <p><i class="fa-solid fa-chevron-left"></i></p>
@@ -552,12 +587,12 @@
                 </div>
 
                 <div class="body flex">
-                    <input type="text" class="input-officer">
+                    <input type="text" class="input-officer" name="km_hospital">
                     <button class="btn-next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
 
-                <div class="content">
+            <div class="content">
                 <div class="header flex items-center">
                     <div class="back btn-prev">
                         <p><i class="fa-solid fa-chevron-left"></i></p>
@@ -566,83 +601,41 @@
                 </div>
 
                 <div class="body flex">
-                    <input type="text" class="input-officer">
-                    <button class="btn-next"><i class="fa-solid fa-chevron-right"></i></button>
+                    <input type="text" class="input-officer" name="km_operating_base">
+                    <button class="btn-to-base btn-next" ><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
         </div>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const hasTreatmentRadio = document.getElementById("has_treatment");
-                const noTreatmentRadio = document.getElementById("no_treatment");
-
-                const treatmentGroup = document.querySelector(".treatment-group");
-                const noTreatmentGroup = document.querySelector(".no-treatment-group");
-
-                hasTreatmentRadio.addEventListener("change", function() {
-                    if (this.checked) {
-                        treatmentGroup.classList.remove("hidden");
-                        noTreatmentGroup.classList.add("hidden");
-                    }
-                });
-
-                noTreatmentRadio.addEventListener("change", function() {
-                    if (this.checked) {
-                        noTreatmentGroup.classList.remove("hidden");
-                        treatmentGroup.classList.add("hidden");
-                    }
-                });
-            });
-        </script>
-
-        <div class="content">
-            <div class="header">
-                <div class="back btn-prev">
-                    <p><i class="fa-solid fa-chevron-left"></i></p>
-                </div>
-            </div>
-            <div class="body">
-                asd5<button class="btn-next">asd</button>
-            </div>
-        </div>
-        <div class="content">
-            <div class="header">
-                <div class="back btn-prev">
-                    <p><i class="fa-solid fa-chevron-left"></i></p>
-                </div>
-            </div>
-            <div class="body">
-                asd6<button class="btn-next">asd</button>
-            </div>
-
-        </div>
-        <div class="content">
-            <div class="header">
-                <div class="back btn-prev">
-
-                    <p><i class="fa-solid fa-chevron-left"></i></p>
-                </div>
-            </div>
-
-            <div class="body">
-                asd7
+        <div class="section-4">
+            <div class="content">
+                <div class="body"></div>
             </div>
         </div>
     </div>
-    <div class="section-4">
-        <div class="content">
-            <div class="body"></div>
-        </div>
-    </div>
 </div>
-</div>
-
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const buttons = document.querySelectorAll('.btn-menu');
         const sections = document.querySelectorAll('.container-content > div');
         const sectionStates = new Map();
         let activeSection = null;
+
+        // Treatment radio button handling with immediate alert
+        document.querySelectorAll('input[name="treatment"]').forEach(input => {
+            input.addEventListener('change', () => {
+                const treatmentGroup = document.querySelector('.treatment-group');
+                const noTreatmentGroup = document.querySelector('.no-treatment-group');
+                if (input.id === 'has_treatment') {
+                    treatmentGroup.classList.remove('hidden');
+                    noTreatmentGroup.classList.add('hidden');
+                } else {
+                    noTreatmentGroup.classList.remove('hidden');
+                    treatmentGroup.classList.add('hidden');
+                }
+                document.querySelectorAll('input[name="sub_treatment"]').forEach(st => st.checked = false);
+            });
+        });
+
 
         // Initialize section states and hide all sections and contents
         sections.forEach((section, index) => {
@@ -651,15 +644,31 @@
             const contents = section.querySelectorAll('.content');
             contents.forEach((content, contentIndex) => {
                 content.style.display = 'none'; // Hide all contents initially
-                // Attach event listeners to pre-existing navigation buttons
                 const prevBtn = content.querySelector('.btn-prev');
-                const nextBtn = content.querySelector('.btn-next');
+                const nextBtns = content.querySelectorAll('.btn-next');
+
                 if (prevBtn) {
                     prevBtn.addEventListener('click', () => navigateContent(index, contentIndex - 1));
                 }
-                if (nextBtn) {
-                    nextBtn.addEventListener('click', () => navigateContent(index, contentIndex + 1));
-                }
+                nextBtns.forEach(nextBtn => {
+                    nextBtn.addEventListener('click', () => {
+                        // Collect data for alert
+                        // const content = nextBtn.closest('.content');
+                        // const textInput = content.querySelector('input[type="text"]');
+                        // const severityInput = content.querySelector('input[name="idc"]');
+                        // let message = '';
+                        // if (textInput) {
+                        //     message += `ข้อมูล: ${textInput.value.trim()}\n`;
+                        // }
+                        // if (severityInput && severityInput.value) {
+                        //     message += `ระดับความรุนแรง: ${severityInput.value}`;
+                        // }
+                        // if (message) {
+                        //     alert(message);
+                        // }
+                        navigateContent(index, contentIndex + 1);
+                    });
+                });
             });
         });
 
@@ -668,32 +677,19 @@
             button.addEventListener('click', () => {
                 const sectionIndex = parseInt(button.style.getPropertyValue('--index'));
                 if (activeSection === sectionIndex) {
-                    // Hide the current section if clicking the active button
                     sections[sectionIndex].style.display = 'none';
                     button.classList.remove('active');
                     activeSection = null;
                 } else {
-                    // Remove active class from all buttons
                     buttons.forEach(btn => btn.classList.remove('active'));
-                    // Add active class to the clicked button
                     button.classList.add('active');
-
-                    // Hide all sections
-                    sections.forEach(section => {
-                        section.style.display = 'none';
-                    });
-
-                    // Show the selected section
+                    sections.forEach(section => section.style.display = 'none');
                     const selectedSection = sections[sectionIndex];
                     selectedSection.style.display = 'block';
                     activeSection = sectionIndex;
-
-                    // Show the last viewed content
                     const currentContentIndex = sectionStates.get(sectionIndex);
                     const contents = selectedSection.querySelectorAll('.content');
-                    contents.forEach(content => {
-                        content.style.display = 'none';
-                    });
+                    contents.forEach(content => content.style.display = 'none');
                     if (contents[currentContentIndex]) {
                         contents[currentContentIndex].style.display = 'block';
                     }
@@ -701,35 +697,83 @@
             });
         });
 
+        // Input validation for text inputs
+        document.querySelectorAll('.content').forEach(content => {
+            const input = content.querySelector('input[type="text"]');
+            const nextButton = content.querySelector('.btn-next');
+            if (input && nextButton) {
+                nextButton.disabled = true;
+                nextButton.classList.add('opacity-50', 'cursor-not-allowed');
+                input.addEventListener('input', () => {
+                    if (input.value.trim() !== "") {
+                        nextButton.disabled = false;
+                        nextButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                    } else {
+                        nextButton.disabled = true;
+                        nextButton.classList.add('opacity-50', 'cursor-not-allowed');
+                    }
+                });
+            }
+        });
+
         function navigateContent(sectionIndex, contentIndex) {
             sectionStates.set(sectionIndex, contentIndex);
-            showSection(sectionIndex);
-        }
-
-        function showSection(sectionIndex) {
-            sections.forEach(section => {
-                section.style.display = 'none';
-            });
+            sections.forEach(section => section.style.display = 'none');
             const selectedSection = sections[sectionIndex];
             selectedSection.style.display = 'block';
             activeSection = sectionIndex;
-
-            const currentContentIndex = sectionStates.get(sectionIndex);
             const contents = selectedSection.querySelectorAll('.content');
-            contents.forEach(content => {
-                content.style.display = 'none';
-            });
-            if (contents[currentContentIndex]) {
-                contents[currentContentIndex].style.display = 'block';
+            contents.forEach(content => content.style.display = 'none');
+            if (contents[contentIndex]) {
+                contents[contentIndex].style.display = 'block';
             }
-            // Update active class on buttons
-            buttons.forEach((btn, idx) => {
-                if (idx === sectionIndex) {
-                    btn.classList.add('active');
+            buttons.forEach((btn, idx) => btn.classList.toggle('active', idx === sectionIndex));
+        }
+
+        // จัดการ radio buttons
+        document.querySelectorAll('input[name="treatment"], input[name="sub_treatment"]').forEach(input => {
+            input.addEventListener('change', showAlertData);
+        });
+
+        // จัดการปุ่ม btn-next
+        document.querySelectorAll('.btn-next').forEach(button => {
+            button.addEventListener('click', showAlertData);
+        });
+
+        function showAlertData(event) {
+            let inputName = '';
+            let inputValue = '';
+
+            const target = event.target;
+
+            // กรณีเป็น radio button (treatment หรือ sub_treatment)
+            if (target.matches('input[name="treatment"], input[name="sub_treatment"]')) {
+                inputName = target.name;
+                inputValue = target.value;
+            }
+            // กรณีเป็นปุ่ม btn-next
+            else if (target.closest('.btn-next')) {
+                const button = target.closest('.btn-next');
+                // ตรวจสอบว่าเป็นปุ่มใน idc-group (ระดับความรุนแรง)
+                if (button.closest('.idc-group')) {
+                    inputName = 'idc';
+                    inputValue = button.textContent.trim();
+                    document.getElementById('idc').value = inputValue;
                 } else {
-                    btn.classList.remove('active');
+                    // ตรวจสอบ text input ที่เกี่ยวข้องกับปุ่ม
+                    const content = button.closest('.content');
+                    const input = content.querySelector('input[type="text"]');
+                    if (input && input.value.trim()) {
+                        inputName = input.name;
+                        inputValue = input.value;
+                    }
                 }
-            });
+            }
+
+            // alert เฉพาะเมื่อมีข้อมูล
+            if (inputName && inputValue) {
+                alert(`${inputName}: ${inputValue}`);
+            }
         }
     });
 </script>
