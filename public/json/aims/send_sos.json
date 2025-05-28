@@ -168,7 +168,7 @@
           {
             "type": "image",
             "url": "https://www.aims.viicheck.com/storage/photo_sos.png",
-            "aspectRatio": "5:9",
+            "aspectRatio": "5:7.5",
             "aspectMode": "cover",
             "action": {
               "type": "uri",
