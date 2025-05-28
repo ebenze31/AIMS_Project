@@ -69,7 +69,7 @@
                 
                 <div class="list_officer card radius-10">
 
-                    <div class="btn-group-round w-100 mb-2 mt-2 p-2">
+                    <div class="btn-group-round w-100 mb-2 mt-2 p-2" style="overflow: auto;">
                         <div class="btn-group w-100" role="group">
                             <button type="button" class="btn btn-info w-100" onclick="select_for_search(this)">
                                 ทั้งหมด

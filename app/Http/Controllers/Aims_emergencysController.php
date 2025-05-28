@@ -331,12 +331,15 @@ class Aims_emergencysController extends Controller
             ->where('aims_emergencys.id', '=', $emergency_id)
             ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
             ->leftJoin('aims_areas', 'aims_emergencys.aims_area_id', '=', 'aims_areas.id')
+            ->leftJoin('aims_partners', 'aims_emergencys.aims_partner_id', '=', 'aims_partners.id')
             ->select(array_merge(
                 ['aims_emergencys.*'],
                 $selects,
-                ['aims_areas.name_area as area_name_area']
+                ['aims_areas.name_area as area_name_area'],
+                ['aims_partners.name as partner_name']
             ))
             ->first();
+
 
         $lat_user = $emergency->emergency_lat;
         $lng_user = $emergency->emergency_lng;
@@ -395,14 +398,35 @@ class Aims_emergencysController extends Controller
             $emergency_detail = $emergency->emergency_detail ;
         }
 
-        $string_json = str_replace("name_user",$emergency->name_reporter,$string_json);
+        $name_reporter = "ไม่ได้ระบุ" ;
+        if (!empty( $emergency->name_reporter )) {
+            $name_reporter = $emergency->name_reporter ;
+        }
+
+        $type_reporter = "ไม่ได้ระบุ" ;
+        if (!empty( $emergency->type_reporter )) {
+            $type_reporter = $emergency->type_reporter ;
+        }
+
+        $phone_reporter = "-" ;
+        if (!empty( $emergency->phone_reporter )) {
+            $phone_reporter = $emergency->phone_reporter ;
+        }
+
+        $emergency_location = "รายละเอียดสถานที่ : ไม่ได้ระบุ" ;
+        if (!empty( $emergency->emergency_location )) {
+            $emergency_location = $emergency->emergency_location ;
+        }
+
+        $string_json = str_replace("name_partner",$emergency->partner_name,$string_json);
         $string_json = str_replace("area",$emergency->area_name_area,$string_json);
         $string_json = str_replace("หัวข้อขอความช่วยเหลือ",$emergency_type,$string_json);
         $string_json = str_replace("รายละเอียดขอความช่วยเหลือ",$emergency_detail,$string_json);
 
-        $string_json = str_replace("png_language","-",$string_json);
-        $string_json = str_replace("png_national","-",$string_json);
-        $string_json = str_replace("0999999999","-",$string_json);
+        $string_json = str_replace("name_user",$name_reporter,$string_json);
+        $string_json = str_replace("type_reporter",$type_reporter,$string_json);
+        $string_json = str_replace("0999999999",$phone_reporter,$string_json);
+        $string_json = str_replace("emergency_location",$emergency_location,$string_json);
 
         $string_json = str_replace("วันที่แจ้ง",$date_now,$string_json);
         $string_json = str_replace("เวลาที่แจ้ง",$time_now,$string_json);
