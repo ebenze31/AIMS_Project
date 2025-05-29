@@ -7,6 +7,10 @@
         height: calc(70vh);
     }
 
+    #map_monitor {
+        height: calc(70vh);
+    }
+
     .list_officer {
         position: absolute;
         top: 10px;
@@ -118,6 +122,14 @@
                     
                 </div>
             </div>
+
+            <!-- ---- ควบคุมการดำเนินการ ---- -->
+            <div id="card_map_operation" class="card-body p-3 d-none">
+                <div id="map_monitor" style="position: relative;">
+                    <!-- พื้นที่แผนที่ -->
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -144,6 +156,7 @@
     </div>
 </div>
 
+<!-- Modal รอเจ้าหน้าที่ -->
 <div class="modal fade" id="wait_officer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="wait_officerLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -162,17 +175,47 @@
     </div>
 </div>
 
+<!-- Modal เจ้าหน้าที่ ปฏิเสธ -->
+<div class="modal fade" id="officer_refuse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="officer_refuseLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="officer_refuseLabel">Modal title</h5>
+            </div>
+            <div class="modal-body">
+                <!-- เนื้อหา modal -->
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button id="officer_refuse_select_again" type="button" class="btn btn-secondary me-2" style="width: 20%;" data-bs-dismiss="modal">
+                    เลือกใหม่
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgrxXDgk1tgXngalZF3eWtcTWI-LPdeus&language=th"></script>
 
 <script>
 
+    var check_show_map ;
+
     document.addEventListener("DOMContentLoaded", function() {
+
+        var aims_operating_officers_id = "{{ $emergency->op_aims_operating_officers_id }}" ;
+        if(aims_operating_officers_id){
+            check_show_map = "card_map_operation";
+            open_map_monitor();
+        }else{
+            check_show_map = "card_map";
+            open_map_operating_unit();
+        }
+
         document.querySelector('#btn_order').click();
-        open_map_operating_unit();
     });
 
     var map ;
+    var map_monitor ;
     var aims_marker = "{{ url('/img/icon/operating_unit/aims/aims_marker.png') }}";
     var officer_marker = "{{ url('/img/icon/operating_unit/aims/officer.png') }}";
     var emergency_Lat = parseFloat("{{ $emergency->emergency_lat }}");
@@ -202,9 +245,35 @@
         });
 
         get_data_officer();
+
+    }
+
+    function open_map_monitor(){
+        const emergency_LatLng = {
+            lat: emergency_Lat,
+            lng: emergency_Lng
+        };
+        
+        map_monitor = new google.maps.Map(document.getElementById("map_monitor"), {
+            center: emergency_LatLng,
+            zoom: 15
+        });
+
+        new google.maps.Marker({
+            position: emergency_LatLng,
+            map: map_monitor,
+            icon: {
+                url: aims_marker,
+                scaledSize: new google.maps.Size(45, 45),
+            },
+        });
+
     }
 
     function get_data_officer(){
+
+        const officerRefuse = "{{ $emergency->op_officer_refuse }}".split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
+        const officerNoRespond = "{{ $emergency->op_officer_no_respond }}".split(',').map(id => parseInt(id.trim())).filter(id => !isNaN(id));
 
         let let_emergency = parseFloat("{{ $emergency->emergency_lat }}");
         let lng_emergency = parseFloat("{{ $emergency->emergency_lng }}");
@@ -248,6 +317,25 @@
                                 }
                             });
 
+                            let buttonHTML = '';
+
+                            if (officerRefuse.includes(result[i].id)) {
+                                buttonHTML = `
+                                    <span class="ms-auto text-danger fw-bold">ปฏิเสธ</span>
+                                `;
+                            } else if (officerNoRespond.includes(result[i].id)) {
+                                buttonHTML = `
+                                    <span class="ms-auto" style="color:#DD8616;">ไม่ตอบสนอง</span>
+                                `;
+                            } else {
+                                buttonHTML = `
+                                    <button id="btn_of_id_${result[i].id}" class="btn btn-sm btn-success radius-30 ms-auto mb-0" onclick="view_select_officer('${result[i].id}');">
+                                        <span class="mx-2">เลือก</span>
+                                    </button>
+                                `;
+                            }
+
+
                             let html = `
                                 <div id="div_officer_id_${result[i].id}" class="d-flex align-items-center officer-card" type="${result[i].unit_name_type_unit}" name_officer="${result[i].name_officer}" unit="${result[i].unit_name_unit}" data-distance="${distanceText}">
                                     <div class="ps-3">
@@ -262,9 +350,7 @@
                                             ระยะห่าง(รัศมี) ≈ ${distanceText} กม. 
                                         </span>
                                     </div>
-                                    <button class="btn btn-sm btn-success radius-30 ms-auto mb-0" onclick="view_select_officer('${result[i].id}');">
-                                        <span class="mx-2">เลือก</span>
-                                    </button>
+                                    ${buttonHTML}
                                 </div>
                                 <hr>
                             `;
@@ -341,12 +427,37 @@
 
 
     let waitOfficerInterval = null;
+    let selectedEmergencyId = null;
+    let selectedOfficerId = null;
+
+    // ฟังก์ชันจัดการ beforeunload
+    function handleBeforeUnload(e) {
+        if (!selectedEmergencyId || !selectedOfficerId) return;
+
+        const url = `{{ url('/') }}/api/officer_no_response`;
+
+        const payload = JSON.stringify({
+            emergency_id: selectedEmergencyId,
+            officer_id: selectedOfficerId
+        });
+
+        const blob = new Blob([payload], { type: 'application/json' });
+
+        navigator.sendBeacon(url, blob);
+    }
+
+    // ติดตั้ง event listener
+    window.addEventListener('beforeunload', handleBeforeUnload);
 
     function select_officer(officer_id, name, unit, type) {
         let data = {
             emergency_id: "{{ $emergency->id }}",
             aims_operating_officers_id: officer_id
         };
+
+        // เก็บข้อมูลระดับ global
+        selectedEmergencyId = data.emergency_id;
+        selectedOfficerId = officer_id;
 
         fetch("{{ url('/') }}/api/send_sos_to_officer", {
             method: 'POST',
@@ -361,29 +472,28 @@
             console.log(result);
 
             if (result === "send success") {
-                // ปิด modal เดิม
                 $('#modal_view_select_officer').modal('hide');
 
-                // เคลียร์ตัวจับเวลาถ้ามี
                 if (waitOfficerInterval) {
                     clearInterval(waitOfficerInterval);
                     waitOfficerInterval = null;
                 }
 
-                // ล้างเนื้อหาเก่า
                 document.querySelector('#wait_officer .modal-body').innerHTML = '';
                 document.querySelector('#wait_officerLabel').innerText = 'กำลังรอเจ้าหน้าที่ตอบรับ';
 
-                // สร้างเนื้อหาใหม่
                 const infoHTML = `
                     <p><strong>ชื่อ:</strong> ${name}</p>
                     <p><strong>หน่วย:</strong> ${unit}</p>
                     <p><strong>ประเภท:</strong> ${type}</p>
                     <p><strong>ระยะเวลา:</strong> <span id="timer_text">00:00</span></p>
+                    <p style="color: red; font-weight: bold;">
+                      หากปิดแท็บหรือรีเฟรช เจ้าหน้าที่ ${name} จะเปลี่ยนสถานะเป็นไม่ตอบสนองเคสนี้
+                    </p>
                 `;
+
                 document.querySelector('#wait_officer .modal-body').innerHTML = infoHTML;
 
-                // เริ่มจับเวลา
                 let secondsPassed = 0;
                 waitOfficerInterval = setInterval(() => {
                     secondsPassed++;
@@ -392,12 +502,60 @@
                     document.getElementById('timer_text').innerText = `${minutes}:${seconds}`;
                 }, 1000);
 
-                // ตั้งค่าปุ่ม "เลือกใหม่"
                 const againButton = document.querySelector('#btn_select_officer_again');
-                againButton.setAttribute('onclick', `select_officer_again(${data.emergency_id}, ${officer_id})`);
+                againButton.setAttribute('onclick', `select_officer_again(${data.emergency_id}, ${officer_id}, 'ไม่ตอบสนอง')`);
 
-                // เปิด modal รอเจ้าหน้าที่
                 $('#wait_officer').modal('show');
+
+                let intervalId = setInterval(() => {
+                    fetch("{{ url('/') }}/api/get_data_wait_officer/" + data.emergency_id + "/" + officer_id)
+                        .then(response => response.text())
+                        .then(result => {
+                            console.log(result);
+
+                            if (result.trim() === "ปฏิเสธ") {
+                                clearInterval(intervalId);
+
+                                // ยกเลิกส่งข้อมูลเมื่อปิดแท็บ
+                                window.removeEventListener('beforeunload', handleBeforeUnload);
+
+                                // ล้างค่าตัวแปร global
+                                selectedEmergencyId = null;
+                                selectedOfficerId = null;
+
+                                $('#wait_officer').modal('hide');
+
+                                const modalBody = document.querySelector('#officer_refuse .modal-body');
+                                modalBody.innerHTML = `
+                                    <p><strong>ชื่อ:</strong> ${name}</p>
+                                    <p><strong>หน่วย:</strong> ${unit}</p>
+                                    <p><strong>ประเภท:</strong> ${type}</p>
+                                    <p class="text-danger"><strong>เจ้าหน้าที่ปฏิเสธการรับเคสนี้</strong></p>
+                                `;
+
+                                const againButton = document.querySelector('#officer_refuse_select_again');
+                                againButton.setAttribute('onclick', `select_officer_again(${data.emergency_id}, ${officer_id}, 'ปฏิเสธ')`);
+
+                                $('#officer_refuse').modal('show');
+                            }
+                            else if(result.trim() === "รับเคส"){
+                                clearInterval(intervalId);
+                                // ยกเลิกส่งข้อมูลเมื่อปิดแท็บ
+                                window.removeEventListener('beforeunload', handleBeforeUnload);
+                                $('#wait_officer').modal('hide');
+
+                                check_show_map = "card_map_operation";
+                                document.getElementById('card_map').classList.add('d-none');
+                                document.getElementById('card_map_operation').classList.remove('d-none');
+                                open_map_monitor();
+
+                            }
+
+                        })
+                        .catch(error => {
+                            console.error("เกิดข้อผิดพลาดในการดึงข้อมูล:", error);
+                        });
+                }, 5000);
             } else {
                 console.warn("ส่งข้อมูลไม่สำเร็จ:", result);
             }
@@ -407,8 +565,9 @@
         });
     }
 
-    function select_officer_again(emergency_id, officer_id) {
-        console.log("เลือกใหม่:", emergency_id, officer_id);
+
+    function select_officer_again(emergency_id, officer_id, type) {
+        // console.log("เลือกใหม่:", emergency_id, officer_id);
 
         // ปิด modal ปัจจุบัน
         $('#wait_officer').modal('hide');
@@ -419,7 +578,43 @@
             waitOfficerInterval = null;
         }
 
-        // เพิ่ม logic อื่น ๆ เช่น รีเซ็ตการเลือก officer หรือโหลด modal อื่นได้ตามต้องการ
+        if( type == "ปฏิเสธ" ){
+            document.querySelector('#btn_of_id_'+officer_id).remove();
+            let div_officer = document.querySelector('#div_officer_id_'+officer_id);
+            let new_show = `<span class="ms-auto text-danger fw-bold">ปฏิเสธ</span>`;
+                div_officer.insertAdjacentHTML('beforeend',new_show); // แทรกล่างสุด
+
+            $('#officer_refuse').modal('hide');
+        }
+        else if( type == "ไม่ตอบสนอง" ){
+            let data = {
+                emergency_id: emergency_id,
+                officer_id: officer_id
+            };
+
+            fetch("{{ url('/') }}/api/officer_no_response", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'ok') {
+                    // console.log('สำเร็จ');
+                    document.querySelector('#btn_of_id_'+officer_id).remove();
+                    let div_officer = document.querySelector('#div_officer_id_'+officer_id);
+                    let new_show = `<span class="ms-auto" style="color:#DD8616;">ไม่ตอบสนอง</span>`;
+                        div_officer.insertAdjacentHTML('beforeend',new_show); // แทรกล่างสุด
+                }
+            })
+            .catch(error => {
+                console.error('เกิดข้อผิดพลาด:', error);
+            });
+        }
+
     }
 
 
@@ -433,8 +628,16 @@
         document.getElementById('btn_info').classList.add('btn-outline-info');
 
         // สลับแสดงผล
-        document.getElementById('card_map').classList.remove('d-none');
         document.getElementById('data_case').classList.add('d-none');
+        document.getElementById('card_map').classList.add('d-none');
+        document.getElementById('card_map_operation').classList.add('d-none');
+
+        // แสดงเฉพาะอันที่ต้องการ
+        if (check_show_map === "card_map") {
+            document.getElementById('card_map').classList.remove('d-none');
+        } else if (check_show_map === "card_map_operation") {
+            document.getElementById('card_map_operation').classList.remove('d-none');
+        }
     });
 
     document.getElementById('btn_info').addEventListener('click', function () {
@@ -448,6 +651,7 @@
         // สลับแสดงผล
         document.getElementById('data_case').classList.remove('d-none');
         document.getElementById('card_map').classList.add('d-none');
+        document.getElementById('card_map_operation').classList.add('d-none');
     });
 
     function select_for_search(btn) {

@@ -166,4 +166,44 @@ class Aims_operating_officersController extends Controller
         return $data_officer ;
 
     }
+
+    function officer_no_response(Request $request)
+    {
+        $data = $request->json()->all();
+
+        $emergency_id = $data['emergency_id'] ?? null;
+        $officer_id = $data['officer_id'] ?? null;
+
+        if (!$emergency_id || !$officer_id) {
+            return response()->json(['status' => 'error', 'message' => 'Missing data'], 400);
+        }
+
+        $currentData = DB::table('aims_emergency_operations')
+            ->where('aims_emergency_id', $emergency_id)
+            ->first();
+
+        if (!empty($currentData)) {
+            $existingOfficerIds = $currentData->officer_no_respond;
+
+            if (empty($existingOfficerIds)) {
+                $newOfficerIds = $officer_id;
+            } else {
+                $officerArray = explode(',', $existingOfficerIds);
+                if (!in_array($officer_id, $officerArray)) {
+                    $officerArray[] = $officer_id;
+                }
+                $newOfficerIds = implode(',', $officerArray);
+            }
+
+            DB::table('aims_emergency_operations')
+                ->where('aims_emergency_id', $emergency_id)
+                ->update([
+                    'waiting_reply' => null,
+                    'officer_no_respond' => $newOfficerIds,
+                    'updated_at' => now()
+                ]);
+        }
+
+        return response()->json(['status' => 'ok']);
+    }
 }

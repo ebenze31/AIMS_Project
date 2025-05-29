@@ -372,7 +372,14 @@ class Aims_emergencysController extends Controller
             ->select($unit_selects)
             ->first();
 
-        // return "send success";
+        DB::table('aims_emergency_operations')
+            ->where('aims_emergency_id', $emergency_id)
+            ->update([
+                'waiting_reply' => $officer_id,
+                'updated_at' => now()
+            ]);
+
+        return "send success";
 
         $template_path = storage_path('../public/json/aims/send_sos.json');
         $string_json = file_get_contents($template_path);
@@ -467,5 +474,42 @@ class Aims_emergencysController extends Controller
         return "send success";
 
     }
+
+    function get_data_wait_officer($emergency_id , $officer_id) {
+        $emergency = DB::table('aims_emergency_operations')
+            ->where('aims_emergency_id', '=', $emergency_id)
+            ->select('waiting_reply', 'officer_refuse', 'aims_operating_officers_id')
+            ->first();
+
+        $text = "";
+
+        if ($emergency) {
+            $isWaitingReplyNull = is_null($emergency->waiting_reply);
+
+            $officerRefuseArray = $emergency->officer_refuse
+                ? explode(',', $emergency->officer_refuse)
+                : [];
+
+            $hasOfficerIdInRefuse = in_array($officer_id, $officerRefuseArray);
+
+            $selectedOfficerId = $emergency->aims_operating_officers_id;
+
+            // ตรวจสอบเงื่อนไขใหม่: เจ้าหน้าที่รับเคส
+            if ($isWaitingReplyNull && $selectedOfficerId == $officer_id) {
+                $text = "รับเคส";
+            }
+            // เงื่อนไขปฏิเสธ
+            elseif ($isWaitingReplyNull && $hasOfficerIdInRefuse) {
+                $text = "ปฏิเสธ";
+            }
+            // เงื่อนไขกำลังรอ
+            else {
+                $text = "กำลังรอ";
+            }
+        }
+
+        return $text;
+    }
+
 
 }
