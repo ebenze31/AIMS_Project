@@ -421,6 +421,9 @@ class Aims_emergencysController extends Controller
         if (!empty( $emergency->emergency_location )) {
             $emergency_location = $emergency->emergency_location ;
         }
+        
+        $string_json = str_replace("emergency_id",$emergency_id,$string_json);
+        $string_json = str_replace("aims_area_id",$emergency->aims_area_id,$string_json);
 
         $string_json = str_replace("name_partner",$emergency->partner_name,$string_json);
         $string_json = str_replace("area",$emergency->area_name_area,$string_json);
@@ -436,8 +439,6 @@ class Aims_emergencysController extends Controller
         $string_json = str_replace("วันที่แจ้ง",$date_now,$string_json);
         $string_json = str_replace("เวลาที่แจ้ง",$time_now,$string_json);
 
-        $string_json = str_replace("emergency_id",$emergency_id,$string_json);
-        $string_json = str_replace("aims_area_id",$emergency->aims_area_id,$string_json);
 
         $string_json = str_replace("gg_lat_mail",$text_at.$lat_user,$string_json);
         $string_json = str_replace("gg_lat",$lat_user,$string_json);

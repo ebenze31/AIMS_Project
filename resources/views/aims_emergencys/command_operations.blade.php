@@ -125,6 +125,35 @@
 
             <!-- ---- ควบคุมการดำเนินการ ---- -->
             <div id="card_map_operation" class="card-body p-3 d-none">
+                <div class="row my-2">
+                    <div id="show_time_distance" class="col-6">
+                        3 นาที (2 กม) • 15:00 น.
+                    </div>
+                    <div id="show_status" class="col-6">
+                        <span class="float-end">สถานะ : กำลังไปช่วยเหลือ</span>
+                    </div>
+                    <hr>
+                    <div class="col-6">
+                        <div class="p-2 radius-10 overflow-hidden bg-gradient-Ohhappiness">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-white">การให้รหัสความรุนแรง (IDC)</p>
+                                    <h5 class="mb-0 text-white">เขียว(ไม่รุนแรง)</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 radius-10 overflow-hidden bg-gradient-burning">
+                            <div class="d-flex align-items-center">
+                                <div>
+                                    <p class="mb-0 text-white">รหัสความรุนแรง ณ จุดเกิดเหตุ (RC)</p>
+                                    <h5 class="mb-0 text-white">แดง(วิกฤติ)</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="map_monitor" style="position: relative;">
                     <!-- พื้นที่แผนที่ -->
                 </div>
