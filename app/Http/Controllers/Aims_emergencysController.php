@@ -379,7 +379,7 @@ class Aims_emergencysController extends Controller
                 'updated_at' => now()
             ]);
 
-        return "send success";
+        // return "send success";
 
         $template_path = storage_path('../public/json/aims/send_sos.json');
         $string_json = file_get_contents($template_path);
@@ -436,8 +436,8 @@ class Aims_emergencysController extends Controller
         $string_json = str_replace("วันที่แจ้ง",$date_now,$string_json);
         $string_json = str_replace("เวลาที่แจ้ง",$time_now,$string_json);
 
-        // $string_json = str_replace("emergency_id",$emergency_id,$string_json);
-        // $string_json = str_replace("aims_area_id",$emergency->aims_area_id,$string_json);
+        $string_json = str_replace("emergency_id",$emergency_id,$string_json);
+        $string_json = str_replace("aims_area_id",$emergency->aims_area_id,$string_json);
 
         $string_json = str_replace("gg_lat_mail",$text_at.$lat_user,$string_json);
         $string_json = str_replace("gg_lat",$lat_user,$string_json);
