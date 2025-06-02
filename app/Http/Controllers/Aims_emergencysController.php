@@ -386,7 +386,7 @@ class Aims_emergencysController extends Controller
 
         $string_json = str_replace("ตัวอย่าง","การขอความช่วยเหลือ",$string_json);
 
-        $text_icon = "" ;
+        $text_icon = "-" ;
         if (!empty( $emergency->emergency_photo )) {
             $string_json = str_replace("photo_sos.png",$emergency->emergency_photo,$string_json);
             $text_icon = "🔍" ;
