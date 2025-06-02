@@ -39,7 +39,7 @@
         "contents": [
           {
             "type": "text",
-            "text": "พื้นที่ : area",
+            "text": "พื้นที่ : name_area",
             "color": "#ffffff",
             "size": "18px",
             "wrap": false
