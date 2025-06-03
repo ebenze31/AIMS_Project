@@ -25,8 +25,6 @@ use App\Models\Sos_1669_form_pink;
 use App\Models\Sos_1669_form_green;
 use App\Models\Sos_1669_form_blue;
 use App\Models\Maintain_noti;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Schema;
 
 class LineApiController extends Controller
 {
