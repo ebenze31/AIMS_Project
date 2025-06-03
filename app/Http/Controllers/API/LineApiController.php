@@ -792,6 +792,13 @@ class LineApiController extends Controller
 
     public function sos_aims_helper($data_postback_explode , $provider_id , $event)
     {
+        // SAVE LOG
+        $data = [
+            "title" => "sos_aims_helper",
+            "content" => "sos_aims_helper",
+        ];
+        MyLog::create($data);
+
         $data_data = explode("/",$data_postback_explode);
 
         $emergency_id = $data_data[0] ;
