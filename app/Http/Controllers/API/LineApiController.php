@@ -25,6 +25,8 @@ use App\Models\Sos_1669_form_pink;
 use App\Models\Sos_1669_form_green;
 use App\Models\Sos_1669_form_blue;
 use App\Models\Maintain_noti;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 
 class LineApiController extends Controller
 {
@@ -795,103 +797,90 @@ class LineApiController extends Controller
         $emergency_id = $data_data[0] ;
         $aims_area_id = $data_data[1] ;
 
-        
+        $user_officer = DB::table('users')->where('provider_id', $provider_id)->first();
+        $data_officer = DB::table('aims_operating_officers')->where('user_id', $user_officer->id)->first();
 
-        
+        if ($data_officer) {
 
-        $data_sos_map = Sos_map::findOrFail($id_sos_map);
+            $amount_help = $data_officer->amount_help;
 
-        if (!empty($data_sos_map->condo_id)) {
-            $condo_id = $data_sos_map->condo_id ;
-        }else{
-            $condo_id = null ;
-        }
-
-        $data_partner_helpers = Partner::findOrFail($id_organization_helper);
-
-        $users = DB::table('users')->where('provider_id', $provider_id)->get();
-
-        // ตรวจสอบ "การช่วยเหลือเสร็จสิ้น" แล้วหรือยัง
-        if ($data_sos_map->help_complete == "Yes") { // การช่วยเหลือเสร็จสิ้น
-
-            // ส่งไลน์การช่วยเหลือนี้เสร็จสิ้นแล้ว
-            $this->This_help_is_done($data_partner_helpers, $event, "This_help_is_done");
-
-        }else{ // การช่วยเหลือ อยู่ระหว่างดำเนินการ
-
-            // ตรวจสอบการเป็นสมาชิก ViiCHECK
-            if ($users != '[]') { // เป็นสมาชิก ViiCHECK
-
-                foreach ($users as $user) {
-                    // ตรวจสอบสถานนะ role
-                    if (!empty($user->role)) {
-                        DB::table('users')
-                            ->where('provider_id', $provider_id)
-                            ->update([
-                                'organization' => $data_partner_helpers->name,
-                        ]);
-                    }else{
-                        DB::table('users')
-                            ->where('provider_id', $provider_id)
-                            ->update([
-                                'organization' => $data_partner_helpers->name,
-                                'role' => 'partner',
-                        ]);
-                    }
-
-                    // ตรวจสอบรายชื่อคนช่วยเหลือ
-                    if (!empty($data_sos_map->helper)) {
-
-                        $explode_helper_id = explode(",",$data_sos_map->helper_id);
-                        for ($i=0; $i < count($explode_helper_id); $i++) {
-
-                            if ($explode_helper_id[$i] != $user->id) {
-                                $helper_double = "No";
-                            }else{
-                                $helper_double = "Yes";
-                                break;
-                            }
-
-                        }
-
-                        if ($helper_double != "Yes") {
-                            DB::table('sos_maps')
-                                ->where('id', $id_sos_map)
-                                ->update([
-                                    'helper' => $data_sos_map->helper . ',' . $user->name,
-                                    'helper_id' => $data_sos_map->helper_id . ',' . $user->id,
-                                    'organization_helper' => $data_sos_map->organization_helper . ',' . $data_partner_helpers->name,
-                            ]);
-
-                            $this->_send_helper_to_groupline($data_sos_map , $data_partner_helpers , $user->name , $user->id , $condo_id) ;
-
-                        }else{
-                            // คุณได้ทำการกด "กำลังไปช่วยเหลือ" ซ้ำ
-                            $this->This_help_is_done($data_partner_helpers, $event , "helper_click_double");
-                        }
-
-                    }else {
-                        DB::table('sos_maps')
-                            ->where('id', $id_sos_map)
-                            ->update([
-                                'helper' => $user->name,
-                                'helper_id' => $user->id,
-                                'organization_helper' => $data_partner_helpers->name,
-                                'time_go_to_help' => date('Y-m-d\TH:i:s'),
-                                'status' => 'กำลังไปช่วยเหลือ',
-                        ]);
-
-                        $this->_send_helper_to_groupline($data_sos_map , $data_partner_helpers , $user->name , $user->id , $condo_id);
-
-                    }
-
-                }
-
-            }else{ // ไม่ได้เป็นสมาชิก ViiCHECK
-                // return redirect('login/line');
-                $this->_send_register_to_groupline($data_partner_helpers);
+            if (is_null($amount_help) || $amount_help === '') {
+                $new_amount_help = 1;
+            } else {
+                $new_amount_help = intval($amount_help) + 1;
             }
+
+            DB::table('aims_operating_officers')
+                ->where('id', $data_officer->id)
+                ->update([
+                    'amount_help' => $new_amount_help,
+                    'status' => 'Helping',
+                    'updated_at' => now(),
+                ]);
         }
+        
+        DB::table('aims_emergency_operations')
+            ->where('aims_emergency_id', $emergency_id)
+            ->update([
+                'status' => "ออกจากฐาน",
+                'aims_operating_unit_id' => $data_officer->aims_operating_unit_id,
+                'aims_operating_officers_id' => $data_officer->id,
+                'time_go_to_help' => now(),
+                'updated_at' => now()
+            ]);
+
+
+        $columns = Schema::getColumnListing('aims_emergency_operations');
+        $selects = array_map(function ($col) {
+            return "aims_emergency_operations.$col as op_$col";
+        }, $columns);
+
+        $emergency = DB::table('aims_emergencys')
+            ->where('aims_emergencys.id', '=', $emergency_id)
+            ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
+            ->leftJoin('aims_areas', 'aims_emergencys.aims_area_id', '=', 'aims_areas.id')
+            ->leftJoin('aims_partners', 'aims_emergencys.aims_partner_id', '=', 'aims_partners.id')
+            ->select(array_merge(
+                ['aims_emergencys.*'],
+                $selects,
+                ['aims_areas.name_area as area_name_area'],
+                ['aims_partners.name as partner_name']
+            ))
+            ->first();
+
+        $template_path = storage_path('../public/json/aims/data_text.json');
+        $string_json = file_get_contents($template_path);
+
+        $text = 'ยืนยันการรับเคส :'.$emergency_id.'\n'.$emergency->partner_name.':'.$emergency->area_name_area;
+        $string_json = str_replace("data_text",$text ,$string_json);
+
+        $messages = [ json_decode($string_json, true) ];
+
+        $body = [
+            "replyToken" => $event["replyToken"],
+            "messages" => $messages,
+        ];
+
+        $opts = [
+            'http' =>[
+                'method'  => 'POST',
+                'header'  => "Content-Type: application/json \r\n".
+                            'Authorization: Bearer '.env('CHANNEL_ACCESS_TOKEN'),
+                'content' => json_encode($body, JSON_UNESCAPED_UNICODE),
+                //'timeout' => 60
+            ]
+        ];
+
+        $context  = stream_context_create($opts);
+        $url = "https://api.line.me/v2/bot/message/reply";
+        $result = file_get_contents($url, false, $context);
+
+        // SAVE LOG
+        $data = [
+            "title" => "officer_id : " . $data_officer->id " >> Go To Help ",
+            "content" => "emergency id : " . $emergency_id,
+        ];
+        MyLog::create($data);
 
     }
 

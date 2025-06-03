@@ -314,6 +314,7 @@ class Aims_emergencysController extends Controller
 
     function send_sos_to_officer(Request $request)
     {
+
         $date_now =  date("d-m-Y");
         $time_now =  date("H:i");
         $text_at = '@' ;
@@ -321,6 +322,9 @@ class Aims_emergencysController extends Controller
         $requestData = $request->all();
         $officer_id = $requestData['aims_operating_officers_id'];
         $emergency_id = $requestData['emergency_id'];
+        $user_id_command = $requestData['user_id_command'];
+
+        $command = DB::table('aims_commands')->where('user_id', $user_id_command)->first();
 
         $columns = Schema::getColumnListing('aims_emergency_operations');
         $selects = array_map(function ($col) {
@@ -375,7 +379,10 @@ class Aims_emergencysController extends Controller
         DB::table('aims_emergency_operations')
             ->where('aims_emergency_id', $emergency_id)
             ->update([
+                'status' => "สั่งการ",
+                'command_by' => $command->id,
                 'waiting_reply' => $officer_id,
+                'time_command' => now(),
                 'updated_at' => now()
             ]);
 

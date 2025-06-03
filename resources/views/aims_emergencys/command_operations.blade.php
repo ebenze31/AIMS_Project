@@ -187,9 +187,284 @@
 
             <!-- ---- ข้อมูลเคส ---- -->
             <div id="data_case" class="card-body p-3">
-                <div>
-                    
+
+                <!-- ข้อมูลการแจ้งเหตุ -->
+                <div id="info_of_ask" class="row">
+                    <div class="mt-2 col-12">
+                        <h5>ข้อมูลการแจ้งเหตุ</h5>
+                    </div>
+                    <div class="mt-3 col-md-6">
+                        <label for="name_reporter" class="form-label">ผู้แจ้งเหตุ</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="bx bxs-user"></i>
+                            </span>
+                            <input id="name_reporter" name="name_reporter" type="text" class="form-control" placeholder="ผู้แจ้งเหตุ" value="{{ $emergency->name_reporter }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-3">
+                        <label for="phone_reporter" class="form-label">เบอร์ผู้แจ้งเหตุ</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-phone"></i>
+                            </span>
+                            <input id="phone_reporter" name="phone_reporter" type="text" class="form-control" placeholder="เบอร์ผู้แจ้งเหตุ" value="{{ $emergency->phone_reporter }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-3">
+                        <label for="type_reporter" class="form-label">ประเภทผู้แจ้ง</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-regular fa-users"></i>
+                            </span>
+                            <input id="type_reporter" name="type_reporter" type="text" class="form-control" placeholder="ประเภทผู้แจ้ง" value="{{ $emergency->type_reporter }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="report_platform" class="form-label">แพลตฟอร์มการแจ้งเหตุ</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-laptop-mobile"></i>
+                            </span>
+                            <input id="report_platform" name="report_platform" type="text" class="form-control" readonly value="{{ $emergency->report_platform }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="emergency_lat" class="form-label">latitude ที่เกิดเหตุ</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </span>
+                            <input id="emergency_lat" name="emergency_lat" type="text" class="form-control" readonly value="{{ $emergency->emergency_lat }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="emergency_lng" class="form-label">longitude ที่เกิดเหตุ</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </span>
+                            <input id="emergency_lng" name="emergency_lng" type="text" class="form-control" readonly value="{{ $emergency->emergency_lng }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-12">
+                        <label for="emergency_location" class="form-label">รายละเอียดสถานที่เกิดเหตุ</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-location-question"></i>
+                            </span>
+                            <textarea id="emergency_location" name="emergency_location" class="form-control"  placeholder="รายละเอียดสถานที่เกิดเหตุ">{{ $emergency->emergency_location }}</textarea>
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="emergency_type" class="form-label">ประเภทเหตุ</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-person-drowning"></i>
+                            </span>
+                            <input id="emergency_type" name="emergency_type" type="text" class="form-control" placeholder="ประเภทเหตุ" value="{{ $emergency->emergency_type }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-8">
+                        <!--  -->
+                    </div>
+                    <div class="mt-3 col-md-12">
+                        <label for="emergency_detail" class="form-label">รายละเอียดเหตุการณ์</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-circle-info"></i>
+                            </span>
+                            <textarea id="emergency_detail" name="emergency_detail" class="form-control"  placeholder="รายละเอียดเหตุการณ์">{{ $emergency->emergency_detail }}</textarea>
+                        </div>
+                    </div>
                 </div>
+
+                <hr>
+
+                <!-- การประเมินอาการ -->
+                <div id="info_of_symptom" class="row">
+                    <div class="mt-2 col-12">
+                        <h5>การประเมินอาการ</h5>
+                    </div>
+                    <div class="mt-3 col-md-12">
+                        <label for="symptom" class="form-label">อาการนำสำคัญ</label>
+                        <div class="input-group">
+                            <div>
+                                list symptom
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-12">
+                        <label for="symptom_other" class="form-label">อาการนำสำคัญอื่นๆ</label>
+                        <div class="input-group">
+                            <textarea id="symptom_other" name="symptom_other" class="form-control"  placeholder="กรอกข้อมูลอาการนำสำคัญ">{{ $emergency->symptom_other }}</textarea>
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-12">
+                        <label for="idc" class="form-label">ประเมินความรุงแรงเบื้องต้น</label>
+                        <div class="input-group">
+                            <div>
+                                list IDC
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-12">
+                        <label for="rc" class="form-label">ประเมินความรุนแรง ณ จุดเกิดเหตุ</label>
+                        <div class="input-group">
+                            <div>
+                                list RC
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-12">
+                        <label for="rc_black_text" class="form-label">ความรุนแรงอื่นๆ</label>
+                        <div class="input-group">
+                            <div>
+                                rc_black_text
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- ข้อมูลผู้ป่วย -->
+                <div id="info_of_patient" class="row">
+                    <div class="mt-2 col-12">
+                        <h5>ข้อมูลผู้ป่วย</h5>
+                    </div>
+                    <div class="mt-3 col-md-6">
+                        <label for="patient_name" class="form-label">ชื่อ-นามสกุล ผู้ป่วย</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="bx bxs-user"></i>
+                            </span>
+                            <input id="patient_name" name="patient_name" type="text" class="form-control" placeholder="ชื่อ-นามสกุล ผู้ป่วย" value="{{ $emergency->patient_name }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-3">
+                        <label for="patient_birth" class="form-label">วันเดือนปีเกิดผู้ป่วย</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-calendar-days"></i>
+                            </span>
+                            <input id="patient_birth" name="patient_birth" type="date" class="form-control" placeholder="วันเดือนปีเกิดผู้ป่วย" value="{{ $emergency->patient_birth }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-3">
+                        <label for="patient_identification" class="form-label">เลขประจำตัวประชาชนผู้ป่วย</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-address-card"></i>
+                            </span>
+                            <input id="patient_identification" name="patient_identification" type="text" class="form-control" placeholder="เลขประจำตัวประชาชนผู้ป่วย" value="{{ $emergency->patient_identification }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="patient_gender" class="form-label">เพศผู้ป่วย</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-venus-mars"></i>
+                            </span>
+                            <input id="patient_gender" name="patient_gender" type="text" class="form-control" placeholder="เพศผู้ป่วย" value="{{ $emergency->patient_gender }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="patient_blood_type" class="form-label">หมู่เลือดผู้ป่วย</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-droplet"></i>
+                            </span>
+                            <input id="patient_blood_type" name="patient_blood_type" type="text" class="form-control" placeholder="หมู่เลือดผู้ป่วย" value="{{ $emergency->patient_blood_type }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="patient_phone" class="form-label">เบอร์โทรศัพท์ผู้ป่วย</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-circle-phone"></i>
+                            </span>
+                            <input id="patient_phone" name="patient_phone" type="text" class="form-control" placeholder="เบอร์โทรศัพท์ผู้ป่วย" value="{{ $emergency->patient_phone }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-12">
+                        <label for="patient_address" class="form-label">ที่อยู่ผู้ป่วย</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                            </span>
+                            <textarea id="patient_address" name="patient_address" class="form-control"  placeholder="ที่อยู่ผู้ป่วย">{{ $emergency->patient_address }}</textarea>
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="patient_congenital_disease" class="form-label">โรคประจำตัวผู้ป่วย</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-disease"></i>
+                            </span>
+                            <input id="patient_congenital_disease" name="patient_congenital_disease" type="text" class="form-control" placeholder="โรคประจำตัวผู้ป่วย" value="{{ $emergency->patient_congenital_disease }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="patient_allergic_drugs" class="form-label">ยาที่แพ้</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-skull-crossbones"></i>
+                            </span>
+                            <input id="patient_allergic_drugs" name="patient_allergic_drugs" type="text" class="form-control" placeholder="ยาที่แพ้" value="{{ $emergency->patient_allergic_drugs }}">
+                        </div>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="patient_regularly_medications" class="form-label">ยาที่ใช้ประจำ</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-white radius-1">
+                                <i class="fa-solid fa-pills"></i>
+                            </span>
+                            <input id="patient_regularly_medications" name="patient_regularly_medications" type="text" class="form-control" placeholder="ยาที่ใช้ประจำ" value="{{ $emergency->patient_regularly_medications }}">
+                        </div>
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- การดำเนินการ การช่วยเหลือ -->
+                <div id="info_of_operations" class="row">
+                    <div class="mt-2 col-12">
+                        <h5>การดำเนินการ</h5>
+                    </div>
+                    <div class="mt-3 col-md-12">
+                        รักษา / ไม่รักษา
+                        นำส่งไม่นำส่ง
+
+                        Timeline การช่วยเหลือ
+                    </div>
+                </div>
+
+                <hr>
+
+                <!-- ข้อมูลการประเมินความพึงพอใจจากผู้แจ้งเหตุ -->
+                <div id="info_of_score" class="row">
+                    <div class="mt-2 col-12">
+                        <h5>การประเมินความพึงพอใจ</h5>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="score_impression" class="form-label">คะแนนความประทับใจ</label>
+                        <p>{{ $emergency->score_impression }}</p>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="score_period" class="form-label">คะแนนความรวดเร็ว</label>
+                        <p>{{ $emergency->score_period }}</p>
+                    </div>
+                    <div class="mt-3 col-md-4">
+                        <label for="score_total" class="form-label">รวม (เฉลี่ย)</label>
+                        <p>{{ $emergency->score_total }}</p>
+                    </div>
+                    <div class="mt-2 col-md-12">
+                        <label for="comment_help" class="form-label">คำแนะนำ ติชม</label>
+                        <p>{{ $emergency->comment_help }}</p>
+                    </div>
+                </div>
+
             </div>
 
             <!-- ---- ควบคุมการดำเนินการ ---- -->
@@ -280,7 +555,7 @@
             open_map_operating_unit();
         }
 
-        document.querySelector('#btn_order').click();
+        // document.querySelector('#btn_order').click();
     });
 
     var map ;
@@ -515,7 +790,8 @@
     function select_officer(officer_id, name, unit, type) {
         let data = {
             emergency_id: "{{ $emergency->id }}",
-            aims_operating_officers_id: officer_id
+            aims_operating_officers_id: officer_id,
+            user_id_command: "{{ Auth::user()->id }}",
         };
 
         // เก็บข้อมูลระดับ global
