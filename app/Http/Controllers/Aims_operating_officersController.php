@@ -157,6 +157,7 @@ class Aims_operating_officersController extends Controller
 
         $data_officer = DB::table('aims_operating_officers')
             ->where('aims_operating_officers.aims_area_id', '=', $area_id)
+            ->where('aims_operating_officers.status', '=', 'Standby')
             ->leftJoin('aims_operating_units', 'aims_operating_officers.aims_operating_unit_id', '=', 'aims_operating_units.id')
             ->leftJoin('aims_type_units', 'aims_operating_units.aims_type_unit_id', '=', 'aims_type_units.id')
             ->leftJoin('users', 'aims_operating_officers.user_id', '=', 'users.id')

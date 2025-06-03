@@ -822,6 +822,7 @@ class LineApiController extends Controller
         DB::table('aims_emergency_operations')
             ->where('aims_emergency_id', $emergency_id)
             ->update([
+                'waiting_reply' => null,
                 'status' => "ออกจากฐาน",
                 'aims_operating_unit_id' => $data_officer->aims_operating_unit_id,
                 'aims_operating_officers_id' => $data_officer->id,
