@@ -836,11 +836,11 @@ class LineApiController extends Controller
 
 
         
+        $text = "ขอบคุณครับ" ;
 
         $template_path = storage_path('../public/json/aims/data_text.json');
         $string_json = file_get_contents($template_path);
 
-        $text = 'ยืนยันการรับเคส :'.$emergency_id.'\n'.$emergency->partner_name.':'.$emergency->area_name_area;
         $string_json = str_replace("data_text",$text ,$string_json);
 
         $messages = [ json_decode($string_json, true) ];
