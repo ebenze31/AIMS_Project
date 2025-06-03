@@ -25,6 +25,8 @@ use App\Models\Sos_1669_form_pink;
 use App\Models\Sos_1669_form_green;
 use App\Models\Sos_1669_form_blue;
 use App\Models\Maintain_noti;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Schema;
 
 class LineApiController extends Controller
 {
@@ -790,13 +792,6 @@ class LineApiController extends Controller
 
     public function sos_aims_helper($data_postback_explode , $provider_id , $event)
     {
-        // SAVE LOG
-        $data = [
-            "title" => "sos_aims_helper",
-            "content" => "sos_aims_helper",
-        ];
-        MyLog::create($data);
-
         $data_data = explode("/",$data_postback_explode);
 
         $emergency_id = $data_data[0] ;
@@ -835,12 +830,28 @@ class LineApiController extends Controller
             ]);
 
 
-        
-        $text = "ขอบคุณครับ" ;
+        $columns = Schema::getColumnListing('aims_emergency_operations');
+        $selects = array_map(function ($col) {
+            return "aims_emergency_operations.$col as op_$col";
+        }, $columns);
+
+        $emergency = DB::table('aims_emergencys')
+            ->where('aims_emergencys.id', '=', $emergency_id)
+            ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
+            ->leftJoin('aims_areas', 'aims_emergencys.aims_area_id', '=', 'aims_areas.id')
+            ->leftJoin('aims_partners', 'aims_emergencys.aims_partner_id', '=', 'aims_partners.id')
+            ->select(array_merge(
+                ['aims_emergencys.*'],
+                $selects,
+                ['aims_areas.name_area as area_name_area'],
+                ['aims_partners.name as partner_name']
+            ))
+            ->first();
 
         $template_path = storage_path('../public/json/aims/data_text.json');
         $string_json = file_get_contents($template_path);
 
+        $text = 'ยืนยันการรับเคส :'.$emergency_id.'\n'.$emergency->partner_name.':'.$emergency->area_name_area;
         $string_json = str_replace("data_text",$text ,$string_json);
 
         $messages = [ json_decode($string_json, true) ];
@@ -866,7 +877,7 @@ class LineApiController extends Controller
 
         // SAVE LOG
         $data = [
-            "title" => "officer_id : " . $data_officer->id " >> Go To Help ",
+            "title" => "officer_id : " . $data_officer->id . " >> Go To Help ",
             "content" => "emergency id : " . $emergency_id,
         ];
         MyLog::create($data);
