@@ -511,5 +511,87 @@ class Aims_emergencysController extends Controller
         return $text;
     }
 
+    function get_for_show_helper($emergency_id){
+
+        $emergency = DB::table('aims_emergencys')
+            ->where('aims_emergencys.id', $emergency_id)
+            ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
+            ->select(array_merge(
+                [
+                    'aims_emergencys.id',
+                    'aims_emergencys.emergency_lat',
+                    'aims_emergencys.emergency_lng',
+                    'aims_emergency_operations.aims_operating_officers_id as officer_id',
+                    'aims_emergency_operations.status as op_status',
+                ]
+            ))
+            ->first();
+
+        if (!$emergency) {
+            return response()->json(['error' => 'ไม่พบเหตุฉุกเฉิน'], 404);
+        }
+
+        $officer_id = $emergency->officer_id;
+
+        $officer = DB::table('aims_operating_officers')
+            ->where('aims_operating_officers.id', $officer_id)
+            ->leftJoin('aims_operating_units','aims_operating_officers.aims_operating_unit_id','=','aims_operating_units.id')
+            ->leftJoin('aims_type_units', 'aims_operating_units.aims_type_unit_id','=','aims_type_units.id')
+            ->leftJoin('users','aims_operating_officers.user_id','=', 'users.id')
+            ->select([
+                'aims_operating_officers.*',
+                'aims_operating_units.name_unit as unit_name_unit',
+                'aims_type_units.name_type_unit as unit_name_type_unit',
+                'users.photo as user_photo'
+            ])
+            ->first();
+
+        return response()->json([
+            'emergency' => $emergency,
+            'officer'   => $officer,
+        ]);
+
+    }
+
+    function get_location_realtime($officer_id, $emergency_id){
+        $officer = DB::table('aims_operating_officers')
+            ->where('aims_operating_officers.id', $officer_id)
+            ->select([
+                'aims_operating_officers.lat',
+                'aims_operating_officers.lng',
+            ])
+            ->first();
+
+        $emergency = DB::table('aims_emergency_operations')
+            ->where('aims_emergency_operations.aims_emergency_id', $emergency_id)
+            ->select([
+                'aims_emergency_operations.status',
+            ])
+            ->first();
+
+        return response()->json([
+            'emergency' => $emergency,
+            'officer'   => $officer,
+        ]);
+    }
+
+    function get_data_case_realtime($emergency_id){
+
+        $emergency = DB::table('aims_emergencys')
+            ->where('aims_emergencys.id', $emergency_id)
+            ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
+            ->select(array_merge(
+                [
+                    'aims_emergencys.idc',
+                    'aims_emergencys.rc',
+                    'aims_emergency_operations.status',
+                ]
+            ))
+            ->get();
+
+        return $emergency ;
+
+    }
+
 
 }

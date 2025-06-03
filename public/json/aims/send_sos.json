@@ -276,7 +276,7 @@
         "justifyContent": "center",
         "action": {
           "type": "postback",
-          "data": "sos?emergency_id/aims_area_id",
+          "data": "sos_aims?emergency_id/aims_area_id",
           "displayText": "กำลังไปช่วยเหลือ"
         },
         "height": "13%",

@@ -533,5 +533,8 @@ Route::get('/change_status_emergency_type/{id}/{old_status}', 'Aims_emergency_ty
 Route::get('/get_data_officer/{area_id}', 'Aims_operating_officersController@get_data_officer');
 Route::post('/officer_no_response', 'Aims_operating_officersController@officer_no_response');
 Route::get('/get_data_wait_officer/{emergency_id}/{officer_id}', 'Aims_emergencysController@get_data_wait_officer');
+Route::get('/get_for_show_helper/{emergency_id}', 'Aims_emergencysController@get_for_show_helper');
+Route::get('/get_location_realtime/{officer_id}/{emergency_id}', 'Aims_emergencysController@get_location_realtime');
+Route::get('/get_data_case_realtime/{emergency_id}', 'Aims_emergencysController@get_data_case_realtime');
 
 // ============> END AIMS <============ //
