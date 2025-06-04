@@ -849,8 +849,8 @@ class LineApiController extends Controller
             ))
             ->first();
 
-        $date_sos = $data_sos_map->created_at->format('d/m/Y');
-        $time_sos = $data_sos_map->created_at->format('g:i:sa');
+        $date_sos = date('d/m/Y');
+        $time_sos = date('g:i:sa');
 
         $template_path = storage_path('../public/json/aims/confirm_case.json');
         $string_json = file_get_contents($template_path);
