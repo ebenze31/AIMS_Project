@@ -856,15 +856,16 @@ class LineApiController extends Controller
         $string_json = file_get_contents($template_path);
 
         $string_json = str_replace("ตัวอย่าง","ยืนยันการรับเคส" ,$string_json);
-        $string_json = str_replace("operating_code", $emergency->op_operating_code ,$string_json);
-        $string_json = str_replace("NAME_OFFICER", $data_officer->name_officer ,$string_json);
-        $string_json = str_replace("NAME_USER_SOS", $emergency->name_reporter ,$string_json);
-        $string_json = str_replace("DATE_SOS", $date_sos ,$string_json);
-        $string_json = str_replace("TIME_SOS", $time_sos ,$string_json);
-        $string_json = str_replace("phone_user", $emergency->phone_reporter ,$string_json);
+        $string_json = str_replace("operating_code", $emergency->op_operating_code ?? '-', $string_json);
+        $string_json = str_replace("NAME_OFFICER", $data_officer->name_officer ?? '-', $string_json);
+        $string_json = str_replace("NAME_USER_SOS", $emergency->name_reporter ?? '-', $string_json);
+        $string_json = str_replace("DATE_SOS", $date_sos ?? '-', $string_json);
+        $string_json = str_replace("TIME_SOS", $time_sos ?? '-', $string_json);
+        $string_json = str_replace("phone_user", $emergency->phone_reporter ?? '-', $string_json);
 
-        $string_json = str_replace("emergency_id", $emergency_id ,$string_json);
-        $string_json = str_replace("_OFFICER_ID_", $data_officer->id ,$string_json);
+        $string_json = str_replace("emergency_id", $emergency_id ?? '-', $string_json);
+        $string_json = str_replace("_OFFICER_ID_", $data_officer->id ?? '-', $string_json);
+
 
         $messages = [ json_decode($string_json, true) ];
 
