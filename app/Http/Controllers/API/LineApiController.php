@@ -849,11 +849,21 @@ class LineApiController extends Controller
             ))
             ->first();
 
-        $template_path = storage_path('../public/json/aims/data_text.json');
+        $date_sos = $data_sos_map->created_at->format('d/m/Y');
+        $time_sos = $data_sos_map->created_at->format('g:i:sa');
+
+        $template_path = storage_path('../public/json/aims/confirm_case.json');
         $string_json = file_get_contents($template_path);
 
-        $text = 'ยืนยันการรับเคส : '.$emergency_id.'\n'.$emergency->partner_name.':'.$emergency->area_name_area;
-        $string_json = str_replace("data_text",$text ,$string_json);
+        $string_json = str_replace("ตัวอย่าง","ยืนยันการรับเคส" ,$string_json);
+        $string_json = str_replace("operating_code", $emergency->op_operating_code ,$string_json);
+        $string_json = str_replace("NAME_OFFICER", $data_officer->name_officer ,$string_json);
+        $string_json = str_replace("NAME_USER_SOS", $emergency->name_reporter ,$string_json);
+        $string_json = str_replace("DATE_SOS", $date_sos ,$string_json);
+        $string_json = str_replace("TIME_SOS", $time_sos ,$string_json);
+
+        $string_json = str_replace("phone_user", $emergency->phone_reporter ,$string_json);
+        // https://www.viicheck.com/sos_help_center/reply_select/SOS_ID?openExternalBrowser=1&answer=go_to_help&unit_id=_UNIT_ID_
 
         $messages = [ json_decode($string_json, true) ];
 
