@@ -175,7 +175,7 @@
     }
    
 </style>
-<div class="container-bs flex items-center h-[100dvh] justify-center">
+<div class="container-bs flex items-center h-[100dvh] justify-center notranslate">
     <!-- ... -->
     <div>
         <div class="flex justify-center">
