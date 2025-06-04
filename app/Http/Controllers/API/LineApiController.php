@@ -861,9 +861,10 @@ class LineApiController extends Controller
         $string_json = str_replace("NAME_USER_SOS", $emergency->name_reporter ,$string_json);
         $string_json = str_replace("DATE_SOS", $date_sos ,$string_json);
         $string_json = str_replace("TIME_SOS", $time_sos ,$string_json);
-
         $string_json = str_replace("phone_user", $emergency->phone_reporter ,$string_json);
-        // https://www.viicheck.com/sos_help_center/reply_select/SOS_ID?openExternalBrowser=1&answer=go_to_help&unit_id=_UNIT_ID_
+
+        $string_json = str_replace("emergency_id", $emergency_id ,$string_json);
+        $string_json = str_replace("_OFFICER_ID_", $data_officer->id ,$string_json);
 
         $messages = [ json_decode($string_json, true) ];
 

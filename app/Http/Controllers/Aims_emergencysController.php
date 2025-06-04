@@ -600,5 +600,9 @@ class Aims_emergencysController extends Controller
 
     }
 
+    function officer_go_to_help($emergency_id){
+        return view('aims_operating_officers.go_to_help');
+    }
+
 
 }

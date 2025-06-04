@@ -577,6 +577,7 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,operator-area'])->grou
 // ==> officer-area
 Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group(function () {
 	Route::get('/aims_edit_profile', 'ProfileController@aims_edit_profile');
+	Route::get('sos_aims/officer_go_to_help/{emergency_id}', 'Aims_emergencysController@officer_go_to_help');
 });
 
 // ==> Guest

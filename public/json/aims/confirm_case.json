@@ -272,7 +272,7 @@
         "action": {
           "type": "uri",
           "label": "ดำเนินการ",
-          "uri": "https://www.viicheck.com/sos_help_center/reply_select/SOS_ID?openExternalBrowser=1&answer=go_to_help&unit_id=_UNIT_ID_"
+          "uri": "https://www.aims.viicheck.com/sos_aims/officer_go_to_help/emergency_id?openExternalBrowser=1&answer=go_to_help&officer_id=_OFFICER_ID_"
         }
       }
     ],
