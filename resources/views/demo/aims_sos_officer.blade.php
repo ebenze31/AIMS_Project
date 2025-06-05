@@ -1,7 +1,337 @@
 @extends('layouts.theme_aims')
 
 @section('content')
+<style>
+    .modal-tw .backdrop-modal {
+        position: fixed;
+        z-index: 999 !important;
+        top: 0;
+        left: 0;
+        width: 100dvw !important;
+        height: 100dvh !important;
+        background-color: #000;
+    }
+
+    .modal-tw.hidden .backdrop-modal {
+        opacity: 0;
+    }
+
+    .modal-tw.flex .backdrop-modal {
+        opacity: .3;
+    }
+
+    .form-label {
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control {
+        font-size: .875rem;
+        font-weight: 400;
+        line-height: 1.5;
+
+        display: block;
+
+        width: 100%;
+        height: calc(1.5em + 1.25rem + 2px);
+        padding: .625rem .75rem;
+
+        transition: all .15s cubic-bezier(.68, -.55, .265, 1.55);
+
+        color: #8898aa;
+        background-color: #fff;
+        background-clip: padding-box;
+        box-shadow: 0 3px 2px rgba(233, 236, 239, .05);
+
+        border: #DDE1EB 1px solid;
+        border-radius: 10px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .form-control {
+            transition: none;
+        }
+    }
+
+    .form-control::-ms-expand {
+        border: 0;
+        background-color: transparent;
+    }
+
+    .form-control:-moz-focusring {
+        color: transparent;
+        text-shadow: 0 0 0 #8898aa;
+    }
+
+    .form-control:focus {
+        color: #8898aa;
+        border-color: #5e72e4;
+        outline: 0;
+        background-color: #fff;
+        box-shadow: 0 3px 9px rgba(50, 50, 9, 0), 3px 4px 8px rgba(94, 114, 228, .1);
+    }
+
+    .form-control::-ms-input-placeholder {
+        opacity: 1;
+        color: #adb5bd;
+    }
+
+    .form-control::placeholder {
+        opacity: 1;
+        color: #adb5bd;
+    }
+
+    .form-control:disabled,
+    .form-control[readonly] {
+        opacity: 1;
+        background-color: #e9ecef;
+    }
+
+    select.form-control:focus::-ms-value {
+        color: #8898aa;
+        background-color: #fff;
+    }
+
+    .form-control-file,
+    .form-control-range {
+        display: block;
+
+        width: 100%;
+    }
+</style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<div id="myModal" tabindex="-1" aria-hidden="true" class="modal-tw hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 justify-center items-center w-full md:inset-0 h-modal md:h-full  z-[9999]">
+    <div class="backdrop-modal"></div>
+    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto z-[9999]">
+        <div class="relative p-4 bg-white rounded-lg shadow  sm:p-5">
+            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-black">
+                    ข้อมูลผู้ป่วย
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="myModal">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+            <div class="mb-4 w-full" >
+                <div style="max-height: calc(100dvh - 250px);overflow: auto;">
+
+                <div class="flex w-full flex-wrap -mx-2">
+
+                    <div class="px-2 w-full lg:w-3/5 mb-4 lg:mb-0">
+                        <label for="patient_name" class="form-label">ชื่อ-นามสกุล</label>
+                        <input type="text" class="form-control" id="patient_name">
+                    </div>
+
+                    <div class="px-2 w-1/2 lg:w-1/5 mb-4 md:mb-0">
+                        <label for="patient_birth_date" class="form-label">วันเกิด</label>
+                        <input type="date" class="form-control" id="patient_birth_date">
+                    </div>
+
+                    <div class="px-2 w-1/2 lg:w-1/5">
+                        <label for="patient_gender" class="form-label">เพศ</label>
+                        <select name="patient_gender_select" id="patient_gender_select" class="form-control">
+                            <option value="">-- เลือกเพศ --</option>
+                            <option value="ชาย">ชาย</option>
+                            <option value="หญิง">หญิง</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="flex w-full flex-wrap -mx-2 mt-2">
+
+                    <div class="px-2 w-1/1 lg:w-1/3 mb-4 md:mb-0">
+                        <label for="patient_gender" class="form-label">กรุ๊ปเลือด</label>
+                        <select name="patient_gender_select" id="patient_gender_select" class="form-control">
+                            <option value="">-- เลือกกรุ๊ปเลือด --</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+
+                    <div class="px-2 w-1/1 lg:w-1/3 mb-4 md:mb-0">
+                        <label for="patient_" class="form-label">เลขประจำตัวประชาชน</label>
+                        <input type="text" class="form-control" id="patient_">
+                    </div>
+
+                    <div class="px-2 w-1/1 lg:w-1/3">
+                        <label for="patient_gender" class="form-label">เบอร์โทรศัพท์</label>
+                        <select name="patient_gender_select" id="patient_gender_select" class="form-control">
+                            <option value="ชาย">ชาย</option>
+                            <option value="หญิง">หญิง</option>
+                        </select>
+                    </div>
+
+                </div>
+                <div class="flex w-full flex-wrap -mx-2 mt-3">
+                    <div class="px-2 w-1/1 lg:w-1/3 mb-4 md:mb-0">
+                        <label for="patient_" class="form-label">โรคประจำตัว</label>
+                        <input type="text" class="form-control" id="patient_">
+                    </div>
+
+                    <div class="px-2 w-1/1 lg:w-1/3 mb-4 md:mb-0">
+                        <label for="patient_" class="form-label">ยาที่แพ้</label>
+                        <input type="text" class="form-control" id="patient_">
+                    </div>
+
+                    <div class="px-2 w-1/1 lg:w-1/3">
+                        <label for="patient_gender" class="form-label">ยาที่ใช้ประจำ</label>
+                        <select name="patient_gender_select" id="patient_gender_select" class="form-control">
+                            <option value="ชาย">ชาย</option>
+                            <option value="หญิง">หญิง</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="flex w-full flex-wrap -mx-2 mt-3">
+                    <div class="px-2 w-full mb-4 md:mb-0">
+                        <label for="patient_" class="form-label">ที่อยู่</label>
+                        <textarea class="form-control" id="inputAddress3" placeholder="กรอกที่อยู่" rows="4" style="height: 97px;"></textarea>
+                    </div>
+                </div>
+                </div>
+            </div>
+            <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <button data-modal-toggle="myModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ตกลง</button>
+                <button data-modal-toggle="myModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal1" tabindex="-1" aria-hidden="true" class="modal-tw hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 justify-center items-center w-full md:inset-0 h-modal md:h-full z-[9999]">
+    <div class="backdrop-modal"></div>
+    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto z-[9999]">
+        <div class="relative p-4 bg-white rounded-lg shadow  sm:p-5">
+            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-black">
+                    เลือกความรุนแรง
+                </h3>
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="myModal">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="sr-only">Close modal</span>
+                </button>
+            </div>
+
+            <style>
+                .btn-idc {
+                    text-align: center;
+                    padding: 10px;
+                    border-radius: 10px;
+                    display: flex;
+                    justify-content: center;
+                    width: 100%;
+                    border-style: solid;
+                    border-width: 1px;
+                    cursor: pointer;
+                    transition: all .15s ease-in-out;
+                }
+
+                .radio-idc {
+                    display: none;
+                }
+
+
+                .radio-idc:checked~.idc-other {
+                    background-color: #000;
+                    color: #fff;
+                }
+
+                .idc-other {
+                    border-color: #000 !important;
+                    color: #000;
+                }
+
+                .radio-idc:checked~.idc-normal {
+                    background-color: #1447e6;
+                    color: #fff;
+                }
+
+                .idc-normal {
+                    border-color: #1447e6 !important;
+                    color: #1447e6;
+
+                }
+
+                .radio-idc:checked~.idc-not-severe {
+                    background-color: #12BA09;
+                    color: #fff;
+                }
+
+                .idc-not-severe {
+                    border-color: #12BA09 !important;
+                    color: #12BA09;
+
+                }
+
+                .radio-idc:checked~.idc-urgent {
+                    background-color: #FFC517;
+                    color: #fff;
+                }
+
+                .idc-urgent {
+                    border-color: #FFC517 !important;
+                    color: #FFC517;
+
+                }
+
+                .radio-idc:checked~.idc-danger {
+                    background-color: #DE2525;
+                    color: #fff;
+                }
+
+                .idc-danger {
+                    border-color: #DE2525 !important;
+                    color: #DE2525;
+
+                }
+            </style>
+            <div class="mb-2">
+                <div class="flex w-full">
+                    <div class="w-1/2 p-2">
+                        <input type="radio" name="idc_officer" id="radio_other" class="radio-idc">
+                        <label for="radio_other" class="btn-idc idc-other">อื่นๆ</label>
+                    </div>
+                    <div class="w-1/2 p-2">
+                        <input type="radio" name="idc_officer" id="radio_normal" class="radio-idc">
+                        <label class="btn-idc idc-normal" for="radio_normal">ทั่วไป</label>
+                    </div>
+                </div>
+                <div class="flex w-full">
+                    <div class="w-1/2 p-2">
+                        <input type="radio" name="idc_officer" id="radio_not_severe" class="radio-idc">
+                        <label class="btn-idc idc-not-severe" for="radio_not_severe"> ไม่รุนแรง</label>
+                    </div>
+                    <div class="w-1/2 p-2">
+                        <input type="radio" name="idc_officer" id="radio_urgent" class="radio-idc">
+                        <label class="btn-idc idc-urgent" for="radio_urgent">เร่งด่วน</label>
+                    </div>
+                </div>
+                <div class="flex w-full">
+                    <div class="p-2 w-full">
+                        <input type="radio" name="idc_officer" id="radio_danger" class="radio-idc">
+                        <label class="btn-idc idc-danger" for="radio_danger">รุนแรง</label>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end pb-6 space-x-2 b rounded-b ">
+                <button data-modal-toggle="myModal1" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ตกลง</button>
+                <!-- <button data-modal-toggle="myModal1" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">ยกเลิก</button> -->
+            </div>
+        </div>
+    </div>
+</div>
 <style>
     body {
         width: 100%;
@@ -224,22 +554,22 @@
         <div class="menu-container">
             <button class="btn-menu" style="--index: 0">
                 <p class="m-0">
-                    <i class="fa-solid fa-phone"></i>
+                    <i class="fa-solid fa-file-pen"></i>
                 </p>
             </button>
             <button class="btn-menu" style="--index: 1">
                 <p class="m-0">
-                    <i class="fa-solid fa-phone"></i>
+                    <i class="fa-solid fa-comments-question-check"></i>
                 </p>
             </button>
             <button class="btn-menu" style="--index: 2">
                 <p class="m-0">
-                    <i class="fa-solid fa-phone"></i>
+                    <i class="fa-solid fa-truck-medical"></i>
                 </p>
             </button>
             <button class="btn-menu" style="--index: 3">
                 <p class="m-0">
-                    <i class="fa-solid fa-phone"></i>
+                    <i class="fa-solid fa-map-location-dot"></i>
                 </p>
             </button>
             <!-- <div> <i class="fa-solid fa-phone"></i>
@@ -262,6 +592,11 @@
             border-radius: 10px;
             margin-bottom: 10px;
             font-weight: bold;
+        }
+
+        .status-other {
+            background-color: rgb(0, 0, 0, .13);
+            color: #000;
         }
 
         .status-normal {
@@ -288,12 +623,40 @@
         <div class="section-1">
             <div class="content">
                 <div class="body">
-                    <button class="btn-edit" style="--index: 0">แก้ไขข้อมูลผู้ป่วย</button>
-                    <button class="btn-call-more" style="--index: 1">ปฎิบัติการร่วม / หมู่</button>
+
+                    <!-- <button data-modal-target="myModal" data-modal-toggle="myModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+  เปิด Modal
+</button>
+ <button data-modal-target="myModal1" data-modal-toggle="myModal1" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+  เปิด Modal
+</button>
+ -->
+
+
+
+                    <button class="btn-edit cursor-pointer" style="--index: 0" data-modal-target="myModal" data-modal-toggle="myModal">แก้ไขข้อมูลผู้ป่วย</button>
+                    <!-- <button class="btn-call-more" style="--index: 1">ปฎิบัติการร่วม / หมู่</button> -->
                 </div>
             </div>
         </div>
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const modalToggles = document.querySelectorAll('[data-modal-toggle]');
+                const modalDismisses = document.querySelectorAll('[data-modal-hide], [data-modal-toggle]'); // Include toggle for closing
 
+                modalToggles.forEach(toggle => {
+                    toggle.addEventListener('click', () => {
+                        const targetModalId = toggle.getAttribute('data-modal-target') || toggle.getAttribute('data-modal-toggle');
+                        const targetModal = document.getElementById(targetModalId);
+                        if (targetModal) {
+                            targetModal.classList.toggle('hidden');
+                            targetModal.classList.toggle('flex'); // Use flex to center content
+                            targetModal.setAttribute('aria-hidden', targetModal.classList.contains('hidden'));
+                        }
+                    });
+                });
+            });
+        </script>
         <div class="section-2">
             <div class="content">
                 <div class="body">
@@ -303,14 +666,29 @@
                             <i class="fa-solid fa-circle fa-2xs me-2"></i>
                             <span>ทั่วไป</span>
                         </div>
+
+                        <div class="status status-success">
+                            <i class="fa-solid fa-circle fa-2xs me-2"></i>
+                            <span>ไม่รุนแรง</span>
+                        </div>
+
+                        <div class="status status-warning">
+                            <i class="fa-solid fa-circle fa-2xs me-2"></i>
+                            <span>เร่งด่วน</span>
+                        </div>
+
+                        <div class="status status-danger">
+                            <i class="fa-solid fa-circle fa-2xs me-2"></i>
+                            <span>ฉุกเฉิน</span>
+                        </div>
                     </div>
-                    <div>
+                    <div class="mt-4">
                         <div class="label">เจ้าหน้าที่</div>
-                        <button class="status status-success flex justify-between">
+                        <button class="status status-success flex justify-between cursor-pointer status-idc" data-modal-target="myModal1" data-modal-toggle="myModal1">
                             <div>
 
                                 <i class="fa-solid fa-circle fa-2xs me-2"></i>
-                                <span>ไม่รุนแรง</span>
+                                <span id="text_idc">ไม่รุนแรง</span>
                             </div>
 
                             <div>
@@ -321,6 +699,56 @@
                 </div>
             </div>
         </div>
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const radios = document.querySelectorAll('input[name="idc_officer"]');
+                const textIdc = document.querySelector('.section-2 .status.status-success #text_idc'); // เปลี่ยนตามตำแหน่งจริง
+                const buttonIdc = document.querySelector('.section-2 .status-idc'); // ปุ่มที่จะแสดงระดับใหม่
+
+                const levelMap = {
+                    'radio_other': {
+                        text: 'อื่นๆ',
+                        class: 'status-other'
+                    },
+                    'radio_normal': {
+                        text: 'ทั่วไป',
+                        class: 'status-normal'
+                    },
+                    'radio_not_severe': {
+                        text: 'ไม่รุนแรง',
+                        class: 'status-success'
+                    },
+                    'radio_urgent': {
+                        text: 'เร่งด่วน',
+                        class: 'status-warning'
+                    },
+                    'radio_danger': {
+                        text: 'รุนแรง',
+                        class: 'status-danger'
+                    }
+                };
+
+                radios.forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        if (this.checked) {
+                            const level = levelMap[this.id];
+
+                            // อัปเดตข้อความ
+                            textIdc.textContent = level.text;
+
+                            // ลบคลาสเดิมออกก่อน
+                            buttonIdc.classList.remove('status-normal', 'status-success', 'status-warning', 'status-danger', 'status-other');
+
+                            // เพิ่มคลาสใหม่ตามระดับ
+                            buttonIdc.classList.add(level.class);
+                        }
+                    });
+                });
+            });
+        </script>
+
         <style>
             .input-officer {
                 padding: 5px 10px;
@@ -487,7 +915,7 @@
 
                     .btn-treatment:hover,
                     input:checked~label.btn-treatment {
-                        background-color: #DB2F2F;
+                        background-color: #db2f2f;
                         color: #fff;
                     }
 
@@ -602,13 +1030,61 @@
 
                 <div class="body flex">
                     <input type="text" class="input-officer" name="km_operating_base">
-                    <button class="btn-to-base btn-next" ><i class="fa-solid fa-chevron-right"></i></button>
+                    <button class="btn-to-base btn-next"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
         </div>
+        <style>
+            .icon-map {
+                background: rgb(40, 86, 250);
+                background: -moz-linear-gradient(260deg, rgba(40, 86, 250, 1) 0%, rgba(6, 162, 253, 1) 100%);
+                background: -webkit-linear-gradient(260deg, rgba(40, 86, 250, 1) 0%, rgba(6, 162, 253, 1) 100%);
+                background: linear-gradient(260deg, rgba(40, 86, 250, 1) 0%, rgba(6, 162, 253, 1) 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                transition: all .15s ease-in-out;
+                font-size: 18px;
+            }
+        </style>
         <div class="section-4">
             <div class="content">
-                <div class="body"></div>
+                <div class="body">
+                    <h4 class="font-bold mb-4 mt-2">จุดเกิดเหตุ</h4>
+                    <div class="flex items-center">
+                        <div class="me-4">
+                            <div style="width: 50px; height: 50px; border-radius: 50px;display: flex;justify-content: center;align-items: center; background-color: #f0f0f0;">
+                                <i class="fa-solid fa-diamond-turn-right icon-map"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-[13px] text-[#7c7c7c] leading-[18px]">ระยะทาง</p>
+                            <p class="text-[18px] text-[#2856fa] leading-[18px]">84 กม.</p>
+                        </div>
+                    </div>
+                    <hr class="text-[#cdcdcd] my-3">
+                    <div class="flex items-center mb-1">
+                        <div class="me-4">
+                            <div style="width: 50px; height: 50px; border-radius: 50px;display: flex;justify-content: center;align-items: center; background-color: #f0f0f0;">
+                                <i class="fa-solid fa-location-crosshairs icon-map"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-[13px] text-[#7c7c7c] leading-[18px]">เดินทาง</p>
+                            <p class="text-[18px] text-[#2856fa] leading-[18px]">1 ชม. 20 นาที</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="body flex justify-around">
+                    <div class="text-center">
+                        <p class="text-[13px]">ระยะทาง</p>
+                        <p class="text-[18px]">84 กม.</p>
+                    </div>
+                    <div>
+                        <p class="text-[13px]">เดินทาง</p>
+                        <p class="text-[18px]">1 ชม. 20 นาที</p>
+                    </div>
+                    <div>asd</div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -647,26 +1123,15 @@
                 const prevBtn = content.querySelector('.btn-prev');
                 const nextBtns = content.querySelectorAll('.btn-next');
 
-                if (prevBtn) {
+                if (prevBtn && index != 0) {
                     prevBtn.addEventListener('click', () => navigateContent(index, contentIndex - 1));
                 }
                 nextBtns.forEach(nextBtn => {
                     nextBtn.addEventListener('click', () => {
-                        // Collect data for alert
-                        // const content = nextBtn.closest('.content');
-                        // const textInput = content.querySelector('input[type="text"]');
-                        // const severityInput = content.querySelector('input[name="idc"]');
-                        // let message = '';
-                        // if (textInput) {
-                        //     message += `ข้อมูล: ${textInput.value.trim()}\n`;
-                        // }
-                        // if (severityInput && severityInput.value) {
-                        //     message += `ระดับความรุนแรง: ${severityInput.value}`;
-                        // }
-                        // if (message) {
-                        //     alert(message);
-                        // }
-                        navigateContent(index, contentIndex + 1);
+                        console.log(contentIndex);
+                        if (contentIndex <= 4) {
+                            navigateContent(index, contentIndex + 1);
+                        }
                     });
                 });
             });
@@ -772,7 +1237,7 @@
 
             // alert เฉพาะเมื่อมีข้อมูล
             if (inputName && inputValue) {
-                alert(`${inputName}: ${inputValue}`);
+                console.log(`${inputName}: ${inputValue}`);
             }
         }
     });
