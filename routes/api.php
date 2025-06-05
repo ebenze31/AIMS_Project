@@ -536,5 +536,6 @@ Route::get('/get_data_wait_officer/{emergency_id}/{officer_id}', 'Aims_emergency
 Route::get('/get_for_show_helper/{emergency_id}', 'Aims_emergencysController@get_for_show_helper');
 Route::get('/get_location_realtime/{officer_id}/{emergency_id}', 'Aims_emergencysController@get_location_realtime');
 Route::get('/get_data_case_realtime/{emergency_id}', 'Aims_emergencysController@get_data_case_realtime');
+Route::get('/get_data_case_all/{user_id}', 'Aims_emergencysController@get_data_case_all');
 
 // ============> END AIMS <============ //

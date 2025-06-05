@@ -572,6 +572,7 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,operator-area'])->grou
 	Route::get('/partner_index', 'PartnerController@partner_index');
 	// Route::get('/member', 'ProfileController@member');
 	Route::get('/command_operations/{id}', 'Aims_emergencysController@command_operations');
+	Route::get('/emergency_all_case', 'Aims_emergencysController@emergency_all_case');
 });
 
 // ==> officer-area

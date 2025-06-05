@@ -290,6 +290,44 @@ class Aims_emergencysController extends Controller
 
     }
 
+    function emergency_all_case(){
+        return view('aims_emergencys.emergency_all_case');
+    }
+
+    function get_data_case_all($user_id){
+        $data_commands = DB::table('aims_commands')->where('user_id',$user_id)->first();
+
+        $emergency = DB::table('aims_emergencys')
+            ->where('aims_emergencys.aims_partner_id', '=', $data_commands->aims_partner_id)
+            ->where('aims_emergencys.aims_area_id', '=', $data_commands->aims_area_id)
+            ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
+            ->leftJoin('aims_commands', 'aims_emergency_operations.command_by', '=', 'aims_commands.id')
+            ->leftJoin('aims_operating_officers', 'aims_emergency_operations.aims_operating_officers_id', '=', 'aims_operating_officers.id')
+            ->leftJoin('aims_operating_units', 'aims_operating_officers.aims_operating_unit_id', '=', 'aims_operating_units.id')
+            ->leftJoin('aims_type_units', 'aims_operating_units.aims_type_unit_id', '=', 'aims_type_units.id')
+            ->select(
+                'aims_emergencys.id',
+                'aims_emergencys.created_at',
+                'aims_emergencys.name_reporter',
+                'aims_emergencys.type_reporter',
+                'aims_emergencys.phone_reporter',
+                'aims_emergencys.emergency_type',
+                'aims_emergencys.idc',
+                'aims_emergencys.rc',
+                'aims_emergency_operations.operating_code',
+                'aims_emergency_operations.status',
+                'aims_emergency_operations.time_sum_sos',
+                'aims_commands.name_officer_command',
+                'aims_operating_officers.name_officer',
+                'aims_operating_units.name_unit',
+                'aims_type_units.name_type_unit',
+            )
+            ->orderBy('aims_emergencys.id', 'DESC')
+            ->get();
+
+        return $emergency;
+    }
+
     function command_operations($id){
 
         $columns = Schema::getColumnListing('aims_emergency_operations');

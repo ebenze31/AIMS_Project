@@ -1097,7 +1097,7 @@
 				</li>
 
 				<li>
-					<a href="{{ url('/') }}">
+					<a href="{{ url('/emergency_all_case') }}">
 						<div class="parent-icon">
 							<i class="fa-solid fa-user-headset"></i>
 						</div>
