@@ -56,6 +56,7 @@
 		fetch("{{ url('/') }}/api/get_data_case_all/" + user_id + "?page=" + page)
 			.then(response => response.json())
 			.then(result => {
+
 				let data = result.data;
 				let total = result.total;
 				let perPage = result.per_page;

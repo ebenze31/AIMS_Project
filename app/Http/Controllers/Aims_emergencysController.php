@@ -221,11 +221,11 @@ class Aims_emergencysController extends Controller
         $run_number = $check_open_partner->for_gen_code ;
 
         $yearMonth = $current_time->format('y') . $current_time->format('m');
-        $formattedPartnerId = str_pad($partner_id, 4, '0', STR_PAD_LEFT);
+        // $formattedPartnerId = str_pad($partner_id, 4, '0', STR_PAD_LEFT);
         $formattedAreaId = str_pad($area_id, 5, '0', STR_PAD_LEFT);
         $new_run_number = $run_number + 1;
         $formattedRunNumber = str_pad($new_run_number, 4, '0', STR_PAD_LEFT);
-        $final_code = "{$yearMonth}-{$formattedPartnerId}-{$formattedAreaId}-{$formattedRunNumber}";
+        $final_code = "{$formattedAreaId}-{$yearMonth}-{$formattedRunNumber}";
 
         $check_open_partner->for_gen_code = $new_run_number;
         $check_open_partner->save();
