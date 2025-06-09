@@ -22,6 +22,7 @@
 			        <li><a class="dropdown-item" href="#" data-field="created_at">วันที่</a></li>
 			        <li><a class="dropdown-item" href="#" data-field="name_officer_command">สั่งการโดย</a></li>
 			        <li><a class="dropdown-item" href="#" data-field="status">สถานะ</a></li>
+			        <li><a class="dropdown-item" href="#" data-field="emergency_type">ประเภทเหตุ</a></li>
 			    </ul>
 			    <input id="search-input" type="text" class="form-control" placeholder="ค้นหาจาก..">
 			    <button id="cf_search" class="btn btn-outline-secondary" type="button">

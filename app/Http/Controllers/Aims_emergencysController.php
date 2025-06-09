@@ -320,6 +320,7 @@ class Aims_emergencysController extends Controller
                 'created_at' => 'aims_emergencys.created_at',
                 'name_officer_command' => 'aims_commands.name_officer_command',
                 'status' => 'aims_emergency_operations.status',
+                'emergency_type' => 'aims_emergencys.emergency_type',
             ];
 
             if (array_key_exists($field, $allowedFields)) {
