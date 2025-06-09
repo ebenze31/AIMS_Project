@@ -14,27 +14,25 @@
 	            </h5>
         	</div>
             <div class="input-group" style="width: 40%;">
-				<button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-					ค้นหาจาก
-				</button>
-				<ul class="dropdown-menu" style="margin: 0px;">
-					<li>
-						<a class="dropdown-item" href="#">รหัสเคส</a>
-					</li>
-					<li>
-						<a class="dropdown-item" href="#">Action</a>
-					</li>
-					<li>
-						<a class="dropdown-item" href="#">Action</a>
-					</li>
-					<li>
-						<a class="dropdown-item" href="#">Action</a>
-					</li>
-				</ul>
-				<input type="text" class="form-control" placeholder="ค้นหาจาก รหัสเคส">
-				<button class="btn btn-outline-secondary" type="button"><i class="fa-solid fa-magnifying-glass fa-flip-horizontal"></i></button>
+			    <button id="search-dropdown" class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+			        ค้นหาจาก
+			    </button>
+			    <ul class="dropdown-menu" style="margin: 0px;">
+			        <li><a class="dropdown-item" href="#" data-field="operating_code">รหัสเคส</a></li>
+			        <li><a class="dropdown-item" href="#" data-field="created_at">วันที่</a></li>
+			        <li><a class="dropdown-item" href="#" data-field="name_officer_command">สั่งการโดย</a></li>
+			        <li><a class="dropdown-item" href="#" data-field="status">สถานะ</a></li>
+			    </ul>
+			    <input id="search-input" type="text" class="form-control" placeholder="ค้นหาจาก..">
+			    <button id="cf_search" class="btn btn-outline-secondary" type="button">
+			        <i class="fa-solid fa-magnifying-glass fa-flip-horizontal"></i>
+			    </button>
+			    <button id="clear_search" class="btn btn-outline-secondary" type="button">
+			        <i class="fa-solid fa-arrows-rotate"></i>
+			    </button>
 			</div>
         </div>
+	    <span id="text_show_amount_case"></span>
         <hr>
         <div id="div_content_all_case">
         	<!-- div_content_all_case -->
@@ -46,158 +44,225 @@
 </div>
 
 <script>
-	document.addEventListener("DOMContentLoaded", function() {
-		get_data_case_all();
+
+	let selectedSearchField = ""; // เก็บฟิลด์ที่เลือก
+let selectedSearchText = "";  // เก็บชื่อใน dropdown เช่น "รหัสเคส"
+let selectedField = null;
+
+document.addEventListener("DOMContentLoaded", function() {
+    get_data_case_all({});  // เรียกครั้งแรก โหลดข้อมูลทั้งหมด
+
+    document.querySelectorAll('.dropdown-item').forEach(item => {
+        item.addEventListener('click', function (e) {
+            e.preventDefault();
+            const fieldText = this.innerText;
+            const fieldValue = this.getAttribute('data-field');
+            selectedField = fieldValue;
+
+            // เปลี่ยน text ปุ่ม dropdown
+            document.getElementById('search-dropdown').innerText = fieldText;
+
+            // เปลี่ยน placeholder
+            const input = document.getElementById('search-input');
+            input.placeholder = 'ค้นหาจาก ' + fieldText;
+
+            // เปลี่ยน input type เป็น date ถ้าเลือก 'created_at'
+            if (fieldValue === 'created_at') {
+                input.type = 'date';
+            } else {
+                input.type = 'text';
+            }
+        });
     });
 
-    function get_data_case_all(page = 1) {
-		let user_id = "{{ Auth::user()->id }}";
+    document.getElementById('cf_search').addEventListener('click', function () {
+        const keyword = document.getElementById('search-input').value;
 
-		fetch("{{ url('/') }}/api/get_data_case_all/" + user_id + "?page=" + page)
-			.then(response => response.json())
-			.then(result => {
+        // ส่ง selectedField และ keyword ไปยัง backend หรือฟังก์ชันค้นหา
+        // console.log('ค้นหาโดย', selectedField, '=>', keyword);
 
-				let data = result.data;
-				let total = result.total;
-				let perPage = result.per_page;
-				let currentPage = result.current_page;
+        // เรียก get_data_case_all พร้อมพารามิเตอร์เป็น object
+        get_data_case_all({
+            search_field: selectedField,
+            keyword: keyword
+        });
+    });
 
-				let div_content_all_case = document.querySelector('#div_content_all_case');
-				div_content_all_case.innerHTML = "";
+    document.getElementById('clear_search').addEventListener('click', function () {
+        selectedField = null;
+        document.getElementById('search-dropdown').innerText = 'ค้นหาจาก';
+        const input = document.getElementById('search-input');
+        input.type = 'text';
+        input.value = '';
+        input.placeholder = 'ค้นหาจาก..';
 
-				for (let i = 0; i < data.length; i++) {
-					let d = data[i];
+        // เรียกฟังก์ชันโหลดข้อมูลใหม่ทั้งหมด
+        get_data_case_all({});
+    });
+});
 
-					let time_sum_sos = ``;
-					if(d.time_sum_sos){
-						time_sum_sos = `<b>เวลาช่วยเหลือ :</b> ${d.time_sum_sos}`;
-					}
+// ปรับฟังก์ชันให้รับพารามิเตอร์เป็น object
+function get_data_case_all({ page = 1, search_field = "", keyword = "" } = {}) {
+    let user_id = "{{ Auth::user()->id }}";
+    let url = `{{ url('/') }}/api/get_data_case_all/${user_id}?page=${page}`;
 
-					let name_officer_command = ``;
-					if(d.name_officer_command){
-						name_officer_command = `<h5 class="mb-1">สั่งการโดย : ${d.name_officer_command}</h5>`;
-					}
+    if (search_field && keyword) {
+        url += `&search_field=${search_field}&keyword=${encodeURIComponent(keyword)}`;
+    }
 
-					let html_officer = ``;
-					if(d.name_officer){
-						html_officer = `
-							<span style="font-size: 16px;">
-								เจ้าหน้าที่ช่วยเหลือ : ${d.name_officer || '-'}<br>
-								หน่วย : ${d.name_unit || '-'}<br>
-								ประเภท : ${d.name_type_unit || '-'}
-							</span>
-						`;
-					}
+    fetch(url)
+        .then(response => response.json())
+        .then(result => {
 
-					let html = `
-						<div class="card mt-2 radius-10 border">
-							<div class="card-body row">
-								<div class="col-8">
-									<h4>รหัสเคส : ${d.operating_code || '-'}</h4>
-								</div>
-								<div class="col-4">
-									<div class="float-end">
-										<span class="btn btn-sm radius-30" style="${getStatusStyle(d.status)}">
-											<b class="mx-4">${d.status || '-'}</b>
-										</span>
-									</div>
-								</div>
-								<div class="col-2">
-									<div class="p-1 mt-1 radius-10 overflow-hidden" style="${getLvStyle(d.idc)}">
-										<div class="text-center">
-											<p class="mb-0 text-white">IDC</p>
-											<p class="mb-0 text-white">${d.idc || '-'}</p>
-										</div>
-									</div>
-									<div class="p-1 mt-1 radius-10 overflow-hidden" style="${getLvStyle(d.rc)}">
-										<div class="text-center">
-											<p class="mb-0 text-white">RC</p>
-											<p class="mb-0 text-white">${d.rc || '-'}</p>
-										</div>
-									</div>
-								</div>
-								<div class="col-4">
-									<h5 class="mb-1">ผู้แจ้งเหตุ : ${d.name_reporter || '-'}</h5>
-									<span style="font-size: 16px;">
-										เบอร์โทรผู้แจ้ง : ${d.phone_reporter || '-'}<br>
-										ประเภทผู้แจ้ง : ${d.type_reporter || 'ไม่ได้ระบุ'}<br>
-										ประเภทเหตุ : ${d.emergency_type || 'ไม่ได้ระบุ'}
-									</span>
-								</div>
-								<div class="col-6">
-									${name_officer_command}
-									${html_officer}
-								</div>
-								<div class="col-12"><hr></div>
-								<div class="col-6">
-									<span style="font-size: 14px;">
-										<b>เวลาแจ้งเหตุ :</b> ${d.created_at ? formatThaiDate(d.created_at) : '-'}<br>
-										${time_sum_sos}
-									</span>
-								</div>
-								<div class="col-6">
-									<div class="float-end">
-										<a href="{{ url('/command_operations/${d.id}') }}" type="button" class="btn btn-info">
-											<b class="mx-4">ดูข้อมูล</b>
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-					`;
+            // console.log(result);
 
-					div_content_all_case.insertAdjacentHTML('beforeend', html);
-				}
+            let data = result.data;
+            let total = result.total;
+            let perPage = result.per_page;
+            let currentPage = result.current_page;
 
-				// สร้าง Navigation
-				let div_navigation = document.querySelector('#div_navigation');
-				div_navigation.innerHTML = "";
+            let amountCaseText = total > 0
+			    ? `หน้า ${currentPage} แสดงผล ${data.length} จาก ${total}`
+			    : 'ไม่พบข้อมูล';
+			document.getElementById("text_show_amount_case").innerText = amountCaseText;
 
-				let totalPages = Math.ceil(total / perPage);
-				if (totalPages < 1) totalPages = 1;
+            let div_content_all_case = document.querySelector('#div_content_all_case');
+            div_content_all_case.innerHTML = "";
 
-				let html_navigation = `
-					<nav aria-label="...">
-						<ul class="pagination">
-							<li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-								<a class="page-link" href="javascript:;" tabindex="-1" aria-disabled="${currentPage == 1}" onclick="get_data_case_all(${currentPage - 1})">«</a>
-							</li>
-				`;
+            for (let i = 0; i < data.length; i++) {
+                let d = data[i];
 
-				for (let i = 1; i <= totalPages; i++) {
-					if (i === currentPage) {
-						html_navigation += `
-							<li id="navigation_${i}" class="page-item" aria-current="page">
-								<a class="page-link" href="javascript:;">${i} <span class="visually-hidden">(current)</span></a>
-							</li>
-						`;
-					} else {
-						html_navigation += `
-							<li id="navigation_${i}" class="page-item">
-								<a class="page-link" href="javascript:;" onclick="get_data_case_all(${i})">${i}</a>
-							</li>
-						`;
-					}
-				}
+                let time_sum_sos = ``;
+                if(d.time_sum_sos){
+                    time_sum_sos = `<b>เวลาช่วยเหลือ :</b> ${d.time_sum_sos}`;
+                }
 
-				html_navigation += `
-							<li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-								<a class="page-link" href="javascript:;" aria-disabled="${currentPage == totalPages}" onclick="get_data_case_all(${currentPage + 1})">»</a>
-							</li>
-						</ul>
-					</nav>
-				`;
+                let name_officer_command = ``;
+                if(d.name_officer_command){
+                    name_officer_command = `<h5 class="mb-1">สั่งการโดย : ${d.name_officer_command}</h5>`;
+                }
 
-				div_navigation.innerHTML = html_navigation;
+                let html_officer = ``;
+                if(d.name_officer){
+                    html_officer = `
+                        <span style="font-size: 16px;">
+                            เจ้าหน้าที่ช่วยเหลือ : ${d.name_officer || '-'}<br>
+                            หน่วย : ${d.name_unit || '-'}<br>
+                            ประเภท : ${d.name_type_unit || '-'}
+                        </span>
+                    `;
+                }
 
-				setTimeout(() => {
-				  	let activeItem = document.querySelector('#navigation_'+currentPage);
-				  		activeItem.classList.add('active');
-				}, 1000);
+                let html = `
+                    <div class="card mt-2 radius-10 border">
+                        <div class="card-body row">
+                            <div class="col-8">
+                                <h4>รหัสเคส : ${d.operating_code || '-'}</h4>
+                            </div>
+                            <div class="col-4">
+                                <div class="float-end">
+                                    <span class="btn btn-sm radius-30" style="${getStatusStyle(d.status)}">
+                                        <b class="mx-4">${d.status || '-'}</b>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <div class="p-1 mt-1 radius-10 overflow-hidden" style="${getLvStyle(d.idc)}">
+                                    <div class="text-center">
+                                        <p class="mb-0 text-white">IDC</p>
+                                        <p class="mb-0 text-white">${d.idc || '-'}</p>
+                                    </div>
+                                </div>
+                                <div class="p-1 mt-1 radius-10 overflow-hidden" style="${getLvStyle(d.rc)}">
+                                    <div class="text-center">
+                                        <p class="mb-0 text-white">RC</p>
+                                        <p class="mb-0 text-white">${d.rc || '-'}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <h5 class="mb-1">ผู้แจ้งเหตุ : ${d.name_reporter || '-'}</h5>
+                                <span style="font-size: 16px;">
+                                    เบอร์โทรผู้แจ้ง : ${d.phone_reporter || '-'}<br>
+                                    ประเภทผู้แจ้ง : ${d.type_reporter || 'ไม่ได้ระบุ'}<br>
+                                    ประเภทเหตุ : ${d.emergency_type || 'ไม่ได้ระบุ'}
+                                </span>
+                            </div>
+                            <div class="col-6">
+                                ${name_officer_command}
+                                ${html_officer}
+                            </div>
+                            <div class="col-12"><hr></div>
+                            <div class="col-6">
+                                <span style="font-size: 14px;">
+                                    <b>เวลาแจ้งเหตุ :</b> ${d.created_at ? formatThaiDate(d.created_at) : '-'}<br>
+                                    ${time_sum_sos}
+                                </span>
+                            </div>
+                            <div class="col-6">
+                                <div class="float-end">
+                                    <a href="{{ url('/command_operations/${d.id}') }}" type="button" class="btn btn-info">
+                                        <b class="mx-4">ดูข้อมูล</b>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
 
-				window.scrollTo({ top: 0, behavior: 'smooth' });
-			});
-	}
+                div_content_all_case.insertAdjacentHTML('beforeend', html);
+            }
+
+            // สร้าง Navigation
+            let div_navigation = document.querySelector('#div_navigation');
+            div_navigation.innerHTML = "";
+
+            let totalPages = Math.ceil(total / perPage);
+            if (totalPages < 1) totalPages = 1;
+
+            let html_navigation = `
+                <nav aria-label="...">
+                    <ul class="pagination">
+                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                            <a class="page-link" href="javascript:;" tabindex="-1" aria-disabled="${currentPage == 1}" onclick="get_data_case_all({page: ${currentPage - 1}})">«</a>
+                        </li>
+            `;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    html_navigation += `
+                        <li id="navigation_${i}" class="page-item" aria-current="page">
+                            <a class="page-link" href="javascript:;">${i} <span class="visually-hidden">(current)</span></a>
+                        </li>
+                    `;
+                } else {
+                    html_navigation += `
+                        <li id="navigation_${i}" class="page-item">
+                            <a class="page-link" href="javascript:;" onclick="get_data_case_all({page: ${i}})">${i}</a>
+                        </li>
+                    `;
+                }
+            }
+
+            html_navigation += `
+                        <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                            <a class="page-link" href="javascript:;" aria-disabled="${currentPage == totalPages}" onclick="get_data_case_all({page: ${currentPage + 1}})">»</a>
+                        </li>
+                    </ul>
+                </nav>
+            `;
+
+            div_navigation.innerHTML = html_navigation;
+
+            setTimeout(() => {
+                let activeItem = document.querySelector('#navigation_'+currentPage);
+                activeItem.classList.add('active');
+            }, 1000);
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+}
+
 
 	function formatThaiDate(dateStr) {
 		const days = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];

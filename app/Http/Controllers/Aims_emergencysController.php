@@ -310,6 +310,24 @@ class Aims_emergencysController extends Controller
             ->leftJoin('aims_operating_units', 'aims_operating_officers.aims_operating_unit_id', '=', 'aims_operating_units.id')
             ->leftJoin('aims_type_units', 'aims_operating_units.aims_type_unit_id', '=', 'aims_type_units.id');
 
+        // ค้นหาจากฟิลด์ที่ระบุ
+        if ($request->filled('search_field') && $request->filled('keyword')) {
+            $field = $request->search_field;
+            $keyword = $request->keyword;
+
+            $allowedFields = [
+                'operating_code' => 'aims_emergency_operations.operating_code',
+                'created_at' => 'aims_emergencys.created_at',
+                'name_officer_command' => 'aims_commands.name_officer_command',
+                'status' => 'aims_emergency_operations.status',
+            ];
+
+            if (array_key_exists($field, $allowedFields)) {
+                $query->where($allowedFields[$field], 'like', '%' . $keyword . '%');
+            }
+        }
+
+
         $total = $query->count(); // จำนวนทั้งหมด
 
         $data = $query->select(
