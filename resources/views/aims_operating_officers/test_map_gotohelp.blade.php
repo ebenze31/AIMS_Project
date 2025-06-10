@@ -1108,18 +1108,15 @@ var map;
 var officerMarker;
 var emergencyMarker;
 var directionsRenderer;
+var watchId; // สำหรับเก็บ ID ของ watchPosition
 
 var aims_marker = "{{ url('/img/icon/operating_unit/aims/aims_marker.png') }}";
 var emergency_Lat = parseFloat("{{ $emergency->emergency_lat }}");
 var emergency_Lng = parseFloat("{{ $emergency->emergency_lng }}");
 
 const emergency_LatLng = { lat: emergency_Lat, lng: emergency_Lng };
-let contentIndex = 0;
-
-// ตัวแปรเก็บตำแหน่งก่อนหน้า
-let previousLatLng = null;
-let currentLatLng = null; // เก็บตำแหน่งล่าสุด
-let isRouteCreated = false; // ตัวแปรควบคุมการสร้างเส้นทางครั้งแรก
+let contentIndex = 0; // ไม่ได้ใช้ในโค้ดนี้ แต่เก็บไว้เผื่อ
+let currentLatLng = null; // เก็บตำแหน่งล่าสุดของผู้ใช้
 let currentHeading = 0; // เริ่มต้นมุมหมุนจากค่าเดิม
 let isManualControl = false; // ตัวแปรควบคุมโหมดลาก/ซูม
 
@@ -1129,148 +1126,225 @@ function open_map() {
         zoom: 15,
         heading: currentHeading,
         mapId: "90f87356969d889c",
-        gestureHandling: "greedy", // อนุญาตการลากและซูม
+        gestureHandling: "greedy",
         mapTypeControl: true,
         zoomControl: true,
         streetViewControl: false,
     });
     
-    // Marker สำหรับจุดฉุกเฉิน
+    // Marker สำหรับจุดฉุกเฉิน (สร้างครั้งเดียว)
     emergencyMarker = new google.maps.Marker({
         position: emergency_LatLng,
         map: map,
         icon: { url: aims_marker, scaledSize: new google.maps.Size(45, 45) }
     });
 
+    // กำหนด DirectionsRenderer (สร้างครั้งเดียว)
+    directionsRenderer = new google.maps.DirectionsRenderer({
+        suppressMarkers: true, // ไม่ให้ DirectionsRenderer สร้าง Marker เอง
+        polylineOptions: {
+            strokeColor: "#256aff", // สีเส้นทาง
+            strokeOpacity: 0.8,
+            strokeWeight: 6
+        }
+    });
+    directionsRenderer.setMap(map);
+
+    // Initial officer marker (สร้างครั้งเดียว)
+    officerMarker = new google.maps.Marker({
+        position: map.getCenter(), // ตำแหน่งเริ่มต้นชั่วคราว
+        map: map,
+        icon: {
+            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
+            scale: 6,
+            strokeColor: "blue",
+            strokeWeight: 2,
+            fillColor: "#256aff",
+            fillOpacity: 1,
+            rotation: 0 // หัวขึ้นเสมอ
+        },
+        title: "ตำแหน่งของผู้ใช้"
+    });
+
     // ร้องขอการเข้าถึง Device Orientation
     if (window.DeviceOrientationEvent) {
         window.addEventListener("deviceorientation", handleOrientation, true);
     } else {
-        console.log("อุปกรณ์นี้ไม่รองรับ DeviceOrientationEvent");
+        console.warn("อุปกรณ์นี้ไม่รองรับ DeviceOrientationEvent การหมุนแผนที่ตามทิศทางอาจทำงานไม่ถูกต้อง");
     }
 
     // เพิ่มปุ่มกลับมาโฟกัส
     addFocusButton();
 
-    updateUserLocation();
+    // เริ่มติดตามตำแหน่งผู้ใช้
+    startTrackingUserLocation();
+
+    // ตรวจจับการลากหรือซูมเพื่อสลับโหมด
+    map.addListener('dragstart', () => {
+        isManualControl = true;
+        console.log("เริ่มการลากแผนที่ ณ เวลา:", new Date().toLocaleString());
+    });
+    map.addListener('zoom_changed', () => {
+        isManualControl = true;
+        console.log("เริ่มการซูมแผนที่ ณ เวลา:", new Date().toLocaleString());
+    });
 }
 
 function handleOrientation(event) {
     if (event.alpha !== null) {
-        const deviceHeading = Math.round(event.alpha); // มุมทิศทางจากเข็มทิศ
-        // ปรับทิศทางให้ตรงกับการหัน (ลบ 180 องศาเพื่อแก้กลับด้าน)
-        currentHeading = (deviceHeading - 180 + 360) % 360;
-        map.setHeading(currentHeading);
-        console.log("อัปเดตทิศทางจากอุปกรณ์ ณ เวลา:", new Date().toLocaleString(), "มุม:", currentHeading);
+        // ใช้ event.webkitCompassHeading สำหรับ iOS หรือ fallback ไปที่ event.alpha
+        // **ข้อควรระวัง:** `event.alpha` เป็นมุมที่สัมพันธ์กับขั้วโลกเหนือจริง
+        // แต่ทิศทางของอุปกรณ์ (หน้าจอ) อาจจะแตกต่างกันไปตามการจับถือ
+        // หากต้องการให้ Marker ชี้ไปตามทิศทางที่ผู้ใช้กำลังหันไป
+        // ต้องใช้ `deviceorientationabsolute` หรือคำนวณจาก `alpha`, `beta`, `gamma`
+        // สำหรับ Google Maps `setHeading` ต้องการมุมที่ 0 องศาคือเหนือ
+        // ซึ่ง `alpha` อาจจะใช้ได้โดยตรง หรืออาจต้องปรับค่าตามอุปกรณ์
+        
+        // สำหรับการหมุนแผนที่ตามทิศทางของอุปกรณ์
+        // ถ้าเป็น Android event.alpha อาจจะพอใช้ได้โดยตรงสำหรับ heading
+        // ถ้าเป็น iOS อาจต้องใช้ event.webkitCompassHeading (ถ้ามี)
+        const deviceHeading = event.webkitCompassHeading || event.alpha;
+        if (deviceHeading !== null) {
+            // ปรับทิศทางให้ 0 องศาคือทิศเหนือ (ตามเข็มนาฬิกา)
+            // อาจต้องปรับค่านี้ขึ้นอยู่กับอุปกรณ์และวิธีที่คุณต้องการให้แผนที่หมุน
+            currentHeading = (360 - deviceHeading + 90) % 360; // ตัวอย่างการปรับค่า
+            map.setHeading(currentHeading);
+            // console.log("อัปเดตทิศทางจากอุปกรณ์ ณ เวลา:", new Date().toLocaleString(), "มุม:", currentHeading);
+        }
     }
 }
 
 function addFocusButton() {
     const controlDiv = document.createElement("div");
     const controlUI = document.createElement("button");
-    controlUI.textContent = "โฟกัสที่ตำแหน่ง";
-    controlUI.style.padding = "5px 10px";
+    controlUI.textContent = "โฟกัสที่ตำแหน่งปัจจุบัน";
+    controlUI.style.padding = "8px 12px";
+    controlUI.style.fontSize = "14px";
+    controlUI.style.backgroundColor = "#fff";
+    controlUI.style.border = "1px solid #ccc";
+    controlUI.style.borderRadius = "4px";
+    controlUI.style.boxShadow = "0 2px 6px rgba(0,0,0,.3)";
     controlUI.style.cursor = "pointer";
+    controlUI.style.marginTop = "10px";
+    controlUI.style.marginRight = "10px"; // เพิ่มระยะห่างด้านขวา
     controlUI.addEventListener("click", () => {
         isManualControl = false; // กลับมาโฟกัสอัตโนมัติ
-        if (currentLatLng) map.setCenter(currentLatLng);
+        if (currentLatLng) {
+            map.setCenter(currentLatLng);
+            map.setZoom(17); // อาจจะซูมเข้ามาเล็กน้อยเพื่อให้เห็นชัด
+        }
     });
     controlDiv.appendChild(controlUI);
     map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);
 }
 
-function updateUserLocation() {
+function startTrackingUserLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
+        // ใช้ watchPosition แทน getCurrentPosition เพื่อติดตามตำแหน่งแบบต่อเนื่อง
+        watchId = navigator.geolocation.watchPosition(
             (position) => {
                 const userLatLng = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
+                currentLatLng = userLatLng; // อัปเดตตำแหน่งล่าสุด
 
-                // อัปเดต Marker เสมอ
-                if (officerMarker) officerMarker.setMap(null);
-
-                officerMarker = new google.maps.Marker({
-                    position: userLatLng,
-                    map: map,
-                    icon: {
-                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                        scale: 6,
-                        strokeColor: "blue",
-                        strokeWeight: 2,
-                        fillColor: "#256aff",
-                        fillOpacity: 1,
-                        rotation: 0 // หัวขึ้นเสมอ
-                    },
-                    title: "ตำแหน่งของผู้ใช้"
-                });
-
-                // อัปเดตตำแหน่งล่าสุด
-                currentLatLng = { lat: userLatLng.lat, lng: userLatLng.lng };
-                if (!previousLatLng) {
-                    previousLatLng = { ...currentLatLng }; // ตั้งค่าเริ่มต้น
-                }
-
-                // สร้างเส้นทางครั้งแรกครั้งเดียว
-                if (!isRouteCreated) {
-                    const directionsService = new google.maps.DirectionsService();
-                    directionsRenderer = new google.maps.DirectionsRenderer({
-                        suppressMarkers: true
-                    });
-                    directionsRenderer.setMap(map);
-
-                    console.log("กำลังคำนวณเส้นทางครั้งแรก ณ เวลา:", new Date().toLocaleString());
-
-                    directionsService.route(
-                        {
-                            origin: userLatLng,
-                            destination: emergency_LatLng,
-                            travelMode: 'DRIVING'
-                        },
-                        (response, status) => {
-                            if (status === 'OK') {
-                                directionsRenderer.setDirections(response);
-                                map.setCenter(userLatLng);
-                                isRouteCreated = true;
-                            }
-                        }
-                    );
-                }
+                // อัปเดตตำแหน่งของ officerMarker
+                officerMarker.setPosition(userLatLng);
 
                 // โฟกัสที่ officerMarker เฉพาะเมื่อไม่มีการควบคุมด้วยมือ
                 if (!isManualControl) {
                     map.setCenter(userLatLng);
                 }
+
+                // อัปเดตเส้นทาง (สามารถเรียกได้บ่อยขึ้น แต่ควรมี logic กรอง)
+                // เพื่อประสิทธิภาพที่ดีขึ้น อาจจะคำนวณเส้นทางใหม่เมื่อ:
+                // 1. ระยะทางจากตำแหน่งเดิมเปลี่ยนไปมากพอสมควร (เช่น 50-100 เมตร)
+                // 2. มีการเคลื่อนที่ (เช่น ความเร็ว > 0)
+                updateRoute(userLatLng);
             },
-            () => {
-                alert("ไม่สามารถรับตำแหน่งได้");
+            (error) => {
+                console.error("เกิดข้อผิดพลาดในการรับตำแหน่ง:", error);
+                let errorMessage = "ไม่สามารถรับตำแหน่งได้ ";
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        errorMessage += "ผู้ใช้ไม่อนุญาตให้เข้าถึงตำแหน่ง";
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        errorMessage += "ไม่สามารถระบุตำแหน่งได้";
+                        break;
+                    case error.TIMEOUT:
+                        errorMessage += "หมดเวลาในการรับตำแหน่ง";
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        errorMessage += "เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ";
+                        break;
+                }
+                alert(errorMessage);
+            },
+            {
+                enableHighAccuracy: true, // ขอตำแหน่งที่แม่นยำสูง
+                maximumAge: 0,            // ไม่ใช้ตำแหน่งที่ cache ไว้
+                timeout: 5000             // กำหนด timeout ในการรับตำแหน่ง (5 วินาที)
+            }
+        );
+    } else {
+        alert("เบราว์เซอร์ของคุณไม่รองรับ Geolocation API");
+    }
+}
+
+let lastRouteUpdateLatLng = null;
+const ROUTE_UPDATE_THRESHOLD_METERS = 50; // อัปเดตเส้นทางเมื่อเคลื่อนที่เกิน 50 เมตร
+
+function updateRoute(userLatLng) {
+    if (!lastRouteUpdateLatLng || 
+        google.maps.geometry.spherical.computeDistanceBetween(
+            new google.maps.LatLng(lastRouteUpdateLatLng),
+            new google.maps.LatLng(userLatLng)
+        ) > ROUTE_UPDATE_THRESHOLD_METERS
+    ) {
+        const directionsService = new google.maps.DirectionsService();
+        directionsService.route(
+            {
+                origin: userLatLng,
+                destination: emergency_LatLng,
+                travelMode: 'DRIVING'
+            },
+            (response, status) => {
+                if (status === 'OK') {
+                    directionsRenderer.setDirections(response);
+                    lastRouteUpdateLatLng = userLatLng;
+                    console.log("อัปเดตเส้นทาง ณ เวลา:", new Date().toLocaleString());
+                } else {
+                    console.error("เกิดข้อผิดพลาดในการคำนวณเส้นทาง:", status);
+                }
             }
         );
     }
 }
 
-// Loop รับตำแหน่งใหม่ทุก 12 วินาที
-let locationInterval = setInterval(() => {
+// Logic สำหรับหยุดการติดตามเมื่อ check_contentIndex เป็น 1
+// คุณต้องเรียกใช้ฟังก์ชันนี้เมื่อ check_contentIndex มีการเปลี่ยนแปลง
+function stopTrackingAndResetMap() {
     if (check_contentIndex === 1) {
-        clearInterval(locationInterval);
-        if (officerMarker) officerMarker.setMap(null);
-        if (directionsRenderer) directionsRenderer.setMap(null);
-        map.setCenter(emergency_LatLng);
-        return;
+        if (watchId) {
+            navigator.geolocation.clearWatch(watchId); // หยุดการติดตามตำแหน่ง
+            watchId = null;
+        }
+        if (officerMarker) officerMarker.setMap(null); // ซ่อน Marker
+        if (directionsRenderer) directionsRenderer.setMap(null); // ซ่อนเส้นทาง
+        map.setCenter(emergency_LatLng); // ย้ายแผนที่ไปที่จุดฉุกเฉิน
+        console.log("หยุดการติดตามตำแหน่งและรีเซ็ตแผนที่");
     }
-    updateUserLocation();
-}, 12000);
+}
 
-// ตรวจจับการลากหรือซูมเพื่อสลับโหมด
-map.addListener('dragstart', () => {
-    isManualControl = true;
-    console.log("เริ่มการลากแผนที่ ณ เวลา:", new Date().toLocaleString());
-});
-map.addListener('zoom_changed', () => {
-    isManualControl = true;
-    console.log("เริ่มการซูมแผนที่ ณ เวลา:", new Date().toLocaleString());
-});
+// คุณต้องเชื่อมโยง check_contentIndex กับเหตุการณ์ที่เหมาะสมในโค้ดของคุณ
+// เช่น ถ้า check_contentIndex ถูกกำหนดผ่านการกดปุ่ม, คุณต้องเรียก stopTrackingAndResetMap()
+// ตัวอย่าง:
+// document.getElementById("someButtonId").addEventListener("click", () => {
+//     check_contentIndex = 1;
+//     stopTrackingAndResetMap();
+// });
 
 function sendOfficerLocation(location) {
     fetch("/api/save_officer_location", {
@@ -1345,6 +1419,7 @@ function initMenuAndContentNavigation() {
                 nextBtn.addEventListener('click', () => {
                     if (contentIndex <= 4) {
                         check_contentIndex = contentIndex ;
+                        stopTrackingAndResetMap();
                         navigateContent(index, contentIndex + 1);
                     }
                 });
