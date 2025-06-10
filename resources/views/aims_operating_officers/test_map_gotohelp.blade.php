@@ -1120,7 +1120,7 @@ let contentIndex = 0;
 let previousLatLng = null;
 let currentLatLng = null; // เก็บตำแหน่งล่าสุด
 let isRouteCreated = false; // ตัวแปรควบคุมการสร้างเส้นทางครั้งแรก
-let currentHeading = 320; // เริ่มต้นมุมหมุนจากค่าเดิม
+let currentHeading = 0; // เริ่มต้นมุมหมุนจากค่าเดิม
 
 function open_map() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -1183,9 +1183,6 @@ function updateUserLocation() {
                     title: "ตำแหน่งของผู้ใช้"
                 });
 
-                // โฟกัสที่ officerMarker
-                map.setCenter(userLatLng);
-
                 // อัปเดตตำแหน่งล่าสุด
                 currentLatLng = { lat: userLatLng.lat, lng: userLatLng.lng };
                 if (!previousLatLng) {
@@ -1211,28 +1208,17 @@ function updateUserLocation() {
                         (response, status) => {
                             if (status === 'OK') {
                                 directionsRenderer.setDirections(response);
-                                map.fitBounds(response.routes[0].bounds, { top: 50, bottom: 500, left: 0, right: 0 });
+                                setInterval(() => {
+                                    map.setCenter(userLatLng);
+                                }, 100);
                                 isRouteCreated = true;
                             }
                         }
                     );
                 }
 
-                // ตรวจสอบการเปลี่ยนแปลงตำแหน่งและเรียก fitBounds
-                if (previousLatLng) {
-                    const prevLatStr = previousLatLng.lat.toFixed(3);
-                    const prevLngStr = previousLatLng.lng.toFixed(3);
-                    const currLatStr = currentLatLng.lat.toFixed(3);
-                    const currLngStr = currentLatLng.lng.toFixed(3);
-
-                    if (prevLatStr !== currLatStr || prevLngStr !== currLngStr) {
-                        if (directionsRenderer && directionsRenderer.getDirections()) {
-                            map.fitBounds(directionsRenderer.getDirections().routes[0].bounds, { top: 50, bottom: 500, left: 0, right: 0 });
-                            console.log("ตำแหน่งเปลี่ยนแปลง ทำ fitBounds ใหม่ ณ เวลา:", new Date().toLocaleString());
-                            previousLatLng = { ...currentLatLng }; // อัปเดต previous หลังจากเปลี่ยน
-                        }
-                    }
-                }
+                // โฟกัสที่ officerMarker
+                map.setCenter(userLatLng);
             },
             () => {
                 alert("ไม่สามารถรับตำแหน่งได้");
