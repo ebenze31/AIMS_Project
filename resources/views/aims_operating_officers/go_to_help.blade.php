@@ -1117,6 +1117,10 @@ var emergency_Lng = parseFloat("{{ $emergency->emergency_lng }}");
 const emergency_LatLng = { lat: emergency_Lat, lng: emergency_Lng };
 let contentIndex = 0;
 
+// ตัวแปรเก็บตำแหน่งก่อนหน้า
+let previousLatLng = null;
+let isRouteCreated = false; // ตัวแปรควบคุมการสร้างเส้นทางครั้งแรก
+
 function open_map() {
     map = new google.maps.Map(document.getElementById("map"), {
         center: emergency_LatLng, 
@@ -1132,10 +1136,6 @@ function open_map() {
 
     updateUserLocation();
 }
-
-// ตัวแปรเก็บตำแหน่งก่อนหน้า
-let previousLatLng = null;
-let isRouteCreated = false; // ตัวแปรควบคุมการสร้างเส้นทางครั้งแรก
 
 function updateUserLocation() {
     if (navigator.geolocation) {
@@ -1172,10 +1172,6 @@ function updateUserLocation() {
                     title: "ตำแหน่งของผู้ใช้"
                 });
 
-                // โฟกัสไปที่ officerMarker
-                // map.setCenter(userLatLng);
-                // map.setZoom(15);
-
                 // อัปเดตตำแหน่งก่อนหน้า
                 previousLatLng = { lat: userLatLng.lat, lng: userLatLng.lng };
 
@@ -1208,6 +1204,21 @@ function updateUserLocation() {
                 // หมุนแผนที่ตามทิศทาง
                 if (rotation !== 0) {
                     map.setHeading(rotation);
+                }
+
+                // ตรวจสอบการเปลี่ยนแปลงตำแหน่งและเรียก fitBounds
+                if (previousLatLng) {
+                    const prevLatStr = previousLatLng.lat.toFixed(3); // ตัดทศนิยม 3 ตำแหน่ง
+                    const prevLngStr = previousLatLng.lng.toFixed(3);
+                    const currLatStr = userLatLng.lat.toFixed(3);
+                    const currLngStr = userLatLng.lng.toFixed(3);
+
+                    if (prevLatStr !== currLatStr || prevLngStr !== currLngStr) {
+                        if (directionsRenderer && directionsRenderer.getDirections()) {
+                            map.fitBounds(directionsRenderer.getDirections().routes[0].bounds, { top: 50, bottom: 500, left: 0, right: 0 });
+                            console.log("ตำแหน่งเปลี่ยนแปลง ทำ fitBounds ใหม่ ณ เวลา:", new Date().toLocaleString());
+                        }
+                    }
                 }
             },
             () => {
