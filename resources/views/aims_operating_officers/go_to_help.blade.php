@@ -1107,7 +1107,6 @@ let check_contentIndex;
 var map;
 var officerMarker;
 var emergencyMarker;
-var isRouteDisabled = false;
 var directionsRenderer;
 
 var aims_marker = "{{ url('/img/icon/operating_unit/aims/aims_marker.png') }}";
@@ -1119,13 +1118,51 @@ let contentIndex = 0;
 
 // ตัวแปรเก็บตำแหน่งก่อนหน้า
 let previousLatLng = null;
+let currentLatLng = null; // เก็บตำแหน่งล่าสุด
 let isRouteCreated = false; // ตัวแปรควบคุมการสร้างเส้นทางครั้งแรก
+let currentHeading = 320; // เริ่มต้นมุมหมุนจากค่าเดิม
 
 function open_map() {
     map = new google.maps.Map(document.getElementById("map"), {
-        center: emergency_LatLng, 
+        center: emergency_LatLng,
         zoom: 15,
+        heading: currentHeading,
+        tilt: 47.5,
+        mapId: "90f87356969d889c",
     });
+    const buttons = [
+        ["Rotate Left", "rotate", 20, google.maps.ControlPosition.LEFT_CENTER],
+        ["Rotate Right", "rotate", -20, google.maps.ControlPosition.RIGHT_CENTER],
+        ["Tilt Down", "tilt", 20, google.maps.ControlPosition.TOP_CENTER],
+        ["Tilt Up", "tilt", -20, google.maps.ControlPosition.BOTTOM_CENTER],
+    ];
+
+    buttons.forEach(([text, mode, amount, position]) => {
+        const controlDiv = document.createElement("div");
+        const controlUI = document.createElement("button");
+
+        controlUI.classList.add("ui-button");
+        controlUI.innerText = `${text}`;
+        controlUI.addEventListener("click", () => {
+            adjustMap(mode, amount);
+        });
+        controlDiv.appendChild(controlUI);
+        map.controls[position].push(controlDiv);
+    });
+
+    const adjustMap = function (mode, amount) {
+        switch (mode) {
+            case "tilt":
+                map.setTilt(map.getTilt() + amount);
+                break;
+            case "rotate":
+                currentHeading = (map.getHeading() + amount + 360) % 360;
+                map.setHeading(currentHeading);
+                break;
+            default:
+                break;
+        }
+    };
 
     // Marker สำหรับจุดฉุกเฉิน
     emergencyMarker = new google.maps.Marker({
@@ -1149,14 +1186,6 @@ function updateUserLocation() {
                 // อัปเดต Marker เสมอ
                 if (officerMarker) officerMarker.setMap(null);
 
-                // คำนวณการหมุนตามทิศทางสำหรับแผนที่
-                let rotation = 0;
-                if (previousLatLng) {
-                    const dy = userLatLng.lat - previousLatLng.lat;
-                    const dx = userLatLng.lng - previousLatLng.lng;
-                    rotation = (Math.atan2(dy, dx) * 180 / Math.PI) + 90; // ปรับให้ชี้ไปข้างหน้า
-                }
-
                 officerMarker = new google.maps.Marker({
                     position: userLatLng,
                     map: map,
@@ -1167,13 +1196,19 @@ function updateUserLocation() {
                         strokeWeight: 2,
                         fillColor: "#256aff",
                         fillOpacity: 1,
-                        rotation: rotation
+                        rotation: 0 // หัวขึ้นเสมอ
                     },
                     title: "ตำแหน่งของผู้ใช้"
                 });
 
-                // อัปเดตตำแหน่งก่อนหน้า
-                previousLatLng = { lat: userLatLng.lat, lng: userLatLng.lng };
+                // โฟกัสที่ officerMarker
+                map.setCenter(userLatLng);
+
+                // อัปเดตตำแหน่งล่าสุด
+                currentLatLng = { lat: userLatLng.lat, lng: userLatLng.lng };
+                if (!previousLatLng) {
+                    previousLatLng = { ...currentLatLng }; // ตั้งค่าเริ่มต้น
+                }
 
                 // สร้างเส้นทางครั้งแรกครั้งเดียว
                 if (!isRouteCreated) {
@@ -1195,28 +1230,24 @@ function updateUserLocation() {
                             if (status === 'OK') {
                                 directionsRenderer.setDirections(response);
                                 map.fitBounds(response.routes[0].bounds, { top: 50, bottom: 500, left: 0, right: 0 });
-                                isRouteCreated = true; // ตั้งค่าสถานะหลังจากสร้างเส้นทาง
+                                isRouteCreated = true;
                             }
                         }
                     );
                 }
 
-                // หมุนแผนที่ตามทิศทาง
-                if (rotation !== 0) {
-                    map.setHeading(rotation);
-                }
-
                 // ตรวจสอบการเปลี่ยนแปลงตำแหน่งและเรียก fitBounds
                 if (previousLatLng) {
-                    const prevLatStr = previousLatLng.lat.toFixed(3); // ตัดทศนิยม 3 ตำแหน่ง
+                    const prevLatStr = previousLatLng.lat.toFixed(3);
                     const prevLngStr = previousLatLng.lng.toFixed(3);
-                    const currLatStr = userLatLng.lat.toFixed(3);
-                    const currLngStr = userLatLng.lng.toFixed(3);
+                    const currLatStr = currentLatLng.lat.toFixed(3);
+                    const currLngStr = currentLatLng.lng.toFixed(3);
 
                     if (prevLatStr !== currLatStr || prevLngStr !== currLngStr) {
                         if (directionsRenderer && directionsRenderer.getDirections()) {
                             map.fitBounds(directionsRenderer.getDirections().routes[0].bounds, { top: 50, bottom: 500, left: 0, right: 0 });
                             console.log("ตำแหน่งเปลี่ยนแปลง ทำ fitBounds ใหม่ ณ เวลา:", new Date().toLocaleString());
+                            previousLatLng = { ...currentLatLng }; // อัปเดต previous หลังจากเปลี่ยน
                         }
                     }
                 }
@@ -1228,7 +1259,7 @@ function updateUserLocation() {
     }
 }
 
-// Loop every 12 seconds
+// Loop รับตำแหน่งใหม่ทุก 12 วินาที
 let locationInterval = setInterval(() => {
     if (check_contentIndex === 1) {
         clearInterval(locationInterval);
@@ -1239,6 +1270,22 @@ let locationInterval = setInterval(() => {
     }
     updateUserLocation();
 }, 12000);
+
+// Loop เช็คการหันหัวทุก 1 วินาที
+let rotationInterval = setInterval(() => {
+    if (currentLatLng && previousLatLng) {
+        const dy = currentLatLng.lat - previousLatLng.lat;
+        const dx = currentLatLng.lng - previousLatLng.lng;
+        let rotation = (Math.atan2(dy, dx) * 180 / Math.PI);
+
+        // หมุนแผนที่ตามทิศทาง
+        if (rotation !== 0) {
+            currentHeading = (rotation + currentHeading + 360) % 360;
+            map.setHeading(currentHeading);
+            console.log("อัปเดตการหมุนแผนที่ ณ เวลา:", new Date().toLocaleString(), "มุม:", currentHeading);
+        }
+    }
+}, 1000);
 
 function sendOfficerLocation(location) {
     fetch("/api/save_officer_location", {
