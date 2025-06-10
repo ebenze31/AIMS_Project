@@ -1121,7 +1121,6 @@ function open_map() {
     map = new google.maps.Map(document.getElementById("map"), {
         center: emergency_LatLng, 
         zoom: 15,
-        heading: 0 // เริ่มต้นมุมหมุน 0 องศา
     });
 
     // Marker สำหรับจุดฉุกเฉิน
@@ -1168,14 +1167,14 @@ function updateUserLocation() {
                         strokeWeight: 2,
                         fillColor: "#256aff",
                         fillOpacity: 1,
-                        rotation: 0 // หัวขึ้นตลอดเวลา
+                        rotation: rotation
                     },
                     title: "ตำแหน่งของผู้ใช้"
                 });
 
                 // โฟกัสไปที่ officerMarker
-                map.setCenter(userLatLng);
-                map.setZoom(15);
+                // map.setCenter(userLatLng);
+                // map.setZoom(15);
 
                 // อัปเดตตำแหน่งก่อนหน้า
                 previousLatLng = { lat: userLatLng.lat, lng: userLatLng.lng };
