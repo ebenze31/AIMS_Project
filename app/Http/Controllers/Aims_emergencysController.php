@@ -695,5 +695,28 @@ class Aims_emergencysController extends Controller
         return view('aims_operating_officers.go_to_help', compact('emergency'));
     }
 
+    function test_map_gotohelp($emergency_id){
+
+        $columns = Schema::getColumnListing('aims_emergency_operations');
+        $selects = array_map(function ($col) {
+            return "aims_emergency_operations.$col as op_$col";
+        }, $columns);
+
+        $emergency = DB::table('aims_emergencys')
+            ->where('aims_emergencys.id', '=', $emergency_id)
+            ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
+            ->leftJoin('aims_areas', 'aims_emergencys.aims_area_id', '=', 'aims_areas.id')
+            ->leftJoin('aims_partners', 'aims_emergencys.aims_partner_id', '=', 'aims_partners.id')
+            ->select(array_merge(
+                ['aims_emergencys.*'],
+                $selects,
+                ['aims_areas.name_area as area_name_area'],
+                ['aims_partners.name as partner_name']
+            ))
+            ->first();
+
+        return view('aims_operating_officers.test_map_gotohelp', compact('emergency'));
+    }
+
 
 }

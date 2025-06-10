@@ -581,6 +581,7 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 	Route::get('/home', 'AimsProfileController@home_for_officer');
 	Route::get('/aims_edit_profile', 'AimsProfileController@aims_edit_profile');
 	Route::get('sos_aims/officer_go_to_help/{emergency_id}', 'Aims_emergencysController@officer_go_to_help');
+	Route::get('test_map_gotohelp/{emergency_id}', 'Aims_emergencysController@test_map_gotohelp');
 });
 
 // ==> Guest
