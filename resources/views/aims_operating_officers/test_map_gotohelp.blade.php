@@ -1127,7 +1127,12 @@ function open_map() {
         center: emergency_LatLng,
         zoom: 15,
         heading: currentHeading,
-        mapId: "90f87356969d889c",
+        // ลบ mapId ชั่วคราวเพื่อทดสอบ
+        // mapId: "90f87356969d889c",
+        gestureHandling: "greedy", // อนุญาตให้โต้ตอบได้ดีขึ้น
+        mapTypeControl: true, // เปิดการควบคุมประเภทแผนที่
+        zoomControl: true, // เปิดปุ่มซูม
+        streetViewControl: false,
     });
     
     // Marker สำหรับจุดฉุกเฉิน
@@ -1143,6 +1148,43 @@ function open_map() {
     } else {
         console.log("อุปกรณ์นี้ไม่รองรับ DeviceOrientationEvent");
     }
+
+    // ปรับปรุงปุ่มควบคุม
+    const buttons = [
+        ["Rotate Left", "rotate", 20, google.maps.ControlPosition.LEFT_CENTER],
+        ["Rotate Right", "rotate", -20, google.maps.ControlPosition.RIGHT_CENTER],
+        ["Tilt Down", "tilt", 20, google.maps.ControlPosition.TOP_CENTER],
+        ["Tilt Up", "tilt", -20, google.maps.ControlPosition.BOTTOM_CENTER],
+    ];
+
+    buttons.forEach(([text, mode, amount, position]) => {
+        const controlDiv = document.createElement("div");
+        const controlUI = document.createElement("button");
+
+        controlUI.classList.add("ui-button");
+        controlUI.innerText = `${text}`;
+        controlUI.style.padding = "5px 10px"; // ปรับขนาดปุ่ม
+        controlUI.style.cursor = "pointer"; // เปลี่ยนเมาส์เป็นมือ
+        controlUI.addEventListener("click", () => {
+            adjustMap(mode, amount);
+        });
+        controlDiv.appendChild(controlUI);
+        map.controls[position].push(controlDiv);
+    });
+
+    const adjustMap = function (mode, amount) {
+        switch (mode) {
+            case "tilt":
+                map.setTilt(map.getTilt() + amount);
+                break;
+            case "rotate":
+                currentHeading = (map.getHeading() + amount + 360) % 360;
+                map.setHeading(currentHeading);
+                break;
+            default:
+                break;
+        }
+    };
 
     updateUserLocation();
 }
