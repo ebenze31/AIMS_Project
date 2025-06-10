@@ -1127,7 +1127,6 @@ function open_map() {
         center: emergency_LatLng,
         zoom: 15,
         heading: currentHeading,
-        tilt: 47.5,
         mapId: "90f87356969d889c",
     });
     const buttons = [
