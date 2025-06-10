@@ -566,9 +566,4 @@ class ProfileController extends Controller
     }
 
 
-    public function aims_edit_profile(Request $request)
-    {
-        return view('ProfileUser.aims_edit_profile');
-    }
-
 }
