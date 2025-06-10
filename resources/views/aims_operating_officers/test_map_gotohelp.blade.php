@@ -1121,6 +1121,7 @@ let previousLatLng = null;
 let currentLatLng = null; // เก็บตำแหน่งล่าสุด
 let isRouteCreated = false; // ตัวแปรควบคุมการสร้างเส้นทางครั้งแรก
 let currentHeading = 0; // เริ่มต้นมุมหมุนจากค่าเดิม
+let isManualControl = false; // ตัวแปรควบคุมโหมดลาก/ซูม
 
 function open_map() {
     map = new google.maps.Map(document.getElementById("map"), {
@@ -1128,6 +1129,10 @@ function open_map() {
         zoom: 15,
         heading: currentHeading,
         mapId: "90f87356969d889c",
+        gestureHandling: "greedy", // อนุญาตการลากและซูม
+        mapTypeControl: true,
+        zoomControl: true,
+        streetViewControl: false,
     });
     
     // Marker สำหรับจุดฉุกเฉิน
@@ -1144,16 +1149,34 @@ function open_map() {
         console.log("อุปกรณ์นี้ไม่รองรับ DeviceOrientationEvent");
     }
 
+    // เพิ่มปุ่มกลับมาโฟกัส
+    addFocusButton();
+
     updateUserLocation();
 }
 
 function handleOrientation(event) {
     if (event.alpha !== null) {
-        const deviceHeading = Math.round(event.alpha); // มุมทิศทางจากเข็มทิศ (0-360 องศา)
-        currentHeading = deviceHeading;
+        const deviceHeading = Math.round(event.alpha); // มุมทิศทางจากเข็มทิศ
+        // ปรับทิศทางให้ตรงกับการหัน (ลบ 180 องศาเพื่อแก้กลับด้าน)
+        currentHeading = (deviceHeading - 180 + 360) % 360;
         map.setHeading(currentHeading);
         console.log("อัปเดตทิศทางจากอุปกรณ์ ณ เวลา:", new Date().toLocaleString(), "มุม:", currentHeading);
     }
+}
+
+function addFocusButton() {
+    const controlDiv = document.createElement("div");
+    const controlUI = document.createElement("button");
+    controlUI.textContent = "โฟกัสที่ตำแหน่ง";
+    controlUI.style.padding = "5px 10px";
+    controlUI.style.cursor = "pointer";
+    controlUI.addEventListener("click", () => {
+        isManualControl = false; // กลับมาโฟกัสอัตโนมัติ
+        if (currentLatLng) map.setCenter(currentLatLng);
+    });
+    controlDiv.appendChild(controlUI);
+    map.controls[google.maps.ControlPosition.TOP_RIGHT].push(controlDiv);
 }
 
 function updateUserLocation() {
@@ -1208,17 +1231,17 @@ function updateUserLocation() {
                         (response, status) => {
                             if (status === 'OK') {
                                 directionsRenderer.setDirections(response);
-                                setInterval(() => {
-                                    map.setCenter(userLatLng);
-                                }, 100);
+                                map.setCenter(userLatLng);
                                 isRouteCreated = true;
                             }
                         }
                     );
                 }
 
-                // โฟกัสที่ officerMarker
-                map.setCenter(userLatLng);
+                // โฟกัสที่ officerMarker เฉพาะเมื่อไม่มีการควบคุมด้วยมือ
+                if (!isManualControl) {
+                    map.setCenter(userLatLng);
+                }
             },
             () => {
                 alert("ไม่สามารถรับตำแหน่งได้");
@@ -1238,6 +1261,16 @@ let locationInterval = setInterval(() => {
     }
     updateUserLocation();
 }, 12000);
+
+// ตรวจจับการลากหรือซูมเพื่อสลับโหมด
+map.addListener('dragstart', () => {
+    isManualControl = true;
+    console.log("เริ่มการลากแผนที่ ณ เวลา:", new Date().toLocaleString());
+});
+map.addListener('zoom_changed', () => {
+    isManualControl = true;
+    console.log("เริ่มการซูมแผนที่ ณ เวลา:", new Date().toLocaleString());
+});
 
 function sendOfficerLocation(location) {
     fetch("/api/save_officer_location", {
