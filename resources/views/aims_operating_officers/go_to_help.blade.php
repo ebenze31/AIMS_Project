@@ -1194,7 +1194,7 @@ function updateUserLocation() {
                         (response, status) => {
                             if (status === 'OK') {
                                 directionsRenderer.setDirections(response);
-                                map.fitBounds(response.routes[0].bounds, { top: 50, bottom: 500, left: 0, right: 0 });
+                                map.fitBounds(response.routes[0].bounds, { top: 100, bottom: 110, left: 0, right: 0 });
                                 isRouteCreated = true; // ตั้งค่าสถานะหลังจากสร้างเส้นทาง
                             }
                         }
