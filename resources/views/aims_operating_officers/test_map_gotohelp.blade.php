@@ -97,9 +97,27 @@
 
         width: 100%;
     }
+    .gm-fullscreen-control{
+        display: none !important;
+    }
+    #trackButton{
+    position: absolute;
+  top:10px;
+  right: 10px;
+        z-index: 999;
+        background-color: #fff;
+        color: #000;
+        padding: 8px;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+    }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<button id="trackButton" class="btn d-none" onclick="toggleTracking();">
+        ติดตามตำแหน่ง
+</button>
 <div id="myModal" tabindex="-1" aria-hidden="true" class="modal-tw hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 justify-center items-center w-full md:inset-0 h-modal md:h-full  z-[9999]">
+    
+    
     <div class="backdrop-modal"></div>
     <div class="relative p-4 w-full max-w-2xl h-full md:h-auto z-[9999]">
         <div class="relative p-4 bg-white rounded-lg shadow  sm:p-5">
@@ -551,7 +569,7 @@
 </style>
 
 <div>
-    <div class="map" id="map"></div>
+    <div class="map notranslate" id="map"></div>
     <div class="backdrop"></div>
     
     <div class="menu">
@@ -576,9 +594,7 @@
                     <i class="fa-solid fa-map-location-dot"></i>
                 </p>
             </button>
-            <button id="trackButton" class="btn d-none" onclick="toggleTracking();">
-                trackButton
-            </button>
+           
             <!-- <div> <i class="fa-solid fa-phone"></i>
                 <button class="btn-menu ">asd</button>
             </div>
