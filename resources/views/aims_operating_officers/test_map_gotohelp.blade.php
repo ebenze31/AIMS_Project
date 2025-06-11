@@ -568,7 +568,7 @@
     }
 </style>
 
-<div>
+<div class="notranslate">
     <div class="map notranslate" id="map"></div>
     <div class="backdrop"></div>
     
