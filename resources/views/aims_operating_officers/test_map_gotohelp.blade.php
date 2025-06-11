@@ -1238,13 +1238,15 @@ function calculateAndDisplayRoute(origin, destination) {
                     const windowHeight = window.innerHeight;
                     const topPadding = windowHeight * 0.20;
                     const bottomPadding = windowHeight * 0.40;
+                    const leftPadding = windowHeight * 0.10;
+                    const rightPadding = windowHeight * 0.10;
 
                     isProgrammaticChange = true; // ระบุว่าเป็นการเปลี่ยนจากโค้ด
                     map.fitBounds(response.routes[0].bounds, {
                         top: topPadding,
                         bottom: bottomPadding,
-                        left: 0,
-                        right: 0
+                        left: leftPadding,
+                        right: rightPadding
                     });
                     isProgrammaticChange = false;
                 }, 200);
