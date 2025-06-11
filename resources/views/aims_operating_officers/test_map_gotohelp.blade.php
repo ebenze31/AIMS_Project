@@ -1237,7 +1237,7 @@ function calculateAndDisplayRoute(origin, destination) {
                 setTimeout(() => {
                     const windowHeight = window.innerHeight;
                     const topPadding = windowHeight * 0.20;
-                    const bottomPadding = windowHeight * 0.30;
+                    const bottomPadding = windowHeight * 0.40;
 
                     isProgrammaticChange = true; // ระบุว่าเป็นการเปลี่ยนจากโค้ด
                     map.fitBounds(response.routes[0].bounds, {
