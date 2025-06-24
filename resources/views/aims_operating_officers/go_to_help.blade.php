@@ -1019,7 +1019,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="body">
                     <div class="label mb-2">ศูนย์ควบคุม</div>
                     <div id="show_text_idc">
-                        <!--  -->
+                        <div class="status status-normal">
+                            <i class="fa-solid fa-circle fa-2xs me-2"></i>
+                            <span>ไม่มีข้อมูล</span>
+                        </div>
                     </div>
                     <div class="mt-4">
                         <div class="label mb-2">เจ้าหน้าที่</div>
