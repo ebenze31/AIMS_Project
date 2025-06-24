@@ -207,4 +207,19 @@ class Aims_operating_officersController extends Controller
 
         return response()->json(['status' => 'ok']);
     }
+
+    function UpdateOfficerLocation(Request $request, $officers_id)
+    {
+        $requestData = $request->all();
+
+        DB::table('aims_operating_officers')
+            ->where('id', $officers_id)
+            ->update([
+                'lat' => $requestData['lat'],
+                'lng' => $requestData['lng'],
+                'updated_at' => now()
+            ]);
+
+        return "success" ;
+    }
 }

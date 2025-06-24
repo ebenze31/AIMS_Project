@@ -258,7 +258,11 @@ class Aims_emergencysController extends Controller
         
         $emergency_operation = Aims_emergency_operation::create($data_operation);
 
-        return "success" ;
+        // return "success" ;
+        return response()->json([
+            'status' => 'success',
+            'emergency_id' => $emergency->id,
+        ]);
         // return $aims_commands ;
     }
 
@@ -292,6 +296,28 @@ class Aims_emergencysController extends Controller
 
     function emergency_all_case(){
         return view('aims_emergencys.emergency_all_case');
+    }
+
+    function user_wait_officer($emergency_id){
+        $columns = Schema::getColumnListing('aims_emergency_operations');
+        $selects = array_map(function ($col) {
+            return "aims_emergency_operations.$col as op_$col";
+        }, $columns);
+
+        $emergency = DB::table('aims_emergencys')
+            ->where('aims_emergencys.id', '=', $emergency_id)
+            ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
+            ->leftJoin('aims_areas', 'aims_emergencys.aims_area_id', '=', 'aims_areas.id')
+            ->leftJoin('aims_partners', 'aims_emergencys.aims_partner_id', '=', 'aims_partners.id')
+            ->select(array_merge(
+                ['aims_emergencys.*'],
+                $selects,
+                ['aims_areas.name_area as area_name_area'],
+                ['aims_partners.name as partner_name']
+            ))
+            ->first();
+
+        return view('aims_emergencys.user_wait_officer', compact('emergency'));
     }
 
     function get_data_case_all($user_id, Request $request){
@@ -716,6 +742,237 @@ class Aims_emergencysController extends Controller
             ->first();
 
         return view('aims_operating_officers.test_map_gotohelp', compact('emergency'));
+    }
+
+    function get_idc_rc_of_case($emergency_id){
+
+        $data = DB::table('aims_emergencys')
+            ->where('id', '=', $emergency_id)
+            ->select('id', 'idc', 'rc')
+            ->get();
+
+        return $data;
+    }
+
+    function update_rc($emergency_id, $rc){
+        DB::table('aims_emergencys')
+            ->where('id', $emergency_id)
+            ->update([
+                'rc' => $rc,
+                'updated_at' => now()
+            ]);
+
+        return "success" ;
+    }
+
+    function update_help_operations(Request $request)
+    {
+        $emergencyId = $request->input('emergency_id');
+        $name = $request->input('name');
+        $value = $request->input('value');
+        $text_return = 'ต่อไป' ;
+
+        $allowedFields = ['rc', 'treatment', 'sub_treatment','km_before', 'km_to_the_scene', 'km_hospital', 'km_operating_base'];
+
+        if (!in_array($name, $allowedFields)) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'ฟิลด์ที่ร้องขอไม่อนุญาต'
+            ], 400);
+        }
+
+        if ($name === "rc") {
+            DB::table('aims_emergencys')
+                ->where('id', $emergencyId)
+                ->update([
+                    $name => $value,
+                    'updated_at' => now()
+                ]);
+        } else {
+            // เตรียมข้อมูลอัปเดตพื้นฐาน
+            $updateData = [
+                $name => $value,
+                'updated_at' => now()
+            ];
+
+            // ถึงที่เกิดเหตุ
+            if ($name === 'km_to_the_scene') {
+                $updateData['status'] = "ถึงที่เกิดเหตุ";
+                $updateData['time_to_the_scene'] = now();
+            }
+            // ประเมินและออกจากที่เกิดเหตุ
+            elseif ($name === 'sub_treatment') {
+                $updateData['time_leave_the_scene'] = now();
+                if($value == "ส่งโรงพยาบาล"){
+                    $updateData['status'] = "ออกจากที่เกิดเหตุ";
+                }
+                else{
+                    $updateData['status'] = "กำลังกลับฐาน";
+                    $updateData['time_sos_success'] = now();
+                    $updateData['remark_status'] = $value;
+                    $text_return = 'เสร็จสิ้น' ;
+                }
+            }
+            elseif ($name === 'km_hospital') {
+                $updateData['status'] = "ถึง รพ.";
+                $updateData['remark_status'] = "ส่งโรงพยาบาล";
+                $updateData['time_sos_success'] = now();
+                $updateData['time_hospital'] = now();
+                $text_return = 'เสร็จสิ้น' ;
+            }
+            elseif ($name === 'km_operating_base') {
+                $updateData['time_to_the_operating_base'] = now();
+                $updateData['status'] = "เสร็จสิ้น";
+                $text_return = 'ถึงฐาน' ;
+            }
+            
+            // บันทึกข้อมูลหลักที่ส่งเข้ามา
+            DB::table('aims_emergency_operations')
+                ->where('aims_emergency_id', $emergencyId)
+                ->update($updateData);
+
+
+            // ดึงข้อมูลที่ต้องใช้ในการคำนวณเพิ่มเติม
+            $operation = DB::table('aims_emergency_operations')
+                ->where('aims_emergency_id', $emergencyId)
+                ->first([
+                    'time_go_to_help',
+                    'time_sos_success',
+                    'time_to_the_operating_base',
+                    'km_before',
+                    'km_operating_base'
+                ]);
+
+            // คำนวณ time_sum_sos 
+            if (
+                ($name === 'sub_treatment' && $value !== 'ส่งโรงพยาบาล') ||
+                $name === 'km_hospital'
+            ) {
+                if ($operation->time_go_to_help && $operation->time_sos_success) {
+                    $start = Carbon::parse($operation->time_go_to_help);
+                    $end = Carbon::parse($operation->time_sos_success);
+
+                    $diffInMinutes = $start->diffInMinutes($end);
+                    $formatted = $this->formatDuration($diffInMinutes);
+
+                    DB::table('aims_emergency_operations')
+                        ->where('aims_emergency_id', $emergencyId)
+                        ->update([
+                            'time_sum_sos' => $formatted,
+                            'updated_at' => now()
+                        ]);
+                }
+            }
+
+            // คำนวณ km_sum และ time_sum_to_base
+            if ($name === 'km_operating_base') {
+                // คำนวณ km_sum
+                if (is_numeric($operation->km_before) && is_numeric($operation->km_operating_base)) {
+                    $distance = abs($operation->km_operating_base - $operation->km_before);
+                    $formattedDistance = $distance . ' กิโลเมตร';
+
+                    DB::table('aims_emergency_operations')
+                        ->where('aims_emergency_id', $emergencyId)
+                        ->update([
+                            'km_sum' => $formattedDistance,
+                            'updated_at' => now()
+                        ]);
+                }
+
+                // คำนวณ time_sum_to_base
+                if ($operation->time_go_to_help && $operation->time_to_the_operating_base) {
+                    $start = Carbon::parse($operation->time_go_to_help);
+                    $end = Carbon::parse($operation->time_to_the_operating_base);
+
+                    $diffInMinutes = $start->diffInMinutes($end);
+                    $formatted = $this->formatDuration($diffInMinutes);
+
+                    DB::table('aims_emergency_operations')
+                        ->where('aims_emergency_id', $emergencyId)
+                        ->update([
+                            'time_sum_to_base' => $formatted,
+                            'updated_at' => now()
+                        ]);
+                }
+            }
+        }
+
+        return $text_return;
+    }
+
+    private function formatDuration($minutes)
+    {
+        $hours = floor($minutes / 60);
+        $remainingMinutes = $minutes % 60;
+
+        $parts = [];
+        if ($hours > 0) {
+            $parts[] = $hours . ' ชั่วโมง';
+        }
+        $parts[] = $remainingMinutes . ' นาที';
+
+        return implode(' ', $parts);
+    }
+
+    function check_and_update(Request $request, $id)
+    {
+        $patient = Aims_emergency::findOrFail($id);
+        $original = $request->input('originalData');
+        $new = $request->input('newData');
+
+        $conflicts = [];
+        $validUpdates = [];
+
+        foreach ($new as $key => $newValue) {
+            if ($patient->$key != $original[$key]) {
+                $conflicts[] = $key;
+            } else {
+                $validUpdates[$key] = $newValue;
+            }
+        }
+
+        if (!empty($validUpdates)) {
+            foreach ($validUpdates as $key => $value) {
+                $patient->$key = $value;
+            }
+            $patient->save();
+        }
+
+        return response()->json([
+            'status' => empty($conflicts) ? 'success' : 'partial',
+            'conflicts' => $conflicts,
+            'currentValues' => collect($conflicts)->mapWithKeys(function ($field) use ($patient) {
+                return [$field => $patient->$field];
+            }),
+        ]);
+
+    }
+
+    public function update_photo_officer(Request $request, $id)
+    {
+        $emergency = Aims_emergency_operation::findOrFail($id);
+
+        if ($request->hasFile('photo_by_officer')) {
+            $path = $request->file('photo_by_officer')->store('photos', 'public');
+            $emergency->photo_by_officer = $path;
+        }
+
+        if ($request->hasFile('photo_succeed')) {
+            $path = $request->file('photo_succeed')->store('photos', 'public');
+            $emergency->photo_succeed = $path;
+        }
+
+        if ($request->filled('remark_photo_by_officer')) {
+            $emergency->remark_photo_by_officer = $request->input('remark_photo_by_officer');
+        }
+
+        if ($request->filled('remark_by_helper')) {
+            $emergency->remark_by_helper = $request->input('remark_by_helper');
+        }
+
+        $emergency->save();
+
+        return response()->json(['success' => true]);
     }
 
 

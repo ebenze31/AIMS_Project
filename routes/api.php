@@ -537,5 +537,10 @@ Route::get('/get_for_show_helper/{emergency_id}', 'Aims_emergencysController@get
 Route::get('/get_location_realtime/{officer_id}/{emergency_id}', 'Aims_emergencysController@get_location_realtime');
 Route::get('/get_data_case_realtime/{emergency_id}', 'Aims_emergencysController@get_data_case_realtime');
 Route::get('/get_data_case_all/{user_id}', 'Aims_emergencysController@get_data_case_all');
-
+Route::post('/UpdateOfficerLocation/{officers_id}', 'Aims_operating_officersController@UpdateOfficerLocation');
+Route::get('/get_idc_rc_of_case/{emergency_id}', 'Aims_emergencysController@get_idc_rc_of_case');
+Route::get('/update_rc/{emergency_id}/{check_rc}', 'Aims_emergencysController@update_rc');
+Route::post('/update_help_operations', 'Aims_emergencysController@update_help_operations');
+Route::post('/patient/{patientId}/check_and_update', 'Aims_emergencysController@check_and_update');
+Route::post('/photo_officer/update/{id}', 'Aims_emergencysController@update_photo_officer')->name('photo_officer.update');
 // ============> END AIMS <============ //

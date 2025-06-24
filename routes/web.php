@@ -588,6 +588,8 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 Route::get('/form-sos', function () {
     return view('aims_emergencys/aims_sos');
 })->name('form.sos');
+
+Route::get('/user_wait_officer/{emergency_id}', 'Aims_emergencysController@user_wait_officer');
 // Route::get('/aims_edit_profile', 'ProfileController@aims_edit_profile');
 
 
@@ -610,9 +612,6 @@ Route::get('/demo/user_wait_officer', function () {
 
 Route::get('/demo/login', function () {
     return view('demo/login');
-});
-Route::get('/demo/user_wait_officer', function () {
-    return view('demo/user_wait_officer');
 });
 
 Route::get('/demo/aims_sos', function () {

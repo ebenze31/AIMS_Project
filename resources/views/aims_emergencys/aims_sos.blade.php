@@ -727,10 +727,11 @@
             method: 'POST',
             body: formData,
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(result => {
-            if (result == "success") {
-                // window.location.href = "{{ url('/demo/user_wait_officer') }}";
+            // console.log(result);
+            if (result.status == "success") {
+                window.location.href = "{{ url('/user_wait_officer') }}" + "/" + result.emergency_id;
             }
         })
         .catch(error => console.error('Error:', error));

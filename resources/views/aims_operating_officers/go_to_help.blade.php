@@ -97,9 +97,354 @@
 
         width: 100%;
     }
+    .gm-fullscreen-control{
+        display: none !important;
+    }
+    #trackButton{
+    position: absolute;
+  top:10px;
+  right: 10px;
+        z-index: 999;
+        background-color: #fff;
+        color: #000;
+        padding: 8px;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+    }
+
+    .gm-bundled-control {
+        display: none !important;
+    }
 </style>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<div id="myModal" tabindex="-1" aria-hidden="true" class="modal-tw hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 justify-center items-center w-full md:inset-0 h-modal md:h-full  z-[9999]">
+<button id="trackButton" class="btn d-none" onclick="toggleTracking();">
+        ติดตามตำแหน่ง
+</button>
+
+<div id="Modal_Case_details" tabindex="-1" aria-hidden="true" class="modal-tw hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 justify-center items-center w-full md:inset-0 h-modal md:h-full  z-[9999]">
+    <div class="backdrop-modal"></div>
+    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto z-[9999]">
+        <div class="relative p-4 bg-white rounded-lg shadow  sm:p-5">
+            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+                <button id="btnDetails" class="btn-call-more mx-2" style="--index: 1">รายละเอียดเคส</button>
+                <button id="btnPhotos" class="btn-call-success-outline mx-2" style="--index: 1">รูปภาพ</button>
+            </div>
+            <div id="content_case_details_1" class="mb-4 w-full" >
+                <div style="max-height: calc(100dvh - 250px);overflow: auto;">
+                    <h5><b>สถานที่เกิดเหตุ</b></h5>
+                    <span class="text-[14px] text-[#3D3D3D]">
+                        {{ $emergency->emergency_location }}
+                    </span>
+                    <h5 class="mt-2"><b>ประเภทเหตุ</b></h5>
+                    <span class="text-[14px] text-[#3D3D3D]">
+                        {{ $emergency->emergency_type }}
+                    </span>
+                    <h5 class="mt-2"><b>รายละเอียด</b></h5>
+                    <span class="text-[14px] text-[#3D3D3D]">
+                        {{ $emergency->emergency_detail }}
+                    </span>
+                    <h5 class="mt-2"><b>อาการนำสำคัญ</b></h5>
+                    <span class="text-[14px] text-[#3D3D3D]">
+                        {{ $emergency->symptom }}
+                    </span>
+                    <h5 class="mt-2"><b>รายละเอียดอาการ</b></h5>
+                    <span class="text-[14px] text-[#3D3D3D]">
+                        {{ $emergency->symptom }}
+                    </span>
+                </div>
+            </div>
+            <div id="content_case_details_2" class="mb-4 w-full hidden">
+                <div style="max-height: calc(100dvh - 250px);overflow: auto;">
+                    @if( !empty($emergency->emergency_photo) )
+                        <img src="{{ url('storage')}}/{{ $emergency->emergency_photo }}" class="w-[100%]">
+                    @elseif( !empty($emergency->emergency_photo_url) )
+                        <img src="{{ $emergency->emergency_photo_url }}" class="w-[100%]">
+                    @else
+                        <span class="text-[14px] text-[#3D3D3D]">
+                            ไม่มีรูปภาพ
+                        </span>
+                    @endif
+                </div>
+            </div>
+            <div class="flex justify-center items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <button data-modal-toggle="Modal_Case_details" type="button" class="w-[50%] text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">ปิด</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const btnDetails = document.querySelector("#btnDetails");
+        const btnPhotos = document.querySelector("#btnPhotos");
+
+        const contentDetails = document.getElementById("content_case_details_1");
+        const contentPhotos = document.getElementById("content_case_details_2");
+
+        btnDetails.addEventListener("click", function () {
+            // ปรับคลาสปุ่ม
+            btnDetails.classList.add("btn-call-more");
+            btnDetails.classList.remove("btn-call-more-outline");
+
+            btnPhotos.classList.add("btn-call-success-outline");
+            btnPhotos.classList.remove("btn-call-success");
+
+            // แสดง/ซ่อนเนื้อหา
+            contentDetails.classList.remove("hidden");
+            contentPhotos.classList.add("hidden");
+        });
+
+        btnPhotos.addEventListener("click", function () {
+            // ปรับคลาสปุ่ม
+            btnPhotos.classList.add("btn-call-success");
+            btnPhotos.classList.remove("btn-call-success-outline");
+
+            btnDetails.classList.add("btn-call-more-outline");
+            btnDetails.classList.remove("btn-call-more");
+
+            // แสดง/ซ่อนเนื้อหา
+            contentDetails.classList.add("hidden");
+            contentPhotos.classList.remove("hidden");
+        });
+    });
+</script>
+
+<div id="Modal_photo_officer" tabindex="-1" aria-hidden="true" class="modal-tw hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 justify-center items-center w-full md:inset-0 h-modal md:h-full  z-[9999]">
+    <div class="backdrop-modal"></div>
+    <div class="relative p-4 w-full max-w-2xl h-full md:h-auto z-[9999]">
+        <div class="relative p-4 bg-white rounded-lg shadow  sm:p-5">
+            <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5 dark:border-gray-600">
+                <button id="btnScene" class="btn-call-more mx-2" style="--index: 1">จุดเกิดเหตุ</button>
+                <button id="btnSuccess" class="btn-call-success-outline mx-2" style="--index: 1">เสร็จสิ้น</button>
+            </div>
+            <div id="content_photo_officer_1" class="mb-4 w-full">
+                <div style="max-height: calc(100dvh - 250px);overflow: auto;">
+                    <!-- ปุ่มแทน input file -->
+                    <div class="mb-4">
+                        <button id="btn_select_photo_1" type="button"
+                            class="px-2 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">
+                            <i class="fa-solid fa-camera"></i> เพิ่มภาพถ่าย
+                        </button>
+
+                        <!-- input file ซ่อน -->
+                        <input id="photo_by_officer" type="file" accept="image/*" capture="environment" class="hidden">
+
+                        <!-- พรีวิวรูป -->
+                        <div id="photo_preview_1_wrapper" class="mt-4 {{ $emergency->op_photo_by_officer ? '' : 'hidden' }}">
+                            <img
+                                id="photo_preview_1"
+                                class="max-w-xs rounded border border-gray-300"
+                                src="{{ $emergency->op_photo_by_officer ? url('storage/' . $emergency->op_photo_by_officer) : '' }}"
+                            />
+                        </div>
+                    </div>
+                    <!-- ช่องกรอกหมายเหตุ -->
+                    <div class="mb-4">
+                        <label for="remark_photo_by_officer" class="block mb-2 text-sm">หมายเหตุ</label>
+                        <textarea
+                            id="remark_photo_by_officer"
+                            class="form-control w-full border border-gray-300 rounded p-2"
+                            rows="3"
+                            placeholder="เหตุเกี่ยวกับภาพถ่าย..."
+                            style="height: 97px;"
+                        >{{ $emergency->op_remark_photo_by_officer }}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div id="content_photo_officer_2" class="mb-4 w-full hidden">
+                <div style="max-height: calc(100dvh - 250px);overflow: auto;">
+                    <!-- ปุ่มแทน input file -->
+                    <div class="mb-4">
+                        <button id="btn_select_photo_2" type="button"
+                            class="px-2 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">
+                            <i class="fa-solid fa-camera"></i> เพิ่มภาพถ่าย
+                        </button>
+
+                        <!-- input file ซ่อน -->
+                        <input id="photo_succeed" type="file" accept="image/*" capture="environment" class="hidden">
+
+                        <!-- พรีวิวรูป -->
+                        <div id="photo_preview_2_wrapper" class="mt-4 {{ $emergency->op_photo_succeed ? '' : 'hidden' }}">
+                            <img
+                                id="photo_preview_2"
+                                class="max-w-xs rounded border border-gray-300"
+                                src="{{ $emergency->op_photo_succeed ? url('storage/' . $emergency->op_photo_succeed) : '' }}"
+                            />
+                        </div>
+                    </div>
+                    <!-- ช่องกรอกหมายเหตุ -->
+                    <div class="mb-4">
+                        <label for="remark_by_helper" class="block mb-2 text-sm">หมายเหตุ</label>
+                        <textarea
+                            id="remark_by_helper"
+                            class="form-control w-full border border-gray-300 rounded p-2"
+                            rows="3"
+                            placeholder="เหตุเกี่ยวกับภาพถ่าย..."
+                            style="height: 97px;"
+                        >{{ $emergency->op_remark_by_helper }}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <button id="btn_send_data_photo_officer" data-modal-toggle="Modal_photo_officer" type="button" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ยืนยัน</button>
+                <button data-modal-toggle="Modal_photo_officer" type="button" class="w-[50%] text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">ปิด</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+const originalphoto_officer = {
+    photo_by_officer: "{{ $emergency->op_photo_by_officer ?? '' }}",
+    remark_photo_by_officer: `{!! trim($emergency->op_remark_photo_by_officer ?? '') !!}`,
+    photo_succeed: "{{ $emergency->op_photo_succeed ?? '' }}",
+    remark_by_helper: `{!! trim($emergency->op_remark_by_helper ?? '') !!}`,
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+    const btn = document.getElementById("btn_send_data_photo_officer");
+
+    btn.addEventListener("click", async function () {
+        const formData = new FormData();
+
+        // ตรวจสอบภาพถ่าย
+        const photoByOfficerFile = document.getElementById("photo_by_officer").files[0];
+        const photoSucceedFile = document.getElementById("photo_succeed").files[0];
+
+        if (photoByOfficerFile) {
+            formData.append("photo_by_officer", photoByOfficerFile);
+        }
+
+        if (photoSucceedFile) {
+            formData.append("photo_succeed", photoSucceedFile);
+        }
+
+        // ตรวจสอบหมายเหตุ
+        const remarkPhoto = document.getElementById("remark_photo_by_officer").value.trim();
+        const remarkSuccess = document.getElementById("remark_by_helper").value.trim();
+
+        if (remarkPhoto !== originalphoto_officer.remark_photo_by_officer) {
+            formData.append("remark_photo_by_officer", remarkPhoto);
+        }
+
+        if (remarkSuccess !== originalphoto_officer.remark_by_helper) {
+            formData.append("remark_by_helper", remarkSuccess);
+        }
+
+        // ถ้าไม่มีข้อมูลเปลี่ยนแปลง ไม่ต้องส่ง
+        if ([...formData.keys()].length === 0) {
+            alert("ไม่มีข้อมูลเปลี่ยนแปลง");
+            return;
+        }
+
+        try {
+            const response = await fetch("{{ route('photo_officer.update', $emergency->id) }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: formData
+            });
+
+            if (response.ok) {
+                alert("บันทึกสำเร็จ");
+                // location.reload(); // หรือปิด modal ก็ได้
+            } else {
+                alert("เกิดข้อผิดพลาดในการบันทึก");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("การเชื่อมต่อล้มเหลว");
+        }
+    });
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const fileInput = document.getElementById("photo_by_officer");
+        const previewImg = document.getElementById("photo_preview_1");
+        const previewWrapper = document.getElementById("photo_preview_1_wrapper");
+        const btnSelectPhoto = document.getElementById("btn_select_photo_1");
+
+        btnSelectPhoto.addEventListener("click", () => {
+            fileInput.click(); // trigger input file
+        });
+
+        fileInput.addEventListener("change", (event) => {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith("image/")) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    previewImg.src = e.target.result;
+                    previewWrapper.classList.remove("hidden");
+                    document.querySelector('#btn_select_photo_1').innerHTML = `<i class="fa-solid fa-camera"></i> ถ่ายใหม่`;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        const photo_succeed = document.getElementById("photo_succeed");
+        const previewImg_2 = document.getElementById("photo_preview_2");
+        const previewWrapper_2 = document.getElementById("photo_preview_2_wrapper");
+        const btnSelectPhoto_2 = document.getElementById("btn_select_photo_2");
+
+        btnSelectPhoto_2.addEventListener("click", () => {
+            photo_succeed.click(); // trigger input file
+        });
+
+        photo_succeed.addEventListener("change", (event_2) => {
+            const file_2 = event_2.target.files[0];
+            if (file_2 && file_2.type.startsWith("image/")) {
+                const reader_2 = new FileReader();
+                reader_2.onload = function (e) {
+                    previewImg_2.src = e.target.result;
+                    previewWrapper_2.classList.remove("hidden");
+                    document.querySelector('#btn_select_photo_1').innerHTML = `<i class="fa-solid fa-camera"></i> ถ่ายใหม่`;
+                };
+                reader_2.readAsDataURL(file_2);
+            }
+        });
+
+        // ------------- สลับปุ่ม -------------
+        const btnScene = document.getElementById("btnScene");
+        const btnSuccess = document.getElementById("btnSuccess");
+
+        const content1 = document.getElementById("content_photo_officer_1");
+        const content2 = document.getElementById("content_photo_officer_2");
+
+        btnScene.addEventListener("click", function () {
+            // ปรับคลาสปุ่ม
+            btnScene.classList.add("btn-call-more");
+            btnScene.classList.remove("btn-call-more-outline");
+
+            btnSuccess.classList.add("btn-call-success-outline");
+            btnSuccess.classList.remove("btn-call-success");
+
+            // แสดง/ซ่อนเนื้อหา
+            content1.classList.remove("hidden");
+            content2.classList.add("hidden");
+        });
+
+        btnSuccess.addEventListener("click", function () {
+            // ปรับคลาสปุ่ม
+            btnSuccess.classList.add("btn-call-success");
+            btnSuccess.classList.remove("btn-call-success-outline");
+
+            btnScene.classList.add("btn-call-more-outline");
+            btnScene.classList.remove("btn-call-more");
+
+            // แสดง/ซ่อนเนื้อหา
+            content1.classList.add("hidden");
+            content2.classList.remove("hidden");
+        });
+    });
+</script>
+
+
+
+
+<div id="Modal_patient" tabindex="-1" aria-hidden="true" class="modal-tw hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 justify-center items-center w-full md:inset-0 h-modal md:h-full  z-[9999]">
     <div class="backdrop-modal"></div>
     <div class="relative p-4 w-full max-w-2xl h-full md:h-auto z-[9999]">
         <div class="relative p-4 bg-white rounded-lg shadow  sm:p-5">
@@ -107,7 +452,7 @@
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-black">
                     ข้อมูลผู้ป่วย
                 </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="myModal">
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="Modal_patient">
                     <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                     </svg>
@@ -121,21 +466,22 @@
 
                     <div class="px-2 w-full lg:w-3/5 mb-4 lg:mb-0">
                         <label for="patient_name" class="form-label">ชื่อ-นามสกุล</label>
-                        <input type="text" class="form-control" id="patient_name">
+                        <input type="text" class="form-control" id="patient_name" value="{{ isset($emergency->patient_name) ? $emergency->patient_name : ''}}">
                     </div>
 
                     <div class="px-2 w-1/2 lg:w-1/5 mb-4 md:mb-0">
-                        <label for="patient_birth_date" class="form-label">วันเกิด</label>
-                        <input type="date" class="form-control" id="patient_birth_date">
+                        <label for="patient_birth" class="form-label">วันเกิด</label>
+                        <input type="date" class="form-control" id="patient_birth" value="{{ isset($emergency->patient_birth) ? $emergency->patient_birth : ''}}">
                     </div>
 
                     <div class="px-2 w-1/2 lg:w-1/5">
                         <label for="patient_gender" class="form-label">เพศ</label>
-                        <select name="patient_gender_select" id="patient_gender_select" class="form-control">
+                        <select name="patient_gender" id="patient_gender" class="form-control">
                             <option value="">-- เลือกเพศ --</option>
-                            <option value="ชาย">ชาย</option>
-                            <option value="หญิง">หญิง</option>
+                            <option value="ชาย" {{ isset($emergency->patient_gender) && $emergency->patient_gender == 'ชาย' ? 'selected' : '' }}>ชาย</option>
+                            <option value="หญิง" {{ isset($emergency->patient_gender) && $emergency->patient_gender == 'หญิง' ? 'selected' : '' }}>หญิง</option>
                         </select>
+
                     </div>
 
                 </div>
@@ -143,72 +489,63 @@
                 <div class="flex w-full flex-wrap -mx-2 mt-2">
 
                     <div class="px-2 w-1/1 lg:w-1/3 mb-4 md:mb-0">
-                        <label for="patient_gender" class="form-label">กรุ๊ปเลือด</label>
-                        <select name="patient_gender_select" id="patient_gender_select" class="form-control">
+                        <label for="patient_blood_type" class="form-label">กรุ๊ปเลือด</label>
+                        <select name="patient_blood_type" id="patient_blood_type" class="form-control">
                             <option value="">-- เลือกกรุ๊ปเลือด --</option>
-                            <option value="A+">A+</option>
-                            <option value="A-">A-</option>
-                            <option value="B+">B+</option>
-                            <option value="B-">B-</option>
-                            <option value="AB+">AB+</option>
-                            <option value="AB-">AB-</option>
-                            <option value="O+">O+</option>
-                            <option value="O-">O-</option>
+                            @foreach(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as $blood)
+                                <option value="{{ $blood }}" {{ isset($emergency->patient_blood_type) && $emergency->patient_blood_type == $blood ? 'selected' : '' }}>
+                                    {{ $blood }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 
                     <div class="px-2 w-1/1 lg:w-1/3 mb-4 md:mb-0">
-                        <label for="patient_" class="form-label">เลขประจำตัวประชาชน</label>
-                        <input type="text" class="form-control" id="patient_">
+                        <label for="patient_identification" class="form-label">เลขประจำตัวประชาชน</label>
+                        <input type="text" class="form-control" id="patient_identification" value="{{ isset($emergency->patient_identification) ? $emergency->patient_identification : ''}}">
                     </div>
 
                     <div class="px-2 w-1/1 lg:w-1/3">
-                        <label for="patient_gender" class="form-label">เบอร์โทรศัพท์</label>
-                        <select name="patient_gender_select" id="patient_gender_select" class="form-control">
-                            <option value="ชาย">ชาย</option>
-                            <option value="หญิง">หญิง</option>
-                        </select>
+                        <label for="patient_phone" class="form-label">เบอร์โทรศัพท์</label>
+                        <input type="text" class="form-control" id="patient_phone" value="{{ isset($emergency->patient_phone) ? $emergency->patient_phone : ''}}">
                     </div>
 
                 </div>
                 <div class="flex w-full flex-wrap -mx-2 mt-3">
                     <div class="px-2 w-1/1 lg:w-1/3 mb-4 md:mb-0">
-                        <label for="patient_" class="form-label">โรคประจำตัว</label>
-                        <input type="text" class="form-control" id="patient_">
+                        <label for="patient_congenital_disease" class="form-label">โรคประจำตัว</label>
+                        <input type="text" class="form-control" id="patient_congenital_disease" value="{{ isset($emergency->patient_congenital_disease) ? $emergency->patient_congenital_disease : ''}}">
                     </div>
 
                     <div class="px-2 w-1/1 lg:w-1/3 mb-4 md:mb-0">
-                        <label for="patient_" class="form-label">ยาที่แพ้</label>
-                        <input type="text" class="form-control" id="patient_">
+                        <label for="patient_allergic_drugs" class="form-label">ยาที่แพ้</label>
+                        <input type="text" class="form-control" id="patient_allergic_drugs" value="{{ isset($emergency->patient_allergic_drugs) ? $emergency->patient_allergic_drugs : ''}}">
                     </div>
 
                     <div class="px-2 w-1/1 lg:w-1/3">
-                        <label for="patient_gender" class="form-label">ยาที่ใช้ประจำ</label>
-                        <select name="patient_gender_select" id="patient_gender_select" class="form-control">
-                            <option value="ชาย">ชาย</option>
-                            <option value="หญิง">หญิง</option>
-                        </select>
+                        <label for="patient_regularly_medications" class="form-label">ยาที่ใช้ประจำ</label>
+                        <input type="text" class="form-control" id="patient_regularly_medications" value="{{ isset($emergency->patient_regularly_medications) ? $emergency->patient_regularly_medications : ''}}">
                     </div>
 
                 </div>
 
                 <div class="flex w-full flex-wrap -mx-2 mt-3">
                     <div class="px-2 w-full mb-4 md:mb-0">
-                        <label for="patient_" class="form-label">ที่อยู่</label>
-                        <textarea class="form-control" id="inputAddress3" placeholder="กรอกที่อยู่" rows="4" style="height: 97px;"></textarea>
+                        <label for="patient_address" class="form-label">ที่อยู่</label>
+                        <textarea class="form-control" id="patient_address" placeholder="กรอกที่อยู่" rows="4" style="height: 97px;">{{ isset($emergency->patient_address) ? $emergency->patient_address : ''}}</textarea>
                     </div>
                 </div>
                 </div>
             </div>
-            <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                <button data-modal-toggle="myModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ตกลง</button>
-                <button data-modal-toggle="myModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">ยกเลิก</button>
+            <div class="flex justify-center items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+                <button id="btn_send_data_patient" data-modal-toggle="Modal_patient" type="button" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ตกลง</button>
+                <button data-modal-toggle="Modal_patient" type="button" class="w-full text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">ยกเลิก</button>
             </div>
         </div>
     </div>
 </div>
 
-<div id="myModal1" tabindex="-1" aria-hidden="true" class="modal-tw hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 justify-center items-center w-full md:inset-0 h-modal md:h-full z-[9999]">
+<div id="Modal_rc" tabindex="-1" aria-hidden="true" class="modal-tw hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 justify-center items-center w-full md:inset-0 h-modal md:h-full z-[9999]">
     <div class="backdrop-modal"></div>
     <div class="relative p-4 w-full max-w-2xl h-full md:h-auto z-[9999]">
         <div class="relative p-4 bg-white rounded-lg shadow  sm:p-5">
@@ -216,7 +553,7 @@
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-black">
                     เลือกความรุนแรง
                 </h3>
-                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="myModal">
+                <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="Modal_rc">
                     <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                     </svg>
@@ -225,7 +562,7 @@
             </div>
 
             <style>
-                .btn-idc {
+                .btn-rc {
                     text-align: center;
                     padding: 10px;
                     border-radius: 10px;
@@ -238,60 +575,60 @@
                     transition: all .15s ease-in-out;
                 }
 
-                .radio-idc {
+                .radio-rc {
                     display: none;
                 }
 
 
-                .radio-idc:checked~.idc-other {
+                .radio-rc:checked~.rc-other {
                     background-color: #000;
                     color: #fff;
                 }
 
-                .idc-other {
+                .rc-other {
                     border-color: #000 !important;
                     color: #000;
                 }
 
-                .radio-idc:checked~.idc-normal {
+                .radio-rc:checked~.rc-normal {
                     background-color: #1447e6;
                     color: #fff;
                 }
 
-                .idc-normal {
+                .rc-normal {
                     border-color: #1447e6 !important;
                     color: #1447e6;
 
                 }
 
-                .radio-idc:checked~.idc-not-severe {
+                .radio-rc:checked~.rc-not-severe {
                     background-color: #12BA09;
                     color: #fff;
                 }
 
-                .idc-not-severe {
+                .rc-not-severe {
                     border-color: #12BA09 !important;
                     color: #12BA09;
 
                 }
 
-                .radio-idc:checked~.idc-urgent {
+                .radio-rc:checked~.rc-urgent {
                     background-color: #FFC517;
                     color: #fff;
                 }
 
-                .idc-urgent {
+                .rc-urgent {
                     border-color: #FFC517 !important;
                     color: #FFC517;
 
                 }
 
-                .radio-idc:checked~.idc-danger {
+                .radio-rc:checked~.rc-danger {
                     background-color: #DE2525;
                     color: #fff;
                 }
 
-                .idc-danger {
+                .rc-danger {
                     border-color: #DE2525 !important;
                     color: #DE2525;
 
@@ -300,34 +637,33 @@
             <div class="mb-2">
                 <div class="flex w-full">
                     <div class="w-1/2 p-2">
-                        <input type="radio" name="idc_officer" id="radio_other" class="radio-idc">
-                        <label for="radio_other" class="btn-idc idc-other">อื่นๆ</label>
+                        <input type="radio" name="rc_officer" id="radio_other" class="radio-rc">
+                        <label for="radio_other" class="btn-rc rc-other">อื่นๆ</label>
                     </div>
                     <div class="w-1/2 p-2">
-                        <input type="radio" name="idc_officer" id="radio_normal" class="radio-idc">
-                        <label class="btn-idc idc-normal" for="radio_normal">ทั่วไป</label>
+                        <input type="radio" name="rc_officer" id="radio_normal" class="radio-rc">
+                        <label class="btn-rc rc-normal" for="radio_normal">ทั่วไป</label>
                     </div>
                 </div>
                 <div class="flex w-full">
                     <div class="w-1/2 p-2">
-                        <input type="radio" name="idc_officer" id="radio_not_severe" class="radio-idc">
-                        <label class="btn-idc idc-not-severe" for="radio_not_severe"> ไม่รุนแรง</label>
+                        <input type="radio" name="rc_officer" id="radio_not_severe" class="radio-rc">
+                        <label class="btn-rc rc-not-severe" for="radio_not_severe"> ไม่รุนแรง</label>
                     </div>
                     <div class="w-1/2 p-2">
-                        <input type="radio" name="idc_officer" id="radio_urgent" class="radio-idc">
-                        <label class="btn-idc idc-urgent" for="radio_urgent">เร่งด่วน</label>
+                        <input type="radio" name="rc_officer" id="radio_urgent" class="radio-rc">
+                        <label class="btn-rc rc-urgent" for="radio_urgent">เร่งด่วน</label>
                     </div>
                 </div>
                 <div class="flex w-full">
                     <div class="p-2 w-full">
-                        <input type="radio" name="idc_officer" id="radio_danger" class="radio-idc">
-                        <label class="btn-idc idc-danger" for="radio_danger">รุนแรง</label>
+                        <input type="radio" name="rc_officer" id="radio_danger" class="radio-rc">
+                        <label class="btn-rc rc-danger" for="radio_danger">ฉุกเฉิน</label>
                     </div>
                 </div>
             </div>
             <div class="flex items-center justify-end pb-6 space-x-2 b rounded-b ">
-                <button data-modal-toggle="myModal1" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ตกลง</button>
-                <!-- <button data-modal-toggle="myModal1" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">ยกเลิก</button> -->
+                <button id="btn_cf_chang_rc" data-modal-toggle="Modal_rc" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">ตกลง</button>
             </div>
         </div>
     </div>
@@ -398,16 +734,16 @@
         transition: all .15s ease-in-out;
     }
 
-    .btn-menu:hover i,
-    .btn-menu:focus i,
+    /*.btn-menu:hover i,*/
+    /*.btn-menu:focus i,*/
     .btn-menu.active i {
         background: #fff;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
     }
 
-    .btn-menu:hover,
-    .btn-menu:focus,
+    /*.btn-menu:hover,*/
+    /*.btn-menu:focus,*/
     .btn-menu.active {
         background: #06A2FD;
         background: -webkit-linear-gradient(90deg, rgba(6, 162, 253, 1) 0%, rgba(40, 86, 250, 1) 100%);
@@ -491,7 +827,7 @@
     }
 
     .btn-edit,
-    .btn-call-more {
+    .btn-call-more, .btn-call-success, .btn-call-success-outline, .btn-call-more-outline {
         width: 100%;
         border-radius: 5px;
         padding: 8px;
@@ -512,6 +848,32 @@
         align-items: center;
         background-color: #2856FA;
         color: #fff;
+    }
+
+    .btn-call-success {
+        align-items: center;
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .btn-call-success-outline {
+        align-items: center;
+        background-color: transparent;     /* พื้นหลังโปร่งใส */
+        color: #28a745;                    /* สีตัวอักษรเขียว */
+        border: 1px solid #28a745;         /* ขอบสีเขียว */
+        padding: 0.375rem 0.75rem;         /* ระยะ padding เหมือนปุ่ม */
+        border-radius: 0.25rem;            /* ขอบโค้ง */
+        transition: all 0.15s ease-in-out; /* ให้มี animation */
+    }
+
+    .btn-call-more-outline {
+        align-items: center;
+        background-color: transparent;     /* พื้นหลังโปร่งใส */
+        color: #2856FA;                    /* สีตัวอักษรเขียว */
+        border: 1px solid #2856FA;         /* ขอบสีเขียว */
+        padding: 0.375rem 0.75rem;         /* ระยะ padding เหมือนปุ่ม */
+        border-radius: 0.25rem;            /* ขอบโค้ง */
+        transition: all 0.15s ease-in-out; /* ให้มี animation */
     }
 
     @-webkit-keyframes slide-top {
@@ -544,11 +906,16 @@
     .header {
         font-weight: bolder;
     }
+
+    .d-none{
+        display: none;
+    }
 </style>
 
-<div>
-    <div class="map" id="map"></div>
+<div class="notranslate">
+    <div class="map notranslate" id="map"></div>
     <div class="backdrop"></div>
+    
     <div class="menu">
         <div class="menu-container">
             <button class="btn-menu" style="--index: 0">
@@ -571,6 +938,7 @@
                     <i class="fa-solid fa-map-location-dot"></i>
                 </p>
             </button>
+           
             <!-- <div> <i class="fa-solid fa-phone"></i>
                 <button class="btn-menu ">asd</button>
             </div>
@@ -622,19 +990,9 @@
         <div class="section-1">
             <div class="content">
                 <div class="body">
-
-                    <!-- <button data-modal-target="myModal" data-modal-toggle="myModal" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-  เปิด Modal
-</button>
- <button data-modal-target="myModal1" data-modal-toggle="myModal1" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-  เปิด Modal
-</button>
- -->
-
-
-
-                    <button class="btn-edit cursor-pointer" style="--index: 0" data-modal-target="myModal" data-modal-toggle="myModal">แก้ไขข้อมูลผู้ป่วย</button>
-                    <!-- <button class="btn-call-more" style="--index: 1">ปฎิบัติการร่วม / หมู่</button> -->
+                    <button class="btn-edit cursor-pointer" style="--index: 0" data-modal-target="Modal_patient" data-modal-toggle="Modal_patient">แก้ไขข้อมูลผู้ป่วย</button>
+                    <button class="btn-call-more mb-[10px]" style="--index: 1" data-modal-target="Modal_Case_details" data-modal-toggle="Modal_Case_details">รายละเอียดเคส</button>
+                    <button class="btn-call-success" style="--index: 2" data-modal-target="Modal_photo_officer" data-modal-toggle="Modal_photo_officer">เพิ่มภาพถ่าย</button>
                 </div>
             </div>
         </div>
@@ -659,37 +1017,17 @@
         <div class="section-2">
             <div class="content">
                 <div class="body">
-                    <div>
-                        <div class="label">ศูนย์สั่งการ</div>
-                        <div class="status status-normal">
-                            <i class="fa-solid fa-circle fa-2xs me-2"></i>
-                            <span>ทั่วไป</span>
-                        </div>
-
-                        <div class="status status-success">
-                            <i class="fa-solid fa-circle fa-2xs me-2"></i>
-                            <span>ไม่รุนแรง</span>
-                        </div>
-
-                        <div class="status status-warning">
-                            <i class="fa-solid fa-circle fa-2xs me-2"></i>
-                            <span>เร่งด่วน</span>
-                        </div>
-
-                        <div class="status status-danger">
-                            <i class="fa-solid fa-circle fa-2xs me-2"></i>
-                            <span>ฉุกเฉิน</span>
-                        </div>
+                    <div class="label mb-2">ศูนย์ควบคุม</div>
+                    <div id="show_text_idc">
+                        <!--  -->
                     </div>
                     <div class="mt-4">
-                        <div class="label">เจ้าหน้าที่</div>
-                        <button class="status status-success flex justify-between cursor-pointer status-idc" data-modal-target="myModal1" data-modal-toggle="myModal1">
+                        <div class="label mb-2">เจ้าหน้าที่</div>
+                        <button id="show_text_rc" class="status status-normal flex justify-between cursor-pointer status-rc" data-modal-target="Modal_rc" data-modal-toggle="Modal_rc">
                             <div>
-
                                 <i class="fa-solid fa-circle fa-2xs me-2"></i>
-                                <span id="text_idc">ไม่รุนแรง</span>
+                                <span id="text_rc">ไม่มีข้อมูล</span>
                             </div>
-
                             <div>
                                 <i class="fa-solid fa-chevron-right"></i>
                             </div>
@@ -701,10 +1039,12 @@
 
 
         <script>
+
+            var check_rc = "{{ $emergency->rc }}";
             document.addEventListener('DOMContentLoaded', function() {
-                const radios = document.querySelectorAll('input[name="idc_officer"]');
-                const textIdc = document.querySelector('.section-2 .status.status-success #text_idc'); // เปลี่ยนตามตำแหน่งจริง
-                const buttonIdc = document.querySelector('.section-2 .status-idc'); // ปุ่มที่จะแสดงระดับใหม่
+                const radios = document.querySelectorAll('input[name="rc_officer"]');
+                const textIdc = document.querySelector('.section-2 .status #text_rc'); // เปลี่ยนตามตำแหน่งจริง
+                const buttonIdc = document.querySelector('.section-2 .status-rc'); // ปุ่มที่จะแสดงระดับใหม่
 
                 const levelMap = {
                     'radio_other': {
@@ -724,7 +1064,7 @@
                         class: 'status-warning'
                     },
                     'radio_danger': {
-                        text: 'รุนแรง',
+                        text: 'ฉุกเฉิน',
                         class: 'status-danger'
                     }
                 };
@@ -742,9 +1082,32 @@
 
                             // เพิ่มคลาสใหม่ตามระดับ
                             buttonIdc.classList.add(level.class);
+
+                            // console.log("text_rc >> " + level.text);
+                            check_rc = level.text ;
                         }
                     });
                 });
+
+                document.getElementById('btn_cf_chang_rc').addEventListener('click', function () {
+                    // สิ่งที่คุณต้องการให้เกิดขึ้นเมื่อคลิกปุ่ม
+                    // console.log("check_rc >> " + check_rc);
+                    
+                    fetch("{{ url('/') }}/api/update_rc" + "/" + '{{ $emergency->id }}' + "/" + check_rc)
+                        .then(response => response.text())
+                        .then(result => {
+                            // console.log(result);
+                            // console.log("เริ่ม interval ใหม่");
+                            start_interval_get_idc_rc();
+                        });
+                });
+
+                document.getElementById('show_text_rc').addEventListener('click', function () {
+                    // console.log("หยุด interval_get_idc_rc ชั่วคราว");
+                    clearInterval(interval_get_idc_rc);
+                });
+
+
             });
         </script>
 
@@ -777,14 +1140,14 @@
                 opacity: .8;
             }
 
-            .idc-group,
+            .rc-group,
             .treatment-group,
             .no-treatment-group {
                 flex-wrap: wrap;
                 display: flex;
             }
 
-            .idc-group button,
+            .rc-group button,
             .treatment-group,
             .no-treatment-group {
                 background: unset;
@@ -855,7 +1218,7 @@
                     <div>ระดับความรุนแรง</div>
                 </div>
 
-                <div class="body flex idc-group">
+                <div class="body flex rc-group">
                     <div class="px-2 w-[50%]">
                         <button class="btn-next btn-black">อื่นๆ</button>
                     </div>
@@ -871,7 +1234,7 @@
                     <div class="px-2 w-[100%]">
                         <button class="btn-next btn-red">ฉุกเฉิน</button>
                     </div>
-                    <input type="hidden" id="idc" name="idc" value="">
+                    <input type="hidden" id="rc" name="rc" value="">
                 </div>
             </div>
             <div class="content">
@@ -947,7 +1310,7 @@
                         <div class="px-2 w-[100%]">
 
                             <input type="radio" name="treatment" id="has_treatment" value="มีการรักษา" class="hidden">
-                            <label for="has_treatment" class="btn btn-treatment test">มีการรักษา</label>
+                            <label label-treatment="มีการรักษา" for="has_treatment" class="btn btn-treatment test">มีการรักษา</label>
 
 
 
@@ -957,7 +1320,7 @@
                         <div class="px-2 w-[100%]">
 
                             <input type="radio" name="treatment" id="no_treatment" value="ไม่มีการรักษา" class="hidden">
-                            <label for="no_treatment" class="btn btn-no-treatment test">ไม่มีการรักษา</label>
+                            <label label-treatment="ไม่มีการรักษา" for="no_treatment" class="btn btn-no-treatment test">ไม่มีการรักษา</label>
                         </div>
                     </div>
 
@@ -1056,8 +1419,8 @@
                             </div>
                         </div>
                         <div>
-                            <p class="text-[13px] text-[#7c7c7c] leading-[18px]">ระยะทาง</p>
-                            <p class="text-[18px] text-[#2856fa] leading-[18px]">84 กม.</p>
+                            <p class="text-[13px] text-[#7c7c7c] leading-[18px]">ระยะทาง (จากฐานถึงที่เกิดเหตุ)</p>
+                            <p class="text-[18px] text-[#2856fa] leading-[18px]" id="travel-distance">00 กม.</p>
                         </div>
                     </div>
                     <hr class="text-[#cdcdcd] my-3">
@@ -1068,8 +1431,8 @@
                             </div>
                         </div>
                         <div>
-                            <p class="text-[13px] text-[#7c7c7c] leading-[18px]">เดินทาง</p>
-                            <p class="text-[18px] text-[#2856fa] leading-[18px]">1 ชม. 20 นาที</p>
+                            <p class="text-[13px] text-[#7c7c7c] leading-[18px]">ระยะเวลา (เริ่มจาก <span id="date_now"></span>)</p>
+                            <p class="text-[18px] text-[#2856fa] leading-[18px]" id="travel-duration">0 นาที</p>
                         </div>
                     </div>
                 </div>
@@ -1092,52 +1455,79 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgrxXDgk1tgXngalZF3eWtcTWI-LPdeus&language=th"></script>
 
 <script>
+
+var current_status = "{{ $emergency->op_status }}";
+var check_km_before = "{{ $emergency->op_km_before }}";
+
 document.addEventListener("DOMContentLoaded", function () {
+
     open_map();
-
-    // setTimeout(() => {
-    //     document.querySelector('#btn_start_page').click();
-    // }, 200);
-
+    start_interval_get_idc_rc();
     initMenuAndContentNavigation();
+
 });
 
-// ========================== แผนที่ ========================== //
+function start_interval_get_idc_rc() {
+    interval_get_idc_rc = setInterval(get_idc_rc_of_case, 5000);
+    get_idc_rc_of_case(); // เรียกทันทีรอบแรก
+}
+
+var interval_get_idc_rc;
 let check_contentIndex;
 var map;
 var officerMarker;
 var emergencyMarker;
-var isRouteDisabled = false;
 var directionsRenderer;
+var watchId;
+var directionsService;
+var isTracking = false;
+var defaultZoom = 15;
+var isProgrammaticChange = false; // ตัวแปรควบคุมการเปลี่ยนแปลงจากโค้ด
 
-var aims_marker = "{{ url('/img/icon/operating_unit/aims/aims_marker.png') }}";
+var aims_icon = "{{ url('/img/icon/operating_unit/aims/aims_marker.png') }}";
+var officer_icon = "{{ url('/img/icon/operating_unit/aims/officer.png') }}";
 var emergency_Lat = parseFloat("{{ $emergency->emergency_lat }}");
 var emergency_Lng = parseFloat("{{ $emergency->emergency_lng }}");
+var officers_id = parseFloat("{{ $emergency->op_aims_operating_officers_id }}");
 
 const emergency_LatLng = { lat: emergency_Lat, lng: emergency_Lng };
-let contentIndex = 0;
-
-// ตัวแปรเก็บตำแหน่งก่อนหน้า
-let previousLatLng = null;
-let isRouteCreated = false; // ตัวแปรควบคุมการสร้างเส้นทางครั้งแรก
 
 function open_map() {
     map = new google.maps.Map(document.getElementById("map"), {
-        center: emergency_LatLng, 
-        zoom: 15,
+        center: emergency_LatLng,
+        zoom: defaultZoom,
+        mapId: "90f87356969d889c",
+        gestureHandling: "greedy"
     });
 
     // Marker สำหรับจุดฉุกเฉิน
     emergencyMarker = new google.maps.Marker({
         position: emergency_LatLng,
         map: map,
-        icon: { url: aims_marker, scaledSize: new google.maps.Size(45, 45) }
+        icon: { url: aims_icon, scaledSize: new google.maps.Size(45, 45) }
     });
 
-    updateUserLocation();
+    if(current_status == "ออกจากฐาน"){
+        // Initialize Directions Service and Renderer
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer({
+            map: map,
+            suppressMarkers: true
+        });
+
+        // เพิ่ม event listener สำหรับหยุดการติดตามเมื่อมีการโต้ตอบกับแผนที่
+        map.addListener('dragend', stopTrackingCenter);
+        map.addListener('zoom_changed', stopTrackingCenter);
+        map.addListener('tilt_changed', stopTrackingCenter);
+        map.addListener('heading_changed', stopTrackingCenter);
+
+        // เริ่มรับตำแหน่งผู้ใช้
+        startTrackingUser();
+    }
+
 }
 
-function updateUserLocation() {
+function startTrackingUser() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -1146,124 +1536,287 @@ function updateUserLocation() {
                     lng: position.coords.longitude
                 };
 
-                // อัปเดต Marker เสมอ
-                if (officerMarker) officerMarker.setMap(null);
+                // console.log("Start geolocation");
+                sendOfficerLocation(userLatLng)
 
-                // คำนวณการหมุนตามทิศทางสำหรับแผนที่
-                let rotation = 0;
-                if (previousLatLng) {
-                    const dy = userLatLng.lat - previousLatLng.lat;
-                    const dx = userLatLng.lng - previousLatLng.lng;
-                    rotation = (Math.atan2(dy, dx) * 180 / Math.PI) + 90; // ปรับให้ชี้ไปข้างหน้า
-                }
-
-                officerMarker = new google.maps.Marker({
-                    position: userLatLng,
-                    map: map,
-                    icon: {
-                        path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW,
-                        scale: 6,
-                        strokeColor: "blue",
-                        strokeWeight: 2,
-                        fillColor: "#256aff",
-                        fillOpacity: 1,
-                        rotation: rotation
-                    },
-                    title: "ตำแหน่งของผู้ใช้"
-                });
-
-                // อัปเดตตำแหน่งก่อนหน้า
-                previousLatLng = { lat: userLatLng.lat, lng: userLatLng.lng };
-
-                // สร้างเส้นทางครั้งแรกครั้งเดียว
-                if (!isRouteCreated) {
-                    const directionsService = new google.maps.DirectionsService();
-                    directionsRenderer = new google.maps.DirectionsRenderer({
-                        suppressMarkers: true
+                if (!officerMarker) {
+                    officerMarker = new google.maps.Marker({
+                        position: userLatLng,
+                        map: map,
+                        icon: { url: officer_icon, scaledSize: new google.maps.Size(45, 45) }
                     });
-                    directionsRenderer.setMap(map);
-
-                    console.log("กำลังคำนวณเส้นทางครั้งแรก ณ เวลา:", new Date().toLocaleString());
-
-                    directionsService.route(
-                        {
-                            origin: userLatLng,
-                            destination: emergency_LatLng,
-                            travelMode: 'DRIVING'
-                        },
-                        (response, status) => {
-                            if (status === 'OK') {
-                                directionsRenderer.setDirections(response);
-                                map.fitBounds(response.routes[0].bounds, { top: 100, bottom: 110, left: 0, right: 0 });
-                                isRouteCreated = true; // ตั้งค่าสถานะหลังจากสร้างเส้นทาง
-                            }
-                        }
-                    );
+                } else {
+                    officerMarker.setPosition(userLatLng);
                 }
 
-                // หมุนแผนที่ตามทิศทาง
-                if (rotation !== 0) {
-                    map.setHeading(rotation);
-                }
+                calculateAndDisplayRoute(userLatLng, emergency_LatLng);
+                document.querySelector('#trackButton').classList.remove('d-none');
 
-                // ตรวจสอบการเปลี่ยนแปลงตำแหน่งและเรียก fitBounds
-                if (previousLatLng) {
-                    const prevLatStr = previousLatLng.lat.toFixed(3); // ตัดทศนิยม 3 ตำแหน่ง
-                    const prevLngStr = previousLatLng.lng.toFixed(3);
-                    const currLatStr = userLatLng.lat.toFixed(3);
-                    const currLngStr = userLatLng.lng.toFixed(3);
+                watchId = navigator.geolocation.watchPosition(
+                    (position) => {
+                        const updatedLatLng = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
 
-                    if (prevLatStr !== currLatStr || prevLngStr !== currLngStr) {
-                        if (directionsRenderer && directionsRenderer.getDirections()) {
-                            map.fitBounds(directionsRenderer.getDirections().routes[0].bounds, { top: 50, bottom: 500, left: 0, right: 0 });
-                            console.log("ตำแหน่งเปลี่ยนแปลง ทำ fitBounds ใหม่ ณ เวลา:", new Date().toLocaleString());
+                        // console.log("watchPosition");
+                        sendOfficerLocation(updatedLatLng)
+
+                        if (isTracking) {
+                            // console.log('ติดตามอยู่');
+                            isProgrammaticChange = true; // ระบุว่าเป็นการเปลี่ยนจากโค้ด
+                            map.panTo(updatedLatLng);
+                            isProgrammaticChange = false;
+                        } else {
+                            // console.log('ไม่ได้ติดตาม');
                         }
+                        officerMarker.setPosition(updatedLatLng);
+                    },
+                    (error) => {
+                        console.error("Error watching position:", error);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 5000,
+                        maximumAge: 0
                     }
-                }
+                );
             },
-            () => {
-                alert("ไม่สามารถรับตำแหน่งได้");
+            (error) => {
+                console.error("Error getting initial position:", error);
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 6000,
+                maximumAge: 0
             }
         );
+    } else {
+        console.error("Geolocation is not supported by this browser.");
     }
 }
 
-// Loop every 12 seconds
-let locationInterval = setInterval(() => {
-    if (check_contentIndex === 1) {
-        clearInterval(locationInterval);
-        if (officerMarker) officerMarker.setMap(null);
-        if (directionsRenderer) directionsRenderer.setMap(null);
-        map.setCenter(emergency_LatLng);
-        return;
+function calculateAndDisplayRoute(origin, destination) {
+    directionsService.route(
+        {
+            origin: origin,
+            destination: destination,
+            travelMode: google.maps.TravelMode.DRIVING
+        },
+        (response, status) => {
+
+            if (status === google.maps.DirectionsStatus.OK) {
+                directionsRenderer.setDirections(response);
+
+                const leg = response.routes[0].legs[0];
+                const distanceText = leg.distance.text;
+                const durationText = leg.duration.text;
+                const durationValue = leg.duration.value;
+
+                const arrivalTime = aims_func_arrivalTime(durationValue);
+                // console.log("เวลาถึงที่หมาย:", arrivalTime);
+
+                document.querySelector("#travel-distance").textContent = distanceText;
+                document.querySelector("#travel-duration").textContent = durationText + " ("+arrivalTime+")";
+                const now = new Date();
+                const formatted = now.toLocaleString('th-TH', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hourCycle: 'h24'
+                });
+
+                document.querySelector("#date_now").textContent = formatted + " น.";
+
+                setTimeout(() => {
+                    const windowHeight = window.innerHeight;
+                    const topPadding = windowHeight * 0.20;
+                    const bottomPadding = windowHeight * 0.40;
+                    const leftPadding = windowHeight * 0.10;
+                    const rightPadding = windowHeight * 0.10;
+
+                    isProgrammaticChange = true;
+                    map.fitBounds(response.routes[0].bounds, {
+                        top: topPadding,
+                        bottom: bottomPadding,
+                        left: leftPadding,
+                        right: rightPadding
+                    });
+                    isProgrammaticChange = false;
+                }, 200);
+            } else {
+                console.error("Directions request failed due to " + status);
+            }
+
+        }
+    );
+}
+
+function toggleTracking() {
+    if (!officerMarker) return;
+
+    isTracking = !isTracking;
+    const trackButton = document.getElementById('trackButton');
+
+    if (isTracking) {
+        // console.log('ติดตาม');
+        isProgrammaticChange = true; // ระบุว่าเป็นการเปลี่ยนจากโค้ด
+        map.panTo(officerMarker.getPosition());
+        map.setZoom(defaultZoom + 2);
+        isProgrammaticChange = false;
+        trackButton.textContent = 'หยุดติดตาม';
+        trackButton.classList.add('tracking');
+    } else {
+        // console.log('หยุดติดตาม');
+        isProgrammaticChange = true; // ระบุว่าเป็นการเปลี่ยนจากโค้ด
+        map.setZoom(defaultZoom);
+        isProgrammaticChange = false;
+        trackButton.textContent = 'ติดตามตำแหน่ง';
+        trackButton.classList.remove('tracking');
     }
-    updateUserLocation();
-}, 12000);
+}
+
+function stopTrackingCenter() {
+    // console.log('stopTrackingCenter');
+    if (isTracking && !isProgrammaticChange) {
+        isTracking = false;
+        const trackButton = document.getElementById('trackButton');
+        trackButton.textContent = 'ติดตามตำแหน่ง';
+        trackButton.classList.remove('tracking');
+        isProgrammaticChange = true; // ระบุว่าเป็นการเปลี่ยนจากโค้ด
+        map.setZoom(defaultZoom);
+        isProgrammaticChange = false;
+    }
+}
+
+function stopTracking() {
+    if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+    }
+    if (officerMarker) {
+        officerMarker.setMap(null);
+        officerMarker = null;
+    }
+    if (directionsRenderer) {
+        directionsRenderer.setMap(null);
+    }
+    isProgrammaticChange = true; // ระบุว่าเป็นการเปลี่ยนจากโค้ด
+    map.setCenter(emergency_LatLng);
+    map.setZoom(defaultZoom);
+    isProgrammaticChange = false;
+    document.querySelector('#trackButton').classList.add('d-none');
+}
 
 function sendOfficerLocation(location) {
-    fetch("/api/save_officer_location", {
-        method: "POST",
+
+    fetch("{{ url('/') }}/api/UpdateOfficerLocation/" + officers_id, {
+        method: 'post',
+        body: JSON.stringify(location),
         headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify({ lat: location.lat, lng: location.lng })
-    })
+            'Content-Type': 'application/json'
+        }
+    }).then(function (response){
+        return response.text();
+    }).then(function(data){
+        // console.log(data);
+    }).catch(function(error){
+        // console.error(error);
+    });
+}
+
+function get_idc_rc_of_case(){
+    fetch("{{ url('/') }}/api/get_idc_rc_of_case" + "/" + '{{ $emergency->id }}')
     .then(response => response.json())
-    .then(data => console.log("Saved officer location:", data))
-    .catch(error => console.error("Error saving officer location:", error));
+    .then(result => {
+        // console.log(result);
+
+        if (result.length > 0 && result[0]['idc']) {
+            let idc = result[0]['idc'];
+            let class_idc = ``;
+            let show_text_idc = document.querySelector('#show_text_idc');
+                show_text_idc.innerHTML = '' ;
+
+            switch (idc) {
+                case 'ทั่วไป':
+                    class_idc = `status-normal`;
+                    break;
+                case 'ไม่รุนแรง':
+                    class_idc = `status-success`;
+                    break;
+                case 'เร่งด่วน':
+                    class_idc = `status-warning`;
+                    break;
+                case 'ฉุกเฉิน':
+                    class_idc = `status-danger`;
+                    break;
+                case 'อื่นๆ':
+                    class_idc = `status-other`;
+                    break;
+                default:
+                    idc = 'ไม่มีข้อมูล';
+                    class_idc = `status-normal`;
+            }
+
+            let text_html_idc = `
+                <div class="status ${class_idc}">
+                    <i class="fa-solid fa-circle fa-2xs me-2"></i>
+                    <span>${idc}</span>
+                </div>
+            `;
+
+            show_text_idc.insertAdjacentHTML('beforeend', text_html_idc);
+        }
+
+        if (result.length > 0 && result[0]['rc']) {
+            let rc = result[0]['rc'];
+            let class_rc = ``;
+            let show_text_rc = document.querySelector('#show_text_rc');
+            let text_rc = document.querySelector('#text_rc');
+
+            show_text_rc.classList.remove('status-normal');
+            show_text_rc.classList.remove('status-success');
+            show_text_rc.classList.remove('status-warning');
+            show_text_rc.classList.remove('status-danger');
+
+            switch (rc) {
+                case 'ทั่วไป':
+                    class_rc = `status-normal`;
+                    break;
+                case 'ไม่รุนแรง':
+                    class_rc = `status-success`;
+                    break;
+                case 'เร่งด่วน':
+                    class_rc = `status-warning`;
+                    break;
+                case 'ฉุกเฉิน':
+                    class_rc = `status-danger`;
+                    break;
+                case 'อื่นๆ':
+                    class_rc = `status-other`;
+                    break;
+                default:
+                    rc = 'ไม่มีข้อมูล';
+                    class_rc = `status-normal`;
+            }
+
+            show_text_rc.classList.add(class_rc);
+            text_rc.innerHTML = rc ;
+        }
+
+    });
 }
 
 function aims_func_arrivalTime(duration){
-    // assuming you have already obtained the duration from Google Maps API and stored it in a variable called `duration`
-    let date_now = new Date(); // get the current time
-    let travelTimeInSeconds = duration; // get the travel time in seconds
-    let arrivalTime = new Date(date_now.getTime() + (travelTimeInSeconds * 1000)); // add the travel time to the current time and create a new date object
-    // let formattedTime = arrivalTime.toLocaleTimeString(); // format the arrival time as a string in a readable format
+    let date_now = new Date();
+    let travelTimeInSeconds = duration; 
+    let arrivalTime = new Date(date_now.getTime() + (travelTimeInSeconds * 1000));
     let options = { hourCycle: 'h24' };
     let formattedTime = arrivalTime.toLocaleTimeString('th-TH', options);
-        let timeWithoutSeconds = formattedTime.slice(0, -3); // ตัดวินาทีออก
-        let timeWithSuffix = `${timeWithoutSeconds} น.`; // เติม "น." เข้าไป
+    let timeWithoutSeconds = formattedTime.slice(0, -3); // ตัดวินาทีออก
+    let timeWithSuffix = `${timeWithoutSeconds} น.`;
 
     return timeWithSuffix ;
 }
@@ -1312,8 +1865,11 @@ function initMenuAndContentNavigation() {
             nextBtns.forEach(nextBtn => {
                 nextBtn.addEventListener('click', () => {
                     if (contentIndex <= 4) {
-                        check_contentIndex = contentIndex ;
                         navigateContent(index, contentIndex + 1);
+
+                        if (contentIndex == 1) {
+                            stopTracking();
+                        }
                     }
                 });
             });
@@ -1367,6 +1923,10 @@ function initMenuAndContentNavigation() {
 
     // ฟังก์ชันแสดง/เปลี่ยน content
     function navigateContent(sectionIndex, contentIndex) {
+
+        // console.log("sectionIndex >> " + sectionIndex);
+        // console.log("contentIndex >> " + contentIndex);
+
         sectionStates.set(sectionIndex, contentIndex);
         sections.forEach(section => section.style.display = 'none');
         const selectedSection = sections[sectionIndex];
@@ -1392,10 +1952,10 @@ function initMenuAndContentNavigation() {
             inputValue = target.value;
         } else if (target.closest('.btn-next')) {
             const button = target.closest('.btn-next');
-            if (button.closest('.idc-group')) {
-                inputName = 'idc';
+            if (button.closest('.rc-group')) {
+                inputName = 'rc';
                 inputValue = button.textContent.trim();
-                document.getElementById('idc').value = inputValue;
+                document.getElementById('rc').value = inputValue;
             } else {
                 const content = button.closest('.content');
                 const input = content.querySelector('input[type="text"]');
@@ -1407,8 +1967,37 @@ function initMenuAndContentNavigation() {
         }
 
         if (inputName && inputValue) {
-            console.log(`${inputName}: ${inputValue}`);
+            // console.log(`${inputName}: ${inputValue}`);
+
+            fetch("{{ url('/') }}/api/update_help_operations", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({
+                    emergency_id: '{{ $emergency->id }}',
+                    name: inputName,
+                    value: inputValue
+                })
+            })
+            .then(response => response.text())
+            .then(data => {
+                // console.log(data);
+                if(data == "เสร็จสิ้น"){
+                    navigateContent(2, 5)   
+                }
+                else if(data == "ถึงฐาน"){
+                    setTimeout(() => {
+                        alert("เสร็จสิ้น GO TO Timeline Page")
+                    }, 300);
+                }
+            })
+            .catch(error => {
+                console.error("เกิดข้อผิดพลาด:", error);
+            });
         }
+
     }
 
     document.querySelectorAll('input[name="treatment"], input[name="sub_treatment"]').forEach(input => {
@@ -1418,7 +2007,143 @@ function initMenuAndContentNavigation() {
     document.querySelectorAll('.btn-next').forEach(button => {
         button.addEventListener('click', showAlertData);
     });
+
+    setTimeout(() => {
+        if(current_status == "ออกจากฐาน" && !check_km_before){
+            document.querySelector('#btn_start_page').click();
+            navigateContent(2, 0);
+        }
+        else if(current_status == "ออกจากฐาน" && check_km_before){
+            document.querySelector('#btn_start_page').click();
+            navigateContent(2, 1);
+        }
+        else if(current_status == "ถึงที่เกิดเหตุ"){
+            document.querySelector('#btn_start_page').click();
+            let check_now_rc = "{{ $emergency->rc }}";
+            let check_treatment = "{{ $emergency->op_treatment }}";
+                // console.log(check_now_rc);
+            if(!check_now_rc){
+                navigateContent(2, 2);
+            }
+            else if(check_now_rc){
+                navigateContent(2, 3);
+                if(check_treatment){
+                    document.querySelector('[label-treatment="'+check_treatment+'"]').click();
+                }
+            }
+        }
+        else if(current_status == "ออกจากที่เกิดเหตุ"){
+            document.querySelector('#btn_start_page').click();
+            navigateContent(2, 4);
+        }
+        else if(current_status == "ถึง รพ." || current_status == "กำลังกลับฐาน"){
+            document.querySelector('#btn_start_page').click();
+            navigateContent(2, 5);
+        }
+        else if(current_status == "เสร็จสิ้น"){
+            document.querySelector('#btn_start_page').disabled = true;
+        }
+    }, 300);
 }
+</script>
+
+<!-- บันทึกข้อมูลผู้ป่วย -->
+<script>
+    var originalData = {
+        patient_name: document.getElementById('patient_name').value,
+        patient_birth: document.getElementById('patient_birth').value,
+        patient_gender: document.getElementById('patient_gender').value,
+        patient_blood_type: document.getElementById('patient_blood_type').value,
+        patient_identification: document.getElementById('patient_identification').value,
+        patient_phone: document.getElementById('patient_phone').value,
+        patient_congenital_disease: document.getElementById('patient_congenital_disease').value,
+        patient_allergic_drugs: document.getElementById('patient_allergic_drugs').value,
+        patient_regularly_medications: document.getElementById('patient_regularly_medications').value,
+        patient_address: document.getElementById('patient_address').value,
+    };
+
+    const fieldLabels = {
+        patient_name: 'ชื่อ-นามสกุล',
+        patient_birth: 'วันเกิด',
+        patient_gender: 'เพศ',
+        patient_blood_type: 'กรุ๊ปเลือด',
+        patient_identification: 'เลขประจำตัวประชาชน',
+        patient_phone: 'เบอร์โทรศัพท์',
+        patient_congenital_disease: 'โรคประจำตัว',
+        patient_allergic_drugs: 'ยาที่แพ้',
+        patient_regularly_medications: 'ยาที่ใช้ประจำ',
+        patient_address: 'ที่อยู่'
+    };
+
+
+    function getChangedData() {
+        let changedData = {};
+        for (let key in originalData) {
+            let currentValue = document.getElementById(key).value;
+            if (originalData[key] !== currentValue) {
+                changedData[key] = currentValue;
+            }
+        }
+        return changedData;
+    }
+
+    document.querySelector('#btn_send_data_patient').addEventListener('click', async () => {
+        const changedData = getChangedData();
+
+        if (Object.keys(changedData).length === 0) {
+            alert('ไม่มีข้อมูลที่เปลี่ยนแปลง');
+            return;
+        }
+
+        const patientId = '{{ $emergency->id }}';
+        try {
+            const res = await fetch("{{ url('/') }}/api/patient/"+patientId+"/check_and_update", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    originalData: originalData,
+                    newData: changedData
+                })
+            });
+
+            const result = await res.json();
+
+            if (result.status === 'success') {
+                alert('บันทึกเรียบร้อย');
+                Object.assign(originalData, changedData);
+            }
+            else if (result.status === 'partial') {
+                const conflictLabels = result.conflicts.map(field => fieldLabels[field] || field);
+                alert(`บันทึกข้อมูลแล้ว แต่ช่องต่อไปนี้มีการเปลี่ยนแปลงโดยศูนย์ควบคุม:\n${conflictLabels.join('\n')}`);
+
+                // 1. อัปเดต originalData เฉพาะช่องที่บันทึกได้
+                for (const key in changedData) {
+                    if (!result.conflicts.includes(key)) {
+                        originalData[key] = changedData[key];
+                    }
+                }
+
+                // 2. อัปเดต input ด้วยค่าปัจจุบันจาก DB สำหรับช่องที่ conflict
+                if (result.currentValues) {
+                    for (const key in result.currentValues) {
+                        const input = document.getElementById(key);
+                        if (input) {
+                            input.value = result.currentValues[key];
+                            originalData[key] = result.currentValues[key]; // sync originalData ด้วย
+                        }
+                    }
+                }
+            }
+
+
+        } catch (error) {
+            console.error('Error saving data:', error);
+            alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+        }
+    });
+
 </script>
 
 @endsection
