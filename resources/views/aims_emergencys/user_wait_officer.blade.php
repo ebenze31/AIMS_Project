@@ -3,8 +3,26 @@
 @section('content')
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <style>
-    .gmnoprint *,
-    .gm-style-mtc-bbw * {
+    .d-none{
+        display: none;
+    }
+
+    #trackButton{
+        position: absolute;
+        top:10px;
+        right: 10px;
+        z-index: 999;
+        background-color: #fff;
+        color: #000;
+        padding: 8px;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+    }
+
+    .gm-bundled-control {
+        display: none !important;
+    }
+
+    .gm-fullscreen-control{
         display: none !important;
     }
     
@@ -173,7 +191,9 @@
     }
 </style>
 
-
+<button id="trackButton" class="btn d-none" onclick="toggleTracking();">
+    ติดตามตำแหน่ง
+</button>
 <div>
     <div class="map" id="map">
         <div class="block justify-center p-5">
@@ -235,10 +255,12 @@
                     </svg>
                     <h5 class="text-center font-extrabold mt-4">กำลังค้นหาเจ้าหน้าที่ใกล้คุณ</h5>
                     <h5 class="text-center mb-3">โปรดรอซักครู่...</h5>
+                    <p class="text-[13px] text-[#7c7c7c] leading-[18px]">ระยะทาง (จากฐานถึงที่เกิดเหตุ)</p>
+                    <p class="text-[18px] text-[#2856fa] leading-[18px]" id="travel-distance">00 กม.</p>
+                    <p class="text-[13px] text-[#7c7c7c] leading-[18px]">ระยะเวลา (เริ่มจาก <span id="date_now"></span>)</p>
+                    <p class="text-[18px] text-[#2856fa] leading-[18px]" id="travel-duration">0 นาที</p>
                 </div>
-                <a href="#" class="btn-call-officer btn">ติดต่อเจ้าหน้าที่</a>
-
-                <!-- <button class="btn-call-officer btn" onclick="test_api();">test api</button> -->
+                <!-- <a href="#" class="btn-call-officer btn">ติดต่อเจ้าหน้าที่</a> -->
             </div>
         </div>
     </div>
@@ -248,101 +270,302 @@
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgrxXDgk1tgXngalZF3eWtcTWI-LPdeus&language=th"></script>
 
 <script>
-    var aims_marker = "{{ url('/img/icon/operating_unit/aims/aims_marker.png') }}";
 
-    document.addEventListener("DOMContentLoaded", function() {
-        // ขออนุญาตตำแหน่งผู้ใช้
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(location_success, error);
-        } else {
-            console.log("Geolocation ไม่รองรับในเบราว์เซอร์นี้");
-        }
+var aims_icon = "{{ url('/img/icon/operating_unit/aims/aims_marker.png') }}";
+var officer_icon = "{{ url('/img/icon/operating_unit/aims/officer.png') }}";
+var emergency_Lat = parseFloat("{{ $emergency->emergency_lat }}");
+var emergency_Lng = parseFloat("{{ $emergency->emergency_lng }}");
+var officers_id = parseFloat("{{ $emergency->op_aims_operating_officers_id }}");
+var current_status = "{{ $emergency->op_status }}";
+
+var interval_get_idc_rc;
+let check_contentIndex;
+var map;
+var officerMarker;
+var emergencyMarker;
+var directionsRenderer;
+var watchId;
+var directionsService;
+var isTracking = false;
+var defaultZoom = 15;
+var isProgrammaticChange = false; // ตัวแปรควบคุมการเปลี่ยนแปลงจากโค้ด
+
+document.addEventListener("DOMContentLoaded", function () {
+    open_map();
+});
+
+const emergency_LatLng = { lat: emergency_Lat, lng: emergency_Lng };
+
+function open_map() {
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: emergency_LatLng,
+        zoom: defaultZoom,
+        mapId: "90f87356969d889c",
+        gestureHandling: "greedy"
     });
 
-    function location_success(position) {
-        const lat = position.coords.latitude;
-        const lng = position.coords.longitude;
+    // Marker สำหรับจุดฉุกเฉิน
+    emergencyMarker = new google.maps.Marker({
+        position: emergency_LatLng,
+        map: map,
+        icon: { url: aims_icon, scaledSize: new google.maps.Size(45, 45) }
+    });
 
-        // สร้าง MAP
-        const userLatLng = {
-            lat: lat,
-            lng: lng
-        };
-        const map = new google.maps.Map(document.getElementById("map"), {
-            center: userLatLng,
-            zoom: 15
-        });
-
-        // Marker ตำแหน่งผู้ใช้
-        new google.maps.Marker({
-            position: userLatLng,
+    if(current_status == "ออกจากฐาน"){
+        // Initialize Directions Service and Renderer
+        directionsService = new google.maps.DirectionsService();
+        directionsRenderer = new google.maps.DirectionsRenderer({
             map: map,
-            icon: {
-                url: aims_marker,
-                scaledSize: new google.maps.Size(40, 40),
-            },
+            suppressMarkers: true
         });
 
+        // เพิ่ม event listener สำหรับหยุดการติดตามเมื่อมีการโต้ตอบกับแผนที่
+        map.addListener('dragend', stopTrackingCenter);
+        map.addListener('zoom_changed', stopTrackingCenter);
+        map.addListener('tilt_changed', stopTrackingCenter);
+        map.addListener('heading_changed', stopTrackingCenter);
+
+        // เริ่มรับตำแหน่งผู้ใช้
+        startTrackingUser();
     }
+}
 
-    function error(err) {
-        console.warn("ไม่สามารถดึงตำแหน่งได้:", err.message);
-        document.getElementById("spin_alert_map").classList.add('hidden');
-        document.getElementById("text_alert_map").innerHTML = `ไม่สามารถดึงตำแหน่งได้ <br> กรุณาเปิดตำแหน่งที่ตั้งและลองใหม่อีกครั้ง`;
-    }
+function startTrackingUser() {
+    let url_api = "{{ url('/') }}/api/get_location_realtime/" + officers_id + "/" + "{{ $emergency->id }}";
 
-    function test_api() {
-        const data = {
-            report_platform: "WLS",
-            name_reporter: "Benz",
-            type_reporter: "ญาติ",
-            phone_reporter: "0999999999",
-            emergency_type: "ฉุกเฉิน",
-            emergency_detail: "รายละเอียด",
-            emergency_lat: "13.7563",
-            emergency_lng: "100.5018",
-            emergency_location: "Bangkok, Thailand",
-            emergency_photo_url: "https://www.aims.viicheck.com/partner_new/images/logo/aims%20logo.png",
-            patient_name: "นายจิตใจ ดีงาม",
-            patient_birth: "1998-08-31",
-            patient_identification: "1234567891234",
-            patient_gender: "ชาย",
-            patient_blood_type: "O",
-            patient_phone: "09876543211",
-            patient_address: "Bangkok, Thailand",
-            patient_congenital_disease: "",
-            patient_allergic_drugs: "",
-            patient_regular_medications: ""
-        };
-
-        fetch("{{ url('/') }}/api/sos_device", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify(data),
-        })
+    fetch(url_api)
         .then(response => {
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error("Network response was not ok");
             }
             return response.json();
         })
-        .then(result => {
-            if (result.status === "success") {
-                console.log("SOS request sent successfully:", result);
-                alert("ส่งคำขอ SOS สำเร็จ!");
+        .then(data => {
+            const userLatLng = {
+                lat: parseFloat(data.officer.lat),
+                lng: parseFloat(data.officer.lng)
+            };
+
+            console.log("ครั้งแรก");
+            console.log(userLatLng);
+
+            if (!officerMarker) {
+                officerMarker = new google.maps.Marker({
+                    position: userLatLng,
+                    map: map,
+                    icon: { url: officer_icon, scaledSize: new google.maps.Size(45, 45) }
+                });
             } else {
-                console.error("SOS request failed:", result.message);
-                alert("เกิดข้อผิดพลาด: " + result.message);
+                officerMarker.setPosition(userLatLng);
             }
+
+            calculateAndDisplayRoute(userLatLng, emergency_LatLng);
+            document.querySelector('#trackButton').classList.remove('d-none');
+
+            // ติดตามตำแหน่งทุก 5 วินาที
+            watchId = setInterval(() => {
+                fetch(url_api)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+                        return response.json();
+                    })
+                    .then(update => {
+                        console.log("Loop");
+                        console.log(update);
+
+                        // ✅ หยุดติดตามและรีเซ็ตแผนที่หากสถานะไม่ใช่ "ออกจากฐาน"
+                        if (update.emergency.status !== "ออกจากฐาน") {
+                            clearInterval(watchId);
+                            watchId = null;
+
+                            // ลบหมุดผู้ปฏิบัติการ
+                            if (officerMarker) {
+                                officerMarker.setMap(null);
+                                officerMarker = null;
+                            }
+
+                            // ลบเส้นทาง
+                            if (directionsRenderer) {
+                                directionsRenderer.setMap(null);
+                                directionsRenderer = null;
+                            }
+
+                            // ลบหมุดฉุกเฉินเก่า (ถ้ามี)
+                            if (emergencyMarker) {
+                                emergencyMarker.setMap(null);
+                            }
+
+                            // ปักหมุดฉุกเฉินใหม่
+                            emergencyMarker = new google.maps.Marker({
+                                position: emergency_LatLng,
+                                map: map,
+                                icon: { url: aims_icon, scaledSize: new google.maps.Size(45, 45) }
+                            });
+
+                            // เซ็ตตำแหน่งไปยังหมุดฉุกเฉิน
+                            isProgrammaticChange = true;
+                            map.setCenter(emergency_LatLng);
+                            map.setZoom(defaultZoom);
+                            isProgrammaticChange = false;
+
+                            // ซ่อนปุ่มติดตาม
+                            document.querySelector('#trackButton').classList.add('d-none');
+
+                            return; // ⛔️ ออกจาก loop
+                        }
+
+                        const updatedLatLng = {
+                            lat: parseFloat(update.officer.lat),
+                            lng: parseFloat(update.officer.lng)
+                        };
+
+                        if (isTracking) {
+                            isProgrammaticChange = true;
+                            map.panTo(updatedLatLng);
+                            isProgrammaticChange = false;
+                        }
+
+                        officerMarker.setPosition(updatedLatLng);
+                    })
+                    .catch(error => {
+                        console.error("Error fetching updated position:", error);
+                    });
+            }, 5000);
         })
         .catch(error => {
-            console.error('Error:', error);
-            alert("เกิดข้อผิดพลาดในการส่งคำขอ: " + error.message);
+            console.error("Error getting initial position:", error);
         });
+}
+
+function calculateAndDisplayRoute(origin, destination) {
+    directionsService.route(
+        {
+            origin: origin,
+            destination: destination,
+            travelMode: google.maps.TravelMode.DRIVING
+        },
+        (response, status) => {
+
+            if (status === google.maps.DirectionsStatus.OK) {
+                directionsRenderer.setDirections(response);
+
+                const leg = response.routes[0].legs[0];
+                const distanceText = leg.distance.text;
+                const durationText = leg.duration.text;
+                const durationValue = leg.duration.value;
+
+                const arrivalTime = aims_func_arrivalTime(durationValue);
+                // console.log("เวลาถึงที่หมาย:", arrivalTime);
+
+                document.querySelector("#travel-distance").textContent = distanceText;
+                document.querySelector("#travel-duration").textContent = durationText + " ("+arrivalTime+")";
+                const now = new Date();
+                const formatted = now.toLocaleString('th-TH', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hourCycle: 'h24'
+                });
+
+                document.querySelector("#date_now").textContent = formatted + " น.";
+
+                setTimeout(() => {
+                    const windowHeight = window.innerHeight;
+                    const topPadding = windowHeight * 0.20;
+                    const bottomPadding = windowHeight * 0.40;
+                    const leftPadding = windowHeight * 0.10;
+                    const rightPadding = windowHeight * 0.10;
+
+                    isProgrammaticChange = true;
+                    map.fitBounds(response.routes[0].bounds, {
+                        top: topPadding,
+                        bottom: bottomPadding,
+                        left: leftPadding,
+                        right: rightPadding
+                    });
+                    isProgrammaticChange = false;
+                }, 200);
+            } else {
+                console.error("Directions request failed due to " + status);
+            }
+
+        }
+    );
+}
+
+function toggleTracking() {
+    if (!officerMarker) return;
+
+    isTracking = !isTracking;
+    const trackButton = document.getElementById('trackButton');
+
+    if (isTracking) {
+        // console.log('ติดตาม');
+        isProgrammaticChange = true; // ระบุว่าเป็นการเปลี่ยนจากโค้ด
+        map.panTo(officerMarker.getPosition());
+        map.setZoom(defaultZoom + 2);
+        isProgrammaticChange = false;
+        trackButton.textContent = 'หยุดติดตาม';
+        trackButton.classList.add('tracking');
+    } else {
+        // console.log('หยุดติดตาม');
+        isProgrammaticChange = true; // ระบุว่าเป็นการเปลี่ยนจากโค้ด
+        map.setZoom(defaultZoom);
+        isProgrammaticChange = false;
+        trackButton.textContent = 'ติดตามตำแหน่ง';
+        trackButton.classList.remove('tracking');
     }
+}
+
+function stopTrackingCenter() {
+    // console.log('stopTrackingCenter');
+    if (isTracking && !isProgrammaticChange) {
+        isTracking = false;
+        const trackButton = document.getElementById('trackButton');
+        trackButton.textContent = 'ติดตามตำแหน่ง';
+        trackButton.classList.remove('tracking');
+        isProgrammaticChange = true; // ระบุว่าเป็นการเปลี่ยนจากโค้ด
+        map.setZoom(defaultZoom);
+        isProgrammaticChange = false;
+    }
+}
+
+function stopTracking() {
+    if (watchId) {
+        navigator.geolocation.clearWatch(watchId);
+        watchId = null;
+    }
+    if (officerMarker) {
+        officerMarker.setMap(null);
+        officerMarker = null;
+    }
+    if (directionsRenderer) {
+        directionsRenderer.setMap(null);
+    }
+    isProgrammaticChange = true; // ระบุว่าเป็นการเปลี่ยนจากโค้ด
+    map.setCenter(emergency_LatLng);
+    map.setZoom(defaultZoom);
+    isProgrammaticChange = false;
+    document.querySelector('#trackButton').classList.add('d-none');
+}
+
+function aims_func_arrivalTime(duration){
+    let date_now = new Date();
+    let travelTimeInSeconds = duration; 
+    let arrivalTime = new Date(date_now.getTime() + (travelTimeInSeconds * 1000));
+    let options = { hourCycle: 'h24' };
+    let formattedTime = arrivalTime.toLocaleTimeString('th-TH', options);
+    let timeWithoutSeconds = formattedTime.slice(0, -3); // ตัดวินาทีออก
+    let timeWithSuffix = `${timeWithoutSeconds} น.`;
+
+    return timeWithSuffix ;
+}
+
+
 </script>
 
 @endsection
