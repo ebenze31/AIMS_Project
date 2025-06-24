@@ -991,8 +991,11 @@ document.addEventListener("DOMContentLoaded", function () {
             <div class="content">
                 <div class="body">
                     <button class="btn-edit cursor-pointer" style="--index: 0" data-modal-target="Modal_patient" data-modal-toggle="Modal_patient">แก้ไขข้อมูลผู้ป่วย</button>
-                    <button class="btn-call-more mb-[10px]" style="--index: 1" data-modal-target="Modal_Case_details" data-modal-toggle="Modal_Case_details">รายละเอียดเคส</button>
-                    <button class="btn-call-success" style="--index: 2" data-modal-target="Modal_photo_officer" data-modal-toggle="Modal_photo_officer">เพิ่มภาพถ่าย</button>
+                    <button class="btn-call-success" style="--index: 1" data-modal-target="Modal_photo_officer" data-modal-toggle="Modal_photo_officer">เพิ่มภาพถ่าย</button>
+                    <button class="btn-call-more mt-[10px]" style="--index: 2" data-modal-target="Modal_Case_details" data-modal-toggle="Modal_Case_details">รายละเอียดเคส</button>
+                    @if( $emergency->op_status == "เสร็จสิ้น" )
+                        <button class="btn-call-more mt-[10px]" style="--index: 3" onclick='window.location.href = "{{ url('/sos_aims/sum_timeline') }}" + "/" + "{{ $emergency->id }}";'>Timeline</button>
+                    @endif
                 </div>
             </div>
         </div>
@@ -1992,7 +1995,8 @@ function initMenuAndContentNavigation() {
                 }
                 else if(data == "ถึงฐาน"){
                     setTimeout(() => {
-                        alert("เสร็จสิ้น GO TO Timeline Page")
+                        // alert("เสร็จสิ้น GO TO Timeline Page")
+                        window.location.href = "{{ url('/sos_aims/sum_timeline') }}" + "/" + "{{ $emergency->id }}";
                     }, 300);
                 }
             })
