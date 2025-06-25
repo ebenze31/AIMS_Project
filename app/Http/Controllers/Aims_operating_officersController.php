@@ -240,4 +240,8 @@ class Aims_operating_officersController extends Controller
         return $data_officer;
 
     }
+
+    function officer_change_status(){
+        return view('aims_operating_officers.change_status');
+    }
 }
