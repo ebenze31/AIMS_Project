@@ -40,4 +40,21 @@ class Aims_adminController extends Controller
 
         return 'OK' ;
     }
+
+    function check_to_home(){
+        // ตรวจสอบว่าผู้ใช้ login แล้วหรือไม่
+        if (!Auth::check()) {
+            return redirect('/login');
+        }
+
+        $user = Auth::user();
+        
+        if (in_array($user->role, ['operator-area', 'admin-area', 'admin-partner'])) {
+            return redirect('/partner_index');
+        } elseif ($user->role === 'officer-area') {
+            return redirect('/home_for_officer');
+        }
+
+        return redirect('/404');
+    }
 }

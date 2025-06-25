@@ -409,10 +409,10 @@
             <!-- กำลังมาช่วยเหลือ -->
             <div id="content_coming" class="content mb-3 d-none">
                 <div class="mb-[8px]">
-                    <p class="text-[13px] text-[#7c7c7c] leading-[18px] mb-[5px]">ระยะเวลา (เริ่มจาก <span id="date_now"></span>)</p>
-                    <p class="text-[17px] text-[#2856fa] leading-[18px] mb-[10px]" id="travel-duration">0 นาที</p>
                     <p class="text-[13px] text-[#7c7c7c] leading-[18px] mb-[5px]">ระยะทาง</p>
                     <p class="text-[17px] text-[#2856fa] leading-[18px] mb-[10px]" id="travel-distance">00 กม.</p>
+                    <p class="text-[13px] text-[#7c7c7c] leading-[18px] mb-[5px]">ระยะเวลา (เริ่มจาก <span id="date_now"></span>)</p>
+                    <p class="text-[17px] text-[#2856fa] leading-[18px] mb-[10px]" id="travel-duration">0 นาที</p>
                 </div>
                 <hr>
                 <div class="mt-[15px]">

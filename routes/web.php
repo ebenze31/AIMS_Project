@@ -552,6 +552,9 @@ Route::get('register_new_officer_qr_code', 'Sos_partner_officersController@regis
 // officer-area  >> เจ้าหน้าที่ออกปฏิบัติการตามพื้นที่
 // ---------------------------------------------//
 
+Route::get('/', 'Aims_adminController@check_to_home');
+Route::get('/home', 'Aims_adminController@check_to_home');
+
 // ==> admin-partner
 Route::middleware(['auth', 'role:admin-partner'])->group(function () {
 	
@@ -567,8 +570,6 @@ Route::middleware(['auth', 'role:admin-partner,admin-area'])->group(function () 
 
 // ==> operator-area
 Route::middleware(['auth', 'role:admin-partner,admin-area,operator-area'])->group(function () {
-	Route::get('/', 'PartnerController@go_to_partner_index');
-	Route::get('/home', 'PartnerController@go_to_partner_index');
 	Route::get('/partner_index', 'PartnerController@partner_index');
 	// Route::get('/member', 'ProfileController@member');
 	Route::get('/command_operations/{id}', 'Aims_emergencysController@command_operations');
@@ -577,11 +578,11 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,operator-area'])->grou
 
 // ==> officer-area
 Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group(function () {
-	Route::get('/', 'AimsProfileController@home_for_officer');
-	Route::get('/home', 'AimsProfileController@home_for_officer');
+	Route::get('/home_for_officer', 'AimsProfileController@home_for_officer');
 	Route::get('/aims_edit_profile', 'AimsProfileController@aims_edit_profile');
 	Route::get('sos_aims/officer_go_to_help/{emergency_id}', 'Aims_emergencysController@officer_go_to_help');
 	Route::get('sos_aims/sum_timeline/{emergency_id}', 'Aims_emergencysController@sum_timeline');
+	Route::get('officer_change_status', 'Aims_operating_officersController@sum_timeline');
 
 	// Route::get('test_map_gotohelp/{emergency_id}', 'Aims_emergencysController@test_map_gotohelp');
 });
