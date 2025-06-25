@@ -244,4 +244,8 @@ class Aims_operating_officersController extends Controller
     function officer_change_status(){
         return view('aims_operating_officers.change_status');
     }
+
+    function officer_register_operating(){
+        return view('aims_operating_officers.officer_register_operating');
+    }
 }

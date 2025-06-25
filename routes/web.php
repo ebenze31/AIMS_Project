@@ -583,6 +583,7 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 	Route::get('sos_aims/officer_go_to_help/{emergency_id}', 'Aims_emergencysController@officer_go_to_help');
 	Route::get('sos_aims/sum_timeline/{emergency_id}', 'Aims_emergencysController@sum_timeline');
 	Route::get('officer_change_status', 'Aims_operating_officersController@officer_change_status');
+	Route::get('officer_register_operating', 'Aims_operating_officersController@officer_register_operating');
 
 	// Route::get('test_map_gotohelp/{emergency_id}', 'Aims_emergencysController@test_map_gotohelp');
 });
