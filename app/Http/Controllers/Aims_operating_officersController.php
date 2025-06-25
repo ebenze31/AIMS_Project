@@ -222,4 +222,22 @@ class Aims_operating_officersController extends Controller
 
         return "success" ;
     }
+
+    function get_data_individual_officer($officers_id){
+        $data_officer = DB::table('aims_operating_officers')
+            ->where('aims_operating_officers.id', '=', $officers_id)
+            ->leftJoin('aims_operating_units', 'aims_operating_officers.aims_operating_unit_id', '=', 'aims_operating_units.id')
+            ->leftJoin('aims_type_units', 'aims_operating_units.aims_type_unit_id', '=', 'aims_type_units.id')
+            ->leftJoin('users', 'aims_operating_officers.user_id', '=', 'users.id')
+            ->select(
+                'aims_operating_officers.name_officer',
+                'aims_operating_units.name_unit',
+                'aims_type_units.name_type_unit',
+                'users.photo'
+            )
+            ->get();
+
+        return $data_officer;
+
+    }
 }

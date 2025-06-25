@@ -62,9 +62,9 @@
     }
 
     .content {
+        flex-direction: column;
         overflow: auto;
-        max-height: 200px;
-        align-content: center;
+        max-height: 230px;
     }
 
     .backdrop {
@@ -191,11 +191,169 @@
     }
 </style>
 
+<style>
+.loader {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(34, 197, 94, 0.1) 30%,
+    transparent 70%
+  );
+  overflow: hidden;
+}
+
+.loader::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 4px solid transparent;
+  border-top-color: rgba(34, 197, 94, 0.6);
+  animation: loader-spin 2s linear infinite;
+}
+
+.loader::after {
+  content: "";
+  position: absolute;
+  inset: 10%;
+  border-radius: 50%;
+  background: conic-gradient(from 90deg, rgba(34, 197, 94, 0.2), transparent);
+  filter: blur(2px);
+  animation: loader-spin-reverse 1.5s linear infinite;
+}
+
+.loader__inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 25px;
+  height: 25px;
+  background: rgba(34, 197, 94, 0.9);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.6);
+  animation: loader-pulse 1s ease-in-out infinite;
+}
+
+.loader__orbit {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  animation: orbit-rotate 3s linear infinite;
+}
+
+.loader__dot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  background: rgba(34, 197, 94, 0.8);
+  border-radius: 50%;
+}
+
+.loader__dot:nth-child(1) {
+  transform: rotate(0deg) translate(60px);
+}
+.loader__dot:nth-child(2) {
+  transform: rotate(90deg) translate(60px);
+}
+.loader__dot:nth-child(3) {
+  transform: rotate(180deg) translate(60px);
+}
+.loader__dot:nth-child(4) {
+  transform: rotate(270deg) translate(60px);
+}
+
+@keyframes loader-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-spin-reverse {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes loader-pulse {
+  0%, 100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+@keyframes orbit-rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>
+
+<style>
+.button-Rate {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  min-width: 280px;
+  background-color: #22c55e;
+  border: 6px solid #bbf7d0;
+  color: white;
+  gap: 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+  font-size: 1.1rem;
+}
+
+.text-Rate {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.svg-Rate svg {
+  width: 32px;
+  height: 20px;
+  animation: jello-vertical 0.9s infinite;
+  transform-origin: left;
+}
+
+@keyframes jello-vertical {
+  0% { transform: scale3d(1, 1, 1); }
+  30% { transform: scale3d(0.75, 1.25, 1); }
+  40% { transform: scale3d(1.25, 0.75, 1); }
+  50% { transform: scale3d(0.85, 1.15, 1); }
+  65% { transform: scale3d(1.05, 0.95, 1); }
+  75% { transform: scale3d(0.95, 1.05, 1); }
+  100% { transform: scale3d(1, 1, 1); }
+}
+</style>
+
 <button id="trackButton" class="btn d-none" onclick="toggleTracking();">
     ติดตามตำแหน่ง
 </button>
 <div>
     <div class="map" id="map">
+        <!-- กำลังค้นหาตำแหน่ง.. GPS -->
         <div class="block justify-center p-5">
             <div class="flex justify-center mb-3" id="spin_alert_map">
                 <svg
@@ -221,47 +379,70 @@
                         fill="none" />
                 </svg>
             </div>
-            
             <p id="text_alert_map" class="text-center mt-5" style="color: #ffffff;">กำลังค้นหาตำแหน่ง...</p>
         </div>
+
     </div>
 
     <div class="menu">
-        <div>
-            <div class="backdrop "></div>
-            <div class="content-container">
-                <div class="content mb-3">
-                    <svg
-                        class="container-loader mb-3 mx-auto"
-                        viewBox="0 0 40 40"
-                        height="40"
-                        width="40">
-                        <circle
-                            class="track"
-                            cx="20"
-                            cy="20"
-                            r="17.5"
-                            pathlength="100"
-                            stroke-width="5px"
-                            fill="none" />
-                        <circle
-                            class="car"
-                            cx="20"
-                            cy="20"
-                            r="17.5"
-                            pathlength="100"
-                            stroke-width="5px"
-                            fill="none" />
-                    </svg>
-                    <h5 class="text-center font-extrabold mt-4">กำลังค้นหาเจ้าหน้าที่ใกล้คุณ</h5>
-                    <h5 class="text-center mb-3">โปรดรอซักครู่...</h5>
-                    <p class="text-[13px] text-[#7c7c7c] leading-[18px]">ระยะทาง (จากฐานถึงที่เกิดเหตุ)</p>
-                    <p class="text-[18px] text-[#2856fa] leading-[18px]" id="travel-distance">00 กม.</p>
-                    <p class="text-[13px] text-[#7c7c7c] leading-[18px]">ระยะเวลา (เริ่มจาก <span id="date_now"></span>)</p>
-                    <p class="text-[18px] text-[#2856fa] leading-[18px]" id="travel-duration">0 นาที</p>
+        <div class="backdrop "></div>
+        <div class="content-container">
+
+            <!-- กำลังค้นหาเจ้าหน้าที่ -->
+            <div id="content_searching" class="content flex flex-col items-center justify-center text-center d-none">
+                <div style="transform: scale(0.6); transform-origin: center;">
+                    <div class="loader">
+                        <div class="loader__inner"></div>
+                        <div class="loader__orbit">
+                            <div class="loader__dot"></div>
+                            <div class="loader__dot"></div>
+                            <div class="loader__dot"></div>
+                            <div class="loader__dot"></div>
+                        </div>
+                    </div>
                 </div>
-                <!-- <a href="#" class="btn-call-officer btn">ติดต่อเจ้าหน้าที่</a> -->
+                <h5 class="text-xl font-extrabold text-green-600 mt-0">กำลังค้นหาเจ้าหน้าที่ใกล้คุณ</h5>
+                <h5 class="text-base text-gray-700 mb-3">โปรดรอสักครู่...</h5>
             </div>
+
+
+            <!-- กำลังมาช่วยเหลือ -->
+            <div id="content_coming" class="content mb-3 d-none">
+                <div class="mb-[8px]">
+                    <p class="text-[13px] text-[#7c7c7c] leading-[18px] mb-[5px]">ระยะเวลา (เริ่มจาก <span id="date_now"></span>)</p>
+                    <p class="text-[17px] text-[#2856fa] leading-[18px] mb-[10px]" id="travel-duration">0 นาที</p>
+                    <p class="text-[13px] text-[#7c7c7c] leading-[18px] mb-[5px]">ระยะทาง</p>
+                    <p class="text-[17px] text-[#2856fa] leading-[18px] mb-[10px]" id="travel-distance">00 กม.</p>
+                </div>
+                <hr>
+                <div class="mt-[15px]">
+                    <div id="content_aims_officer" class="flex items-center bg-white rounded-lg shadow-md">
+                        <!--  -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- ถึงที่เกิดเหตุ -->
+            <div id="content_arrive_scene" class="content mb-3 d-none">
+                <h5 class="text-xl font-extrabold text-green-600 mt-4">เจ้าหน้าที่เดินทางมาถึงแล้ว</h5>
+                <h5 class="text-base text-gray-700">กำลังช่วยเหลือ...</h5>
+            </div>
+
+            <!-- เสร็จสิ้น -->
+            <div id="content_success" class="content flex flex-col items-center justify-center text-center d-none">
+                <h5 class="text-xl font-extrabold text-gray-600 mt-2 mb-2">การช่วยเหลือเสร็จสิ้นแล้ว</h5>
+                <a id="btn_to_questionnaire" href="{{ url('/assistance_questionnaire') }}/{{ $emergency->id }}" class="button-Rate"  style="transform: scale(0.8); transform-origin: center;">
+                    <span class="text-Rate">ให้คะแนนการช่วยเหลือ</span>
+                    <span class="svg-Rate">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="20" viewBox="0 0 38 15" fill="none">
+                            <path fill="white"
+                            d="M10 7.519l-.939-.344h0l.939.344zm14.386-1.205l-.981-.192.981.192zm1.276 5.509l.537.843.148-.094.107-.139-.792-.611zm4.819-4.304l-.385-.923h0l.385.923zm7.227.707a1 1 0 0 0 0-1.414L31.343.448a1 1 0 0 0-1.414 0 1 1 0 0 0 0 1.414l5.657 5.657-5.657 5.657a1 1 0 0 0 1.414 1.414l6.364-6.364zM1 7.519l.554.833.029-.019.094-.061.361-.23 1.277-.77c1.054-.609 2.397-1.32 3.629-1.787.617-.234 1.17-.392 1.623-.455.477-.066.707-.008.788.034.025.013.031.021.039.034a.56.56 0 0 1 .058.235c.029.327-.047.906-.39 1.842l1.878.689c.383-1.044.571-1.949.505-2.705-.072-.815-.45-1.493-1.16-1.865-.627-.329-1.358-.332-1.993-.244-.659.092-1.367.305-2.056.566-1.381.523-2.833 1.297-3.921 1.925l-1.341.808-.385.245-.104.068-.028.018c-.011.007-.011.007.543.84zm8.061-.344c-.198.54-.328 1.038-.36 1.484-.032.441.024.94.325 1.364.319.45.786.64 1.21.697.403.054.824-.001 1.21-.09.775-.179 1.694-.566 2.633-1.014l3.023-1.554c2.115-1.122 4.107-2.168 5.476-2.524.329-.086.573-.117.742-.115s.195.038.161.014c-.15-.105.085-.139-.076.685l1.963.384c.192-.98.152-2.083-.74-2.707-.405-.283-.868-.37-1.28-.376s-.849.069-1.274.179c-1.65.43-3.888 1.621-5.909 2.693l-2.948 1.517c-.92.439-1.673.743-2.221.87-.276.064-.429.065-.492.057-.043-.006.066.003.155.127.07.099.024.131.038-.063.014-.187.078-.49.243-.94l-1.878-.689zm14.343-1.053c-.361 1.844-.474 3.185-.413 4.161.059.95.294 1.72.811 2.215.567.544 1.242.546 1.664.459a2.34 2.34 0 0 0 .502-.167l.15-.076.049-.028.018-.011c.013-.008.013-.008-.524-.852l-.536-.844.019-.012c-.038.018-.064.027-.084.032-.037.008.053-.013.125.056.021.02-.151-.135-.198-.895-.046-.734.034-1.887.38-3.652l-1.963-.384zm2.257 5.701l.791.611.024-.031.08-.101.311-.377 1.093-1.213c.922-.954 2.005-1.894 2.904-2.27l-.771-1.846c-1.31.547-2.637 1.758-3.572 2.725l-1.184 1.314-.341.414-.093.117-.025.032c-.01.013-.01.013.781.624zm5.204-3.381c.989-.413 1.791-.42 2.697-.307.871.108 2.083.385 3.437.385v-2c-1.197 0-2.041-.226-3.19-.369-1.114-.139-2.297-.146-3.715.447l.771 1.846z">
+                            </path>
+                        </svg>
+                    </span>
+                </a>
+            </div>
+
         </div>
     </div>
 </div>
@@ -278,7 +459,7 @@ var emergency_Lng = parseFloat("{{ $emergency->emergency_lng }}");
 var officers_id = parseFloat("{{ $emergency->op_aims_operating_officers_id }}");
 var current_status = "{{ $emergency->op_status }}";
 
-var interval_get_idc_rc;
+var interval_check_status;
 let check_contentIndex;
 var map;
 var officerMarker;
@@ -292,7 +473,72 @@ var isProgrammaticChange = false; // ตัวแปรควบคุมกา�
 
 document.addEventListener("DOMContentLoaded", function () {
     open_map();
+    updateContentByStatus(current_status);
+    start_check_status();
 });
+
+function start_check_status() {
+    interval_check_status = setInterval(loop_check_status, 5000);
+}
+
+var first_check_status = true;
+
+function loop_check_status(){
+    fetch("{{ url('/') }}/api/loop_check_status" + "/" + '{{ $emergency->id }}')
+    .then(response => response.text())
+    .then(result => {
+        // console.log(result);
+        if(result){
+            current_status = result ;
+            updateContentByStatus(current_status);
+
+            if (current_status === "ออกจากฐาน") {
+                if(first_check_status){
+
+                    first_check_status = false;
+
+                    // Initialize Directions Service and Renderer
+                    directionsService = new google.maps.DirectionsService();
+                    directionsRenderer = new google.maps.DirectionsRenderer({
+                        map: map,
+                        suppressMarkers: true
+                    });
+
+                    // เพิ่ม event listener สำหรับหยุดการติดตามเมื่อมีการโต้ตอบกับแผนที่
+                    map.addListener('dragend', stopTrackingCenter);
+                    map.addListener('zoom_changed', stopTrackingCenter);
+                    map.addListener('tilt_changed', stopTrackingCenter);
+                    map.addListener('heading_changed', stopTrackingCenter);
+
+                    // เริ่มรับตำแหน่งผู้ใช้
+                    startTrackingUser();
+                }
+            }
+        }
+    });
+}
+
+function updateContentByStatus(current_status) {
+    // ซ่อนทั้งหมดก่อน
+    document.querySelector('#content_searching')?.classList.add('d-none');
+    document.querySelector('#content_coming')?.classList.add('d-none');
+    document.querySelector('#content_arrive_scene')?.classList.add('d-none');
+    document.querySelector('#content_success')?.classList.add('d-none');
+
+    // แสดงเฉพาะตามสถานะ
+    if (current_status === "รับแจ้งเหตุ" || current_status === "สั่งการ") {
+        document.querySelector('#content_searching')?.classList.remove('d-none');
+    } else if (current_status === "ออกจากฐาน") {
+        document.querySelector('#content_coming')?.classList.remove('d-none');
+    } else if (current_status === "ถึงที่เกิดเหตุ") {
+        document.querySelector('#content_arrive_scene')?.classList.remove('d-none');
+    } else if (current_status === "เสร็จสิ้น") {
+        document.querySelector('#content_success')?.classList.remove('d-none');
+    }else{
+        document.querySelector('#content_arrive_scene')?.classList.remove('d-none');
+    }
+}
+
 
 const emergency_LatLng = { lat: emergency_Lat, lng: emergency_Lng };
 
@@ -312,6 +558,9 @@ function open_map() {
     });
 
     if(current_status == "ออกจากฐาน"){
+
+        first_check_status = false;
+
         // Initialize Directions Service and Renderer
         directionsService = new google.maps.DirectionsService();
         directionsRenderer = new google.maps.DirectionsRenderer({
@@ -331,6 +580,9 @@ function open_map() {
 }
 
 function startTrackingUser() {
+
+    get_data_individual_officer();
+
     let url_api = "{{ url('/') }}/api/get_location_realtime/" + officers_id + "/" + "{{ $emergency->id }}";
 
     fetch(url_api)
@@ -346,8 +598,8 @@ function startTrackingUser() {
                 lng: parseFloat(data.officer.lng)
             };
 
-            console.log("ครั้งแรก");
-            console.log(userLatLng);
+            // console.log("ครั้งแรก");
+            // console.log(userLatLng);
 
             if (!officerMarker) {
                 officerMarker = new google.maps.Marker({
@@ -372,8 +624,8 @@ function startTrackingUser() {
                         return response.json();
                     })
                     .then(update => {
-                        console.log("Loop");
-                        console.log(update);
+                        // console.log("Loop");
+                        // console.log(update);
 
                         // ✅ หยุดติดตามและรีเซ็ตแผนที่หากสถานะไม่ใช่ "ออกจากฐาน"
                         if (update.emergency.status !== "ออกจากฐาน") {
@@ -563,6 +815,36 @@ function aims_func_arrivalTime(duration){
     let timeWithSuffix = `${timeWithoutSeconds} น.`;
 
     return timeWithSuffix ;
+}
+
+function get_data_individual_officer(){
+    fetch("{{ url('/') }}/api/get_data_individual_officer" + "/" + officers_id)
+    .then(response => response.json())
+    .then(result => {
+
+        if(result){
+            // console.log(result);
+            let content_aims_officer = document.querySelector('#content_aims_officer');
+                content_aims_officer.innerHTML = "" ;
+
+            let html_photo = ``;
+            if(result[0].photo){
+                html_photo = `<img src="{{ url('storage')}}/${result[0].photo}" class="w-14 h-14 rounded-full object-cover mr-4">`;
+            }
+
+            let html = `
+                ${html_photo}
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-800">${result[0].name_officer}</h2>
+                    <p class="text-sm text-gray-500">${result[0].name_unit}</p>
+                    <p class="text-sm text-gray-500">${result[0].name_type_unit}</p>
+                </div>
+            `;
+
+            content_aims_officer.insertAdjacentHTML('beforeend',html); // แทรกล่างสุด
+        }
+
+    });
 }
 
 

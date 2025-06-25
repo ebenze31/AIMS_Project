@@ -592,6 +592,7 @@ Route::get('/form-sos', function () {
 })->name('form.sos');
 
 Route::get('/user_wait_officer/{emergency_id}', 'Aims_emergencysController@user_wait_officer');
+Route::get('/assistance_questionnaire/{emergency_id}', 'Aims_emergencysController@assistance_questionnaire');
 // Route::get('/aims_edit_profile', 'ProfileController@aims_edit_profile');
 
 

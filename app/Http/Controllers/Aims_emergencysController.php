@@ -298,26 +298,47 @@ class Aims_emergencysController extends Controller
         return view('aims_emergencys.emergency_all_case');
     }
 
-    function user_wait_officer($emergency_id){
-        $columns = Schema::getColumnListing('aims_emergency_operations');
-        $selects = array_map(function ($col) {
-            return "aims_emergency_operations.$col as op_$col";
-        }, $columns);
-
+    function user_wait_officer($emergency_id)
+    {
         $emergency = DB::table('aims_emergencys')
             ->where('aims_emergencys.id', '=', $emergency_id)
             ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
-            ->leftJoin('aims_areas', 'aims_emergencys.aims_area_id', '=', 'aims_areas.id')
-            ->leftJoin('aims_partners', 'aims_emergencys.aims_partner_id', '=', 'aims_partners.id')
-            ->select(array_merge(
-                ['aims_emergencys.*'],
-                $selects,
-                ['aims_areas.name_area as area_name_area'],
-                ['aims_partners.name as partner_name']
-            ))
+            ->select([
+                'aims_emergencys.id',
+                'aims_emergencys.emergency_lat',
+                'aims_emergencys.emergency_lng',
+                'aims_emergency_operations.aims_operating_officers_id as op_aims_operating_officers_id',
+                'aims_emergency_operations.status as op_status'
+            ])
             ->first();
 
         return view('aims_emergencys.user_wait_officer', compact('emergency'));
+    }
+
+    function assistance_questionnaire($emergency_id)
+    {
+        $emergency = DB::table('aims_emergencys')
+            ->where('aims_emergencys.id', '=', $emergency_id)
+            ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
+            ->select([
+                'aims_emergencys.id',
+                'aims_emergencys.emergency_lat',
+                'aims_emergencys.emergency_lng',
+                'aims_emergency_operations.aims_operating_officers_id as op_aims_operating_officers_id',
+                'aims_emergency_operations.status as op_status'
+            ])
+            ->first();
+
+        return view('aims_emergencys.assistance_questionnaire', compact('emergency'));
+    }
+
+    function loop_check_status($emergency_id){
+        $emergency = DB::table('aims_emergency_operations')
+            ->where('aims_emergency_id', '=', $emergency_id)
+            ->select('status')
+            ->first();
+
+        return $emergency->status;
     }
 
     function get_data_case_all($user_id, Request $request){
