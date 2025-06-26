@@ -58,7 +58,7 @@
 	<!-- datatables -->
 	{{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" /> --}}
 
-	<title id="title_theme">AIMS</title>
+	<title id="title_theme">AIMS - Command</title>
 
 	<style>
 		 *:not(i){
