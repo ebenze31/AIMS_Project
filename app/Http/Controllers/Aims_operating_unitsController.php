@@ -129,12 +129,36 @@ class Aims_operating_unitsController extends Controller
     function operating_unit(){
         $data_user = Auth::user();
         $partner_of_user = Aims_command::where('user_id' , $data_user->id)->first();
+        $role = $partner_of_user->officer_role ;
+        $partner_id = $partner_of_user->aims_partner_id ;
+        $area_id = $partner_of_user->aims_area_id ;
+        $command_id = $partner_of_user->id ;
+
+        $aims_areas_query = DB::table('aims_areas')
+            ->where('aims_partner_id', $partner_id);
+
+        $aims_type_units_query = DB::table('aims_type_units')
+            ->where('aims_partner_id', $partner_id);
+
+        if ($role === 'admin-area') {
+            $aims_areas_query->where('id', $area_id);
+            $aims_type_units_query->where('aims_area_id', $area_id);
+        }
+
+        $aims_areas = $aims_areas_query
+            ->select('id', 'name_area', 'status')
+            ->get();
+
+        $aims_type_units = $aims_type_units_query
+            ->select('id', 'name_type_unit')
+            ->get();
 
         $operating_unit = DB::table('aims_operating_units')
-            ->where('aims_operating_units.aims_partner_id', '=' ,$partner_of_user->aims_partner_id)
+            ->where('aims_operating_units.aims_partner_id', '=' ,$partner_id)
             ->leftjoin('aims_type_units', 'aims_operating_units.aims_type_unit_id', '=', 'aims_type_units.id')
             ->leftjoin('aims_areas', 'aims_operating_units.aims_area_id', '=', 'aims_areas.id')
             ->select(
+                'aims_operating_units.id as id',
                 'aims_operating_units.name_unit as name_unit',
                 'aims_operating_units.status as status',
                 'aims_operating_units.creator as creator_units',
@@ -143,6 +167,18 @@ class Aims_operating_unitsController extends Controller
             )
             ->get();
         
-        return view('aims_operating_units.operating_unit', compact('operating_unit'));
+        return view('aims_operating_units.operating_unit', compact('operating_unit', 'aims_areas', 'aims_type_units', 'role', 'partner_id', 'command_id'));
     }
+
+    function cf_add_operating_unit(Request $request)
+    {
+        $requestData = $request->json()->all();
+        $newUnit = Aims_operating_unit::create($requestData);
+
+        return response()->json([
+            'status' => 'success',
+            'id' => $newUnit->id
+        ]);
+    }
+
 }

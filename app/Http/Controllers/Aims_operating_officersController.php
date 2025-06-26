@@ -248,4 +248,8 @@ class Aims_operating_officersController extends Controller
     function officer_register_operating(){
         return view('aims_operating_officers.officer_register_operating');
     }
+
+    function officer_register_unit($unit_id){
+        return view('aims_operating_officers.officer_register_unit');
+    }
 }

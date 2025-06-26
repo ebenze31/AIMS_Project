@@ -564,6 +564,7 @@ Route::middleware(['auth', 'role:admin-partner'])->group(function () {
 Route::middleware(['auth', 'role:admin-partner,admin-area'])->group(function () {
 	Route::get('all_name_user_partner', 'Aims_commandsController@all_name_user_partner');
 	Route::get('operating_unit', 'Aims_operating_unitsController@operating_unit');
+	Route::get('operating_unit/{id}', 'Aims_operating_unitsController@show');
 	Route::resource('aims_emergency_types', 'Aims_emergency_typesController');
 	Route::resource('aims_type_units', 'Aims_type_unitsController');
 });
@@ -584,6 +585,7 @@ Route::middleware(['auth', 'role:admin-partner,admin-area,officer-area'])->group
 	Route::get('sos_aims/sum_timeline/{emergency_id}', 'Aims_emergencysController@sum_timeline');
 	Route::get('officer_change_status', 'Aims_operating_officersController@officer_change_status');
 	Route::get('officer_register_operating', 'Aims_operating_officersController@officer_register_operating');
+	Route::get('officer_register_unit/{unit_id}', 'Aims_operating_officersController@officer_register_unit');
 
 	// Route::get('test_map_gotohelp/{emergency_id}', 'Aims_emergencysController@test_map_gotohelp');
 });
@@ -603,7 +605,7 @@ Route::get('/assistance_questionnaire/{emergency_id}', 'Aims_emergencysControlle
 Route::resource('aims_partners', 'Aims_partnersController');
 Route::resource('aims_areas', 'Aims_areasController');
 Route::resource('aims_commands', 'Aims_commandsController');
-Route::resource('aims_operating_units', 'Aims_operating_unitsController');
+// Route::resource('aims_operating_units', 'Aims_operating_unitsController');
 Route::resource('aims_operating_officers', 'Aims_operating_officersController');
 Route::resource('aims_emergencys', 'Aims_emergencysController');
 Route::resource('aims_emergency_operations', 'Aims_emergency_operationsController');
