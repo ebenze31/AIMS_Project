@@ -4,18 +4,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <div class="p-4">
-    <h2 class="text-xl font-bold mb-4">สแกนหรือเลือกรูป QR Code</h2>
+    <h2 class="text-xl font-bold mb-4">สแกน QR Code</h2>
 
-    <!-- แสดงผลลัพธ์ -->
-    <div class="mb-4">
+    <!-- ช่องแสดงผลลัพธ์ -->
+    <div id="result_container" class="mb-4 hidden">
         <label class="block font-medium mb-1">ผลลัพธ์จาก QR Code:</label>
         <textarea id="qr_result" class="w-full p-2 border rounded" rows="3" readonly></textarea>
     </div>
 
-    <!-- ปุ่มเปิดกล้อง -->
+    <!-- กล้องสแกน -->
     <div class="mb-4">
         <video id="qr_video" width="100%" class="rounded border" autoplay></video>
-        <button onclick="startCamera()" class="mt-2 px-4 py-2 bg-blue-600 text-white rounded">เปิดกล้อง</button>
     </div>
 
     <!-- อัปโหลดรูป QR Code -->
@@ -30,64 +29,80 @@
 <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
 
 <script>
-    let video = document.getElementById('qr_video');
-    let canvas = document.getElementById('qr_canvas');
-    let ctx = canvas.getContext('2d');
-    let resultBox = document.getElementById('qr_result');
+    const video = document.getElementById('qr_video');
+    const canvas = document.getElementById('qr_canvas');
+    const ctx = canvas.getContext('2d');
+    const resultBox = document.getElementById('qr_result');
+    const resultContainer = document.getElementById('result_container');
 
-    // ฟังก์ชันเปิดกล้อง
-    function startCamera() {
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
-            .then((stream) => {
-                video.srcObject = stream;
-                scanFromCamera();
-            })
-            .catch((err) => {
-                alert('ไม่สามารถเข้าถึงกล้องได้: ' + err);
-            });
-    }
+    let videoStream = null;
+    let scanInterval = null;
 
-    // อ่าน QR จากกล้อง
-    function scanFromCamera() {
-        const interval = setInterval(() => {
-            if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                let code = jsQR(imageData.data, imageData.width, imageData.height);
-                if (code) {
-                    resultBox.value = code.data;
-                    clearInterval(interval);
+    async function startCameraAndScan() {
+        try {
+            videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+            video.srcObject = videoStream;
+
+            scanInterval = setInterval(() => {
+                if (video.readyState === video.HAVE_ENOUGH_DATA) {
+                    canvas.width = video.videoWidth;
+                    canvas.height = video.videoHeight;
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                    if (code) {
+                        showResult(code.data);
+                        stopCamera();
+                        clearInterval(scanInterval);
+                    }
                 }
-            }
-        }, 500);
+            }, 500);
+        } catch (err) {
+            alert('ไม่สามารถเปิดกล้องได้: ' + err.message);
+        }
     }
 
-    // อ่าน QR จากไฟล์รูปภาพ
+    function stopCamera() {
+        if (videoStream) {
+            videoStream.getTracks().forEach(track => track.stop());
+            video.srcObject = null;
+        }
+    }
+
+    function showResult(text) {
+        resultBox.value = text;
+        resultContainer.classList.remove('hidden');
+    }
+
     function handleFile(input) {
-        let file = input.files[0];
+        const file = input.files[0];
         if (!file) return;
 
-        let reader = new FileReader();
+        const reader = new FileReader();
         reader.onload = function (e) {
-            let img = new Image();
+            const img = new Image();
             img.onload = function () {
                 canvas.classList.remove('hidden');
                 canvas.width = img.width;
                 canvas.height = img.height;
                 ctx.drawImage(img, 0, 0);
-                let imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                let code = jsQR(imageData.data, imageData.width, imageData.height);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
                 if (code) {
-                    resultBox.value = code.data;
+                    showResult(code.data);
+                    stopCamera();
+                    clearInterval(scanInterval);
                 } else {
                     resultBox.value = 'ไม่พบ QR Code';
+                    resultContainer.classList.remove('hidden');
                 }
             };
             img.src = e.target.result;
         };
         reader.readAsDataURL(file);
     }
+
+    document.addEventListener('DOMContentLoaded', startCameraAndScan);
 </script>
 @endsection
