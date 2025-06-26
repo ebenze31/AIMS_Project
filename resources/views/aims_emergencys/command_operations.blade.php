@@ -1732,7 +1732,7 @@
     let nameSearchTimeout = null;
 
     function filter_officers(delaySearch = false) {
-        const selectedFilter = document.querySelector('.btn-group .btn-info').textContent.trim();
+        const selectedFilter = document.querySelector('.btn-group .btn-dark').textContent.trim();
 
         const allOfficerCards = document.querySelectorAll('.officer-card');
 
