@@ -678,6 +678,13 @@
                 </div>
             </div>
 
+            <!-- ---- ควบคุมการดำเนินการ ---- -->
+            <div id="card_map_operation" class="card-body p-3 d-none">
+                <div id="map_monitor" style="position: relative;">
+                    <!-- พื้นที่แผนที่ -->
+                </div>
+            </div>
+
             <!-- ---- MAP สั่งการ ---- -->
             <div id="card_map" class="w-100 p-0 bg-primary map-oparating d-none">
                 <div id="map_operations" style="position: relative;">
@@ -883,13 +890,6 @@
 
             </div>
         </div>
-    </div>
-</div>
-
-<!-- ---- ควบคุมการดำเนินการ ---- -->
-<div id="card_map_operation" class="card-body p-3 d-none">
-    <div id="map_monitor" style="position: relative;">
-        <!-- พื้นที่แผนที่ -->
     </div>
 </div>
 
