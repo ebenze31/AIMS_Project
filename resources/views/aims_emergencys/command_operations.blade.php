@@ -120,7 +120,8 @@
 
     @media only screen and (max-width: 1350px) and (min-width: 768px) {
         .data-oparating {
-            width: 500px;
+            max-width: 300px;
+            min-width: 300px;
         }
 
 
@@ -128,7 +129,8 @@
 
     @media (min-width: 1350px) {
         .data-oparating {
-            width: 600px;
+            max-width: 300px;
+            min-width: 300px;
         }
     }
 
@@ -726,7 +728,7 @@
 
                     .menu-toggle-btn {
                         position: fixed;
-                        top: 90px;
+                        top: 150px;
                         right: 30px;
                         z-index: 999;
                         display: none;
@@ -780,35 +782,35 @@
                     <div class="menu-header">กรองข้อมูล</div>
                     <div class="col mx-3">
                         <div class="btn-group w-100 d-flex" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-outline-dark w-100" onclick="select_for_search(this)">ทั้งหมด</button>
+                            <button type="button" class="btn btn-dark w-100" onclick="select_for_search(this)">ทั้งหมด</button>
                             <button type="button" class="btn btn-outline-dark w-100" onclick="select_for_search(this)">ประเภท</button>
                             <button type="button" class="btn btn-outline-dark w-100" onclick="select_for_search(this)">ชื่อ</button>
                             <button type="button" class="btn btn-outline-dark w-100" onclick="select_for_search(this)">หน่วย</button>
                         </div>
                     </div>
                     <!-- ค้นหาจาก ประเภท -->
-                    <div id="search_by_type" class="px-2 d-none">
+                    <div id="search_by_type" class="px-3 my-3 d-none">
                         <select class="form-select" name="input_search_by_type" id="input_search_by_type" onchange="filter_officers();">
                             <option>เลือกประเภท</option>
                         </select>
                     </div>
 
                     <!-- ค้นหาจาก ชื่อ -->
-                    <div id="search_by_name" class="px-2 d-none">
+                    <div id="search_by_name" class="px-3 my-3 d-none">
                         <input type="text" class="form-control" name="input_search_by_name" id="input_search_by_name" placeholder="กรอกชื่อเจ้าหน้าที่" oninput="filter_officers(true)">
                     </div>
 
                     <!-- ค้นหาจาก หน่วย -->
-                    <div id="search_by_unit" class="px-2 d-none">
+                    <div id="search_by_unit" class="px-3 my-3 d-none">
                         <select class="form-select" name="input_search_by_unit" id="input_search_by_unit" onchange="filter_officers();">
                             <option>เลือกหน่วย</option>
                         </select>
                     </div>
 
                     <!-- -------------- แสดงผลรายชื่อเจ้าหน้าที่ -------------- -->
-                    <div id="div_list_officer" class="card-body p-3">
+                    <!-- <div id="div_list_officer" class="card-body p-3"> -->
                         <!-- content By Javascript -->
-                    </div>
+                    <!-- </div> -->
                     <div class="menu-container mt-4">
                         <div class="menu-header">เจ้าหน้าที่</div>
                         <div class="menu-content">
@@ -1084,30 +1086,23 @@
                                 `;
                             } else {
                                 buttonHTML = `
-                                    <button id="btn_of_id_${result[i].id}" class="btn btn-sm btn-success radius-30 ms-auto mb-0" onclick="view_select_officer('${result[i].id}');">
-                                        <span class="mx-2">เลือก</span>
-                                    </button>
+                                        <button class="btn btn-success btn-select-officer" id="btn_of_id_${result[i].id}" onclick="view_select_officer('${result[i].id}');">เลือก</button>
+
                                 `;
                             }
 
 
                             let html = `
-                                <div id="div_officer_id_${result[i].id}" class="d-flex align-items-center officer-card" type="${result[i].unit_name_type_unit}" name_officer="${result[i].name_officer}" unit="${result[i].unit_name_unit}" data-distance="${distanceText}">
-                                    <div class="ps-3">
-                                        <h6 class="mb-0 font-weight-bold">
-                                            <b>${result[i].name_officer}</b>
-                                        </h6>
-                                        <span class="mt-2 text-secondary">
-                                            <b>${result[i].unit_name_unit}</b>
-                                            <br>
-                                            ${result[i].unit_name_type_unit}
-                                            <br>
-                                            ระยะห่าง(รัศมี) ≈ ${distanceText} กม. 
-                                        </span>
+                                 <div class="content-items" id="div_officer_id_${result[i].id}"  type="${result[i].unit_name_type_unit}" name_officer="${result[i].name_officer}" unit="${result[i].unit_name_unit}" data-distance="${distanceText}">
+                                    <div>
+                                        <p class="mb-0 font-18 fw-bolder text-dark">${result[i].name_officer}</p>
+                                        <p class="mb-0 font-16 fw-light text-dark">${result[i].unit_name_unit}</p>
+                                        <p class="mb-0 font-16 fw-light text-dark">  ${result[i].unit_name_type_unit} (${distanceText} กม.) </p>
                                     </div>
-                                    ${buttonHTML}
+                                    <div>
+                                        ${buttonHTML}
+                                    </div>
                                 </div>
-                                <hr>
                             `;
 
                             div_list_officer.insertAdjacentHTML('beforeend', html); // แทรกล่างสุด
