@@ -8,15 +8,22 @@
         position: relative;
         width: 100%;
         max-width: 400px;
+        aspect-ratio: 1/1;
         margin: auto;
-        aspect-ratio: 9/16;
+    }
+
+    #qr_crop_area {
+        position: relative;
+        width: 100%;
+        padding-top: 100%; /* สร้างกรอบสี่เหลี่ยมจัตุรัส */
         overflow: hidden;
-        border: 12px solid black;
-        border-radius: 30px;
-        background: #e6f7fb;
+        border-radius: 16px;
     }
 
     #qr_video {
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -24,15 +31,15 @@
 
     #scan-frame {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 60%;
-        height: 35%;
-        transform: translate(-50%, -50%);
-        border: 4px solid rgba(255, 100, 100, 0.8);
-        border-radius: 12px;
-        box-shadow: 0 0 20px rgba(255, 100, 100, 0.3);
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: 4px solid rgba(255, 100, 100, 0.9);
+        border-radius: 16px;
+        box-shadow: 0 0 20px rgba(255, 100, 100, 0.4);
         pointer-events: none;
+        z-index: 10;
     }
 
     #result_container {
@@ -44,10 +51,12 @@
 <div class="p-4 text-center">
     <h2 class="text-xl font-bold mb-4">สแกน QR Code</h2>
 
-    <!-- วิดีโอกล้องพร้อมกรอบ -->
+    <!-- กล้องเต็มกรอบ -->
     <div id="qr_wrapper">
-        <video id="qr_video" autoplay></video>
-        <div id="scan-frame"></div>
+        <div id="qr_crop_area">
+            <video id="qr_video" autoplay muted playsinline></video>
+            <div id="scan-frame"></div>
+        </div>
     </div>
 
     <!-- แสดงผลลัพธ์ -->
@@ -64,7 +73,6 @@
     </div>
 </div>
 
-<!-- jsQR -->
 <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
 
 <script>
