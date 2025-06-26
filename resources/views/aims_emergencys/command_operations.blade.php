@@ -1093,7 +1093,7 @@
 
 
                             let html = `
-                                 <div class="content-items" id="div_officer_id_${result[i].id}"  type="${result[i].unit_name_type_unit}" name_officer="${result[i].name_officer}" unit="${result[i].unit_name_unit}" data-distance="${distanceText}">
+                                 <div class="content-items officer-card" id="div_officer_id_${result[i].id}"  type="${result[i].unit_name_type_unit}" name_officer="${result[i].name_officer}" unit="${result[i].unit_name_unit}" data-distance="${distanceText}">
                                     <div>
                                         <p class="mb-0 font-18 fw-bolder text-dark">${result[i].name_officer}</p>
                                         <p class="mb-0 font-16 fw-light text-dark">${result[i].unit_name_unit}</p>
