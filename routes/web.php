@@ -632,4 +632,8 @@ Route::get('/demo/aims_sos_officer', function () {
 Route::get('/demo/aims_sos_oparating', function () {
     return view('demo/aims_sos_oparating');
 });
+
+Route::get('/demo/aims_sos_form', function () {
+    return view('demo/aims_sos_form');
+});
 // ============> end demo aims <============//

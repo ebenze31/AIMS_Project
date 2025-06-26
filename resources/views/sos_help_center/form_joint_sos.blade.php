@@ -310,7 +310,7 @@
 	}
 
 	/* taplet */
-	@media screen and (min-width: 768px) and (max-width: 1023px) {
+	@media screen and (min-width: 768px) and (max-width: 1023px) {min-width
 		.colOfficer {
 			margin-top: 1rem;
 			max-width: 100%;
