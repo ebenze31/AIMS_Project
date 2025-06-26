@@ -46,17 +46,30 @@
         max-width: 400px;
         margin: 20px auto;
     }
+
+    #qr_image {
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    width: 100%;
+	    height: 100%;
+	    object-fit: cover;
+	    border-radius: 16px;
+	    display: none;
+	}
+
 </style>
 
 <div class="p-4 text-center">
-    <h2 class="text-xl font-bold mb-4">สแกน QR Code</h2>
 
     <!-- กล้องเต็มกรอบ -->
     <div id="qr_wrapper">
+    	<h2 class="text-xl font-bold mb-4">สแกน QR Code</h2>
         <div id="qr_crop_area">
-            <video id="qr_video" autoplay muted playsinline></video>
-            <div id="scan-frame"></div>
-        </div>
+		    <video id="qr_video" autoplay muted playsinline></video>
+		    <img id="qr_image" alt="Uploaded QR Image" />
+		    <div id="scan-frame"></div>
+		</div>
     </div>
 
     <!-- แสดงผลลัพธ์ -->
@@ -66,11 +79,21 @@
     </div>
 
     <!-- อัปโหลดรูป QR Code -->
-    <div class="mt-4 max-w-md mx-auto">
-        <label class="block font-medium mb-1">หรือเลือกรูป QR Code:</label>
-        <input type="file" accept="image/*" onchange="handleFile(this)" class="block w-full">
-        <canvas id="qr_canvas" class="hidden mt-2 border rounded"></canvas>
-    </div>
+	<div class="mt-4 max-w-md mx-auto">
+	    <!-- ปุ่มแทน input -->
+	    <button onclick="document.getElementById('qr_file_input').click()"
+		    class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">
+		    เลือกรูป
+		</button>
+
+
+	    <!-- input ซ่อน -->
+	    <input type="file" id="qr_file_input" accept="image/*" onchange="handleFile(this)" class="hidden">
+
+	    <!-- canvas ซ่อนเพื่อ decode -->
+	    <canvas id="qr_canvas" class="hidden mt-2 border rounded"></canvas>
+	</div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jsqr/dist/jsQR.js"></script>
@@ -120,35 +143,49 @@
     function showResult(text) {
         resultBox.value = text;
         resultContainer.classList.remove('hidden');
+        document.querySelector('#qr_wrapper').classList.add('hidden');
     }
 
     function handleFile(input) {
-        const file = input.files[0];
-        if (!file) return;
+	    const file = input.files[0];
+	    if (!file) return;
 
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const img = new Image();
-            img.onload = function () {
-                canvas.classList.remove('hidden');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                ctx.drawImage(img, 0, 0);
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const code = jsQR(imageData.data, imageData.width, imageData.height);
-                if (code) {
-                    showResult(code.data);
-                    stopCamera();
-                    clearInterval(scanInterval);
-                } else {
-                    resultBox.value = 'ไม่พบ QR Code';
-                    resultContainer.classList.remove('hidden');
-                }
-            };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
+	    const reader = new FileReader();
+	    reader.onload = function (e) {
+	        const img = new Image();
+	        img.onload = function () {
+	            // canvas.classList.remove('hidden');
+	            canvas.width = img.width;
+	            canvas.height = img.height;
+	            ctx.drawImage(img, 0, 0);
+	            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+	            const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+	            const qrImageEl = document.getElementById('qr_image');
+	            const qrVideoEl = document.getElementById('qr_video');
+
+	            if (code) {
+	                showResult(code.data);
+	                stopCamera();
+	                clearInterval(scanInterval);
+	                qrImageEl.style.display = 'none';
+	            } else {
+	                // แสดงรูปที่อัปโหลด
+	                qrImageEl.src = e.target.result;
+	                qrImageEl.style.display = 'block';
+
+	                // ซ่อนกล้อง
+	                qrVideoEl.style.display = 'none';
+
+	                resultBox.value = 'ไม่พบ QR Code';
+	                resultContainer.classList.remove('hidden');
+	            }
+	        };
+	        img.src = e.target.result;
+	    };
+	    reader.readAsDataURL(file);
+	}
+
 
     document.addEventListener('DOMContentLoaded', startCameraAndScan);
 </script>
