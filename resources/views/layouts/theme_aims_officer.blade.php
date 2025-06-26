@@ -52,84 +52,93 @@
         }
 </style>
 
+<body class="min-h-screen flex flex-col">
 
-<div class="flex w-full">
+    <div class="flex w-full flex-col flex-grow">
 
-    <div class="relative flex w-full flex-col">
-        <header class="pointer-events-none relative z-50 flex flex-none flex-col" style="height:var(--header-height);margin-bottom:var(--header-mb)">
-
-        <div class="top-0 z-10 h-16 pt-6" style="position:var(--header-position)">
-            <div class="sm:px-8 top-(--header-top,--spacing(6)) w-full" style="position:var(--header-inner-position)">
-                <div class="mx-auto w-full max-w-7xl lg:px-8">
-                    <div class="relative px-4 sm:px-8 lg:px-12">
-                        <div class="mx-auto max-w-2xl lg:max-w-5xl">
-                            <div class="relative flex gap-4">
-                                <div class="flex flex-1 justify-center md:justify-center">
-                                    <div class="pointer-events-auto md:hidden" data-headlessui-state="" data-open="">
-                                        <button class="group flex items-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20" type="button" aria-expanded="false" data-headlessui-state="" id="headlessui-popover-button-menu">Menu<svg viewBox="0 0 8 6" aria-hidden="true" class="ml-3 h-auto w-2 stroke-zinc-500 group-hover:stroke-zinc-700 dark:group-hover:stroke-zinc-400">
-                                            <path d="M1.75 1.75 4 4.25l2.25-2.5" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg></button>
-                                        <div class="fixed inset-0 z-50 bg-zinc-800/40 backdrop-blur-xs duration-150 data-closed:opacity-0 data-enter:ease-out data-leave:ease-in dark:bg-black/80" id="headlessui-popover-backdrop" aria-hidden="true" data-headlessui-state="" style="opacity: 0; pointer-events: none;"></div>
-                                        <div class="fixed inset-x-4 top-8 z-50 origin-top rounded-3xl bg-white p-8 ring-1 ring-zinc-900/5 duration-150 data-closed:scale-95 data-closed:opacity-0 data-enter:ease-out data-leave:ease-in dark:bg-zinc-900 dark:ring-zinc-800" id="headlessui-popover-panel" tabindex="-1" data-headlessui-state="" style="--button-width: 87.75px; opacity: 0; transform: scale(0.95); pointer-events: none;">
-                                            <div class="flex flex-row-reverse items-center justify-between">
-                                                <button aria-label="Close menu" class="-m-1 p-1" type="button" data-close-menu>
-                                                    <svg viewBox="0 0 24 24" aria-hidden="true" class="h-6 w-6 text-zinc-500 dark:text-zinc-400">
-                                                        <path d="m17.25 6.75-10.5 10.5M6.75 6.75l10.5 10.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                                                    </svg>
-                                                </button>
-                                                <h2 class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Navigation</h2>
-                                            </div>
-                                            <nav class="mt-6">
-                                                <ul class="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
-                                                    <li><a class="block py-2" href="/about">About</a></li>
-                                                    <li><a class="block py-2" href="/articles">Articles</a></li>
-                                                    <li><a class="block py-2" href="/projects">Projects</a></li>
-                                                    <li><a class="block py-2" href="/speaking">Speaking</a></li>
-                                                    <li><a class="block py-2" href="/uses">Uses</a></li>
-                                                </ul>
-                                            </nav>
-                                        </div>
+        <!-- HEADER -->
+        <header class="relative z-50 flex-none" style="height:var(--header-height);margin-bottom:var(--header-mb)">
+            <div class="top-0 z-10 h-16 pt-6" style="position:var(--header-position)">
+                <div class="sm:px-8 w-full" style="position:var(--header-inner-position)">
+                    <div class="mx-auto w-full max-w-7xl lg:px-8">
+                        <div class="relative px-4 sm:px-8 lg:px-12">
+                            <div class="mx-auto max-w-2xl lg:max-w-5xl">
+                                <div class="relative flex items-center justify-between">
+                                    <!-- โลโก้ด้านซ้าย -->
+                                    <div class="flex items-center">
+                                        <a href="/" class="flex items-center">
+                                            <img src="{{ asset('/partner_new/images/logo/aims full logo.png') }}" alt="Logo" class="h-10">
+                                        </a>
                                     </div>
-                                    <div hidden="" style="position:fixed;top:1px;left:1px;width:1px;height:0;padding:0;margin:-1px;overflow:hidden;clip:rect(0, 0, 0, 0);white-space:nowrap;border-width:0;display:none"></div>
-                                    <nav class="pointer-events-auto hidden md:block">
-                                        <ul class="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
-                                            <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/about">About</a></li>
-                                            <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/articles">Articles</a></li>
-                                            <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/projects">Projects</a></li>
-                                            <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/speaking">Speaking</a></li>
-                                            <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/uses">Uses</a></li>
-                                        </ul>
-                                    </nav>
+
+                                    <!-- เมนูเดิมของคุณ -->
+                                    <div class="flex flex-1 justify-end md:justify-end">
+                                        <div class="pointer-events-auto md:hidden" data-headlessui-state="" data-open="">
+                                            <button class="group flex items-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20" type="button" aria-expanded="false" id="headlessui-popover-button-menu">Menu
+                                                <svg viewBox="0 0 8 6" aria-hidden="true" class="ml-3 h-auto w-2 stroke-zinc-500 group-hover:stroke-zinc-700 dark:group-hover:stroke-zinc-400">
+                                                    <path d="M1.75 1.75 4 4.25l2.25-2.5" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                </svg>
+                                            </button>
+
+                                            <!-- เมนูแบบ mobile -->
+                                            <div class="fixed inset-0 z-50 bg-zinc-800/40 backdrop-blur-xs duration-150 data-closed:opacity-0 data-enter:ease-out data-leave:ease-in dark:bg-black/80" id="headlessui-popover-backdrop" aria-hidden="true" style="opacity: 0; pointer-events: none;"></div>
+
+                                            <div class="fixed inset-x-4 top-8 z-50 origin-top rounded-3xl bg-white p-8 ring-1 ring-zinc-900/5 duration-150 data-closed:scale-95 data-closed:opacity-0 data-enter:ease-out data-leave:ease-in dark:bg-zinc-900 dark:ring-zinc-800" id="headlessui-popover-panel" tabindex="-1" style="opacity: 0; transform: scale(0.95); pointer-events: none;">
+                                                <div class="flex flex-row-reverse items-center justify-between">
+                                                    <button aria-label="Close menu" class="-m-1 p-1" type="button" data-close-menu>
+                                                        <svg viewBox="0 0 24 24" aria-hidden="true" class="h-6 w-6 text-zinc-500 dark:text-zinc-400">
+                                                            <path d="m17.25 6.75-10.5 10.5M6.75 6.75l10.5 10.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                                                        </svg>
+                                                    </button>
+                                                    <h2 class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Navigation</h2>
+                                                </div>
+                                                <nav class="mt-6">
+                                                    <ul class="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
+                                                        <li><a class="block py-2" href="/about">About</a></li>
+                                                        <li><a class="block py-2" href="/articles">Articles</a></li>
+                                                        <li><a class="block py-2" href="/projects">Projects</a></li>
+                                                        <li><a class="block py-2" href="/speaking">Speaking</a></li>
+                                                        <li><a class="block py-2" href="/uses">Uses</a></li>
+                                                    </ul>
+                                                </nav>
+                                            </div>
+                                        </div>
+
+                                        <!-- เมนู Desktop -->
+                                        <nav class="pointer-events-auto hidden md:block">
+                                            <ul class="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
+                                                <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/about">About</a></li>
+                                                <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/articles">Articles</a></li>
+                                                <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/projects">Projects</a></li>
+                                                <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/speaking">Speaking</a></li>
+                                                <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/uses">Uses</a></li>
+                                            </ul>
+                                        </nav>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-        @yield('content')
+        <!-- เนื้อหาหลัก -->
+        <main class="flex-grow">
+            @yield('content')
+        </main>
 
-
-        <footer class="mt-32 flex-none">
-            <div class="sm:px-8">
-                <div class="mx-auto w-full max-w-7xl lg:px-8">
-                    <div class="border-t border-zinc-100 pt-10 pb-16 dark:border-zinc-700/40">
-                        <div class="relative px-4 sm:px-8 lg:px-12">
-                            <div class="mx-auto max-w-2xl lg:max-w-5xl">
-                                <div class="flex flex-col items-center justify-center gap-6 md:flex-row">
-                                  
-                                    <p class="text-sm text-zinc-400 dark:text-zinc-500">© <!-- -->2025<!-- --> Spencer Sharp. All rights reserved.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <!-- FOOTER -->
+        <footer class="bg-zinc-100 dark:bg-zinc-800 py-3">
+            <div class="container mx-auto text-center text-sm text-zinc-600 dark:text-zinc-400">
+                AIMS
             </div>
         </footer>
     </div>
-</div>
+
+</body>
+
+
 <script>
         document.addEventListener('DOMContentLoaded', () => {
             const menuButton = document.getElementById('headlessui-popover-button-menu');
