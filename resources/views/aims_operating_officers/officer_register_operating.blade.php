@@ -74,8 +74,8 @@
 
     <!-- แสดงผลลัพธ์ -->
     <div id="result_container" class="hidden">
-        <label class="block font-medium mt-4 mb-1">ผลลัพธ์จาก QR Code:</label>
-        <textarea id="qr_result" class="w-full p-2 border rounded" rows="3" readonly></textarea>
+        <!-- <label class="block font-medium mt-4 mb-1">ผลลัพธ์จาก QR Code:</label> -->
+        <p id="qr_result" class="w-full p-2"></p>
     </div>
 
     <!-- อัปโหลดรูป QR Code -->
@@ -141,50 +141,61 @@
     }
 
     function showResult(text) {
-        resultBox.value = text;
+        resultBox.innerHTML = text;
         resultContainer.classList.remove('hidden');
         document.querySelector('#qr_wrapper').classList.add('hidden');
     }
 
     function handleFile(input) {
-	    const file = input.files[0];
-	    if (!file) return;
+        const file = input.files[0];
+        if (!file) return;
 
-	    const reader = new FileReader();
-	    reader.onload = function (e) {
-	        const img = new Image();
-	        img.onload = function () {
-	            // canvas.classList.remove('hidden');
-	            canvas.width = img.width;
-	            canvas.height = img.height;
-	            ctx.drawImage(img, 0, 0);
-	            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-	            const code = jsQR(imageData.data, imageData.width, imageData.height);
+        // ซ่อนผลลัพธ์ก่อนเสมอ
+        resultBox.innerHTML = '';
+        resultContainer.classList.add('hidden');
 
-	            const qrImageEl = document.getElementById('qr_image');
-	            const qrVideoEl = document.getElementById('qr_video');
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = new Image();
+            img.onload = function () {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                ctx.drawImage(img, 0, 0);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, imageData.width, imageData.height);
 
-	            if (code) {
-	                showResult(code.data);
-	                stopCamera();
-	                clearInterval(scanInterval);
-	                qrImageEl.style.display = 'none';
-	            } else {
-	                // แสดงรูปที่อัปโหลด
-	                qrImageEl.src = e.target.result;
-	                qrImageEl.style.display = 'block';
+                const qrImageEl = document.getElementById('qr_image');
+                const qrVideoEl = document.getElementById('qr_video');
 
-	                // ซ่อนกล้อง
-	                qrVideoEl.style.display = 'none';
+                if (code) {
+                    stopCamera();
+                    clearInterval(scanInterval);
+                    qrImageEl.style.display = 'none';
 
-	                resultBox.value = 'ไม่พบ QR Code';
-	                resultContainer.classList.remove('hidden');
-	            }
-	        };
-	        img.src = e.target.result;
-	    };
-	    reader.readAsDataURL(file);
-	}
+                    if (code.data.includes('officer_register_unit')) {
+                        // ✅ ไปยัง URL ทันที
+                        window.location.href = code.data;
+                    } else {
+                        // ✅ QR ไม่ถูกต้อง
+                        resultBox.innerHTML = 'QR Code ไม่ถูกต้อง';
+                        resultContainer.classList.remove('hidden');
+                    }
+
+                } else {
+                    // ✅ แสดงภาพ + บอกว่าไม่พบ QR
+                    qrImageEl.src = e.target.result;
+                    qrImageEl.style.display = 'block';
+                    qrVideoEl.style.display = 'none';
+
+                    resultBox.innerHTML = 'ไม่พบ QR Code';
+                    resultContainer.classList.remove('hidden');
+                }
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
 
 
     document.addEventListener('DOMContentLoaded', startCameraAndScan);
