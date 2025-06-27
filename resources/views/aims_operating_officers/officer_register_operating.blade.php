@@ -133,7 +133,7 @@
                         if (code.data.includes('officer_register_unit')) {
                             window.location.href = code.data;
                         } else {
-                            showResult('QR Code ไม่ถูกต้อง');
+                            showResult('QR Code ไม่ถูกต้อง', 'กล้อง');
                         }
                     }
                 }
@@ -150,13 +150,19 @@
         }
     }
 
-    function showResult(text) {
+    function showResult(text , type) {
         resultBox.innerHTML = text;
         resultContainer.classList.remove('hidden');
         // document.querySelector('#qr_wrapper').classList.add('hidden');
 
-        // ✅ แสดงปุ่มเปิดกล้องอีกครั้ง
-        document.getElementById('restart_camera_btn').classList.remove('hidden');
+        if(type == "กล้อง"){
+            restartCamera();
+        }
+        else{
+            // ✅ แสดงปุ่มเปิดกล้องอีกครั้ง
+            document.getElementById('restart_camera_btn').classList.remove('hidden');
+        }
+
     }
 
     function restartCamera() {
@@ -164,8 +170,8 @@
         document.getElementById('qr_video').style.display = 'block';
         document.getElementById('qr_image').style.display = 'none';
         document.getElementById('restart_camera_btn').classList.add('hidden');
-        resultBox.innerHTML = '';
-        resultContainer.classList.add('hidden');
+        // resultBox.innerHTML = '';
+        // resultContainer.classList.add('hidden');
         startCameraAndScan();
     }
 
@@ -204,7 +210,7 @@
                         qrImageEl.style.display = 'block';
                         qrVideoEl.style.display = 'none';
 
-                        showResult('QR Code ไม่ถูกต้อง');
+                        showResult('QR Code ไม่ถูกต้อง', 'เลือกรูป');
                     }
                 } else {
                     // ไม่พบ QR → แสดงรูปภาพแทน
@@ -212,7 +218,7 @@
                     qrImageEl.style.display = 'block';
                     qrVideoEl.style.display = 'none';
 
-                    showResult('ไม่พบ QR Code');
+                    showResult('ไม่พบ QR Code', 'เลือกรูป');
                 }
             };
             img.src = e.target.result;
