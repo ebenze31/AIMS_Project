@@ -58,6 +58,10 @@
 	    display: none;
 	}
 
+    button {
+        transition: background 0.2s ease-in-out;
+    }
+
 </style>
 
 <div class="p-4 text-center">
@@ -78,21 +82,18 @@
         <p id="qr_result" class="w-full p-2"></p>
     </div>
 
-    <!-- อัปโหลดรูป QR Code -->
-	<div class="mt-4 max-w-md mx-auto">
-	    <!-- ปุ่มแทน input -->
-	    <button onclick="document.getElementById('qr_file_input').click()"
-		    class="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700">
-		    เลือกรูป
-		</button>
+    <div class="mt-4 flex justify-center gap-2">
+        <button onclick="document.getElementById('qr_file_input').click()" class="bg-blue-600 text-white text-sm px-3 py-1.5 rounded hover:bg-blue-700">
+            เลือกรูป
+        </button>
+        <button onclick="restartCamera()" id="restart_camera_btn" class="bg-gray-600 text-white text-sm px-3 py-1.5 rounded hover:bg-gray-700 hidden">
+            เปิดกล้องอีกครั้ง
+        </button>
+        <input type="file" id="qr_file_input" accept="image/*" onchange="handleFile(this)" class="hidden">
 
-
-	    <!-- input ซ่อน -->
-	    <input type="file" id="qr_file_input" accept="image/*" onchange="handleFile(this)" class="hidden">
-
-	    <!-- canvas ซ่อนเพื่อ decode -->
-	    <canvas id="qr_canvas" class="hidden mt-2 border rounded"></canvas>
-	</div>
+        <!-- canvas ซ่อนเพื่อ decode -->
+        <canvas id="qr_canvas" class="hidden mt-2 border rounded"></canvas>
+    </div>
 
 </div>
 
@@ -153,7 +154,21 @@
         resultBox.innerHTML = text;
         resultContainer.classList.remove('hidden');
         document.querySelector('#qr_wrapper').classList.add('hidden');
+
+        // ✅ แสดงปุ่มเปิดกล้องอีกครั้ง
+        document.getElementById('restart_camera_btn').classList.remove('hidden');
     }
+
+    function restartCamera() {
+        document.getElementById('qr_wrapper').classList.remove('hidden');
+        document.getElementById('qr_video').style.display = 'block';
+        document.getElementById('qr_image').style.display = 'none';
+        document.getElementById('restart_camera_btn').classList.add('hidden');
+        resultBox.innerHTML = '';
+        resultContainer.classList.add('hidden');
+        startCameraAndScan();
+    }
+
 
     function handleFile(input) {
         const file = input.files[0];
@@ -175,6 +190,7 @@
 
                 const qrImageEl = document.getElementById('qr_image');
                 const qrVideoEl = document.getElementById('qr_video');
+                const restartBtn = document.getElementById('restart_camera_btn');
 
                 if (code) {
                     stopCamera();
