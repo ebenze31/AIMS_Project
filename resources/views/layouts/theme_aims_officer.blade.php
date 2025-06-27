@@ -57,24 +57,25 @@
     <div class="flex w-full flex-col flex-grow">
 
         <!-- HEADER -->
-        <header class="relative z-50 flex-none" style="height:var(--header-height);margin-bottom:var(--header-mb)">
-            <div class="top-0 z-10 h-16 pt-6" style="position:var(--header-position)">
-                <div class="sm:px-8 w-full" style="position:var(--header-inner-position)">
-                    <div class="mx-auto w-full max-w-7xl lg:px-8">
-                        <div class="relative px-4 sm:px-8 lg:px-12">
+        <header class="relative z-50 flex-none pb-2" style="height:var(--header-height);margin-bottom:var(--header-mb)">
+            <div class="top-0 z-10 h-16 pt-2" style="position:var(--header-position)">
+                <div class="px-0 w-full" style="position:var(--header-inner-position)">
+                    <div class="w-full px-2 lg:px-8">
+                        <div class="relative px-2 sm:px-8 lg:px-2">
                             <div class="mx-auto max-w-2xl lg:max-w-5xl">
-                                <div class="relative flex items-center justify-between">
+                                <div class="relative flex items-center justify-between w-full">
                                     <!-- โลโก้ด้านซ้าย -->
                                     <div class="flex items-center">
                                         <a href="/" class="flex items-center">
-                                            <img src="{{ asset('/partner_new/images/logo/aims full logo.png') }}" alt="Logo" class="h-10">
+                                            <img src="{{ asset('/partner_new/images/logo/aims full logo.png') }}" alt="Logo" class="h-15">
                                         </a>
                                     </div>
 
-                                    <!-- เมนูเดิมของคุณ -->
-                                    <div class="flex flex-1 justify-end md:justify-end">
+                                    <!-- เมนู -->
+                                    <div class="flex ml-auto justify-end">
                                         <div class="pointer-events-auto md:hidden" data-headlessui-state="" data-open="">
-                                            <button class="group flex items-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20" type="button" aria-expanded="false" id="headlessui-popover-button-menu">Menu
+                                            <button class="group flex items-center rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10 dark:hover:ring-white/20" type="button" aria-expanded="false" id="headlessui-popover-button-menu">
+                                                {{ Auth::user()->name }}
                                                 <svg viewBox="0 0 8 6" aria-hidden="true" class="ml-3 h-auto w-2 stroke-zinc-500 group-hover:stroke-zinc-700 dark:group-hover:stroke-zinc-400">
                                                     <path d="M1.75 1.75 4 4.25l2.25-2.5" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                                 </svg>
@@ -90,15 +91,19 @@
                                                             <path d="m17.25 6.75-10.5 10.5M6.75 6.75l10.5 10.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
                                                         </svg>
                                                     </button>
-                                                    <h2 class="text-sm font-medium text-zinc-600 dark:text-zinc-400">Navigation</h2>
                                                 </div>
                                                 <nav class="mt-6">
                                                     <ul class="-my-2 divide-y divide-zinc-100 text-base text-zinc-800 dark:divide-zinc-100/5 dark:text-zinc-300">
-                                                        <li><a class="block py-2" href="/about">About</a></li>
-                                                        <li><a class="block py-2" href="/articles">Articles</a></li>
-                                                        <li><a class="block py-2" href="/projects">Projects</a></li>
-                                                        <li><a class="block py-2" href="/speaking">Speaking</a></li>
-                                                        <li><a class="block py-2" href="/uses">Uses</a></li>
+                                                        <li><a class="block py-2" href="{{ url('/officer_register_operating') }}">ลงทะเบียนหน่วย</a></li>
+                                                        <li><a class="block py-2" href="{{ url('/aims_edit_profile') }}">แก้ไขข้อมูล</a></li>
+                                                        <li>
+                                                            <a class="block py-2" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                                                ออกจากระบบ
+                                                            </a>
+                                                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                                @csrf
+                                                            </form>
+                                                        </li>
                                                     </ul>
                                                 </nav>
                                             </div>
@@ -107,11 +112,16 @@
                                         <!-- เมนู Desktop -->
                                         <nav class="pointer-events-auto hidden md:block">
                                             <ul class="flex rounded-full bg-white/90 px-3 text-sm font-medium text-zinc-800 shadow-lg ring-1 shadow-zinc-800/5 ring-zinc-900/5 backdrop-blur-sm dark:bg-zinc-800/90 dark:text-zinc-200 dark:ring-white/10">
-                                                <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/about">About</a></li>
-                                                <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/articles">Articles</a></li>
-                                                <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/projects">Projects</a></li>
-                                                <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/speaking">Speaking</a></li>
-                                                <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="/uses">Uses</a></li>
+                                                <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="{{ url('/officer_register_operating') }}">ลงทะเบียนหน่วย</a></li>
+                                                <li><a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="{{ url('/aims_edit_profile') }}">แก้ไขข้อมูล</a></li>
+                                                <li>
+                                                    <a class="relative block px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                                        ออกจากระบบ
+                                                    </a>
+                                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                                        @csrf
+                                                    </form>
+                                                </li>
                                             </ul>
                                         </nav>
                                     </div>
