@@ -156,7 +156,9 @@
         // document.querySelector('#qr_wrapper').classList.add('hidden');
 
         if(type == "กล้อง"){
-            restartCamera();
+            setTimeout(() => {
+                restartCamera();
+            }, 1500);
         }
         else{
             // ✅ แสดงปุ่มเปิดกล้องอีกครั้ง
