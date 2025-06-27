@@ -113,6 +113,10 @@
             videoStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
             video.srcObject = videoStream;
 
+            // ✅ ซ่อนผลลัพธ์ตอนเริ่มต้นกล้อง
+            resultBox.innerHTML = '';
+            resultContainer.classList.add('hidden');
+
             scanInterval = setInterval(() => {
                 if (video.readyState === video.HAVE_ENOUGH_DATA) {
                     canvas.width = video.videoWidth;
@@ -122,9 +126,14 @@
                     const code = jsQR(imageData.data, imageData.width, imageData.height);
 
                     if (code) {
-                        showResult(code.data);
                         stopCamera();
                         clearInterval(scanInterval);
+
+                        if (code.data.includes('officer_register_unit')) {
+                            window.location.href = code.data;
+                        } else {
+                            showResult('QR Code ไม่ถูกต้อง');
+                        }
                     }
                 }
             }, 500);
@@ -150,7 +159,7 @@
         const file = input.files[0];
         if (!file) return;
 
-        // ซ่อนผลลัพธ์ก่อนเสมอ
+        // ✅ ซ่อนผลลัพธ์ก่อนเสมอ
         resultBox.innerHTML = '';
         resultContainer.classList.add('hidden');
 
@@ -173,22 +182,21 @@
                     qrImageEl.style.display = 'none';
 
                     if (code.data.includes('officer_register_unit')) {
-                        // ✅ ไปยัง URL ทันที
                         window.location.href = code.data;
                     } else {
-                        // ✅ QR ไม่ถูกต้อง
-                        resultBox.innerHTML = 'QR Code ไม่ถูกต้อง';
-                        resultContainer.classList.remove('hidden');
-                    }
+                        qrImageEl.src = e.target.result;
+                        qrImageEl.style.display = 'block';
+                        qrVideoEl.style.display = 'none';
 
+                        showResult('QR Code ไม่ถูกต้อง');
+                    }
                 } else {
-                    // ✅ แสดงภาพ + บอกว่าไม่พบ QR
+                    // ไม่พบ QR → แสดงรูปภาพแทน
                     qrImageEl.src = e.target.result;
                     qrImageEl.style.display = 'block';
                     qrVideoEl.style.display = 'none';
 
-                    resultBox.innerHTML = 'ไม่พบ QR Code';
-                    resultContainer.classList.remove('hidden');
+                    showResult('ไม่พบ QR Code');
                 }
             };
             img.src = e.target.result;
@@ -196,8 +204,7 @@
         reader.readAsDataURL(file);
     }
 
-
-
     document.addEventListener('DOMContentLoaded', startCameraAndScan);
 </script>
+
 @endsection
