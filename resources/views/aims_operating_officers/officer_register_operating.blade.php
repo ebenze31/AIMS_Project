@@ -87,7 +87,7 @@
             เลือกรูป
         </button>
         <button onclick="restartCamera()" id="restart_camera_btn" class="bg-gray-600 text-white text-sm px-3 py-1.5 rounded hover:bg-gray-700 hidden">
-            เปิดกล้องอีกครั้ง
+            เปิดกล้อง
         </button>
         <input type="file" id="qr_file_input" accept="image/*" onchange="handleFile(this)" class="hidden">
 
