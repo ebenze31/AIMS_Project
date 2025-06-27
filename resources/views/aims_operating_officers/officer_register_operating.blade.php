@@ -153,7 +153,7 @@
     function showResult(text) {
         resultBox.innerHTML = text;
         resultContainer.classList.remove('hidden');
-        document.querySelector('#qr_wrapper').classList.add('hidden');
+        // document.querySelector('#qr_wrapper').classList.add('hidden');
 
         // ✅ แสดงปุ่มเปิดกล้องอีกครั้ง
         document.getElementById('restart_camera_btn').classList.remove('hidden');
