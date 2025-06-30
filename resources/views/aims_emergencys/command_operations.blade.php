@@ -265,9 +265,58 @@
         background-color: rgb(255, 197, 13, .13);
         color: rgb(231, 173, 0);
     }
-    
+    .officer-card-modal {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.officer-image-modal img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #dee2e6;
+}
+
+.officer-name-modal {
+    font-size: 22px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+
+.officer-info-modal p {
+    font-size: 16px;
+    margin: 4px 0;
+    color: #6c757d;
+}
+
+.officer-info-modal p strong {
+    color: #212529;
+    font-weight: 500;
+    margin-right: 8px;
+}
+.btn-colse-modal {
+    background-color: #fff;
+    border-color: #dee2e6;
+    color:  #212529;
+}
+
+.btn-colse-modal:hover {
+    background-color: #e9ecef;
+}
+
+.modal.fade.show{
+    background-color: rgb(0, 0, 0 ,.50);
+}
+.modal-content{
+    border-radius: 15px;
+    border: none;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+
+}
 </style>
-<div class="col  radius-10 align-items-center">
+<div class="col  radius-10 align-items-center test">
     <div class="card radius-10 w-100   mt-4 container-oparating" style="">
         <div class="h-100 content-oparating m-0 ">
             <div class="data-oparating h-100 m-0 p-0" style="border-right: 1px solid #DADADA;">
@@ -905,12 +954,12 @@
             <div class="modal-body">
                 <!-- เนื้อหา modal -->
             </div>
-            <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary me-2" style="width: 20%;" data-bs-dismiss="modal">
+            <div class="modal-footer justify-content-end">
+                <button type="button" class="btn btn-colse-modal me-2" style="width: 20%;" data-bs-dismiss="modal">
                     ยกเลิก
                 </button>
-                <button type="button" class="btn btn-success" style="width: 20%;" id="btn_confirm_select">
-                    ยืนยัน
+                <button type="button" class="btn btn-success" id="btn_confirm_select">
+                    เลือกเจ้าหน้าที่
                 </button>
             </div>
         </div>
@@ -1035,7 +1084,7 @@
         fetch("{{ url('/') }}/api/get_data_officer/" + "{{ $emergency->aims_area_id }}")
             .then(response => response.json())
             .then(result => {
-                // console.log(result);
+                console.log(result);
 
                 if (result) {
 
@@ -1086,7 +1135,7 @@
                                 `;
                             } else {
                                 buttonHTML = `
-                                        <button class="btn btn-success btn-select-officer" id="btn_of_id_${result[i].id}" onclick="view_select_officer('${result[i].id}');">เลือก</button>
+                                        <button class="btn btn-success btn-select-officer" id="btn_of_id_${result[i].id}" onclick="view_select_officer('${result[i].id}' ,'${result[i].user_photo}');">เลือก</button>
 
                                 `;
                             }
@@ -1144,7 +1193,7 @@
     }
 
 
-    function view_select_officer(officer_id) {
+    function view_select_officer(officer_id ,userPhoto) {
         const officerDiv = document.getElementById(`div_officer_id_${officer_id}`);
         if (!officerDiv) return;
 
@@ -1158,14 +1207,27 @@
         const modalBody = document.querySelector('#modal_view_select_officer .modal-body');
         const confirmButton = document.getElementById('btn_confirm_select');
 
+        let htmlPhoto = '';
+        if (userPhoto !== null) {
+            htmlPhoto = `<div class="officer-image-modal">
+                            <img src="{{url('/storage')}}/${userPhoto}" alt="รูปเจ้าหน้าที่">
+                        </div>`;
+        }
+      
         // เคลียร์และใส่เนื้อหาใหม่
         modalTitle.textContent = "ยืนยันการเลือกเจ้าหน้าที่";
         modalBody.innerHTML = `
-            <p><strong>ชื่อ:</strong> ${name_officer}</p>
-            <p><strong>หน่วย:</strong> ${unit_name}</p>
-            <p><strong>ประเภท:</strong> ${unit_type}</p>
-            <p><strong>ระยะห่าง:</strong> ${distanceText} กม.</p>
-            <p class="text-danger">คุณต้องการเลือกเจ้าหน้าที่คนนี้ใช่หรือไม่?</p>
+            <div class="officer-card-modal">
+                ${htmlPhoto}
+                <div class="officer-details-modal">
+                    <h4 class="officer-name-modal">${name_officer}</h4>
+                    <div class="officer-info-modal">
+                        <p><strong>หน่วย:</strong><span>${unit_name}</span></p>
+                        <p><strong>ประเภท:</strong><span>${unit_type} 1</span></p>
+                        <p><strong>ระยะห่าง:</strong><span> ${distanceText} กม.</span></p>
+                    </div>
+                </div>
+            </div>
         `;
 
         // ตั้งค่า onclick ปุ่มยืนยัน

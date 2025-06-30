@@ -153,7 +153,8 @@ class Aims_operating_officersController extends Controller
             ['aims_operating_officers.*'],
             $unitSelects,
             $typeUnitSelects,
-            ['users.provider_id as user_provider_id']
+            ['users.provider_id as user_provider_id'],
+            ['users.photo as user_photo'],
         );
 
         $data_officer = DB::table('aims_operating_officers')
