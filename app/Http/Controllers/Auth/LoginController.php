@@ -38,12 +38,6 @@ class LoginController extends Controller
 
     protected function redirectTo()
     {
-        // if(!isset($_SESSION["backurl"]) )
-        //     $_SESSION["backurl"] = $_SERVER['HTTP_REFERER'] ;
-        //     $backurl = $_SESSION["backurl"];
-        //     // echo "backurl >> ". parse_url($backurl, PHP_URL_QUERY);
-        //     // exit();
-
         $backurl = $_SERVER['HTTP_REFERER'] ;
 
         $redirectTo = parse_url($backurl, PHP_URL_QUERY);
@@ -77,88 +71,9 @@ class LoginController extends Controller
         return 'username';
     }
 
-    // Google login
-    public function redirectToGoogle(Request $request)
-    {
-        $request->session()->put('redirectTo', $request->get('redirectTo'));
-
-        return Socialite::driver('google')->redirect();
-    }
-
-    // Google callback
-    public function handleGoogleCallback(Request $request)
-    {
-        $user = Socialite::driver('google')->user();
-
-        $this->_registerOrLoginUser($user, "google",null,null, null);
-
-        $value = $request->session()->get('redirectTo');
-        $request->session()->forget('redirectTo');
-
-        // Return home after login
-        return redirect()->intended($value);
-    }
-
-    // Facebook login
-    public function redirectToFacebook(Request $request)
-    {   
-        return Socialite::driver('facebook')->redirect();
-    }
-
-    // Facebook callback
-    public function handleFacebookCallback(Request $request)
-    {
-        // $user = Socialite::driver('facebook')->user();
-        $user = Socialite::driver('facebook')->stateless()->user();
-        // print_r($user);
-        $this->_registerOrLoginUser($user,"facebook",null,null, null);
-
-        $value = $request->session()->get('redirectTo');
-        $request->session()->forget('redirectTo');
-
-        return redirect()->intended($value);
-    }
-
-    // Line login API
-    public function register_api(Request $request)
-    {
-        $requestData = $request->all();
-
-        echo ">>> : register_api";
-        echo "<br>";
-        echo "<pre>";
-        print_r($requestData);
-        echo "<pre>";
-        // exit();
-
-        $this->redirectToLine_By_api($requestData);
-    }
-
-    public function redirectToLine_By_api($requestData)
-    {   
-        // $request->session()->put('redirectTo', 'https://www.viicheck.com');
-
-        // $redirectTo = $request->session()->get('redirectTo');
-        
-        echo "<br>";
-        echo ">>> : redirectToLine_By_api";
-        echo "<br>";
-        // echo $redirectTo ;
-        echo "<br>";
-        
-
-        // exit(); 
-
-        return Socialite::driver('line')->redirect();
-    }
-
     // Line login
     public function redirectToLine(Request $request)
     {
-        $request->session()->put('Student', $request->get('Student'));
-        $request->session()->put('redirectTo', $request->get('redirectTo'));
-        $request->session()->put('from', $request->get('from'));
-
         return Socialite::driver('line')->redirect();
     }
 
@@ -167,63 +82,14 @@ class LoginController extends Controller
     {
         $user = Socialite::driver('line')->stateless()->user();
 
-        $by_api = $request->session()->get('by_api');
+        // register general
+        $this->_registerOrLoginUser($user, "line");
 
-        if (!empty($by_api)) {
-            // register api
+        return redirect()->intended('/');
 
-            $data_register_api = [] ;
-            $data_register_api['name'] = $request->session()->get('name'); 
-            $data_register_api['phone'] = $request->session()->get('phone'); 
-            $data_register_api['tambon_th'] = $request->session()->get('tambon_th'); 
-            $data_register_api['amphoe_th'] = $request->session()->get('amphoe_th'); 
-            $data_register_api['changwat_th'] = $request->session()->get('changwat_th'); 
-            $data_register_api['by_api'] = $request->session()->get('by_api'); 
-
-            $this->_register_API($user , "line" , $data_register_api );
-
-        }else{
-            $student = $request->session()->get('Student');
-            $from = $request->session()->get('from');
-            $check_in_at = $request->session()->get('check_in_at');
-            // register general
-            $this->_registerOrLoginUser($user,"line",$student , $from , $check_in_at );
-        }
-
-
-        $value = $request->session()->get('redirectTo');
-        $request->session()->forget('redirectTo');
-
-        // return redirect()->intended($value);
-
-        $redirectTo = $this->determineRedirectTo($request);
-        return redirect($redirectTo);
     }
 
-    protected function determineRedirectTo(Request $request)
-    {
-        // 1. ลองดึงจาก session ก่อน
-        $redirectTo = $request->session()->pull('redirectTo');
-
-        // 2. ถ้าไม่มี ลองหาจาก HTTP_REFERER
-        if (!$redirectTo && isset($_SERVER['HTTP_REFERER'])) {
-            $referer = $_SERVER['HTTP_REFERER'];
-            $query = parse_url($referer, PHP_URL_QUERY);
-
-            if ($query) {
-                parse_str($query, $params);
-                if (isset($params['redirectTo']) && str_starts_with($params['redirectTo'], '/')) {
-                    $redirectTo = $params['redirectTo'];
-                }
-            }
-        }
-
-        // 3. fallback สุดท้าย
-        return $redirectTo ?? '/';
-    }
-
-
-    protected function _registerOrLoginUser($data, $type , $student , $from , $check_in_at)
+    protected function _registerOrLoginUser($data, $type)
     {
         //GET USER 
         $user = User::where('provider_id', '=', $data->id)->first();
@@ -299,15 +165,4 @@ class LoginController extends Controller
 
     }
 
-    protected function _register_API($data, $type , $data_register_api)
-    {
-        echo "_register_API" ; 
-        echo "<br>" ; 
-
-        echo "<pre>";
-        print_r($data_register_api);
-        echo "<pre>";
-
-        exit();
-    }
 }
