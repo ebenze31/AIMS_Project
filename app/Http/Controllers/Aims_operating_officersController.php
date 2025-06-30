@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Validator;
 
 class Aims_operating_officersController extends Controller
 {
@@ -250,6 +251,47 @@ class Aims_operating_officersController extends Controller
     }
 
     function officer_register_unit($unit_id){
-        return view('aims_operating_officers.officer_register_unit');
+
+        $data = DB::table('aims_operating_units')
+            ->where('aims_operating_units.id', '=', $unit_id)
+            ->leftJoin('aims_type_units', 'aims_operating_units.aims_type_unit_id', '=', 'aims_type_units.id')
+            ->select(
+                'aims_operating_units.*',
+                'aims_type_units.name_type_unit',
+            )
+            ->first();
+
+        return view('aims_operating_officers.officer_register_unit', compact('data'));
+    }
+
+    public function officer_reg_to_unit(Request $request)
+    {
+        // ตรวจสอบความถูกต้องของข้อมูล
+        $validator = Validator::make($request->all(), [
+            'name_officer' => 'required|string|max:255',
+            'vehicle_type' => 'required|string|max:255',
+            'user_id' => 'required|numeric',
+            'aims_operating_unit_id' => 'required|numeric',
+            'aims_partner_id' => 'required|numeric',
+            'aims_area_id' => 'required|numeric',
+            'level' => 'nullable|string|max:100',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // สร้างข้อมูล
+        $officer = Aims_operating_officer::create($request->all());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'ลงทะเบียนสำเร็จ',
+            'data' => $officer
+        ], 201);
     }
 }

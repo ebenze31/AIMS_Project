@@ -546,4 +546,5 @@ Route::post('/patient/{patientId}/check_and_update', 'Aims_emergencysController@
 Route::post('/photo_officer/update/{id}', 'Aims_emergencysController@update_photo_officer')->name('photo_officer.update');
 Route::get('/loop_check_status/{emergency_id}', 'Aims_emergencysController@loop_check_status');
 Route::get('/get_data_individual_officer/{officers_id}', 'Aims_operating_officersController@get_data_individual_officer');
+Route::post('/officer_reg_to_unit', 'Aims_operating_officersController@officer_reg_to_unit');
 // ============> END AIMS <============ //
