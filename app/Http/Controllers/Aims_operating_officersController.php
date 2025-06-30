@@ -251,7 +251,26 @@ class Aims_operating_officersController extends Controller
         return view('aims_operating_officers.officer_register_operating');
     }
 
-    function officer_register_unit($unit_id){
+    function officer_register_unit(Request $request, $unit_id){
+
+        $data_user = Auth::user();
+        $info = [];
+
+        $check_officer = DB::table('aims_operating_officers')
+            ->where('user_id', $data_user->id)
+            ->first();
+
+        $info['old_data'] = "ไม่มีข้อมูล";
+        if( !empty($check_officer->id) ){
+            $info['old_data'] = "มีข้อมูลเดิม";
+            $info['old_unit'] = "คนละหน่วย";
+            if( $check_officer->aims_operating_unit_id == $unit_id ){
+                $info['old_unit'] = "หน่วยเดิม";
+            }
+            else{
+                
+            }
+        }
 
         $data = DB::table('aims_operating_units')
             ->where('aims_operating_units.id', '=', $unit_id)
@@ -262,7 +281,7 @@ class Aims_operating_officersController extends Controller
             )
             ->first();
 
-        return view('aims_operating_officers.officer_register_unit', compact('data'));
+        return view('aims_operating_officers.officer_register_unit', compact('data','info'));
     }
 
     public function officer_reg_to_unit(Request $request)

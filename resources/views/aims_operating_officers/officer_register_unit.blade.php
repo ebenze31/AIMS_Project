@@ -2,20 +2,6 @@
 
 @section('content')
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<!-- Modal -->
-<div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-  <div class="bg-white rounded-lg shadow-lg p-8 text-center max-w-sm w-full animate-fade-in">
-    <!-- Checkmark animation -->
-    <div class="flex justify-center mb-4">
-      <svg class="w-16 h-16 text-green-500 animate-bounce-in" fill="none" stroke="currentColor" stroke-width="3"
-        viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-      </svg>
-    </div>
-    <h3 class="text-xl font-bold text-gray-800 mb-2">ลงทะเบียนสำเร็จ</h3>
-    <p class="text-gray-600 text-sm">ระบบกำลังนำคุณไปยังหน้าเปิดสถานะ...</p>
-  </div>
-</div>
 
 <style>
 @keyframes bounce-in {
@@ -54,6 +40,57 @@ animation: fade-in 0.3s ease-in-out;
 	display: none;
 }
 </style>
+
+<!-- Modal -->
+<div id="successModal" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+  	<div class="bg-white rounded-lg shadow-lg p-8 text-center max-w-sm w-full mx-6 animate-fade-in">
+	    <!-- Checkmark animation -->
+	    <div class="flex justify-center mb-4">
+	      	<svg class="w-16 h-16 text-green-500 animate-bounce-in" fill="none" stroke="currentColor" stroke-width="3"
+	        viewBox="0 0 24 24">
+	        	<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+	      	</svg>
+	    </div>
+	    <h3 class="text-xl font-bold text-gray-800 mb-2">ลงทะเบียนสำเร็จ</h3>
+	    <p class="text-gray-600 text-sm">ระบบกำลังนำคุณไปยังหน้าเปิดสถานะ...</p>
+  	</div>
+</div>
+
+<!-- Modal: แจ้งว่ามีการลงทะเบียนไว้ที่หน่วยอื่น -->
+<div id="modalOtherUnit" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+	<div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full text-center mx-6">
+	  	<h2 class="text-xl font-bold text-red-600 mb-2">คุณมีการลงทะเบียนไว้ที่หน่วยอื่น</h2>
+	  	<p class="text-gray-700">หากคุณดำเนินการลงทะเบียนใหม่<br>จะเป็นการยกเลิกหน่วยเดิม</p>
+	  	
+	  	<div class="flex justify-center gap-4 mt-4">
+		  	<!-- ปุ่ม ดำเนินการต่อ -->
+		  	<button onclick="closeModal('modalOtherUnit')"
+			    class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+			    ดำเนินการต่อ
+			</button>
+
+			<!-- ปุ่ม ยกเลิก -->
+			<button onclick="window.close();"
+			    class="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+			    ยกเลิก
+			</button>
+		</div>
+	</div>
+</div>
+
+<!-- Modal: หน่วยเดิม แสดงแอนิเมชันติกถูก -->
+<div id="modalSameUnit" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
+	<div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full mx-6 text-center animate-fade-in">
+	  	<div class="flex justify-center mb-4">
+	    	<svg class="w-16 h-16 text-green-500 animate-bounce-in" fill="none" stroke="currentColor" stroke-width="3"
+	         viewBox="0 0 24 24">
+	      		<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+	    	</svg>
+	  	</div>
+	  	<h3 class="text-lg font-bold text-gray-800 mb-2">คุณลงทะเบียนหน่วยนี้แล้ว</h3>
+	  	<p class="text-gray-600 text-sm">ระบบกำลังนำคุณไปยังหน้าเปิดสถานะ...</p>
+	</div>
+</div>
 
 <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
     <h2 class="text-2xl font-bold text-gray-800 text-center">ลงทะเบียนเจ้าหน้าที่</h2>
@@ -142,6 +179,27 @@ animation: fade-in 0.3s ease-in-out;
 </div>
 
 <script>
+
+// แปลงค่า Blade เป็น JavaScript
+const info = @json($info);
+
+window.onload = () => {
+	if (info.old_data === 'มีข้อมูลเดิม') {
+	  	if (info.old_unit === 'คนละหน่วย') {
+	    	document.getElementById('modalOtherUnit').classList.remove('hidden');
+	  	} else if (info.old_unit === 'หน่วยเดิม') {
+	    	document.getElementById('modalSameUnit').classList.remove('hidden');
+	    	setTimeout(() => {
+	      		window.location.href = "{{ url('/officer_change_status') }}";
+	    	}, 4000);
+	  	}
+	}
+};
+
+function closeModal(id) {
+	document.getElementById(id).classList.add('hidden');
+}
+
 async function submitOfficerForm() {
 	const name_officer = document.getElementById("name_officer").value.trim();
     const level = document.getElementById("level").value.trim();
