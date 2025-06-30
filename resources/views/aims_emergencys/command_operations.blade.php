@@ -1084,7 +1084,7 @@
         fetch("{{ url('/') }}/api/get_data_officer/" + "{{ $emergency->aims_area_id }}")
             .then(response => response.json())
             .then(result => {
-                console.log(result);
+                // console.log(result);
 
                 if (result) {
 
@@ -1125,6 +1125,11 @@
 
                             let buttonHTML = '';
 
+                            let check_UserPhoto = 'ไม่มี' ;
+                            if(result[i].user_photo){
+                                check_UserPhoto = result[i].user_photo;
+                            }
+
                             if (officerRefuse.includes(result[i].id)) {
                                 buttonHTML = `
                                     <span class="ms-auto text-danger fw-bold">ปฏิเสธ</span>
@@ -1135,7 +1140,7 @@
                                 `;
                             } else {
                                 buttonHTML = `
-                                        <button class="btn btn-success btn-select-officer" id="btn_of_id_${result[i].id}" onclick="view_select_officer('${result[i].id}' ,'${result[i].user_photo}');">เลือก</button>
+                                        <button class="btn btn-success btn-select-officer" id="btn_of_id_${result[i].id}" onclick="view_select_officer('${result[i].id}' , '${check_UserPhoto}');">เลือก</button>
 
                                 `;
                             }
@@ -1208,7 +1213,7 @@
         const confirmButton = document.getElementById('btn_confirm_select');
 
         let htmlPhoto = '';
-        if (userPhoto !== null) {
+        if (userPhoto != 'ไม่มี') {
             htmlPhoto = `<div class="officer-image-modal">
                             <img src="{{url('/storage')}}/${userPhoto}" alt="รูปเจ้าหน้าที่">
                         </div>`;
