@@ -61,7 +61,7 @@ animation: fade-in 0.3s ease-in-out;
 	<div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full text-center mx-6">
 	  	<h2 class="text-xl font-bold text-red-600 mb-2">คุณมีการลงทะเบียนไว้ที่หน่วยอื่น</h2>
 	  	<p class="text-gray-700">หากคุณดำเนินการลงทะเบียนใหม่<br>จะเป็นการยกเลิกหน่วยเดิม</p>
-	  	
+
 	  	<div class="flex justify-center gap-4 mt-4">
 		  	<!-- ปุ่ม ดำเนินการต่อ -->
 		  	<button onclick="closeModal('modalOtherUnit')"
@@ -70,13 +70,26 @@ animation: fade-in 0.3s ease-in-out;
 			</button>
 
 			<!-- ปุ่ม ยกเลิก -->
-			<button onclick="window.close();"
+			<button onclick="tryCloseWindow()"
 			    class="mt-4 px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
 			    ยกเลิก
 			</button>
 		</div>
 	</div>
 </div>
+
+<script>
+  	function tryCloseWindow() {
+    	window.close();
+
+    	// fallback: ถ้าหน้ายังไม่ปิดภายใน 1 วินาที ให้ redirect แทน
+    	setTimeout(() => {
+	      	if (!window.closed) {
+	        	window.location.href = "https://line.me/R/ti/p/@453bzkvm";
+	      	}
+    	}, 1000);
+  	}
+</script>
 
 <!-- Modal: หน่วยเดิม แสดงแอนิเมชันติกถูก -->
 <div id="modalSameUnit" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 hidden">
