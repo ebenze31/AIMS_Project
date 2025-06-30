@@ -129,41 +129,6 @@ class LoginController extends Controller
         return Socialite::driver('line')->redirect();
     }
 
-    // Line login TU
-    public function redirectToLine_TU_SOS(Request $request)
-    {
-        $request->session()->put('Student', $request->get('Student'));
-        $request->session()->put('redirectTo', 'https://www.viicheck.com/sos_map/create');
-
-        return Socialite::driver('line')->redirect();
-    }
-
-    // Line login other_app
-    public function redirectToLine_other_app_SOS(Request $request, $user_from)
-    {
-        $request->session()->put('from', $user_from);
-        $request->session()->put('redirectTo', 'https://www.viicheck.com/sos_map/create');
-
-        return Socialite::driver('line')->redirect();
-    }
-
-    // VOTE KAN
-    public function redirectToLine_vote_kan_login(Request $request, $user_from)
-    {
-        $request->session()->put('from', $user_from);
-        $request->session()->put('redirectTo', 'https://www.viicheck.com/vote_kan_stations/create');
-
-        return Socialite::driver('line')->redirect();
-    }
-    
-    // Line login kmutnbs
-    public function redirectToLine_check_in(Request $request)
-    {
-        $request->session()->put('check_in_at', $request->get('check_in_at'));
-
-        return Socialite::driver('line')->redirect();
-    }
-
     // Line login API
     public function register_api(Request $request)
     {

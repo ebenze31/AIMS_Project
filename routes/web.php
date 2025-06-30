@@ -5,62 +5,58 @@ use App\Http\Controllers\QrCodeGeneratorController;
 use Illuminate\Support\Facades\Cookie;
 
 //วิธีใช้
-Route::get('/how_to_use', function () {
-    return view('how_to_use/how_to_use');
-});
+// Route::get('/how_to_use', function () {
+//     return view('how_to_use/how_to_use');
+// });
 
 
-// registe re-to line
-// https://www.viicheck.com/login/line/to_line_oa
-Route::get('login/line/to_line_oa', 'Home_pageController@re_to_line_oa');
-Route::get('re_to_line_oa_2', 'Home_pageController@re_to_line_oa_2');
+// // registe re-to line
+// // https://www.viicheck.com/login/line/to_line_oa
+// Route::get('login/line/to_line_oa', 'Home_pageController@re_to_line_oa');
+// Route::get('re_to_line_oa_2', 'Home_pageController@re_to_line_oa_2');
 
 
-// Google login
-Route::get('login/google', 'Auth\LoginController@redirectToGoogle')->name('login.google');
-Route::get('login/google/callback', 'Auth\LoginController@handleGoogleCallback');
+// // Google login
+// Route::get('login/google', 'Auth\LoginController@redirectToGoogle')->name('login.google');
+// Route::get('login/google/callback', 'Auth\LoginController@handleGoogleCallback');
 
-// Facebook login
-Route::get('login/facebook', 'Auth\LoginController@redirectToFacebook')->name('login.facebook');
-Route::get('login/facebook/callback', 'Auth\LoginController@handleFacebookCallback');
+// // Facebook login
+// Route::get('login/facebook', 'Auth\LoginController@redirectToFacebook')->name('login.facebook');
+// Route::get('login/facebook/callback', 'Auth\LoginController@handleFacebookCallback');
 
-// Line login
-Route::get('login/line', 'Auth\LoginController@redirectToLine')->name('login.line');
-Route::get('login/line/callback', 'Auth\LoginController@handleLineCallback');
+// // TU
+// Route::get('login/line/tu_sos', 'Auth\LoginController@redirectToLine_TU_SOS');
 
-// TU
-Route::get('login/line/tu_sos', 'Auth\LoginController@redirectToLine_TU_SOS');
+// // Line login other app
+// Route::get('login/line/{user_from}', 'Auth\LoginController@redirectToLine_other_app_SOS');
+// Route::get('/sos_login/{user_from}', 'Sos_mapController@sos_login_other_app');
 
-// Line login other app
-Route::get('login/line/{user_from}', 'Auth\LoginController@redirectToLine_other_app_SOS');
-Route::get('/sos_login/{user_from}', 'Sos_mapController@sos_login_other_app');
-
-Route::get('/vote_kan_login/{user_from}', 'Vote_kan_data_stationsController@vote_kan_login');
-Route::get('/vote_kan_login/login/line/{user_from}', 'Auth\LoginController@redirectToLine_vote_kan_login');
+// Route::get('/vote_kan_login/{user_from}', 'Vote_kan_data_stationsController@vote_kan_login');
+// Route::get('/vote_kan_login/login/line/{user_from}', 'Auth\LoginController@redirectToLine_vote_kan_login');
 
 
-// check_in
-Route::get('login/line/check_in', 'Auth\LoginController@redirectToLine_check_in'); //?check_in_at=
+// // check_in
+// Route::get('login/line/check_in', 'Auth\LoginController@redirectToLine_check_in'); //?check_in_at=
 
-// facebook_messenger_api
-// Route::get('/facebook_messenger_api', 'API\facebook_messenger_api@facebook');
-// WhatsApp_messenger_api
-Route::get('/whatsapp_messenger_api', 'API\facebook_messenger_api@whatsapp');
+// // facebook_messenger_api
+// // Route::get('/facebook_messenger_api', 'API\facebook_messenger_api@facebook');
+// // WhatsApp_messenger_api
+// Route::get('/whatsapp_messenger_api', 'API\facebook_messenger_api@whatsapp');
 
-Route::get('facebook_callback_guest', 'MessengerController@facebook_callback_guest');
+// Route::get('facebook_callback_guest', 'MessengerController@facebook_callback_guest');
 
-// ติดต่อเจ้าของรถ
-Route::get('/welcome_line', 'Register_carController@welcome_line');
-Route::get('/welcome_line_guest', 'GuestController@welcome_line_guest');
+// // ติดต่อเจ้าของรถ
+// Route::get('/welcome_line', 'Register_carController@welcome_line');
+// Route::get('/welcome_line_guest', 'GuestController@welcome_line_guest');
 
-Route::get('/welcome_facebook', 'Register_carController@welcome_facebook');
-Route::get('/welcome_facebook_guest', 'GuestController@welcome_facebook_guest');
+// Route::get('/welcome_facebook', 'Register_carController@welcome_facebook');
+// Route::get('/welcome_facebook_guest', 'GuestController@welcome_facebook_guest');
 
-// CHECK IN
-Route::get('/welcome_check_in_line', 'Check_inController@welcome_check_in_line');
-Route::get('/check_in_to_cretae', 'Check_inController@check_in_to_cretae');
+// // CHECK IN
+// Route::get('/welcome_check_in_line', 'Check_inController@welcome_check_in_line');
+// Route::get('/check_in_to_cretae', 'Check_inController@check_in_to_cretae');
 
-Route::resource('check_in', 'Check_inController')->except(['index','show','edit','view']);
+// Route::resource('check_in', 'Check_inController')->except(['index','show','edit','view']);
 
 
 
@@ -78,15 +74,6 @@ Route::get('/select_get', function () {
     return view('register_car/select_get');
 });
 
-Route::get('/terms_of_service', function () {
-
-    return view('terms_of_service');
-});
-
-Route::get('/privacy_policy', function () {
-
-    return view('privacy_policy');
-});
 Route::get('/faq', function () {
 
     return view('faq');
@@ -552,8 +539,19 @@ Route::get('register_new_officer_qr_code', 'Sos_partner_officersController@regis
 // officer-area  >> เจ้าหน้าที่ออกปฏิบัติการตามพื้นที่
 // ---------------------------------------------//
 
+// Line login
+Route::get('login/line', 'Auth\LoginController@redirectToLine')->name('login.line');
+Route::get('login/line/callback', 'Auth\LoginController@handleLineCallback');
+
 Route::get('/', 'Aims_adminController@check_to_home');
 Route::get('/home', 'Aims_adminController@check_to_home');
+
+Route::get('/terms_of_service', function () {
+    return view('terms_of_service');
+});
+Route::get('/privacy_policy', function () {
+    return view('privacy_policy');
+});
 
 // ==> admin-partner
 Route::middleware(['auth', 'role:admin-partner'])->group(function () {

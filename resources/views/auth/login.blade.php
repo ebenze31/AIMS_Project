@@ -189,7 +189,7 @@
         <div class="mt-5 mb-5 text-center font-bold text-[14px] text-[#9E9E9E] ">
             การลงชื่อหมายความว่าคุณ <br>
             ยอมรับ
-            <a href="#" class="term-and-privicypolicy">Term and privicy policy</a>
+            <a href="{{ url('/terms_of_service') }}" class="term-and-privicypolicy">Term</a> and <a href="{{ url('/privacy_policy') }}" class="term-and-privicypolicy">privicy policy</a>
         </div>
 
         <form method="POST" id="from_login" action="{{ route('login') }}">
