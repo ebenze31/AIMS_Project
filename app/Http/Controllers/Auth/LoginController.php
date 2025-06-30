@@ -119,16 +119,6 @@ class LoginController extends Controller
         return redirect()->intended($value);
     }
 
-    // Line login
-    public function redirectToLine(Request $request)
-    {
-        $request->session()->put('Student', $request->get('Student'));
-        $request->session()->put('redirectTo', $request->get('redirectTo'));
-        $request->session()->put('from', $request->get('from'));
-
-        return Socialite::driver('line')->redirect();
-    }
-
     // Line login API
     public function register_api(Request $request)
     {
@@ -162,22 +152,20 @@ class LoginController extends Controller
         return Socialite::driver('line')->redirect();
     }
 
+    // Line login
+    public function redirectToLine(Request $request)
+    {
+        $request->session()->put('Student', $request->get('Student'));
+        $request->session()->put('redirectTo', $request->get('redirectTo'));
+        $request->session()->put('from', $request->get('from'));
+
+        return Socialite::driver('line')->redirect();
+    }
+
     // Line callback
     public function handleLineCallback(Request $request)
     {
-        // $user = Socialite::driver('line')->user();
         $user = Socialite::driver('line')->stateless()->user();
-
-        // try {
-        //     $user = Socialite::driver('line')->user();
-        // } catch (InvalidStateException $e) {
-        //     $user = Socialite::driver('line')->stateless()->user();
-        // }
-
-        // echo "<pre>";
-        // print_r($user);
-        // echo "<pre>";
-        // exit();
 
         $by_api = $request->session()->get('by_api');
 
@@ -206,9 +194,34 @@ class LoginController extends Controller
         $value = $request->session()->get('redirectTo');
         $request->session()->forget('redirectTo');
 
-        return redirect()->intended($value);
+        // return redirect()->intended($value);
 
+        $redirectTo = $this->determineRedirectTo($request);
+        return redirect($redirectTo);
     }
+
+    protected function determineRedirectTo(Request $request)
+    {
+        // 1. ลองดึงจาก session ก่อน
+        $redirectTo = $request->session()->pull('redirectTo');
+
+        // 2. ถ้าไม่มี ลองหาจาก HTTP_REFERER
+        if (!$redirectTo && isset($_SERVER['HTTP_REFERER'])) {
+            $referer = $_SERVER['HTTP_REFERER'];
+            $query = parse_url($referer, PHP_URL_QUERY);
+
+            if ($query) {
+                parse_str($query, $params);
+                if (isset($params['redirectTo']) && str_starts_with($params['redirectTo'], '/')) {
+                    $redirectTo = $params['redirectTo'];
+                }
+            }
+        }
+
+        // 3. fallback สุดท้าย
+        return $redirectTo ?? '/';
+    }
+
 
     protected function _registerOrLoginUser($data, $type , $student , $from , $check_in_at)
     {
