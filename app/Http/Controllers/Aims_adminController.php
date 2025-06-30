@@ -55,7 +55,7 @@ class Aims_adminController extends Controller
             return redirect('/home_for_officer');
         }
         else {
-            return redirect('/');
+            return redirect('/form-sos');
         }
 
         return redirect('/404');

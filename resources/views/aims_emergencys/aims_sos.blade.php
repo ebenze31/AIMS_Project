@@ -283,16 +283,28 @@
         }
     }
 </style>
-<nav class="nav-top">   
-    <div style="width: 55px;height: 55px;padding: 5px;background-color: #fff;border-radius: 50px;" class="mr-3" >
-
-        <img src="{{ asset('/partner_new/images/logo/aims full logo.png') }}" height="60" width="60"  alt="" >
+<nav class="nav-top flex items-center justify-between">
+    <div class="flex items-center">
+        <div class="w-[55px] h-[55px] p-1 bg-white rounded-full mr-3">
+            <img src="{{ asset('/partner_new/images/logo/aims full logo.png') }}" height="60" width="60" alt="">
+        </div>
+        <div>แจ้งเหตุฉุกเฉิน</div>
     </div>
 
-    <div class="">
-        แจ้งเหตุฉุกเฉิน
+    @if(Auth::check())
+    <div class="ml-auto text-sm">
+        <a href="{{ route('logout') }}"
+           onclick="event.preventDefault();document.getElementById('logout-form').submit();"
+           class="text-white">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+            @csrf
+        </form>
     </div>
+    @endif
 </nav>
+
 
 <div class=" m-auto">
     <div class="content">
