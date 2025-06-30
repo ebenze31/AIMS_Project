@@ -54,6 +54,9 @@ class Aims_adminController extends Controller
         } elseif ($user->role === 'officer-area') {
             return redirect('/home_for_officer');
         }
+        else {
+            return redirect('/');
+        }
 
         return redirect('/404');
     }
