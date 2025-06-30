@@ -255,6 +255,7 @@ class Aims_operating_officersController extends Controller
 
         $data_user = Auth::user();
         $info = [];
+        $unit_old = null ;
 
         $check_officer = DB::table('aims_operating_officers')
             ->where('user_id', $data_user->id)
@@ -268,7 +269,14 @@ class Aims_operating_officersController extends Controller
                 $info['old_unit'] = "หน่วยเดิม";
             }
             else{
-                
+                $unit_old = DB::table('aims_operating_units')
+                    ->where('aims_operating_units.id', '=', $check_officer->aims_operating_unit_id)
+                    ->leftJoin('aims_type_units', 'aims_operating_units.aims_type_unit_id', '=', 'aims_type_units.id')
+                    ->select(
+                        'aims_operating_units.*',
+                        'aims_type_units.name_type_unit',
+                    )
+                    ->first();
             }
         }
 
@@ -281,7 +289,7 @@ class Aims_operating_officersController extends Controller
             )
             ->first();
 
-        return view('aims_operating_officers.officer_register_unit', compact('data','info'));
+        return view('aims_operating_officers.officer_register_unit', compact('data','info','unit_old'));
     }
 
     public function officer_reg_to_unit(Request $request)
@@ -305,8 +313,23 @@ class Aims_operating_officersController extends Controller
             ], 422);
         }
 
-        // สร้างข้อมูล
-        $officer = Aims_operating_officer::create($request->all());
+        // หา officer ที่มี user_id นี้อยู่แล้วหรือไม่
+        $officer = Aims_operating_officer::where('user_id', $request->user_id)->first();
+
+        if ($officer) {
+            // อัพเดทข้อมูล officer เดิม
+            $officer->update($request->all());
+        } else {
+            // สร้างข้อมูล officer ใหม่
+            $officer = Aims_operating_officer::create($request->all());
+        }
+
+        // อัพเดท role ของ user ในตาราง users
+        $user = User::find($request->user_id);
+        if ($user) {
+            $user->role = 'officer-area';
+            $user->save();
+        }
 
         return response()->json([
             'status' => 'success',
@@ -314,4 +337,5 @@ class Aims_operating_officersController extends Controller
             'data' => $officer
         ], 201);
     }
+
 }

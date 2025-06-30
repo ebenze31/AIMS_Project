@@ -62,6 +62,19 @@ animation: fade-in 0.3s ease-in-out;
 	  	<h2 class="text-xl font-bold text-red-600 mb-2">คุณมีการลงทะเบียนไว้ที่หน่วยอื่น</h2>
 	  	<p class="text-gray-700">หากคุณดำเนินการลงทะเบียนใหม่<br>จะเป็นการยกเลิกหน่วยเดิม</p>
 
+	  	@if (!empty($unit_old))
+		  	<div class="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-400 rounded-md shadow-sm">
+		    	<h3 class="text-lg font-semibold text-yellow-700 mb-2">
+		      		หน่วยเดิมของคุณ
+	    		</h3>
+	    		<ul class="list-disc pl-6 text-gray-800 space-y-1">
+		      		<li>หน่วย : {{ $unit_old->name_unit }}</li>
+		      		<li>ประเภท : {{ $unit_old->name_type_unit }}</li>
+		    	</ul>
+		  	</div>
+		@endif
+
+
 	  	<div class="flex justify-center gap-4 mt-4">
 		  	<!-- ปุ่ม ดำเนินการต่อ -->
 		  	<button onclick="closeModal('modalOtherUnit')"
@@ -80,7 +93,7 @@ animation: fade-in 0.3s ease-in-out;
 
 <script>
   	function tryCloseWindow() {
-    	window.close();
+    	// window.close();
 
     	// fallback: ถ้าหน้ายังไม่ปิดภายใน 1 วินาที ให้ redirect แทน
     	setTimeout(() => {
