@@ -157,11 +157,21 @@ class LoginController extends Controller
         Auth::login($user);
         $data_user = Auth::user();
 
-        DB::table('users')
-            ->where('provider_id', $data->id)
-            ->update([
-                'status' => 'active',
-            ]);
+        if( empty($data_user->role) ){
+            DB::table('users')
+                ->where('provider_id', $data->id)
+                ->update([
+                    'status' => 'active',
+                    'role' => 'officer-area',
+                ]);
+        }
+        else{
+            DB::table('users')
+                ->where('provider_id', $data->id)
+                ->update([
+                    'status' => 'active',
+                ]);
+        }
 
     }
 
