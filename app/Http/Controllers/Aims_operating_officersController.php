@@ -225,6 +225,36 @@ class Aims_operating_officersController extends Controller
         return "success" ;
     }
 
+    public function UpdateStatusOfficer(Request $request, $officers_id , $status)
+    {
+        $requestData = $request->all();
+
+        if($status == 'null'){
+            $status = null ;
+        }
+
+        $updateData = [
+            'status' => $status,
+            'updated_at' => now(),
+        ];
+
+        // ถ้ามี lat/lng ค่อยเพิ่มเข้าไป
+        if (isset($requestData['lat']) && isset($requestData['lng'])) {
+            $updateData['lat'] = $requestData['lat'];
+            $updateData['lng'] = $requestData['lng'];
+        } else {
+            // ถ้าไม่มี ให้เคลียร์ตำแหน่ง (เลือกได้ว่าจะ null หรือไม่อัพเดต)
+            $updateData['lat'] = null;
+            $updateData['lng'] = null;
+        }
+
+        DB::table('aims_operating_officers')
+            ->where('id', $officers_id)
+            ->update($updateData);
+
+        return "success";
+    }
+
     function get_data_individual_officer($officers_id){
         $data_officer = DB::table('aims_operating_officers')
             ->where('aims_operating_officers.id', '=', $officers_id)
@@ -243,8 +273,13 @@ class Aims_operating_officersController extends Controller
 
     }
 
-    function officer_change_status(){
-        return view('aims_operating_officers.change_status');
+    function officer_change_status(Request $request){
+        $data_user = Auth::user();
+        $data_officer = DB::table('aims_operating_officers')
+            ->where('user_id', $data_user->id)
+            ->first();
+
+        return view('aims_operating_officers.change_status', compact('data_user','data_officer'));
     }
 
     function officer_register_operating(){
