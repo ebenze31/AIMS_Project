@@ -296,13 +296,13 @@
     font-weight: 500;
     margin-right: 8px;
 }
-.btn-colse-modal {
+.btn-secondary-normal {
     background-color: #fff;
     border-color: #dee2e6;
     color:  #212529;
 }
 
-.btn-colse-modal:hover {
+.btn-secondary-normal:hover {
     background-color: #e9ecef;
 }
 
@@ -321,14 +321,14 @@
         <div class="h-100 content-oparating m-0 ">
             <div class="data-oparating h-100 m-0 p-0" style="border-right: 1px solid #DADADA;">
                 <div class="px-4 py-3" style="border-bottom:  1px solid #DADADA;;">
-                    <div class="header">รหัสปฏิบัติการ</div>
-                    <p class="mb-0">{{ $emergency->op_operating_code ?? '-' }}</p>
+                    <div class="header mb-0">รหัสปฏิบัติการ</div>
+                    <p class="mb-3">{{ $emergency->op_operating_code ?? '-' }}</p>
                     <!-- <button class="btn w-100 btn-show-img">ดูรูปภาพ</button> -->
                     <div class="d-flex">
-                        <button class="btn w-100 btn-outline-danger mx-1 " id="btn_order">
+                        <button class="btn w-100 btn-outline-danger mx-1 py-1 " id="btn_order">
                             สั่งการ
                         </button>
-                        <button class="btn w-100 mx-1 btn-primary " id="btn_info">
+                        <button class="btn w-100 mx-1 btn-primary  py-1" id="btn_info">
                             ข้อมูลเคส
                         </button>
                     </div>
@@ -339,6 +339,8 @@
                     <p class="mb-0">เบอร์ : : {{ $emergency->type_reporter ?? 'ไม่ได้ระบุ' }}</p>
                     <p class="mb-0">เบอร์ : {{ $emergency->phone_reporter ?? 'ไม่ได้ระบุ' }}</p>
                     <!-- <button class="btn w-100 btn-show-img">ดูรูปภาพ</button> -->
+
+                    @if(!empty($emergency->emergency_photo))
                     <button class="btn w-100 btn-show-img collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
                         ดูรูปภาพ
                     </button>
@@ -347,6 +349,7 @@
                             <img class="photo-img" src="{{ url('/storage') }}/{{ $emergency->emergency_photo }}">
                         </div>
                     </div>
+                    @endif
                 </div>
                 @php
 
@@ -789,6 +792,7 @@
                         text-align: center !important;
                         vertical-align: middle !important;
                         border-radius: 50px;
+                         box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
                     }
 
                     @media (max-width: 400px) {
@@ -955,7 +959,7 @@
                 <!-- เนื้อหา modal -->
             </div>
             <div class="modal-footer justify-content-end">
-                <button type="button" class="btn btn-colse-modal me-2" style="width: 20%;" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-secondary-normal me-2" style="width: 20%;" data-bs-dismiss="modal">
                     ยกเลิก
                 </button>
                 <button type="button" class="btn btn-success" id="btn_confirm_select">
@@ -966,18 +970,152 @@
     </div>
 </div>
 
+
+<style>
+    .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid  #dee2e6;
+}
+    .modal-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    color:  #212529;
+}
+.loader {
+    border: 5px solid #f3f3f3;
+    border-top: 5px solid #0d6efd;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.waiting-name {
+    margin-top: 0;
+}
+
+.officer-unit {
+    color:#6c757d;
+    margin: -5px 0 5px 0;
+    font-size: 16px;
+}
+
+.timer-container {
+    margin: 20px 0;
+}
+
+.timer-container p {
+    margin: 0;
+    font-size: 14px;
+    color: #6c757d;
+}
+
+#timer_text {
+    font-size: 42px;
+    font-weight: 700;
+    color:  #212529;
+    letter-spacing: 2px;
+}
+
+.warning-box {
+    background-color: #fff3cd;
+    border: 1px solid  #ffc107;
+    color: #664d03;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    margin-top: 20px;
+    text-align: left;
+}
+
+.warning-box p {
+    margin: 0;
+}
+
+.modal-wait-officer {
+  max-width: 420px;
+  margin: auto;
+}
+
+.status-icon-wrapper {
+    margin: 0 auto 20px auto;
+}
+
+.status-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto;
+    position: relative;
+    box-sizing: border-box;
+    animation: scale-in 0.3s ease-in-out;
+}
+
+@keyframes scale-in {
+    from { transform: scale(0.5); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.rejection-icon {
+    background-color: #f8d7da;
+    border: 4px solid #dc3545;
+}
+
+.rejection-icon .icon-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 5px;
+    background-color: #dc3545;
+    border-radius: 2px;
+}
+
+.rejection-icon .line-1 {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.rejection-icon .line-2 {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.status-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #212529;
+    margin: 0 0 8px 0;
+}
+
+.status-description {
+    font-size: 16px;
+    color:  #6c757d;
+    line-height: 1.6;
+    margin: 0;
+}
+</style>
 <!-- Modal รอเจ้าหน้าที่ -->
 <div class="modal fade" id="wait_officer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="wait_officerLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-wait-officer">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="wait_officerLabel">Modal title</h5>
             </div>
-            <div class="modal-body">
+            <div class="modal-body text-center">
+                
                 <!-- เนื้อหา modal -->
             </div>
-            <div class="modal-footer justify-content-center">
-                <button id="btn_select_officer_again" type="button" class="btn btn-secondary me-2" style="width: 20%;" data-bs-dismiss="modal">
+            <div class="modal-footer justify-content-end">
+                <button id="btn_select_officer_again" type="button" class="btn btn-secondary-normal me-2" data-bs-dismiss="modal">
                     เลือกใหม่
                 </button>
             </div>
@@ -985,18 +1123,40 @@
     </div>
 </div>
 
+<style>
+
+
+.btn-primary-blue {
+     font-size: 16px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all .15s ease-in-out;
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #fff;
+}
+.btn-primary-blue:hover {
+    background-color: #0b5ed7;
+    border-color: #0b5ed7;
+    color: #fff;
+}
+</style>
 <!-- Modal เจ้าหน้าที่ ปฏิเสธ -->
 <div class="modal fade" id="officer_refuse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="officer_refuseLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered modal-wait-officer">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="officer_refuseLabel">Modal title</h5>
-            </div>
-            <div class="modal-body">
+            <div class="modal-body text-center">
                 <!-- เนื้อหา modal -->
             </div>
-            <div class="modal-footer justify-content-center">
-                <button id="officer_refuse_select_again" type="button" class="btn btn-secondary me-2" style="width: 20%;" data-bs-dismiss="modal">
+            
+            <div class="modal-footer justify-content-end">
+                <button type="button" class="btn btn-secondary-normal me-2 px-4  py-2"  data-bs-dismiss="modal">
+                    ปิด
+                </button>
+                <button id="officer_refuse_select_again" type="button" class="btn btn-primary-blue me-2 py-2" data-bs-dismiss="modal">
                     เลือกใหม่
                 </button>
             </div>
@@ -1132,11 +1292,21 @@
 
                             if (officerRefuse.includes(result[i].id)) {
                                 buttonHTML = `
-                                    <span class="ms-auto text-danger fw-bold">ปฏิเสธ</span>
+                                    <div>
+                                        <div class="officer-response officer-refuse">
+                                            <i class="fa-regular fa-circle-xmark"></i>
+                                            <p class="mb-0">ปฏิเสธ</p>
+                                        </div>
+                                    </div>
                                 `;
                             } else if (officerNoRespond.includes(result[i].id)) {
                                 buttonHTML = `
-                                    <span class="ms-auto" style="color:#DD8616;">ไม่ตอบสนอง</span>
+                                     <div>
+                                        <div class="officer-response officer-no-response">
+                                            <i class="fa-regular fa-circle-exclamation"></i>
+                                            <p class="mb-0">ไม่ตอบสนอง</p>
+                                        </div>
+                                    </div>
                                 `;
                             } else {
                                 buttonHTML = `
@@ -1300,16 +1470,22 @@
                     }
 
                     document.querySelector('#wait_officer .modal-body').innerHTML = '';
-                    document.querySelector('#wait_officerLabel').innerText = 'กำลังรอเจ้าหน้าที่ตอบรับ';
+                    document.querySelector('#wait_officerLabel').innerText = 'กำลังรอการตอบรับ';
 
                     const infoHTML = `
-                    <p><strong>ชื่อ:</strong> ${name}</p>
-                    <p><strong>หน่วย:</strong> ${unit}</p>
-                    <p><strong>ประเภท:</strong> ${type}</p>
-                    <p><strong>ระยะเวลา:</strong> <span id="timer_text">00:00</span></p>
-                    <p style="color: red; font-weight: bold;">
-                      หากปิดแท็บหรือรีเฟรช เจ้าหน้าที่ ${name} จะเปลี่ยนสถานะเป็นไม่ตอบสนองเคสนี้
-                    </p>
+                    
+                    <div class="loader"></div>
+
+                    <h4 class="officer-name waiting-name"> ${name}</h4>
+                    <p class="officer-unit">หน่วย: ${unit}</p>
+                    <p class="officer-unit">ประเภท: ${type}</p>
+                    <div class="timer-container">
+                        <p>ระยะเวลา</p>
+                        <span id="timer_text">00:00</span>
+                    </div>
+                    <div class="warning-box">
+                        <p>หากปิดแท็บหรือรีเฟรช เจ้าหน้าที่ ${name} จะเปลี่ยนสถานะเป็นไม่ตอบสนองเคสนี้</p>
+                    </div>
                 `;
 
                     document.querySelector('#wait_officer .modal-body').innerHTML = infoHTML;
@@ -1347,10 +1523,16 @@
 
                                     const modalBody = document.querySelector('#officer_refuse .modal-body');
                                     modalBody.innerHTML = `
-                                    <p><strong>ชื่อ:</strong> ${name}</p>
-                                    <p><strong>หน่วย:</strong> ${unit}</p>
-                                    <p><strong>ประเภท:</strong> ${type}</p>
-                                    <p class="text-danger"><strong>เจ้าหน้าที่ปฏิเสธการรับเคสนี้</strong></p>
+                                    <div class="status-icon-wrapper mt-3">
+                                        <div class="status-icon rejection-icon">
+                                            <span class="icon-line line-1"></span>
+                                            <span class="icon-line line-2"></span>
+                                        </div>
+                                    </div>
+                                     <h3 class="status-title">เจ้าหน้าที่ปฏิเสธ</h3>
+                                    <p class="status-description">
+                                        "${name}" ได้ปฏิเสธการช่วยเหลือ<br>กรุณาเลือกเจ้าหน้าที่คนอื่น
+                                    </p>
                                 `;
 
                                     const againButton = document.querySelector('#officer_refuse_select_again');
