@@ -11,7 +11,20 @@ class AimsProfileController extends Controller
 
     public function home_for_officer(Request $request)
     {
-        return view('amis_homepage.home_for_officer');
+        $user = Auth::user();
+
+        $data_officer = DB::table('aims_operating_officers')
+            ->where('aims_operating_officers.user_id', '=', $user->id)
+            ->leftJoin('users', 'aims_operating_officers.user_id', '=', 'users.id')
+            ->select(
+                'aims_operating_officers.name_officer',
+                'aims_operating_officers.level',
+                'aims_operating_officers.vehicle_type',
+                'users.*'
+            )
+            ->first();
+            
+        return view('amis_homepage.home_for_officer', compact('data_officer'));
     }
 
     public function aims_edit_profile(Request $request)
@@ -27,7 +40,19 @@ class AimsProfileController extends Controller
             return view('aims_profile.edit_profile_command');
         }
         elseif ($user->role === 'officer-area') {
-            return view('aims_profile.edit_profile_officer');
+
+            $data_officer = DB::table('aims_operating_officers')
+                ->where('aims_operating_officers.user_id', '=', $user->id)
+                ->leftJoin('users', 'aims_operating_officers.user_id', '=', 'users.id')
+                ->select(
+                    'aims_operating_officers.name_officer',
+                    'aims_operating_officers.level',
+                    'aims_operating_officers.vehicle_type',
+                    'users.*'
+                )
+                ->first();
+
+            return view('aims_profile.edit_profile_officer', compact('data_officer'));
         }
         else {
             return redirect('/form-sos');
