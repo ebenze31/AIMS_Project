@@ -119,7 +119,7 @@ animation: fade-in 0.3s ease-in-out;
 </div>
 
 <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-xl">
-    <h2 class="text-2xl font-bold text-gray-800 text-center">ลงทะเบียนเจ้าหน้าที่</h2>
+    <h2 class="text-2xl font-bold text-gray-800 text-center mb-3">ลงทะเบียนเจ้าหน้าที่</h2>
     <ul class="list-disc pl-6 text-gray-800 space-y-1">
 	  	<li>หน่วย  : {{ $data->name_unit }}</li>
 	  	<li>ประเภท : {{ $data->name_type_unit }}</li>
