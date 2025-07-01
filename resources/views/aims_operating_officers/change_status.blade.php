@@ -361,7 +361,19 @@
 </style>
 
 <div class="notranslate">
-    <div class="map notranslate" id="map"></div>
+    <div class="map notranslate" id="map">
+    	<div class="fixed inset-0 flex items-center justify-center bg-white z-50">
+		    <div class="flex flex-col items-center space-y-4">
+		        <!-- Spinner -->
+		        <div class="w-10 h-10 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+		        
+		        <!-- ข้อความ -->
+		        <div class="text-gray-700 text-lg font-medium">
+		            กำลังโหลดกรุณารอสักครู่..
+		        </div>
+		    </div>
+		</div>
+    </div>
     <div class="backdrop"></div>
 
     @php
