@@ -25,7 +25,7 @@ class Cancel_after_6_month extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'username', 'email', 'provider_id', 'avatar', 'role', 'type', 'phone', 'brith', 'sex', 'ranking', 'driver_license', 'driver_license2', 'location_P', 'location_A', 'organization', 'branch', 'branch_district', 'branch_province', 'photo','user_id'];
+    protected $fillable = ['name', 'username', 'email', 'provider_id', 'avatar', 'role', 'type', 'phone', 'birthday', 'sex', 'ranking', 'driver_license', 'driver_license2', 'location_P', 'location_A', 'organization', 'branch', 'branch_district', 'branch_province', 'photo','user_id'];
 
     
 }

@@ -66,7 +66,7 @@ class Cancel_after extends Command
                 $data_6_month['role'] = $key->role ;
                 $data_6_month['type'] = $key->type ;
                 $data_6_month['phone'] = $key->phone ;
-                $data_6_month['brith'] = $key->brith ;
+                $data_6_month['birthday'] = $key->birthday ;
                 $data_6_month['sex'] = $key->sex ;
                 $data_6_month['ranking'] = $key->ranking ;
                 $data_6_month['driver_license'] = $key->driver_license ;

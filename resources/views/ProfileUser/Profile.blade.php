@@ -133,7 +133,7 @@
                                 <center><i class="fas fa-birthday-cake"></i> <b>&nbsp;วันเกิด</b></center>
                             </div>
                             <div class="col-8">
-                                {{ $data->brith }}
+                                {{ $data->birthday }}
                             </div>
                             <hr style="margin-top: 20px;height:0.1px;width: 96%;">
 
@@ -621,7 +621,7 @@
                                 <center><i class="fas fa-birthday-cake"></i> <b>&nbsp;วันเกิด</b></center>
                             </div>
                             <div class="col-8">
-                                {{ $data->brith }}
+                                {{ $data->birthday }}
                             </div>
                             <hr style="margin-top: 20px;height:0.1px;width: 90%;">
 

@@ -181,7 +181,7 @@
                                         </td>
                                         <td>{{$user->sex ? $user->sex : "--"}}</td>
                                         <td>    
-                                            {{ thaidate("lที่ j F Y" , ($user->brith )? $user->brith : "--")  }}
+                                            {{ thaidate("lที่ j F Y" , ($user->birthday )? $user->birthday : "--")  }}
                                         </td>
                                         <td ><span class="badge bg-light-success text-success w-40">{{$user->status ? $user->status : "--"}}</span></td>
                                         <td>{{$user->created_at->locale('th')->diffForHumans() ? $user->created_at->locale('th')->diffForHumans() : "--"}}</td>

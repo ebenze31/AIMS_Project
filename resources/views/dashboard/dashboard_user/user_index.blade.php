@@ -55,7 +55,7 @@
                                 <td >{{$user->name ? $user->name : '-'}}</td>
                                 <td>{{$user->name_staff ? $user->name_staff : '-'}}</td>
                                 <td>{{$user->sex ? $user->sex : '-'}}</td>
-                                <td>{{$user->brith ? $user->brith : '-'}}</td>
+                                <td>{{$user->birthday ? $user->birthday : '-'}}</td>
                                 <td>{{$user->location_P ? $user->location_P : '-'}}</td>
                                 <td>{{$user->location_A ? $user->location_A : '-'}}</td>
                                 <td>{{$user->nationalitie ? $user->nationalitie : '-'}}</td>

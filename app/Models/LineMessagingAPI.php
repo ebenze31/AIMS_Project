@@ -323,7 +323,7 @@ class LineMessagingAPI extends Model
                         $sex = "กรุณาระบุเพศ" ;
                     }
 
-                    $date_time_birth = strtotime($item->brith);
+                    $date_time_birth = strtotime($item->birthday);
 
                     if(date('m-d') == date('m-d', $date_time_birth)) {
                         $birth_day = "สุขสันต์วันเกิด";
@@ -381,7 +381,7 @@ class LineMessagingAPI extends Model
 
                     $date_birth = date('d/m/Y', $date_time_birth);
                     // วันเกิด
-                    if (!empty($item->brith)) {
+                    if (!empty($item->birthday)) {
                         $string_json = str_replace("31/08/1998",$date_birth,$string_json);
 
                     }else{

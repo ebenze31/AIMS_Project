@@ -46,9 +46,9 @@
                                 </div>
                                 <div class="col-12 col-md-3">
                                     <label  class="control-label">{{ 'วันเกิด' }}</label>
-                                    <div class="form-group {{ $errors->has('brith') ? 'has-error' : ''}}">
-                                        <input class="form-control" name="brith" type="date" id="brith" value="{{ isset($register_car->brith) ? $register_car->brith :  Auth::user()->brith }}">
-                                        {!! $errors->first('brith', '<p class="help-block">:message</p>') !!}
+                                    <div class="form-group {{ $errors->has('birthday') ? 'has-error' : ''}}">
+                                        <input class="form-control" name="birthday" type="date" id="birthday" value="{{ isset($register_car->birthday) ? $register_car->birthday :  Auth::user()->birthday }}">
+                                        {!! $errors->first('birthday', '<p class="help-block">:message</p>') !!}
                                     </div>
                                 </div>
                             </div>

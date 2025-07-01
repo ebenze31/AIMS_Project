@@ -47,9 +47,9 @@
                                 {!! $errors->first('name_staff', '<p class="help-block">:message</p>') !!}
                         </div>
                         <label for="massengbox" class="control-label"><b>{{ 'Birthday' }}</b></label>
-                        <div class="form-group {{ $errors->has('brith') ? 'has-error' : ''}}">
-                            <input class="form-control" name="brith" type="date" id="brith" value="{{ isset($data->brith) ? $data->brith : ''}}" >
-                                    {!! $errors->first('brith', '<p class="help-block">:message</p>') !!}
+                        <div class="form-group {{ $errors->has('birthday') ? 'has-error' : ''}}">
+                            <input class="form-control" name="birthday" type="date" id="birthday" value="{{ isset($data->birthday) ? $data->birthday : ''}}" >
+                                    {!! $errors->first('birthday', '<p class="help-block">:message</p>') !!}
                         </div>
                         <label for="massengbox" class="control-label"><b>{{ 'Gender' }}</b></label>
                         <div class="form-group {{ $errors->has('sex') ? 'has-error' : ''}}">

@@ -72,7 +72,7 @@ class Broadcast_userController extends Controller
                 $data_search = User::where('type','line')
                 ->where('organization',$partner_name)
                 ->when($age_user, function ($query) use ($startDate, $endDate) {
-                    return $query->whereBetween('brith', [$startDate, $endDate]);
+                    return $query->whereBetween('birthday', [$startDate, $endDate]);
                 })
                 ->when($gender_user, function ($query, $gender_user) {
                     return $query->where('sex', $gender_user);
@@ -106,7 +106,7 @@ class Broadcast_userController extends Controller
                 $data_search = User::where('type','line')
                 ->where('user_from','LIKE',"%$partner_name%")
                 ->when($age_user, function ($query) use ($startDate, $endDate) {
-                    return $query->whereBetween('brith', [$startDate, $endDate]);
+                    return $query->whereBetween('birthday', [$startDate, $endDate]);
                 })
                 ->when($gender_user, function ($query, $gender_user) {
                     return $query->where('sex', $gender_user);
@@ -143,7 +143,7 @@ class Broadcast_userController extends Controller
             ->where('organization',$partner_name)
             ->orWhere('user_from','LIKE',"%$partner_name%")
             ->when($age_user, function ($query) use ($startDate, $endDate) {
-                return $query->whereBetween('brith', [$startDate, $endDate]);
+                return $query->whereBetween('birthday', [$startDate, $endDate]);
             })
             ->when($gender_user, function ($query, $gender_user) {
                 return $query->where('sex', $gender_user);

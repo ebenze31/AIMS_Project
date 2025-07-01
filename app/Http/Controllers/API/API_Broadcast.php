@@ -71,7 +71,7 @@ class API_Broadcast extends Controller
                     $arr_data['user_id'] = $data->id ;
                     $arr_data['name'] = $data->name ;
                     $arr_data['sex'] = $data->sex ;
-                    $arr_data['age'] = $data->brith ;
+                    $arr_data['age'] = $data->birthday ;
 
                     if (in_array($arr_data, $arr_select_user)){
                         // skip
@@ -98,7 +98,7 @@ class API_Broadcast extends Controller
                     $arr_data['user_id'] = $data->id ;
                     $arr_data['name'] = $data->name ;
                     $arr_data['sex'] = $data->sex ;
-                    $arr_data['age'] = $data->brith ;
+                    $arr_data['age'] = $data->birthday ;
 
                     if (in_array($arr_data, $arr_select_user)){
                         // skip
@@ -127,7 +127,7 @@ class API_Broadcast extends Controller
                         $arr_data['user_id'] = $data->id ;
                         $arr_data['name'] = $data->name ;
                         $arr_data['sex'] = $data->sex ;
-                        $arr_data['age'] = $data->brith ;
+                        $arr_data['age'] = $data->birthday ;
 
                         if (in_array($arr_data, $arr_select_user)){
                             // skip
@@ -155,7 +155,7 @@ class API_Broadcast extends Controller
                         $arr_data['user_id'] = $data->id ;
                         $arr_data['name'] = $data->name ;
                         $arr_data['sex'] = $data->sex ;
-                        $arr_data['age'] = $data->brith ;
+                        $arr_data['age'] = $data->birthday ;
 
                         if (in_array($arr_data, $arr_select_user)){
                             // skip
@@ -184,7 +184,7 @@ class API_Broadcast extends Controller
                         $arr_data['user_id'] = $data->id ;
                         $arr_data['name'] = $data->name ;
                         $arr_data['sex'] = $data->sex ;
-                        $arr_data['age'] = $data->brith ;
+                        $arr_data['age'] = $data->birthday ;
 
                         if (in_array($arr_data, $arr_select_user)){
                             // skip
@@ -201,7 +201,7 @@ class API_Broadcast extends Controller
                 $data_all_check_partner = Check_in::join('users', 'check_ins.user_id', '=', 'users.id')
                     ->where('check_ins.check_in_at', 'LIKE' , "%$name_partner%")
                     ->where('users.type' , 'LIKE' , 'line')
-                    ->whereMonth('users.brith' , date('m'))
+                    ->whereMonth('users.birthday' , date('m'))
                     ->select('users.*')
                     ->get();
 
@@ -211,7 +211,7 @@ class API_Broadcast extends Controller
                     $arr_data['user_id'] = $data->id ;
                     $arr_data['name'] = $data->name ;
                     $arr_data['sex'] = $data->sex ;
-                    $arr_data['age'] = $data->brith ;
+                    $arr_data['age'] = $data->birthday ;
 
                     if (in_array($arr_data, $arr_select_user)){
                         // skip
@@ -274,7 +274,7 @@ class API_Broadcast extends Controller
                         $arr_data['user_id'] = $data->id ;
                         $arr_data['name'] = $data->name ;
                         $arr_data['sex'] = $data->sex ;
-                        $arr_data['age'] = $data->brith ;
+                        $arr_data['age'] = $data->birthday ;
 
                         if (in_array($arr_data, $arr_select_user)){
                             // skip
@@ -295,8 +295,8 @@ class API_Broadcast extends Controller
                     $data_all_check_partner = Check_in::join('users', 'check_ins.user_id', '=', 'users.id')
                         ->where('check_ins.check_in_at', 'LIKE' , "%$name_partner%")
                         ->where('users.type' , 'LIKE' , 'line')
-                        ->whereYear('users.brith' , "<=" , $age_range_1)
-                        ->whereYear('users.brith' , ">=" , $age_range_2)
+                        ->whereYear('users.birthday' , "<=" , $age_range_1)
+                        ->whereYear('users.birthday' , ">=" , $age_range_2)
                         ->select('users.*')
                         ->get();
                 }else if( empty($select_user_sex) && empty($select_user_age) && !empty($select_user_location) ){
@@ -313,8 +313,8 @@ class API_Broadcast extends Controller
                         ->where('check_ins.check_in_at', 'LIKE' , "%$name_partner%")
                         ->where('users.type' , 'LIKE' , 'line')
                         ->where('users.sex' , $select_user_sex)
-                        ->whereYear('users.brith' , "<=" , $age_range_1)
-                        ->whereYear('users.brith' , ">=" , $age_range_2)
+                        ->whereYear('users.birthday' , "<=" , $age_range_1)
+                        ->whereYear('users.birthday' , ">=" , $age_range_2)
                         ->select('users.*')
                         ->get();
                 }else if( !empty($select_user_sex) && empty($select_user_age) && !empty($select_user_location) ){
@@ -329,8 +329,8 @@ class API_Broadcast extends Controller
                     $data_all_check_partner = Check_in::join('users', 'check_ins.user_id', '=', 'users.id')
                         ->where('check_ins.check_in_at', 'LIKE' , "%$name_partner%")
                         ->where('users.type' , 'LIKE' , 'line')
-                        ->whereYear('users.brith' , "<=" , $age_range_1)
-                        ->whereYear('users.brith' , ">=" , $age_range_2)
+                        ->whereYear('users.birthday' , "<=" , $age_range_1)
+                        ->whereYear('users.birthday' , ">=" , $age_range_2)
                         ->where('users.changwat_th' , $select_user_location)
                         ->select('users.*')
                         ->get();
@@ -341,8 +341,8 @@ class API_Broadcast extends Controller
                         ->where('check_ins.check_in_at', 'LIKE' , "%$name_partner%")
                         ->where('users.type' , 'LIKE' , 'line')
                         ->where('users.sex' , $select_user_sex)
-                        ->whereYear('users.brith' , "<=" , $age_range_1)
-                        ->whereYear('users.brith' , ">=" , $age_range_2)
+                        ->whereYear('users.birthday' , "<=" , $age_range_1)
+                        ->whereYear('users.birthday' , ">=" , $age_range_2)
                         ->where('users.changwat_th' , $select_user_location)
                         ->select('users.*')
                         ->get();
@@ -355,7 +355,7 @@ class API_Broadcast extends Controller
                     $arr_data['user_id'] = $data->id ;
                     $arr_data['name'] = $data->name ;
                     $arr_data['sex'] = $data->sex ;
-                    $arr_data['age'] = $data->brith ;
+                    $arr_data['age'] = $data->birthday ;
 
                     if (in_array($arr_data, $arr_select_user)){
                         // skip
@@ -384,7 +384,7 @@ class API_Broadcast extends Controller
                     $arr_data['user_id'] = $data->id ;
                     $arr_data['name'] = $data->name ;
                     $arr_data['sex'] = $data->sex ;
-                    $arr_data['age'] = $data->brith ;
+                    $arr_data['age'] = $data->birthday ;
 
                     if (in_array($arr_data, $arr_select_user)){
                         // skip
@@ -411,7 +411,7 @@ class API_Broadcast extends Controller
                     $arr_data['user_id'] = $data->id ;
                     $arr_data['name'] = $data->name ;
                     $arr_data['sex'] = $data->sex ;
-                    $arr_data['age'] = $data->brith ;
+                    $arr_data['age'] = $data->birthday ;
 
                     if (in_array($arr_data, $arr_select_user)){
                         // skip
@@ -440,7 +440,7 @@ class API_Broadcast extends Controller
                         $arr_data['user_id'] = $data->id ;
                         $arr_data['name'] = $data->name ;
                         $arr_data['sex'] = $data->sex ;
-                        $arr_data['age'] = $data->brith ;
+                        $arr_data['age'] = $data->birthday ;
 
                         if (in_array($arr_data, $arr_select_user)){
                             // skip
@@ -468,7 +468,7 @@ class API_Broadcast extends Controller
                         $arr_data['user_id'] = $data->id ;
                         $arr_data['name'] = $data->name ;
                         $arr_data['sex'] = $data->sex ;
-                        $arr_data['age'] = $data->brith ;
+                        $arr_data['age'] = $data->birthday ;
 
                         if (in_array($arr_data, $arr_select_user)){
                             // skip
@@ -497,7 +497,7 @@ class API_Broadcast extends Controller
                         $arr_data['user_id'] = $data->id ;
                         $arr_data['name'] = $data->name ;
                         $arr_data['sex'] = $data->sex ;
-                        $arr_data['age'] = $data->brith ;
+                        $arr_data['age'] = $data->birthday ;
 
                         if (in_array($arr_data, $arr_select_user)){
                             // skip
@@ -514,7 +514,7 @@ class API_Broadcast extends Controller
                 $data_all_check_partner = Check_in::join('users', 'check_ins.user_id', '=', 'users.id')
                     ->where('check_ins.partner_id',  $id_name_area)
                     ->where('users.type' , 'LIKE' , 'line')
-                    ->whereMonth('users.brith' , date('m'))
+                    ->whereMonth('users.birthday' , date('m'))
                     ->select('users.*')
                     ->get();
 
@@ -524,7 +524,7 @@ class API_Broadcast extends Controller
                     $arr_data['user_id'] = $data->id ;
                     $arr_data['name'] = $data->name ;
                     $arr_data['sex'] = $data->sex ;
-                    $arr_data['age'] = $data->brith ;
+                    $arr_data['age'] = $data->birthday ;
 
                     if (in_array($arr_data, $arr_select_user)){
                         // skip
@@ -587,7 +587,7 @@ class API_Broadcast extends Controller
                         $arr_data['user_id'] = $data->id ;
                         $arr_data['name'] = $data->name ;
                         $arr_data['sex'] = $data->sex ;
-                        $arr_data['age'] = $data->brith ;
+                        $arr_data['age'] = $data->birthday ;
 
                         if (in_array($arr_data, $arr_select_user)){
                             // skip
@@ -608,8 +608,8 @@ class API_Broadcast extends Controller
                     $data_all_check_partner = Check_in::join('users', 'check_ins.user_id', '=', 'users.id')
                         ->where('check_ins.partner_id',  $id_name_area)
                         ->where('users.type' , 'LIKE' , 'line')
-                        ->whereYear('users.brith' , "<=" , $age_range_1)
-                        ->whereYear('users.brith' , ">=" , $age_range_2)
+                        ->whereYear('users.birthday' , "<=" , $age_range_1)
+                        ->whereYear('users.birthday' , ">=" , $age_range_2)
                         ->select('users.*')
                         ->get();
                 }else if( empty($select_user_sex) && empty($select_user_age) && !empty($select_user_location) ){
@@ -626,8 +626,8 @@ class API_Broadcast extends Controller
                         ->where('check_ins.partner_id',  $id_name_area)
                         ->where('users.type' , 'LIKE' , 'line')
                         ->where('users.sex' , $select_user_sex)
-                        ->whereYear('users.brith' , "<=" , $age_range_1)
-                        ->whereYear('users.brith' , ">=" , $age_range_2)
+                        ->whereYear('users.birthday' , "<=" , $age_range_1)
+                        ->whereYear('users.birthday' , ">=" , $age_range_2)
                         ->select('users.*')
                         ->get();
                 }else if( !empty($select_user_sex) && empty($select_user_age) && !empty($select_user_location) ){
@@ -642,8 +642,8 @@ class API_Broadcast extends Controller
                     $data_all_check_partner = Check_in::join('users', 'check_ins.user_id', '=', 'users.id')
                         ->where('check_ins.partner_id',  $id_name_area)
                         ->where('users.type' , 'LIKE' , 'line')
-                        ->whereYear('users.brith' , "<=" , $age_range_1)
-                        ->whereYear('users.brith' , ">=" , $age_range_2)
+                        ->whereYear('users.birthday' , "<=" , $age_range_1)
+                        ->whereYear('users.birthday' , ">=" , $age_range_2)
                         ->where('users.changwat_th' , $select_user_location)
                         ->select('users.*')
                         ->get();
@@ -654,8 +654,8 @@ class API_Broadcast extends Controller
                         ->where('check_ins.partner_id',  $id_name_area)
                         ->where('users.type' , 'LIKE' , 'line')
                         ->where('users.sex' , $select_user_sex)
-                        ->whereYear('users.brith' , "<=" , $age_range_1)
-                        ->whereYear('users.brith' , ">=" , $age_range_2)
+                        ->whereYear('users.birthday' , "<=" , $age_range_1)
+                        ->whereYear('users.birthday' , ">=" , $age_range_2)
                         ->where('users.changwat_th' , $select_user_location)
                         ->select('users.*')
                         ->get();
@@ -668,7 +668,7 @@ class API_Broadcast extends Controller
                     $arr_data['user_id'] = $data->id ;
                     $arr_data['name'] = $data->name ;
                     $arr_data['sex'] = $data->sex ;
-                    $arr_data['age'] = $data->brith ;
+                    $arr_data['age'] = $data->birthday ;
 
                     if (in_array($arr_data, $arr_select_user)){
                         // skip

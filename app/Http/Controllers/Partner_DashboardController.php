@@ -318,7 +318,7 @@ class Partner_DashboardController extends Controller
                     continue; // ถ้าเจอ id ที่ถูกนับแล้ว ข้ามไปเช็คคนถัดไป
                 }
 
-                $birthDate = $finder_hbd->brith;
+                $birthDate = $finder_hbd->birthday;
                 $birthMonth = date('m', strtotime($birthDate));
 
                 if($birthMonth == $currentMonth){
@@ -1524,7 +1524,7 @@ class Partner_DashboardController extends Controller
                         continue; // ถ้าเจอ id ที่ถูกนับแล้ว ข้ามไปเช็คคนถัดไป
                     }
 
-                    $birthDate = $finder_hbd->brith;
+                    $birthDate = $finder_hbd->birthday;
                     $birthMonth = date('m', strtotime($birthDate));
 
                     if($birthMonth == $currentMonth){

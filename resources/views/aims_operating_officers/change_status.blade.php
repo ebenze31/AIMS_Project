@@ -429,7 +429,7 @@
 			        id="statusToggle"
 			        {{ $data_officer->status == 'Standby' ? 'checked' : '' }}>
 			    
-			    <div class="w-11 h-6 bg-gray-300 peer-checked:bg-green-500 rounded-full peer-focus:ring-2 peer-focus:ring-green-500 transition-all duration-300"></div>
+			    <div class="w-11 h-6 bg-gray-300 peer-checked:bg-green-500 rounded-full transition-all duration-300"></div>
 			    <div class="w-5 h-5 bg-white absolute rounded-full -translate-x-1 peer-checked:translate-x-6 transition-transform duration-300 shadow-md pointer-events-none"></div>
 			</label>
         </div>

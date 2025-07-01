@@ -1308,11 +1308,11 @@ animation: myAnim 1s ease 0s 1 normal forwards;
                         }
 
                         let age_user = "" ;
-                        if (!result[i]['brith']) {
+                        if (!result[i]['birthday']) {
                             age_user = "ไม่ได้ระบุ" ;
                         }else{
                             // สร้างวัตถุ Date สำหรับวันเกิด
-                            let birthday = new Date(result[i]['brith']);
+                            let birthday = new Date(result[i]['birthday']);
 
                             // สร้างวัตถุ Date สำหรับวันปัจจุบัน
                             let today = new Date();
@@ -1326,7 +1326,7 @@ animation: myAnim 1s ease 0s 1 normal forwards;
                             // แสดงผล
                             // console.log("อายุของคุณคือ: " + age_user + " ปี");
                         }
-                        console.log(result[i]['name']);console.log(result[i]['sex']);console.log(result[i]['brith']);
+                        console.log(result[i]['name']);console.log(result[i]['sex']);console.log(result[i]['birthday']);
 
                         let div_data_name = `<div class="col-12 col-md-3 col-lg-3 card main-shadow item-content  m-1" onclick="click_select('`+result[i]['id']+`')" id="div_result_content_count_`+content_count+`">
                                 <div class="content-header">

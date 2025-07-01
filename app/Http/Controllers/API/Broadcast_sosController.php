@@ -199,7 +199,7 @@ class Broadcast_sosController extends Controller
                 $data_result = User::whereIn('id',$data_sos)
                 ->where('type','line')
                 ->when($age_user, function ($query) use ($startDate, $endDate) {
-                    return $query->whereBetween('brith', [$startDate, $endDate]);
+                    return $query->whereBetween('birthday', [$startDate, $endDate]);
                 })
                 ->when($gender_user, function ($query, $gender_user) {
                     return $query->where('sex', $gender_user);

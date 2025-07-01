@@ -29,7 +29,7 @@ class Cancel_after_6_monthController extends Controller
                 ->orWhere('role', 'LIKE', "%$keyword%")
                 ->orWhere('type', 'LIKE', "%$keyword%")
                 ->orWhere('phone', 'LIKE', "%$keyword%")
-                ->orWhere('brith', 'LIKE', "%$keyword%")
+                ->orWhere('birthday', 'LIKE', "%$keyword%")
                 ->orWhere('sex', 'LIKE', "%$keyword%")
                 ->orWhere('ranking', 'LIKE', "%$keyword%")
                 ->orWhere('driver_license', 'LIKE', "%$keyword%")

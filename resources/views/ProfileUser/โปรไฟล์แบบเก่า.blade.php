@@ -81,7 +81,7 @@
                                                     <center>
                                                     <i class="fas fa-birthday-cake"></i> &nbsp;<b>วันเกิด</b> 
                                                     <br>
-                                                    <span class="text-primary">{{ $data->brith }}<hr style=" height:0.3px; color:#778899;"> </span>
+                                                    <span class="text-primary">{{ $data->birthday }}<hr style=" height:0.3px; color:#778899;"> </span>
                                                     </center>
                                                 </div>
                                                 <div class="col-12">
@@ -209,7 +209,7 @@
                                                 <div class="col-md-7">
                                                     <i class="fas fa-birthday-cake"></i> &nbsp;<b>วันเกิด</b> 
                                                     &nbsp;&nbsp;
-                                                    <span class="text-primary">{{ $data->brith }}<hr style=" height:0.1px; color:#778899;"> </span>
+                                                    <span class="text-primary">{{ $data->birthday }}<hr style=" height:0.1px; color:#778899;"> </span>
                                                 </div>
                                                 <div class="col-md-5">
                                                     <i class="fas fa-venus-mars"></i></i> &nbsp;<b>เพศ</b> 
