@@ -1535,8 +1535,10 @@
                                     </p>
                                 `;
 
-                                    const againButton = document.querySelector('#officer_refuse_select_again');
-                                    againButton.setAttribute('onclick', `select_officer_again(${data.emergency_id}, ${officer_id}, 'ปฏิเสธ')`);
+                                    select_officer_again(data.emergency_id , officer_id , 'ปฏิเสธ')
+
+                                    // const againButton = document.querySelector('#officer_refuse_select_again');
+                                    // againButton.setAttribute('onclick', `select_officer_again(${data.emergency_id}, ${officer_id}, 'ปฏิเสธ')`);
 
                                     $('#officer_refuse').modal('show');
                                 } else if (result.trim() === "รับเคส") {
@@ -1582,7 +1584,12 @@
         if (type == "ปฏิเสธ") {
             document.querySelector('#btn_of_id_' + officer_id).remove();
             let div_officer = document.querySelector('#div_officer_id_' + officer_id);
-            let new_show = `<span class="ms-auto text-danger fw-bold">ปฏิเสธ</span>`;
+            let new_show = `<div>
+                                <div class="officer-response officer-refuse">
+                                    <i class="fa-regular fa-circle-xmark"></i>
+                                    <p class="mb-0">ปฏิเสธ</p>
+                                </div>
+                            </div>`;
             div_officer.insertAdjacentHTML('beforeend', new_show); // แทรกล่างสุด
 
             $('#officer_refuse').modal('hide');
@@ -1606,7 +1613,12 @@
                         // console.log('สำเร็จ');
                         document.querySelector('#btn_of_id_' + officer_id).remove();
                         let div_officer = document.querySelector('#div_officer_id_' + officer_id);
-                        let new_show = `<span class="ms-auto" style="color:#DD8616;">ไม่ตอบสนอง</span>`;
+                        let new_show = `<div>
+                                            <div class="officer-response officer-no-response">
+                                                <i class="fa-regular fa-circle-exclamation"></i>
+                                                <p class="mb-0">ไม่ตอบสนอง</p>
+                                            </div>
+                                        </div>`;
                         div_officer.insertAdjacentHTML('beforeend', new_show); // แทรกล่างสุด
                     }
                 })
