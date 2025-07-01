@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class AimsProfileController extends Controller
 {
@@ -23,7 +24,7 @@ class AimsProfileController extends Controller
                 'users.*'
             )
             ->first();
-            
+
         return view('amis_homepage.home_for_officer', compact('data_officer'));
     }
 
@@ -52,7 +53,12 @@ class AimsProfileController extends Controller
                 )
                 ->first();
 
-            return view('aims_profile.edit_profile_officer', compact('data_officer'));
+                $ip = request()->ip(); // ดึง IP ของผู้ใช้
+
+                $response = Http::get("http://ip-api.com/json/{$ip}?lang=th");
+                $ip_data = $response->successful() ? $response->json() : null;
+
+            return view('aims_profile.edit_profile_officer', compact('data_officer','ip_data'));
         }
         else {
             return redirect('/form-sos');
@@ -61,4 +67,5 @@ class AimsProfileController extends Controller
         return redirect('/404');
 
     }
+
 }

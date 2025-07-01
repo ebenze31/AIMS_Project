@@ -116,9 +116,12 @@
 
 	        <!-- IP Address -->
 			<div class="d-">
-			    <label class="block text-sm font-medium text-gray-700">IP Information</label>
-			    <textarea id="ip_info" name="ip_info" rows="8" readonly
-			        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm text-gray-700 bg-gray-50"></textarea>
+			    @if($ip_data)
+				    <textarea class="w-full h-48 border p-2 rounded" readonly>{{ json_encode($ip_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</textarea>
+				@else
+				    <p class="text-red-500">ไม่สามารถดึงข้อมูล IP ได้</p>
+				@endif
+
 			</div>
 
 	    </div>
@@ -234,24 +237,6 @@ document.getElementById('photoInput').addEventListener('change', function (event
     }
 });
 
-fetch('http://ip-api.com/json/')
-    .then(response => response.json())
-    .then(data => {
-    	console.log(data);
-
-        const textarea = document.getElementById('ip_info');
-        const time_zone_info = document.getElementById('time_zone_info');
-        const country_info = document.getElementById('country_info');
-
-        if (textarea) {
-            textarea.value = JSON.stringify(data, null, 2);
-            time_zone_info.value = data['timezone'];
-            country_info.value = data['countryCode'];
-        }
-    })
-    .catch(error => {
-        console.error("ไม่สามารถดึงข้อมูล IP ได้:", error);
-    });
 </script>
 
 
