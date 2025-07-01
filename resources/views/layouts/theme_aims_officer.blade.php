@@ -62,7 +62,7 @@
                 <div class="px-0 w-full" style="position:var(--header-inner-position)">
                     <div class="w-full px-2 lg:px-8">
                         <div class="relative px-2 sm:px-8 lg:px-2">
-                            <div class="mx-auto max-w-2xl lg:max-w-5xl">
+                            <div class="mx-auto">
                                 <div class="relative flex items-center justify-between w-full">
                                     <!-- โลโก้ด้านซ้าย -->
                                     <div class="flex items-center">
