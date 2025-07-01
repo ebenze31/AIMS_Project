@@ -103,16 +103,23 @@
 	        </div>
 
 	        <!-- time_zone -->
-	        <div class="d-none">
-	            <label class="block text-sm font-medium text-gray-700">Time Zone</label>
-	            <input id="time_zone_info" type="text" name="time_zone" value="{{ $data_officer->time_zone ?? '' }}" readonly class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-	        </div>
+			<div class="d-none">
+			    <label class="block text-sm font-medium text-gray-700">Time Zone</label>
+			    <input id="time_zone_info" type="text" name="time_zone" 
+			        value="{{ $data_officer->time_zone ?? $ip_data['time_zone'] ?? '' }}" 
+			        readonly 
+			        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+			</div>
 
-	        <!-- country -->
-	        <div class="d-none">
-	            <label class="block text-sm font-medium text-gray-700">ประเทศ</label>
-	            <input id="country_info" type="text" name="country" value="{{ $data_officer->country ?? '' }}" readonly class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-	        </div>
+			<!-- country -->
+			<div class="d-none">
+			    <label class="block text-sm font-medium text-gray-700">ประเทศ</label>
+			    <input id="country_info" type="text" name="country" 
+			        value="{{ $data_officer->country ?? $ip_data['country'] ?? '' }}" 
+			        readonly 
+			        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+			</div>
+
 
 	        <!-- IP Address -->
 			<div class="d-">
