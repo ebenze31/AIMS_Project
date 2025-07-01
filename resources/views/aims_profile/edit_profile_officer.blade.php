@@ -88,22 +88,82 @@
 	            </select>
 	        </div>
 
-	        <!-- language -->
-	        <div>
-	            <label class="block text-sm font-medium text-gray-700">ภาษา</label>
-	            <input type="text" name="language" value="{{ $data_officer->language ?? '' }}"
-	                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-	        </div>
+	        @php
+			    $languages = [
+				    'th' => 'Thai',
+				    'en' => 'English',
+				    'zh' => 'Chinese',
+				    'es' => 'Spanish',
+				    'fr' => 'French',
+				    'de' => 'German',
+				    'ja' => 'Japanese',
+				    'ko' => 'Korean',
+				    'ar' => 'Arabic',
+				    'hi' => 'Hindi',
+				    'ru' => 'Russian',
+				    'pt' => 'Portuguese',
+				    'bn' => 'Bengali',
+				    'ur' => 'Urdu',
+				    'vi' => 'Vietnamese',
+				    'Other' => 'Other'
+				];
 
-	        <!-- nationalitie -->
-	        <div>
-	            <label class="block text-sm font-medium text-gray-700">สัญชาติ</label>
-	            <input type="text" name="nationalitie" value="{{ $data_officer->nationalitie ?? '' }}"
-	                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-	        </div>
+			    $nationalities = [
+			        'Thai', 'American', 'British', 'Chinese', 'Japanese', 'Indian', 'French', 'German',
+			        'Australian', 'Canadian', 'Vietnamese', 'South Korean', 'Indonesian', 'Malaysian', 'Filipino', 'Other'
+			    ];
+
+			    $selectedLanguage = $data_officer->language ?? '';
+			    $selectedNationality = $data_officer->nationalitie ?? '';
+
+			    $isOtherLanguage = !array_key_exists($selectedLanguage, $languages);
+			    $isOtherNationality = !in_array($selectedNationality, $nationalities);
+			@endphp
+
+			<!-- ภาษา -->
+			<div>
+			    <label class="block text-sm font-medium text-gray-700">ภาษา</label>
+
+			    <select name="language" id="language_select"
+			        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+			        onchange="toggleLanguageInput(this)">
+			        <option value="">-- กรุณาเลือกภาษา --</option>
+			        @foreach ($languages as $code => $name)
+			            <option value="{{ $code }}" {{ $selectedLanguage == $code ? 'selected' : '' }}>
+			                {{ $name }}
+			            </option>
+			        @endforeach
+			    </select>
+
+			    <input id="language_input" type="text" name="language_other"
+			        value="{{ $isOtherLanguage ? $selectedLanguage : '' }}"
+			        class="d-none mt-2 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+			        placeholder="ระบุภาษาอื่น ๆ">
+			</div>
+
+			<!-- สัญชาติ -->
+			<div class="mt-4">
+			    <label class="block text-sm font-medium text-gray-700">สัญชาติ</label>
+
+			    <select id="nationality_select" name="nationalitie"
+			        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+			        onchange="toggleNationalityInput(this)">
+			        <option value="">-- กรุณาเลือกสัญชาติ --</option>
+			        @foreach ($nationalities as $nation)
+			            <option value="{{ $nation }}" {{ $selectedNationality == $nation ? 'selected' : '' }}>
+			                {{ $nation }}
+			            </option>
+			        @endforeach
+			    </select>
+
+			    <input id="nationality_input" type="text" name="nationalitie_other"
+			        value="{{ $isOtherNationality ? $selectedNationality : '' }}"
+			        class="d-none mt-2 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+			        placeholder="ระบุสัญชาติอื่น ๆ">
+			</div>
 
 	        <!-- time_zone -->
-			<div class="d-">
+			<div class="d-none">
 			    <label class="block text-sm font-medium text-gray-700">Time Zone</label>
 			    <input type="text" name="time_zone" 
 			        value="{{ $data_officer->time_zone ?? $ip_data['timezone'] ?? '' }}" 
@@ -112,7 +172,7 @@
 			</div>
 
 			<!-- country -->
-			<div class="d-">
+			<div class="d-none">
 			    <label class="block text-sm font-medium text-gray-700">ประเทศ</label>
 			    <input type="text" name="country" 
 			        value="{{ $data_officer->country ?? $ip_data['countryCode'] ?? '' }}" 
@@ -122,7 +182,7 @@
 
 
 	        <!-- IP Address -->
-			<div class="d-">
+			<div class="d-none">
 			    @if($ip_data)
 				    <textarea class="w-full h-48 border p-2 rounded" readonly>{{ json_encode($ip_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</textarea>
 				@else
@@ -154,17 +214,39 @@
 	        </div>
 
 	        <!-- vehicle_type -->
-	        <div>
-	            <label class="block text-sm font-medium text-gray-700">ประเภทยานพาหนะ</label>
-	            <select name="vehicle_type"
-	                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-	                <option value="">กรุณาเลือกยานพาหนะ</option>
-	                <option value="รถยนต์" {{ $data_officer->vehicle_type == 'รถยนต์' ? 'selected' : '' }}>รถยนต์</option>
-	                <option value="รถจักรยานยนต์" {{ $data_officer->vehicle_type == 'รถจักรยานยนต์' ? 'selected' : '' }}>รถจักรยานยนต์</option>
-	                <option value="เดินเท้า" {{ $data_officer->vehicle_type == 'เดินเท้า' ? 'selected' : '' }}>เดินเท้า</option>
-	                <option value="อื่นๆ" {{ $data_officer->vehicle_type == 'อื่นๆ' ? 'selected' : '' }}>อื่นๆ</option>
-	            </select>
-	        </div>
+	        @php
+			    $vehicleOptions = [
+			        'รถยนต์' => 'รถยนต์',
+			        'รถจักรยานยนต์' => 'รถจักรยานยนต์',
+			        'รถพยาบาล' => 'รถพยาบาล',
+			        'เรือ' => 'เรือ',
+			        'เฮลิคอปเตอร์' => 'เฮลิคอปเตอร์',
+			    ];
+
+			    $selectedVehicle = $data_officer->vehicle_type ?? '';
+			    $isOtherVehicle = !array_key_exists($selectedVehicle, $vehicleOptions);
+			@endphp
+
+			<div>
+			    <label class="block text-sm font-medium text-gray-700">ประเภทยานพาหนะ</label>
+
+			    <select name="vehicle_type" id="vehicle_select"
+			        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+			        onchange="toggleVehicleInput(this)">
+			        <option value="">กรุณาเลือกยานพาหนะ</option>
+			        @foreach ($vehicleOptions as $value => $label)
+			            <option value="{{ $value }}" {{ (!$isOtherVehicle && $selectedVehicle == $value) ? 'selected' : '' }}>
+			                {{ $label }}
+			            </option>
+			        @endforeach
+			        <option value="other" {{ $isOtherVehicle ? 'selected' : '' }}>อื่นๆ</option>
+			    </select>
+
+			    <input id="vehicle_input" type="text" name="vehicle_type_other"
+			        value="{{ $isOtherVehicle ? $selectedVehicle : '' }}"
+			        class="mt-2 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 {{ $isOtherVehicle ? '' : 'd-none' }}"
+			        placeholder="ระบุประเภทยานพาหนะอื่น ๆ">
+			</div>
         </div>
     </div>
 </div>
@@ -243,6 +325,37 @@ document.getElementById('photoInput').addEventListener('change', function (event
         reader.readAsDataURL(file);
     }
 });
+
+function toggleLanguageInput(select) {
+    const input = document.getElementById('language_input');
+    if (select.value === 'Other') {
+        input.classList.remove('d-none');
+    } else {
+        input.classList.add('d-none');
+        input.value = '';
+    }
+}
+
+function toggleNationalityInput(select) {
+    const input = document.getElementById('nationality_input');
+    if (select.value === 'Other') {
+        input.classList.remove('d-none');
+    } else {
+        input.classList.add('d-none');
+        input.value = '';
+    }
+}
+
+function toggleVehicleInput(select) {
+    const input = document.getElementById('vehicle_input');
+    if (select.value === 'other') {
+        input.classList.remove('d-none');
+    } else {
+        input.classList.add('d-none');
+        input.value = '';
+    }
+}
+
 
 </script>
 
