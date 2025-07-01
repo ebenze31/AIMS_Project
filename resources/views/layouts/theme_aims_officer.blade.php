@@ -26,7 +26,7 @@
 
 <style>
     :root {
-        --background_primary: linear-gradient(260deg, rgba(40, 86, 250, 1) 0%, rgba(6, 162, 253, 1) 100%);
+        --background_primary: linear-gradient(260deg, rgba(40, 86, 250, 1) 0%, #06a2fd 100%);
     }
 
     *:not(i) {
@@ -57,7 +57,7 @@
     <div class="flex w-full flex-col flex-grow">
 
         <!-- HEADER -->
-        <header class="relative z-50 flex-none pb-2" style="height:var(--header-height);margin-bottom:var(--header-mb)">
+        <header class="relative z-50 flex-none pb-2" style="height:var(--header-height);margin-bottom:var(--header-mb);background-color:06a2fd ">
             <div class="top-0 z-10 h-16 pt-2" style="position:var(--header-position)">
                 <div class="px-0 w-full" style="position:var(--header-inner-position)">
                     <div class="w-full px-2 lg:px-8">

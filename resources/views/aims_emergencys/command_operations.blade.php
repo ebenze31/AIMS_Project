@@ -1153,9 +1153,9 @@
             </div>
             
             <div class="modal-footer justify-content-end">
-                <button type="button" class="btn btn-secondary-normal me-2 px-4  py-2"  data-bs-dismiss="modal">
+                <!-- <button type="button" class="btn btn-secondary-normal me-2 px-4  py-2"  data-bs-dismiss="modal">
                     ปิด
-                </button>
+                </button> -->
                 <button id="officer_refuse_select_again" type="button" class="btn btn-primary-blue me-2 py-2" data-bs-dismiss="modal">
                     เลือกใหม่
                 </button>
