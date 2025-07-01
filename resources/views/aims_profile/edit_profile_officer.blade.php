@@ -103,7 +103,7 @@
 	        </div>
 
 	        <!-- time_zone -->
-			<div class="d-none">
+			<div class="d-">
 			    <label class="block text-sm font-medium text-gray-700">Time Zone</label>
 			    <input id="time_zone_info" type="text" name="time_zone" 
 			        value="{{ $data_officer->time_zone ?? $ip_data['time_zone'] ?? '' }}" 
@@ -112,7 +112,7 @@
 			</div>
 
 			<!-- country -->
-			<div class="d-none">
+			<div class="d-">
 			    <label class="block text-sm font-medium text-gray-700">ประเทศ</label>
 			    <input id="country_info" type="text" name="country" 
 			        value="{{ $data_officer->country ?? $ip_data['country'] ?? '' }}" 
