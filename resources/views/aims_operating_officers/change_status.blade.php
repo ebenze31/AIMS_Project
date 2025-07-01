@@ -446,6 +446,7 @@ const officer_id = "{{ $data_officer->id }}";
 let map;
 let defaultZoom = 15;
 let LatLng = { lat: 13.736717, lng: 100.523186 };
+let cachedLocation = null; // ใช้เก็บตำแหน่งจากตอนโหลดหน้า
 
 function open_map() {
     if (navigator.geolocation) {
@@ -455,6 +456,11 @@ function open_map() {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
+
+                cachedLocation = {
+				    lat: position.coords.latitude,
+				    lng: position.coords.longitude
+				};
 
                 // สร้างแผนที่
                 map = new google.maps.Map(document.getElementById("map"), {
@@ -483,26 +489,21 @@ function open_map() {
 
                 // ✅ 2.2 เพิ่ม event toggle
                 toggle.addEventListener('change', function () {
-                    if (this.checked) {
-                        // เปิด → ส่งตำแหน่ง
-                        navigator.geolocation.getCurrentPosition(
-                            function (pos) {
-                                const loc = {
-                                    lat: pos.coords.latitude,
-                                    lng: pos.coords.longitude
-                                };
-                                UpdateStatusOfficer(loc, "Standby");
-                            },
-                            function () {
-                                alert("ไม่สามารถเข้าถึงตำแหน่งของคุณได้");
-                                toggle.checked = false;
-                            }
-                        );
-                    } else {
-                        // ปิด → ส่ง null
-                        UpdateStatusOfficer(null, null);
-                    }
-                });
+				    if (this.checked) {
+				        // เปิด → ใช้ cached location
+				        if (cachedLocation) {
+				            UpdateStatusOfficer(cachedLocation, "Standby");
+				            updateStatusUI("Standby");
+				        } else {
+				            alert("ตำแหน่งไม่พร้อมใช้งาน");
+				            this.checked = false;
+				        }
+				    } else {
+				        // ปิด → ส่ง null
+				        UpdateStatusOfficer(null, null);
+				        updateStatusUI(null);
+				    }
+				});
             },
             function (error) {
                 console.error("ไม่สามารถเข้าถึงตำแหน่งผู้ใช้:", error);
@@ -513,6 +514,62 @@ function open_map() {
 
                 // fallback map
                 loadMapWithDefault();
+
+                // ✅ เริ่ม polling เพื่อตรวจสอบว่าผู้ใช้เปิดตำแหน่งแล้วหรือยัง
+			    const retryInterval = setInterval(function () {
+			        navigator.geolocation.getCurrentPosition(
+			            function (position) {
+			                // ✅ ได้ตำแหน่งแล้ว → หยุด interval
+			                clearInterval(retryInterval);
+
+			                const userLatLng = {
+			                    lat: position.coords.latitude,
+			                    lng: position.coords.longitude
+			                };
+
+			                cachedLocation = userLatLng;
+
+			                map.setCenter(userLatLng);
+
+			                // ปักหมุด
+			                new google.maps.Marker({
+			                    position: userLatLng,
+			                    map: map,
+			                    icon: officer_icon,
+			                });
+
+			                // แสดงการ์ด
+			                div_card_content.classList.remove("d-none");
+			                div_card_warn.classList.add("d-none");
+
+			                // ถ้าเปิด toggle อยู่แล้ว → ส่งตำแหน่ง
+			                if (toggle.checked) {
+			                    UpdateStatusOfficer(userLatLng, "Standby");
+			                    updateStatusUI("Standby");
+			                }
+
+			                // เพิ่ม event toggle
+			                toggle.addEventListener('change', function () {
+			                    if (this.checked) {
+			                        if (cachedLocation) {
+			                            UpdateStatusOfficer(cachedLocation, "Standby");
+			                            updateStatusUI("Standby");
+			                        } else {
+			                            alert("ตำแหน่งไม่พร้อมใช้งาน");
+			                            this.checked = false;
+			                        }
+			                    } else {
+			                        UpdateStatusOfficer(null, null);
+			                        updateStatusUI(null);
+			                    }
+			                });
+			            },
+			            function () {
+			                // ยังไม่ได้ → ลองใหม่ในรอบถัดไป
+			                // console.log("ยังไม่สามารถรับตำแหน่งได้ ลองใหม่...");
+			            }
+			        );
+			    }, 5000); // ลองใหม่ทุก 5 วินาที
             }
         );
     } else {
@@ -551,34 +608,6 @@ function UpdateStatusOfficer(location, status) {
 
 const statusTextEl = document.getElementById('statusText');
 const statusDotEl = document.getElementById('statusDot');
-
-toggle.addEventListener('change', function () {
-    if (this.checked) {
-        // เปิด → ส่งตำแหน่ง
-        navigator.geolocation.getCurrentPosition(
-            function (pos) {
-                const loc = {
-                    lat: pos.coords.latitude,
-                    lng: pos.coords.longitude
-                };
-                UpdateStatusOfficer(loc, "Standby");
-
-                // 🔁 ปรับ UI → พร้อมช่วยเหลือ
-                updateStatusUI("Standby");
-            },
-            function () {
-                alert("ไม่สามารถเข้าถึงตำแหน่งของคุณได้");
-                toggle.checked = false;
-            }
-        );
-    } else {
-        // ปิด → ส่ง null
-        UpdateStatusOfficer(null, null);
-
-        // 🔁 ปรับ UI → ไม่พร้อม
-        updateStatusUI(null);
-    }
-});
 
 function updateStatusUI(status) {
     // ลบ ping เก่าถ้าเคยมี
