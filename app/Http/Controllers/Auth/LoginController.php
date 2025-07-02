@@ -130,7 +130,7 @@ class LoginController extends Controller
             $user->save();
         }else{
             // AVATAR
-            if (!empty($data->avatar)) {
+            if ( !empty($data->avatar) && empty($user->photo) ) {
                 $user->avatar = $data->avatar;
 
                 $url = $data->avatar;
@@ -140,8 +140,8 @@ class LoginController extends Controller
                 $user->photo = "uploads". "/" . 'photo' . $data->id . '.png';
             }
             else if (empty($data->avatar)) {
-                $user->avatar = null;
-                $user->photo = null ;
+                // $user->avatar = null;
+                // $user->photo = null ;
             }
             
             DB::table('users')
