@@ -147,7 +147,7 @@ class LoginController extends Controller
             DB::table('users')
                 ->where('provider_id', $data->id)
                 ->update([
-                    'name' => $data->name,
+                    // 'name' => $data->name,
                     'photo' => $user->photo,
                     'avatar' => $user->avatar,
                 ]);

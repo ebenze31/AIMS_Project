@@ -198,14 +198,17 @@ class Aims_emergencysController extends Controller
 
         if ($check_open_partner) {
             if ($check_open_partner->check_time_command === 'No') {
+                // เปิดทำการ 24 ชม.
                 $status_message = 'เปิดทำการ';
-            } elseif ($check_open_partner->check_time_command === 'Yes') {
+            }
+            elseif ($check_open_partner->check_time_command === 'Yes') {
                 // แปลงเวลาเริ่มต้นและเวลาสิ้นสุดเป็น Carbon
                 $start_time = Carbon::createFromFormat('H:i:s', $check_open_partner->time_start_command);
                 $end_time = Carbon::createFromFormat('H:i:s', $check_open_partner->time_end_command);
 
                 // ตรวจสอบว่าเวลาอยู่ในช่วงหรือไม่
                 if ($current_time->between($start_time, $end_time)) {
+                    // อยู่ในเวลาทำการ
                     $status_message = 'เปิดทำการ';
                 }
             }
