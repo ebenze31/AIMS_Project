@@ -185,11 +185,10 @@
 		        <!-- IP Address -->
 				<div class="d-none">
 				    @if($ip_data)
-					    <textarea class="w-full h-48 border p-2 rounded" readonly>{{ json_encode($ip_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</textarea>
+					    <input type="hidden" id="ip_data_json" value='@json($ip_data)'>
 					@else
 					    <p class="text-red-500">ไม่สามารถดึงข้อมูล IP ได้</p>
 					@endif
-
 				</div>
 
 		    </div>
@@ -359,53 +358,54 @@ function toggleVehicleInput(select) {
 }
 
 function submitOfficerForm() {
-  const form = document.getElementById('officerForm');
-  const formData = new FormData();
+  	const form = document.getElementById('officerForm');
+  	const formData = new FormData();
 
-  const ipDataText = document.getElementById('ip_data_json')?.value || '{}';
-  const ip_data = JSON.parse(ipDataText);
+  	const ipDataText = document.getElementById('ip_data_json')?.value || '{}';
+	const ip_data = JSON.parse(ipDataText); // <-- ip_data จะมีข้อมูลจริง
+  	console.log(ip_data);
 
-  const data_user = {
-    name: form.name.value,
-    phone: form.phone.value,
-    birthday: form.birthday.value,
-    sex: form.sex.value,
-    language: form.language.value === 'Other' ? form.language_other.value : form.language.value,
-    nationalitie: form.nationalitie.value === 'Other' ? form.nationalitie_other.value : form.nationalitie.value,
-    time_zone: form.time_zone?.value ?? '',
-    country: form.country?.value ?? '',
-    ip_address: ip_data,
-  };
 
-  const data_officer = {
-    name_officer: form.name_officer.value,
-    level: form.level.value,
-    vehicle_type: form.vehicle_type.value === 'other' ? form.vehicle_type_other.value : form.vehicle_type.value,
-  };
+  	const data_user = {
+    	name: form.name.value,
+	    phone: form.phone.value,
+	    birthday: form.birthday.value,
+	    sex: form.sex.value,
+	    language: form.language.value === 'Other' ? form.language_other.value : form.language.value,
+	    nationalitie: form.nationalitie.value === 'Other' ? form.nationalitie_other.value : form.nationalitie.value,
+	    time_zone: form.time_zone?.value ?? '',
+	    country: form.country?.value ?? '',
+	    ip_address: ip_data,
+	};
 
-  formData.append('data_user', JSON.stringify(data_user));
-  formData.append('data_officer', JSON.stringify(data_officer));
-  formData.append('user_id', "{{ Auth::user()->id }}");
+  	const data_officer = {
+    	name_officer: form.name_officer.value,
+    	level: form.level.value,
+    	vehicle_type: form.vehicle_type.value === 'other' ? form.vehicle_type_other.value : form.vehicle_type.value,
+  	};
 
-  const photoFile = form.photo.files[0];
-  if (photoFile) {
-    formData.append('photo', photoFile);
-  }
+  	formData.append('data_user', JSON.stringify(data_user));
+  	formData.append('data_officer', JSON.stringify(data_officer));
+  	formData.append('user_id', "{{ Auth::user()->id }}");
 
-  fetch("{{ url('/') }}/api/cf_edit_profile_officer", {
-    method: 'POST',
-    body: formData,
-  })
+  	const photoFile = form.photo.files[0];
+  	if (photoFile) {
+    	formData.append('photo', photoFile);
+  	}
+
+  	fetch("{{ url('/') }}/api/cf_edit_profile_officer", {
+    	method: 'POST',
+    	body: formData,
+  	})
     .then(response => {
-      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-      return response.json();
+      	if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      	return response.json();
     })
     .then(data => {
         window.location.href = "{{ url('/home_for_officer') }}";
     })
     .catch(error => {
-      console.error('Error:', error);
-      // แจ้งเตือน error
+      	console.error('Error:', error);
     });
 }
 </script>
