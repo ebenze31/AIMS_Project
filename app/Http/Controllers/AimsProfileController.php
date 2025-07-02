@@ -76,6 +76,10 @@ class AimsProfileController extends Controller
         $dataOfficer = json_decode($request->input('data_officer'), true);
         $userId = $request->input('user_id');
 
+        if (isset($dataUser['ip_address']) && is_array($dataUser['ip_address'])) {
+            $dataUser['ip_address'] = json_encode($dataUser['ip_address']);
+        }
+    
         if ($request->hasFile('photo')) {
             $path = $request->file('photo')->store('uploads', 'public');
             $dataUser['photo'] = $path;
