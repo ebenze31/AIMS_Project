@@ -74,7 +74,21 @@ class Aims_operating_unitsController extends Controller
      */
     public function show($id)
     {
-        $aims_operating_unit = Aims_operating_unit::findOrFail($id);
+        // $aims_operating_unit = Aims_operating_unit::findOrFail($id);
+
+        $aims_operating_unit = DB::table('aims_operating_units')
+            ->where('aims_operating_units.id', '=' ,$id)
+            ->leftjoin('aims_type_units', 'aims_operating_units.aims_type_unit_id', '=', 'aims_type_units.id')
+            ->leftjoin('aims_areas', 'aims_operating_units.aims_area_id', '=', 'aims_areas.id')
+            ->select(
+                'aims_operating_units.id as id',
+                'aims_operating_units.name_unit as name_unit',
+                'aims_operating_units.status as status',
+                'aims_operating_units.creator as creator_units',
+                'aims_type_units.name_type_unit as name_type_unit',
+                'aims_areas.name_area as name_area',
+            )
+            ->first();
 
         return view('aims_operating_units.show', compact('aims_operating_unit'));
     }
@@ -179,6 +193,28 @@ class Aims_operating_unitsController extends Controller
             'status' => 'success',
             'id' => $newUnit->id
         ]);
+    }
+
+    function get_data_by_unit($unit_id){
+
+        $data = DB::table('aims_operating_officers')
+            ->leftjoin('users', 'aims_operating_officers.user_id', '=', 'users.id')
+            ->where('aims_operating_officers.aims_operating_unit_id', '=' ,$unit_id)
+            ->select(
+                'aims_operating_officers.id',
+                'aims_operating_officers.name_officer',
+                'aims_operating_officers.level',
+                'aims_operating_officers.status',
+                'aims_operating_officers.amount_help',
+                'aims_operating_officers.lat',
+                'aims_operating_officers.lng',
+                'aims_operating_officers.vehicle_type',
+                'users.photo as photo',
+            )
+            ->get();
+
+        return $data ;
+
     }
 
 }
