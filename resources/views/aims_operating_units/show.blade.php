@@ -161,6 +161,7 @@
     let LatLng = { lat: 14.3, lng: 100.6 };
     let defaultZoom = 13;
     let mapBounds = new google.maps.LatLngBounds();
+    let markerIndex = 0;
 
     function open_map() {
         map = new google.maps.Map(document.getElementById("map"), {
@@ -211,9 +212,14 @@
                         const vehicleText = officer.vehicle_type ? `ยานพาหนะ : ${officer.vehicle_type}` : '';
                         const amountHelpText = officer.amount_help ? `ช่วยเหลือ : ${officer.amount_help}` : 'ช่วยเหลือ : 0';
 
+                        let cardDataIndexAttr = '';
+                        if (isValidStatus && officer.lat && officer.lng) {
+                            cardDataIndexAttr = `data-index="${markerIndex}"`;
+                        }
+
                         const html = `
                             <div class="col-12 col-md-6 mb-3">
-                                <div class="d-flex align-items-center justify-content-between bg-white border rounded p-3 officer-card h-100" data-index="${index}">
+                                <div class="d-flex align-items-center justify-content-between bg-white border rounded p-3 officer-card h-100" ${cardDataIndexAttr}>
                                     <div class="d-flex align-items-start">
                                         ${photoHTML}
                                         <div>
@@ -271,6 +277,7 @@
                             markers.push(marker);
                             infoWindows.push(info);
                             mapBounds.extend(latLng);
+                            markerIndex++;
                         }
                     });
 
@@ -280,37 +287,47 @@
 
                     const cards = document.querySelectorAll('.officer-card');
 
-                    cards.forEach((card, i) => {
+                    cards.forEach((card) => {
+                        const markerIdx = card.getAttribute('data-index');
+
                         card.addEventListener('mouseenter', () => {
+                            if (markerIdx === null) {
+                                // เจ้าหน้าที่ไม่พร้อม
+                                if (!mapBounds.isEmpty()) {
+                                    map.fitBounds(mapBounds);
+                                }
+                                return;
+                            }
+
+                            const i = parseInt(markerIdx);
                             if (markers[i]) {
-                                // แพนไปที่หมุด
                                 map.panTo(markers[i].getPosition());
                                 map.setZoom(15);
 
-                                // ปิด Info ทั้งหมดก่อน
                                 infoWindows.forEach(iw => iw.close());
-
-                                // เปิด Info ของเจ้าหน้าที่ที่ hover
                                 infoWindows[i].open(map, markers[i]);
 
                                 let btn_close = document.querySelector('.gm-style-iw-chr');
+                                if (btn_close) {
                                     btn_close.classList.add("d-none");
+                                }
                             }
                         });
 
                         card.addEventListener('mouseleave', () => {
-                            // ปิด InfoWindow เฉพาะของเจ้าหน้าที่คนนั้น
-                            infoWindows[i].close();
+                            if (markerIdx !== null && infoWindows[markerIdx]) {
+                                infoWindows[markerIdx].close();
+                            }
 
-                            // รอเล็กน้อยแล้วเช็คว่าไม่มี .officer-card ที่ hover อยู่
                             setTimeout(() => {
-                                const isAnyHovered = Array.from(document.querySelectorAll('.officer-card:hover')).length > 0;
+                                const isAnyHovered = document.querySelector('.officer-card:hover');
                                 if (!isAnyHovered && !mapBounds.isEmpty()) {
                                     map.fitBounds(mapBounds);
                                 }
                             }, 100);
                         });
                     });
+
                 }
             });
     }
