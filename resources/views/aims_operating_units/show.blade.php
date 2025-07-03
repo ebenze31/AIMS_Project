@@ -10,6 +10,12 @@
         border-radius: 10px;
     }
 
+    .gmnoprint {
+        scale: 0.7 !important;
+        top: -10px !important;
+        left: -35px !important;
+    }
+
     .gm-svpc, .gm-control-active{
         display: none !important;
     }
