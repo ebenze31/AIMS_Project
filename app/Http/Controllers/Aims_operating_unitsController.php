@@ -173,6 +173,7 @@ class Aims_operating_unitsController extends Controller
             ->leftjoin('aims_areas', 'aims_operating_units.aims_area_id', '=', 'aims_areas.id')
             ->select(
                 'aims_operating_units.id as id',
+                'aims_operating_units.aims_type_unit_id as aims_type_unit_id',
                 'aims_operating_units.name_unit as name_unit',
                 'aims_operating_units.status as status',
                 'aims_operating_units.creator as creator_units',
@@ -215,6 +216,23 @@ class Aims_operating_unitsController extends Controller
 
         return $data ;
 
+    }
+
+    function update_operating_unit(Request $request)
+    {
+        $data = $request->all();
+
+        DB::table('aims_operating_units')
+            ->where('id', $data['unit_id'])
+            ->update([
+                'name_unit' => $data['name_unit'],
+                'aims_type_unit_id' => $data['aims_type_unit_id'],
+                'aims_area_id' => $data['aims_area_id'],
+                'status' => $data['status'],
+                'updated_at' => now()
+            ]);
+
+        return response()->json(['success' => true]);
     }
 
 }

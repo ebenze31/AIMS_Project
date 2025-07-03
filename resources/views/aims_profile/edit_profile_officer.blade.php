@@ -71,23 +71,27 @@
 		                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
 		        </div>
 
-		        <!-- birthday -->
-		        <div>
-		            <label class="block text-sm font-medium text-gray-700">วันเกิด</label>
-		            <input type="date" name="birthday" value="{{ $data_officer->birthday ?? '' }}"
-		                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-		        </div>
+		        <!-- วันเกิด และ เพศ -->
+				<div class="grid grid-cols-2 gap-4">
+				    <!-- birthday -->
+				    <div>
+				        <label class="block text-sm font-medium text-gray-700">วันเกิด</label>
+				        <input type="date" name="birthday" value="{{ $data_officer->birthday ?? '' }}"
+				            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+				    </div>
 
-		        <!-- sex -->
-		        <div>
-		            <label class="block text-sm font-medium text-gray-700">เพศ</label>
-		            <select name="sex" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-		                <option value="">-- เลือกเพศ --</option>
-		                <option value="ชาย" {{ $data_officer->sex == 'ชาย' ? 'selected' : '' }}>ชาย</option>
-		                <option value="หญิง" {{ $data_officer->sex == 'หญิง' ? 'selected' : '' }}>หญิง</option>
-		                <option value="อื่นๆ" {{ $data_officer->sex == 'อื่นๆ' ? 'selected' : '' }}>อื่นๆ</option>
-		            </select>
-		        </div>
+				    <!-- sex -->
+				    <div>
+				        <label class="block text-sm font-medium text-gray-700">เพศ</label>
+				        <select name="sex"
+				            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+				            <option value="">-- เลือกเพศ --</option>
+				            <option value="ชาย" {{ $data_officer->sex == 'ชาย' ? 'selected' : '' }}>ชาย</option>
+				            <option value="หญิง" {{ $data_officer->sex == 'หญิง' ? 'selected' : '' }}>หญิง</option>
+				            <option value="อื่นๆ" {{ $data_officer->sex == 'อื่นๆ' ? 'selected' : '' }}>อื่นๆ</option>
+				        </select>
+				    </div>
+				</div>
 
 		        @php
 				    $languages = [
@@ -121,46 +125,49 @@
 				    $isOtherNationality = !in_array($selectedNationality, $nationalities);
 				@endphp
 
-				<!-- ภาษา -->
-				<div>
-				    <label class="block text-sm font-medium text-gray-700">ภาษา</label>
+				<!-- ภาษา และ สัญชาติ -->
+				<div class="grid grid-cols-2 gap-4">
+				    <!-- ภาษา -->
+				    <div>
+				        <label class="block text-sm font-medium text-gray-700">ภาษา</label>
 
-				    <select name="language" id="language_select"
-				        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-				        onchange="toggleLanguageInput(this)">
-				        <option value="">-- กรุณาเลือกภาษา --</option>
-				        @foreach ($languages as $code => $name)
-				            <option value="{{ $code }}" {{ $selectedLanguage == $code ? 'selected' : '' }}>
-				                {{ $name }}
-				            </option>
-				        @endforeach
-				    </select>
+				        <select name="language" id="language_select"
+				            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+				            onchange="toggleLanguageInput(this)">
+				            <option value="">-- กรุณาเลือกภาษา --</option>
+				            @foreach ($languages as $code => $name)
+				                <option value="{{ $code }}" {{ $selectedLanguage == $code ? 'selected' : '' }}>
+				                    {{ $name }}
+				                </option>
+				            @endforeach
+				        </select>
 
-				    <input id="language_input" type="text" name="language_other"
-				        value="{{ $isOtherLanguage ? $selectedLanguage : '' }}"
-				        class="d-none mt-2 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-				        placeholder="ระบุภาษาอื่น ๆ">
-				</div>
+				        <input id="language_input" type="text" name="language_other"
+				            value="{{ $isOtherLanguage ? $selectedLanguage : '' }}"
+				            class="d-none mt-2 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+				            placeholder="ระบุภาษาอื่น ๆ">
+				    </div>
 
-				<!-- สัญชาติ -->
-				<div class="mt-4">
-				    <label class="block text-sm font-medium text-gray-700">สัญชาติ</label>
+				    <!-- สัญชาติ -->
+				    <div>
+				        <label class="block text-sm font-medium text-gray-700">สัญชาติ</label>
 
-				    <select id="nationality_select" name="nationalitie"
-				        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-				        onchange="toggleNationalityInput(this)">
-				        <option value="">-- กรุณาเลือกสัญชาติ --</option>
-				        @foreach ($nationalities as $nation)
-				            <option value="{{ $nation }}" {{ $selectedNationality == $nation ? 'selected' : '' }}>
-				                {{ $nation }}
-				            </option>
-				        @endforeach
-				    </select>
+				        <select id="nationality_select" name="nationalitie"
+				            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+				            onchange="toggleNationalityInput(this)">
+				            <option value="">-- กรุณาเลือกสัญชาติ --</option>
+				            @foreach ($nationalities as $nation)
+				                <option value="{{ $nation }}" {{ $selectedNationality == $nation ? 'selected' : '' }}>
+				                    {{ $nation }}
+				                </option>
+				            @endforeach
+				        </select>
 
-				    <input id="nationality_input" type="text" name="nationalitie_other"
-				        value="{{ $isOtherNationality ? $selectedNationality : '' }}"
-				        class="d-none mt-2 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
-				        placeholder="ระบุสัญชาติอื่น ๆ">
+				        <input id="nationality_input" type="text" name="nationalitie_other"
+				            value="{{ $isOtherNationality ? $selectedNationality : '' }}"
+				            class="d-none mt-2 w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+				            placeholder="ระบุสัญชาติอื่น ๆ">
+				    </div>
 				</div>
 
 		        <!-- time_zone -->

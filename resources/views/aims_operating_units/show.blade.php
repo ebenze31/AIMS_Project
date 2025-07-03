@@ -16,6 +16,10 @@
         left: -35px !important;
     }
 
+    .gm-bundled-control {
+        display: none !important;
+    }
+
     .gm-svpc, .gm-control-active{
         display: none !important;
     }
