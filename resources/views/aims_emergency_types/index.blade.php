@@ -91,9 +91,9 @@
                             </center>
                         </td>
                         <td style="text-align: right; white-space: nowrap;width: 1%;">
-                           <button class="btn btn-info btn-sm">
+                           <a href="{{ url('/manage_priority') }}/ผู้ใช้ไม่ได้กรอก" class="btn btn-info btn-sm">
                                 <i class="fa-solid fa-list-ol"></i> Priority
-                            </button>
+                            </a>
                         </td>
                     </tr>
                     @foreach($aims_emergency_types as $item)
@@ -114,9 +114,9 @@
                                     {{ csrf_field() }}
                                     <button type="submit" class="btn btn-danger btn-sm" title="Delete Aims_emergency_type" onclick="return confirm(&quot;Confirm delete?&quot;)"><i class="fa-solid fa-delete-right"></i> Delete</button>
                                 </form>
-                                <button class="btn btn-info btn-sm">
+                                <a href="{{ url('/manage_priority') }}/{{ $item->id }}" class="btn btn-info btn-sm">
                                     <i class="fa-solid fa-list-ol"></i> Priority
-                                </button>
+                                </a>
                             </td>
                         </tr>
                     @endforeach

@@ -564,6 +564,7 @@ Route::middleware(['auth', 'role:admin-partner,admin-area'])->group(function () 
 	Route::get('operating_unit', 'Aims_operating_unitsController@operating_unit');
 	Route::get('operating_unit/{id}', 'Aims_operating_unitsController@show');
 	Route::resource('aims_emergency_types', 'Aims_emergency_typesController');
+	Route::get('manage_priority/{title}', 'Aims_emergency_typesController@manage_priority');
 	Route::resource('aims_type_units', 'Aims_type_unitsController');
 });
 

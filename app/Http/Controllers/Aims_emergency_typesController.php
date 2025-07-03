@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Aims_command;
+use App\Models\Aims_type_unit;
 
 class Aims_emergency_typesController extends Controller
 {
@@ -179,4 +180,126 @@ class Aims_emergency_typesController extends Controller
         return "success" ;
 
     }
+
+    public function manage_priority($id)
+    {
+        $aims_emergency_type = Aims_emergency_type::where('id' , $id)->first();
+
+        $name_title = 'ผู้ใช้ไม่ได้กรอก';
+        if( !empty($aims_emergency_type->name_emergency_type) ){
+            $name_title = $aims_emergency_type->name_emergency_type ;
+        }
+
+        return view('aims_emergency_types.show', compact('name_title', 'id'));
+    }
+
+    public function getPriorityUnits($id)
+    {
+        $aims_emergency_type = Aims_emergency_type::find($id);
+
+        if (!$aims_emergency_type) {
+            return response()->json(['error' => 'ไม่พบข้อมูล'], 404);
+        }
+
+        $name_title = $aims_emergency_type->name_emergency_type ?? 'ผู้ใช้ไม่ได้กรอก';
+
+        $units = Aims_type_unit::all()->filter(function ($unit) use ($id, $name_title) {
+            $emergency_types = json_decode($unit->emergency_type, true);
+            if (is_array($emergency_types)) {
+                foreach ($emergency_types as $item) {
+                    if (
+                        isset($item['id'], $item['name_emergency_type']) &&
+                        $item['id'] == $id &&
+                        $item['name_emergency_type'] == $name_title
+                    ) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        })->map(function ($unit) use ($id, $name_title) {
+            $emergency_types = json_decode($unit->emergency_type, true);
+            $priority = null;
+            if (is_array($emergency_types)) {
+                foreach ($emergency_types as $item) {
+                    if (
+                        $item['id'] == $id &&
+                        $item['name_emergency_type'] == $name_title
+                    ) {
+                        $priority = $item['priority'] ?? null;
+                        break;
+                    }
+                }
+            }
+            return [
+                'id' => $unit->id,
+                'name_type_unit' => $unit->name_type_unit,
+                'priority' => $priority
+            ];
+        })->sortBy(function ($unit) {
+            return $unit['priority'] ?? PHP_INT_MAX;
+        })->values();
+
+        return response()->json($units);
+    }
+
+    public function updatePriorityUnit(Request $request)
+    {
+        $realId = $request->input('realId');
+        $finalPriority = $request->input('finalPriority');
+        $name_title = $request->input('name_title');
+
+        $unit = Aims_type_unit::find($realId);
+
+        if (!$unit) {
+            return response()->json(['error' => 'ไม่พบข้อมูล aims_type_unit'], 404);
+        }
+
+        $emergency_types = json_decode($unit->emergency_type, true);
+        if (!is_array($emergency_types)) {
+            $emergency_types = [];
+        }
+
+        // หาว่า index ไหนที่มี name_emergency_type ตรงกับ name_title
+        $indexToUpdate = null;
+        foreach ($emergency_types as $index => $item) {
+            if ($item['name_emergency_type'] == $name_title) {
+                $indexToUpdate = $index;
+                break;
+            }
+        }
+
+        if ($finalPriority == 'ไม่รับ Auto') {
+            // ลบ object ออก
+            if (!is_null($indexToUpdate)) {
+                array_splice($emergency_types, $indexToUpdate, 1);
+            }
+        } elseif ($finalPriority == 'สุดท้าย') {
+            // ตั้ง priority เป็น null
+            if (!is_null($indexToUpdate)) {
+                $emergency_types[$indexToUpdate]['priority'] = null;
+            }
+        } else {
+            // แปลงเป็นตัวเลขแล้วเซ็ตเข้า priority
+            $priorityNumber = is_numeric($finalPriority) ? (int)$finalPriority : null;
+            if (!is_null($indexToUpdate)) {
+                $emergency_types[$indexToUpdate]['priority'] = $priorityNumber;
+            }
+            else {
+                // ถ้ายังไม่มี item นี้ ให้เพิ่มใหม่
+                $emergency_types[] = [
+                    'id' => (string) $request->input('id'), // ถ้ามี id emergency_type ก็ส่งมาด้วย
+                    'name_emergency_type' => $name_title,
+                    'priority' => $priorityNumber
+                ];
+            }
+        }
+
+        // บันทึกกลับ
+        $unit->emergency_type = json_encode($emergency_types, JSON_UNESCAPED_UNICODE);
+        $unit->save();
+
+        return response()->json(['message' => 'อัปเดตเรียบร้อย', 'data' => $emergency_types]);
+    }
+
 }

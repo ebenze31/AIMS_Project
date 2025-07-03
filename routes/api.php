@@ -551,4 +551,7 @@ Route::post('/officer_reg_to_unit', 'Aims_operating_officersController@officer_r
 Route::post('/cf_edit_profile_officer', 'AimsProfileController@cf_edit_profile_officer');
 Route::get('/get_data_by_unit/{unit_id}', 'Aims_operating_unitsController@get_data_by_unit');
 Route::post('/update_operating_unit', 'Aims_operating_unitsController@update_operating_unit');
+Route::get('/get_priority_units/{id}', 'Aims_emergency_typesController@getPriorityUnits');
+Route::post('/update_priority_unit', 'Aims_emergency_typesController@updatePriorityUnit');
+
 // ============> END AIMS <============ //
