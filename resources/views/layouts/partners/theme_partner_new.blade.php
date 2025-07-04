@@ -1148,7 +1148,7 @@
 					}
 
 					/* --- General Card Style --- */
-					.hours-card {
+					/*.hours-card {
 						background-color: var(--card-background-color);
 						border-radius: 12px;
 						box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -1158,6 +1158,19 @@
 						transition: all 0.3s ease;
 						width: 100% !important;
 
+					}*/
+
+					.hours-card {
+						margin-left: -10%;
+					    scale: 0.8;
+					    background-color: var(--card-background-color);
+					    border-radius: 12px;
+					    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+					    border: 1px solid var(--border-color);
+					    padding: 1.25rem;
+					    box-sizing: border-box;
+					    transition: all 0.3s ease;
+					    width: 120% !important;
 					}
 
 					.hours-card-header {
