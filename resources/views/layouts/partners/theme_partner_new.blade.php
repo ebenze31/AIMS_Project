@@ -1148,7 +1148,7 @@
 					}
 
 					/* --- General Card Style --- */
-					/*.hours-card {
+					.hours-card {
 						background-color: var(--card-background-color);
 						border-radius: 12px;
 						box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -1158,23 +1158,6 @@
 						transition: all 0.3s ease;
 						width: 100% !important;
 
-					}*/
-
-					.hours-card {
-						margin-left: -10%;
-					    scale: 0.8;
-					    background-color: var(--card-background-color);
-					    border-radius: 12px;
-					    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-					    border: 1px solid var(--border-color);
-					    padding: 1.25rem;
-					    box-sizing: border-box;
-					    transition: all 0.3s ease;
-					    width: 120% !important;
-					}
-
-					.add-margin-bottom-9 {
-						margin-bottom: -9%;
 					}
 
 					.hours-card-header {
@@ -1185,7 +1168,7 @@
 					}
 
 					.hours-card-title {
-						font-size: 1.1rem;
+						font-size: 1rem;
 						font-weight: 600;
 						margin: 0;
 					}
@@ -1206,14 +1189,14 @@
 					}
 
 					#timeSlots .item-label {
-						font-size: 0.9rem;
+						font-size: 0.8rem;
 						color: var(--label-color);
 						margin-top: 0.5rem;
 						display: block;
 					}
 
 					#timeSlots .item-time {
-						font-size: 1.5rem;
+						font-size: 1.3rem;
 						font-weight: 600;
 						color: var(--primary-color);
 						display: block;
@@ -1236,7 +1219,7 @@
 					}
 
 					#allDayDisplay .item-time {
-						font-size: 1.5rem;
+						font-size: 1.3rem;
 						font-weight: 600;
 						color: var(--primary-color);
 					}
@@ -1248,13 +1231,13 @@
 					}
 
 					#allDayDisplay i {
-						font-size: 20px;
+						font-size: 18px;
 						color: var(--primary-color);
 						margin-bottom: 0.75rem;
 					}
 
 					.edit-btn {
-						font-size: 0.9rem;
+						font-size: 0.7rem;
 						font-weight: 500;
 						padding: 0.35rem 0.85rem;
 						border-radius: 8px;
@@ -1283,11 +1266,11 @@
 
 					.form-group input[type="time"] {
 						width: 100%;
-						padding: 0.75rem;
+						padding: 0.5rem;
 						border: 1px solid var(--border-color);
 						border-radius: 8px;
 						font-family: 'Kanit', sans-serif;
-						font-size: 1rem;
+						font-size: .9rem;
 						box-sizing: border-box;
 					}
 
@@ -1357,10 +1340,10 @@
 					}
 
 					.btn-time {
-						padding: 0.6rem 1.25rem;
+						padding: 0.5rem 1.25rem;
 						border: none;
 						border-radius: 8px;
-						font-size: 0.95rem;
+						font-size: 0.8rem;
 						font-weight: 500;
 						font-family: 'Kanit', sans-serif;
 						cursor: pointer;
@@ -1417,7 +1400,7 @@
 						</div>
 
 						<div id="allDayDisplay">
-							<i class="fa-regular fa-clock"></i>
+							<i class="fa-regular fa-clock me-1"></i>
 							<span class="item-time">เปิด 24 ชั่วโมง</span>
 							<!-- <span class="item-label">บริการทุกวัน</span> -->
 						</div>
@@ -1476,14 +1459,12 @@
 					editButton.addEventListener('click', () => {
 						displayCard.style.display = 'none';
 						editCard.style.display = 'block';
-						editCard.classList.add('add-margin-bottom-9');
 					});
 
 					// Function to switch back to Display Mode
 					function showDisplayCard() {
 						editCard.style.display = 'none';
 						displayCard.style.display = 'block';
-						editCard.classList.remove('add-margin-bottom-9');
 					}
 
 					cancelButton.addEventListener('click', showDisplayCard);
