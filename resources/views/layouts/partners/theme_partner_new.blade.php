@@ -1173,6 +1173,10 @@
 					    width: 120% !important;
 					}
 
+					.add-margin-bottom-9 {
+						margin-bottom: -9%;
+					}
+
 					.hours-card-header {
 						display: flex;
 						justify-content: space-between;
@@ -1472,12 +1476,14 @@
 					editButton.addEventListener('click', () => {
 						displayCard.style.display = 'none';
 						editCard.style.display = 'block';
+						editCard.classList.add('add-margin-bottom-9');
 					});
 
 					// Function to switch back to Display Mode
 					function showDisplayCard() {
 						editCard.style.display = 'none';
 						displayCard.style.display = 'block';
+						editCard.classList.remove('add-margin-bottom-9');
 					}
 
 					cancelButton.addEventListener('click', showDisplayCard);
