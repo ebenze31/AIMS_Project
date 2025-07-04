@@ -1411,6 +1411,39 @@
 							<h3 class="hours-card-title">แก้ไขเวลาทำการ</h3>
 						</div>
 						<form id="editForm">
+							<div class="form-group">
+								<label for="openTime">วัน</label>
+							    <div class="d-flex flex-wrap" style="column-gap: .5rem; row-gap: .25rem;">
+							        <div class="form-check">
+							            <input class="form-check-input" type="checkbox" id="monday">
+							            <label class="form-check-label" for="monday">จ.</label>
+							        </div>
+							        <div class="form-check">
+							            <input class="form-check-input" type="checkbox" id="tuesday">
+							            <label class="form-check-label" for="tuesday">อ.</label>
+							        </div>
+							        <div class="form-check">
+							            <input class="form-check-input" type="checkbox" id="wednesday">
+							            <label class="form-check-label" for="wednesday">พ.</label>
+							        </div>
+							        <div class="form-check">
+							            <input class="form-check-input" type="checkbox" id="thursday">
+							            <label class="form-check-label" for="thursday">พฤ.</label>
+							        </div>
+							        <div class="form-check">
+							            <input class="form-check-input" type="checkbox" id="friday">
+							            <label class="form-check-label" for="friday">ศ.</label>
+							        </div>
+							        <div class="form-check">
+							            <input class="form-check-input" type="checkbox" id="saturday">
+							            <label class="form-check-label" for="saturday">ส.</label>
+							        </div>
+							        <div class="form-check">
+							            <input class="form-check-input" type="checkbox" id="sunday">
+							            <label class="form-check-label" for="sunday">อา.</label>
+							        </div>
+							    </div>
+							</div>
 
 							<div class="form-group">
 								<label for="openTime">เวลาเปิด</label>
