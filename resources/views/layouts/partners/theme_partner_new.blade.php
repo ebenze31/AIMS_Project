@@ -61,9 +61,10 @@
 	<title id="title_theme">AIMS - Command</title>
 
 	<style>
-		 *:not(i){
-            font-family: "K2D", sans-serif;
-        }
+		*:not(i) {
+			font-family: "K2D", sans-serif;
+		}
+
 		.main-shadow {
 			box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.15), 0 4px 10px 0 rgba(0, 0, 0, 0.15);
 		}
@@ -1118,6 +1119,386 @@
 
 			</ul>
 			<!--end navigation-->
+			<div class="" style="position: fixed; position: absolute;  bottom: 0;  left: 0;  width: 100%; padding: 5px;">
+				<style>
+					@media (min-width: 1024px) {
+						.wrapper.toggled .card-container {
+							display: none;
+						}
+					}
+
+					.wrapper.toggled.sidebar-hovered .card-container {
+						display: flex;
+					}
+
+					:root {
+						--primary-color: #3B82F6;
+						--background-color: #F8F9FA;
+						--card-background-color: #FFFFFF;
+						--text-color: #212529;
+						--label-color: #6C757D;
+						--border-color: #E9ECEF;
+						--success-color: #198754;
+						--light-grey: #f1f1f1;
+					}
+
+					.card-container {
+						width: 100% !important;
+						max-width: 350px;
+					}
+
+					/* --- General Card Style --- */
+					.hours-card {
+						background-color: var(--card-background-color);
+						border-radius: 12px;
+						box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+						border: 1px solid var(--border-color);
+						padding: 1.25rem;
+						box-sizing: border-box;
+						transition: all 0.3s ease;
+						width: 100% !important;
+
+					}
+
+					.hours-card-header {
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						margin-bottom: 1.25rem;
+					}
+
+					.hours-card-title {
+						font-size: 1.1rem;
+						font-weight: 600;
+						margin: 0;
+					}
+
+					/* --- Display Card --- */
+					#timeSlots {
+						display: flex;
+						justify-content: space-around;
+						text-align: center;
+					}
+
+					#timeSlots .time-item {
+						width: 50%;
+					}
+
+					#timeSlots .time-item:first-child {
+						border-right: 1px solid var(--border-color);
+					}
+
+					#timeSlots .item-label {
+						font-size: 0.9rem;
+						color: var(--label-color);
+						margin-top: 0.5rem;
+						display: block;
+					}
+
+					#timeSlots .item-time {
+						font-size: 1.5rem;
+						font-weight: 600;
+						color: var(--primary-color);
+						display: block;
+					}
+
+					#timeSlots svg {
+						/* font-size: 28px; */
+						color: var(--primary-color);
+						opacity: 0.7;
+						width: 50px;
+						height: 50px;
+					}
+
+					/* New styles for 24h display */
+					#allDayDisplay {
+						display: none;
+						/* Hidden by default */
+						text-align: center;
+						padding: 0.5rem 0;
+					}
+
+					#allDayDisplay .item-time {
+						font-size: 1.5rem;
+						font-weight: 600;
+						color: var(--primary-color);
+					}
+
+					#allDayDisplay .item-label {
+						font-size: 1rem;
+						color: var(--label-color);
+						display: block;
+					}
+
+					#allDayDisplay i {
+						font-size: 20px;
+						color: var(--primary-color);
+						margin-bottom: 0.75rem;
+					}
+
+					.edit-btn {
+						font-size: 0.9rem;
+						font-weight: 500;
+						padding: 0.35rem 0.85rem;
+						border-radius: 8px;
+						background-color: #E7F3FF;
+						color: #0052CC;
+						text-decoration: none;
+						cursor: pointer;
+						border: none;
+					}
+
+					/* --- Edit Card --- */
+					#editCard {
+						display: none;
+					}
+
+					.form-group {
+						margin-bottom: 1rem;
+					}
+
+					.form-group label {
+						display: block;
+						margin-bottom: 0.5rem;
+						font-weight: 500;
+						color: var(--label-color);
+					}
+
+					.form-group input[type="time"] {
+						width: 100%;
+						padding: 0.75rem;
+						border: 1px solid var(--border-color);
+						border-radius: 8px;
+						font-family: 'Kanit', sans-serif;
+						font-size: 1rem;
+						box-sizing: border-box;
+					}
+
+					.form-group input[type="time"]:disabled {
+						background-color: var(--light-grey);
+						cursor: not-allowed;
+					}
+
+					/* Toggle Switch */
+					.toggle-group {
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+					}
+
+					.switch {
+						position: relative;
+						display: inline-block;
+						width: 50px;
+						height: 28px;
+					}
+
+					.switch input {
+						opacity: 0;
+						width: 0;
+						height: 0;
+					}
+
+					.slider {
+						position: absolute;
+						cursor: pointer;
+						top: 0;
+						left: 0;
+						right: 0;
+						bottom: 0;
+						background-color: #ccc;
+						transition: .4s;
+						border-radius: 28px;
+					}
+
+					.slider:before {
+						position: absolute;
+						content: "";
+						height: 20px;
+						width: 20px;
+						left: 4px;
+						bottom: 4px;
+						background-color: white;
+						transition: .4s;
+						border-radius: 50%;
+					}
+
+					input:checked+.slider {
+						background-color: var(--primary-color);
+					}
+
+					input:checked+.slider:before {
+						transform: translateX(22px);
+					}
+
+					/* Action Buttons */
+					.form-actions {
+						margin-top: 1.5rem;
+						display: flex;
+						justify-content: flex-end;
+						gap: 0.75rem;
+					}
+
+					.btn-time {
+						padding: 0.6rem 1.25rem;
+						border: none;
+						border-radius: 8px;
+						font-size: 0.95rem;
+						font-weight: 500;
+						font-family: 'Kanit', sans-serif;
+						cursor: pointer;
+						transition: opacity 0.2s ease;
+					}
+
+					.btn-time:hover {
+						opacity: 0.85;
+					}
+
+					.btn-cancle-time {
+						background-color: #fff;
+						color: var(--label-color);
+						border: 1px solid #D5D5D5;
+					}
+
+					.btn-cancle-time:hover {
+						background-color: rgb(247, 247, 247)
+					}
+
+					.btn-submit-time {
+						background-color: var(--primary-color);
+						color: white;
+					}
+				</style>
+
+				<div class="card-container">
+
+					<div class="hours-card" id="displayCard">
+						<div class="hours-card-header">
+							<h3 class="hours-card-title">เวลาทำการ</h3>
+							<button class="edit-btn" id="editButton">แก้ไข</button>
+						</div>
+
+						<div id="timeSlots">
+							<div class="time-item">
+								<!-- <div class="d-flex justify-content-center w-100">
+									<div style="background-color: #fff; color: #04b360;border-radius: 5px; width: fit-content;padding: 5px 10px;border: 1px solid #04b360;font-weight: bolder;">
+										open
+									</div>
+								</div> -->
+								<span class="item-time" id="displayOpenTime">09:00</span>
+								<span class="item-label">เปิดทำการ</span>
+							</div>
+							<div class="time-item">
+								<!-- <div class="d-flex justify-content-center w-100">
+									<div style="background-color: #f5424e; color: #fff;border-radius: 5px; width: fit-content;padding: 5px 10px;">
+										close
+									</div>
+								</div> -->
+								<span class="item-time" id="displayCloseTime">18:00</span>
+								<span class="item-label">ปิดทำการ</span>
+							</div>
+						</div>
+
+						<div id="allDayDisplay">
+							<i class="fa-regular fa-clock"></i>
+							<span class="item-time">เปิด 24 ชั่วโมง</span>
+							<!-- <span class="item-label">บริการทุกวัน</span> -->
+						</div>
+					</div>
+
+					<div class="hours-card" id="editCard">
+						<div class="hours-card-header">
+							<h3 class="hours-card-title">แก้ไขเวลาทำการ</h3>
+						</div>
+						<form id="editForm">
+
+							<div class="form-group">
+								<label for="openTime">เวลาเปิด</label>
+								<input type="time" id="openTime" value="09:00">
+							</div>
+							<div class="form-group">
+								<label for="closeTime">เวลาปิด</label>
+								<input type="time" id="closeTime" value="18:00">
+							</div>
+
+							<div class="toggle-group form-group">
+								<label for="is24h">เปิด 24 ชั่วโมง</label>
+								<label class="switch">
+									<input type="checkbox" id="is24h">
+									<span class="slider"></span>
+								</label>
+							</div>
+							<div class="form-actions">
+								<button type="button" class="btn-time btn-cancle-time" id="cancelButton">ยกเลิก</button>
+								<button type="submit" class="btn-time btn-submit-time" id="saveButton">บันทึก</button>
+							</div>
+						</form>
+					</div>
+				</div>
+
+				<script>
+					// Get references to all elements
+					const displayCard = document.getElementById('displayCard');
+					const editCard = document.getElementById('editCard');
+
+					const editButton = document.getElementById('editButton');
+					const cancelButton = document.getElementById('cancelButton');
+					const editForm = document.getElementById('editForm');
+
+					const openTimeInput = document.getElementById('openTime');
+					const closeTimeInput = document.getElementById('closeTime');
+					const is24hInput = document.getElementById('is24h');
+
+					// Display elements
+					const timeSlots = document.getElementById('timeSlots');
+					const allDayDisplay = document.getElementById('allDayDisplay');
+					const displayOpenTime = document.getElementById('displayOpenTime');
+					const displayCloseTime = document.getElementById('displayCloseTime');
+
+					// Function to switch to Edit Mode
+					editButton.addEventListener('click', () => {
+						displayCard.style.display = 'none';
+						editCard.style.display = 'block';
+					});
+
+					// Function to switch back to Display Mode
+					function showDisplayCard() {
+						editCard.style.display = 'none';
+						displayCard.style.display = 'block';
+					}
+
+					cancelButton.addEventListener('click', showDisplayCard);
+
+					// Handle the 24-hour toggle in the edit form
+					is24hInput.addEventListener('change', () => {
+						const isDisabled = is24hInput.checked;
+						openTimeInput.disabled = isDisabled;
+						closeTimeInput.disabled = isDisabled;
+					});
+
+					// Handle form submission
+					editForm.addEventListener('submit', (event) => {
+						event.preventDefault(); // Prevent page reload
+
+						if (is24hInput.checked) {
+							// If 24h is checked, show the single display and hide the double one
+							timeSlots.style.display = 'none';
+							allDayDisplay.style.display = 'block';
+						} else {
+							// Otherwise, show the double display and hide the single one
+							allDayDisplay.style.display = 'none';
+							timeSlots.style.display = 'flex'; // Use 'grid' to restore the two-column layout
+
+							// Update the times
+							displayOpenTime.textContent = openTimeInput.value;
+							displayCloseTime.textContent = closeTimeInput.value;
+
+						}
+
+						showDisplayCard(); // Switch back to the display card
+					});
+				</script>
+			</div>
 		</div>
 		<!--end sidebar wrapper -->
 
@@ -1866,12 +2247,14 @@
 		}
 	</script>
 
-<script>
-	class ShadToastDisplay extends HTMLElement {
-		constructor() {
-			super();
-			this.attachShadow({ mode: "open" });
-			this.shadowRoot.innerHTML = `
+	<script>
+		class ShadToastDisplay extends HTMLElement {
+			constructor() {
+				super();
+				this.attachShadow({
+					mode: "open"
+				});
+				this.shadowRoot.innerHTML = `
 				<style>
 					:host {
 						display: flex;
@@ -1906,38 +2289,40 @@
 				</style>
 				<slot></slot>
 			`;
-			this.timeoutId = null;
-			this.addEventListener("mouseenter", () => this.show());
-			this.addEventListener("mouseleave", () => this.hide());
-		}
-		show() {
-			clearTimeout(this.timeoutId);
-			this.classList.remove("hidden");
-			this.removeAttribute("collapse");
-		}
-		hide() {
-			this.setAttribute("collapse", "");
-			this.timeoutId = setTimeout(() => {
-				if (this.hasAttribute("collapse")) {
-					this.classList.add("hidden");
+				this.timeoutId = null;
+				this.addEventListener("mouseenter", () => this.show());
+				this.addEventListener("mouseleave", () => this.hide());
+			}
+			show() {
+				clearTimeout(this.timeoutId);
+				this.classList.remove("hidden");
+				this.removeAttribute("collapse");
+			}
+			hide() {
+				this.setAttribute("collapse", "");
+				this.timeoutId = setTimeout(() => {
+					if (this.hasAttribute("collapse")) {
+						this.classList.add("hidden");
+					}
+				}, 200000); // 200 seconds
+			}
+			assignOrder() {
+				const children = this.children;
+				for (let i = 0; i < 4 && i < children.length; i++) {
+					children[i].setAttribute("order", i);
+					void children[i].offsetHeight;
 				}
-			}, 200000); // 200 seconds
-		}
-		assignOrder() {
-			const children = this.children;
-			for (let i = 0; i < 4 && i < children.length; i++) {
-				children[i].setAttribute("order", i);
-				void children[i].offsetHeight;
 			}
 		}
-	}
-	customElements.define("shad-toast-display", ShadToastDisplay);
+		customElements.define("shad-toast-display", ShadToastDisplay);
 
-	class ShadToast extends HTMLElement {
-		constructor() {
-			super();
-			this.attachShadow({ mode: "open" });
-			this.shadowRoot.innerHTML = `
+		class ShadToast extends HTMLElement {
+			constructor() {
+				super();
+				this.attachShadow({
+					mode: "open"
+				});
+				this.shadowRoot.innerHTML = `
 				<link rel="stylesheet" href="{{ asset('/partner/fonts/fontawesome/css/fontawesome-all.min.css') }}">
 				<link href="https://kit-pro.fontawesome.com/releases/v6.7.2/css/pro.min.css" rel="stylesheet">
 				<style>
@@ -2024,107 +2409,107 @@
 				</div>
 			`;
 
-			this.shadowRoot.querySelector(".close-button").addEventListener("click", () => {
-				this.setAttribute("remove", "");
-				this.style.zIndex = "-1";
-				this.style.opacity = "0";
-				const siblings = Array.from(this.parentElement.children);
-				const index = siblings.indexOf(this);
-				for (let i = index + 1; i < siblings.length; i++) {
-					const newOrder = parseInt(siblings[i].getAttribute("order")) - 1;
-					siblings[i].setAttribute("order", newOrder);
-				}
-			});
+				this.shadowRoot.querySelector(".close-button").addEventListener("click", () => {
+					this.setAttribute("remove", "");
+					this.style.zIndex = "-1";
+					this.style.opacity = "0";
+					const siblings = Array.from(this.parentElement.children);
+					const index = siblings.indexOf(this);
+					for (let i = index + 1; i < siblings.length; i++) {
+						const newOrder = parseInt(siblings[i].getAttribute("order")) - 1;
+						siblings[i].setAttribute("order", newOrder);
+					}
+				});
 
-			this.addEventListener("transitionend", () => {
-				if (this.hasAttribute("remove")) {
-					this.remove();
-				}
-			});
-		}
-
-		connectedCallback() {
-			const set = (selector, value) => {
-				const el = this.shadowRoot.querySelector(selector);
-				if (el) el.textContent = value || "ไม่ได้ระบุ";
-			};
-
-			set(".name", this.getAttribute("name"));
-			set(".phone", this.getAttribute("phone"));
-			set(".emergency_type", this.getAttribute("emergency_type"));
-			set(".emergency_detail", this.getAttribute("emergency_detail"));
-
-			const photoImg = this.shadowRoot.getElementById("photo-img");
-			const emergencyPhoto = this.getAttribute("emergency_photo");
-			if (photoImg && emergencyPhoto && emergencyPhoto !== "ไม่ได้ระบุ") {
-				photoImg.src = emergencyPhoto;
-			}else{
-				photoImg.remove();
-			}
-
-			const acceptBtn = this.shadowRoot.querySelector(".accept-btn");
-			if (acceptBtn) {
-				const id = this.getAttribute("id");
-				acceptBtn.addEventListener("click", () => {
-					window.location.href = `{{ url('/command_operations') }}/${id}`;
+				this.addEventListener("transitionend", () => {
+					if (this.hasAttribute("remove")) {
+						this.remove();
+					}
 				});
 			}
+
+			connectedCallback() {
+				const set = (selector, value) => {
+					const el = this.shadowRoot.querySelector(selector);
+					if (el) el.textContent = value || "ไม่ได้ระบุ";
+				};
+
+				set(".name", this.getAttribute("name"));
+				set(".phone", this.getAttribute("phone"));
+				set(".emergency_type", this.getAttribute("emergency_type"));
+				set(".emergency_detail", this.getAttribute("emergency_detail"));
+
+				const photoImg = this.shadowRoot.getElementById("photo-img");
+				const emergencyPhoto = this.getAttribute("emergency_photo");
+				if (photoImg && emergencyPhoto && emergencyPhoto !== "ไม่ได้ระบุ") {
+					photoImg.src = emergencyPhoto;
+				} else {
+					photoImg.remove();
+				}
+
+				const acceptBtn = this.shadowRoot.querySelector(".accept-btn");
+				if (acceptBtn) {
+					const id = this.getAttribute("id");
+					acceptBtn.addEventListener("click", () => {
+						window.location.href = `{{ url('/command_operations') }}/${id}`;
+					});
+				}
+			}
 		}
-	}
-	customElements.define("shad-toast", ShadToast);
+		customElements.define("shad-toast", ShadToast);
 
-	// Mount shad-toast-display to DOM on load
-	const shadToastDisplay = document.createElement("shad-toast-display");
-	shadToastDisplay.classList.add("hidden");
-	document.addEventListener("DOMContentLoaded", () => {
-		document.body.appendChild(shadToastDisplay);
-	});
-
-	// Show toast
-	function toast(message) {
-		const toast = document.createElement("shad-toast");
-
-		const getSafe = (obj, key) => obj?.[key] ? obj[key] : "ไม่ได้ระบุ";
-
-		toast.setAttribute("name", getSafe(message.emergency, "name_reporter"));
-		toast.setAttribute("phone", getSafe(message.emergency, "phone_reporter"));
-		toast.setAttribute("emergency_type", getSafe(message.emergency, "emergency_type"));
-		toast.setAttribute("emergency_detail", getSafe(message.emergency, "emergency_detail"));
-
-		const photo = message.emergency?.emergency_photo;
-		if (photo && photo !== "ไม่ได้ระบุ") {
-			toast.setAttribute("emergency_photo", `{{ url('/storage') }}/${photo}`);
-		}
-
-		toast.setAttribute("id", getSafe(message.emergency, "id"));
-
-		toast.classList.add("new");
-		shadToastDisplay.show();
-		shadToastDisplay.prepend(toast);
-		requestAnimationFrame(() => {
-			toast.classList.remove("new");
+		// Mount shad-toast-display to DOM on load
+		const shadToastDisplay = document.createElement("shad-toast-display");
+		shadToastDisplay.classList.add("hidden");
+		document.addEventListener("DOMContentLoaded", () => {
+			document.body.appendChild(shadToastDisplay);
 		});
-		shadToastDisplay.assignOrder();
-		shadToastDisplay.hide();
-	}
 
-	function test_toast(){
+		// Show toast
+		function toast(message) {
+			const toast = document.createElement("shad-toast");
 
-		let data = [];
-		let sub_data = [];
+			const getSafe = (obj, key) => obj?.[key] ? obj[key] : "ไม่ได้ระบุ";
 
-			sub_data['name_reporter'] = 'Benz' ;
-			sub_data['phone_reporter'] = '0998823219' ;
-			sub_data['emergency_type'] = 'เหตุด่วนเหตุร้าย' ;
-			sub_data['emergency_detail'] = 'พระภิกษุ มีอาการปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้อง ที่วัดบ้านแหน2' ;
-			sub_data['emergency_photo'] = 'uploads/ICSOilzxguFQf2Dw66XUm9ureeiESzRigtNwh3DB.jpg' ;
-			sub_data['id'] = '58' ;
+			toast.setAttribute("name", getSafe(message.emergency, "name_reporter"));
+			toast.setAttribute("phone", getSafe(message.emergency, "phone_reporter"));
+			toast.setAttribute("emergency_type", getSafe(message.emergency, "emergency_type"));
+			toast.setAttribute("emergency_detail", getSafe(message.emergency, "emergency_detail"));
 
-		data['emergency'] = sub_data ;
+			const photo = message.emergency?.emergency_photo;
+			if (photo && photo !== "ไม่ได้ระบุ") {
+				toast.setAttribute("emergency_photo", `{{ url('/storage') }}/${photo}`);
+			}
 
-		toast(data);
-	}
-</script>
+			toast.setAttribute("id", getSafe(message.emergency, "id"));
+
+			toast.classList.add("new");
+			shadToastDisplay.show();
+			shadToastDisplay.prepend(toast);
+			requestAnimationFrame(() => {
+				toast.classList.remove("new");
+			});
+			shadToastDisplay.assignOrder();
+			shadToastDisplay.hide();
+		}
+
+		function test_toast() {
+
+			let data = [];
+			let sub_data = [];
+
+			sub_data['name_reporter'] = 'Benz';
+			sub_data['phone_reporter'] = '0998823219';
+			sub_data['emergency_type'] = 'เหตุด่วนเหตุร้าย';
+			sub_data['emergency_detail'] = 'พระภิกษุ มีอาการปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้องปวดท้อง ที่วัดบ้านแหน2';
+			sub_data['emergency_photo'] = 'uploads/ICSOilzxguFQf2Dw66XUm9ureeiESzRigtNwh3DB.jpg';
+			sub_data['id'] = '58';
+
+			data['emergency'] = sub_data;
+
+			toast(data);
+		}
+	</script>
 
 
 </body>

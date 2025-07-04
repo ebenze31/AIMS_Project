@@ -265,56 +265,59 @@
         background-color: rgb(255, 197, 13, .13);
         color: rgb(231, 173, 0);
     }
+
     .officer-card-modal {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
 
-.officer-image-modal img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #dee2e6;
-}
+    .officer-image-modal img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #dee2e6;
+    }
 
-.officer-name-modal {
-    font-size: 22px;
-    font-weight: 700;
-    margin: 0 0 8px 0;
-}
+    .officer-name-modal {
+        font-size: 22px;
+        font-weight: 700;
+        margin: 0 0 8px 0;
+    }
 
-.officer-info-modal p {
-    font-size: 16px;
-    margin: 4px 0;
-    color: #6c757d;
-}
+    .officer-info-modal p {
+        font-size: 16px;
+        margin: 4px 0;
+        color: #6c757d;
+    }
 
-.officer-info-modal p strong {
-    color: #212529;
-    font-weight: 500;
-    margin-right: 8px;
-}
-.btn-secondary-normal {
-    background-color: #fff;
-    border-color: #dee2e6;
-    color:  #212529;
-}
+    .officer-info-modal p strong {
+        color: #212529;
+        font-weight: 500;
+        margin-right: 8px;
+    }
 
-.btn-secondary-normal:hover {
-    background-color: #e9ecef;
-}
+    .btn-secondary-normal {
+        background-color: #fff;
+        border-color: #dee2e6;
+        color: #212529;
+    }
 
-.modal.fade.show{
-    background-color: rgb(0, 0, 0 ,.50);
-}
-.modal-content{
-    border-radius: 15px;
-    border: none;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    .btn-secondary-normal:hover {
+        background-color: #e9ecef;
+    }
 
-}
+    .modal.fade.show {
+        background-color: rgb(0, 0, 0, .50);
+    }
+
+    .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+
+    }
 </style>
 <div class="col  radius-10 align-items-center test">
     <div class="card radius-10 w-100   mt-4 container-oparating" style="">
@@ -396,27 +399,34 @@
                 }
                 }
                 @endphp
-                <div class="px-4 py-3" style="border-bottom:  1px solid #DADADA;;">
-                    <div class="header">สถานะ : {{ $emergency->op_status }}</div>
-                    <div class="mb-4">
+                <div class="px-4 py-3" style="border-bottom:  1px solid #DADADA;;" id="status_case">
+                    <div class="header mb-0" id="show_status">สถานะ : {{ $emergency->op_status }}</div>
+                    <div id="show_time_distance" class="d-none">
+                        <!-- 3 นาที (2 กม) • 15:00 น. -->
+                    </div>
+                    <div class="mb-4 mt-3">
                         <p class="mb-0">การประเมินจากศูนย์</p>
-                        <div class="status-rc {{$class_status_idc}}">
+                        <div class="status-rc {{$class_status_idc}}" id="status_idc">
                             <i class="fa-solid fa-circle-small mx-2"></i>
-                            <span> {{ $emergency->idc ?? '-' }}</span>
+                            <span id="show_text_idc"> {{ $emergency->idc ?? '-' }}</span>
                         </div>
                     </div>
                     <div>
                         <p class="mb-0">การประเมินจากหน่วย</p>
-                        <div class="status-rc {{$class_status_rc}}">
+                        <div class="status-rc {{$class_status_rc}}" id="status_rc">
                             <i class="fa-solid fa-circle-small mx-2"></i>
-                            <span>{{ $emergency->rc ?? '-' }}</span>
+                            <span id="show_text_rc">{{ $emergency->rc ?? '-' }}</span>
                         </div>
                     </div>
                 </div>
-                <div class="px-4 py-3" style="border-bottom:  1px solid #DADADA;;">
+
+
+
+
+                <div class="px-4 py-3 d-none" style="border-bottom:  1px solid #DADADA;" id="info_officer">
                     <div class="header">ข้อมูลหน่วยแพทย์</div>
-                    <div class="d-flex align-items-center">
-                        <div>
+                    <div class="d-flex align-items-center" id="div_data_info_officer">
+                        <!-- <div>
                             <img src="" height="70" width="70" alt="" style="border-radius: 50px; background-color: #D9D9D9;">
                         </div>
                         <div class="ms-3">
@@ -426,7 +436,7 @@
                             </div>
                             <p class="mb-0">officer</p>
                             <p class="mb-0">viicheck , อาสาสมัคร</p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -730,10 +740,453 @@
                     </div>
 
                 </div>
+
+                <hr class="my-5">
+
+
+                <style>
+                    :root {
+                        --primary-color: #0D6EFD;
+                        /* A slightly softer blue */
+                        --background-color: #F8F9FA;
+                        --card-background-color: #FFFFFF;
+                        --text-color: #212529;
+                        --label-color: #6C757D;
+                        --border-color: #E9ECEF;
+                        --pill-time-bg: #F0F5FD;
+                        --pill-time-text: #0D6EFD;
+                        --pill-distance-bg: #FFF4E5;
+                        --pill-distance-text: #E75800;
+                    }
+
+
+
+                    .main-container {
+                        width: 100%;
+                        max-width: 750px;
+                        margin: 0 auto;
+                    }
+
+                    .timeline {
+                        position: relative;
+                        padding: 0;
+                        list-style: none;
+                    }
+
+                    .timeline::before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 20px;
+                        /* Center of the icon (40px width) */
+                        bottom: 0;
+                        width: 3px;
+                        background: var(--border-color);
+                        border-radius: 1.5px;
+                    }
+
+                    .timeline-item {
+                        position: relative;
+                        margin-bottom: 1.5rem;
+                        padding-left: 65px;
+                        /* Icon width + gap */
+                    }
+
+                    .timeline-item:last-of-type {
+                        margin-bottom: 0;
+                    }
+
+                    .timeline-icon {
+                        position: absolute;
+                        left: 0;
+                        top: 13px;
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        background-color: var(--primary-color);
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 1;
+                    }
+
+                    .timeline-icon svg {
+                        width: 22px;
+                        height: 22px;
+                    }
+
+                    .timeline-content {
+                        background-color: var(--card-background-color);
+                        padding: 1rem 1.5rem;
+                        border-radius: 12px;
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                        border: 1px solid var(--border-color);
+                    }
+
+
+
+                    .timeline-header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        flex-wrap: wrap;
+                    }
+
+                    .timeline-item:not(:first-child) .timeline-content .timeline-header {
+                        margin-bottom: 0.75rem;
+                        border-bottom: 1px #DEE2E6 dashed;
+                        padding-bottom: 0.75rem;
+
+
+                    }
+
+                    .timeline-title {
+                        font-size: 1.1rem;
+                        font-weight: 600;
+                        margin: 0;
+                    }
+
+                    .timeline-time {
+                        font-size: 1rem;
+                        font-weight: 500;
+                        color: var(--label-color);
+                        flex-shrink: 0;
+                        padding: 4px 12px;
+                        background-color: #F8F9FA;
+                        border-radius: 5px;
+                    }
+
+                    .timeline-details {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 0.75rem;
+                    }
+
+                    .detail-item {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+
+                    .detail-label {
+                        display: flex;
+                        align-items: center;
+                        gap: 0.5rem;
+                        color: var(--label-color);
+                        font-size: 0.95rem;
+                    }
+
+                    .detail-label svg {
+                        width: 16px;
+                        height: 16px;
+                    }
+
+                    .data-pill {
+                        font-size: 0.9rem;
+                        font-weight: 500;
+                        padding: 0.25rem 0.75rem;
+                        border-radius: 5px;
+                        white-space: nowrap;
+                    }
+
+                    .pill-time {
+                        background-color: var(--pill-time-bg);
+                        color: var(--pill-time-text);
+                    }
+
+                    .pill-distance {
+                        background-color: var(--pill-distance-bg);
+                        color: var(--pill-distance-text);
+                    }
+
+                    /* Summary Card */
+                    .summary-card {
+                        background-color: var(--pill-time-bg);
+                        padding: 1.5rem;
+                        border-radius: 16px;
+                        margin-top: 2.5rem;
+                        border: 1px solid #4A90E2;
+                    }
+
+                    .summary-title {
+                        font-size: 1.1rem;
+                        font-weight: 600;
+                        margin-top: 0;
+                        margin-bottom: 1.5rem;
+                        color: #5892E5;
+                    }
+
+                    .summary-grid {
+                        display: grid;
+                        grid-template-columns: repeat(3, 1fr);
+                        gap: 1rem;
+                    }
+
+                    .summary-item {
+                        background-color: #fff;
+                        padding: 20px 10px;
+                        border-radius: 5px;
+                    }
+
+                    .summary-item .value {
+                        font-size: 1.5rem;
+                        font-weight: 600;
+                        color: var(--text-color);
+                        line-height: 1.2;
+                    }
+
+                    .summary-item .label {
+                        font-size: 1rem;
+                        color: var(--text-color);
+                        margin-top: 0.1rem;
+                    }
+
+                    .summary-item .sub-label {
+                        font-size: 0.85rem;
+                        color: var(--label-color);
+                    }
+
+                    /* Responsive */
+                    @media (max-width: 768px) {
+                        .main-container {
+                            padding: 0;
+                        }
+
+                        .timeline-content {
+                            padding: 1rem;
+                        }
+
+                        .summary-grid {
+                            grid-template-columns: 1fr;
+                            gap: 1.5rem;
+                        }
+
+                        .timeline-item {
+                            padding-left: 55px;
+                        }
+
+                        .timeline::before {
+                            left: 17px;
+                        }
+
+                        .timeline-icon {
+                            width: 34px;
+                            height: 34px;
+                        }
+
+                        .timeline-icon svg {
+                            width: 18px;
+                            height: 18px;
+                        }
+                    }
+
+                    @media (max-width: 1393px) {
+                        .summary-grid {
+                            grid-template-columns: 1fr;
+                            gap: 1.5rem;
+                        }
+
+                        .timeline-item {
+                            padding-left: 55px;
+                        }
+
+                        .timeline::before {
+                            left: 17px;
+                        }
+
+                        .timeline-icon {
+                            width: 34px;
+                            height: 34px;
+                        }
+
+                        .timeline-icon svg {
+                            width: 18px;
+                            height: 18px;
+                        }
+                    }
+                </style>
+                <div class="header  mt-5">ไทม์ไลน์การช่วยเหลือ</div>
+                <ul class="timeline">
+                    <li class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fa-regular fa-phone"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <h2 class="timeline-title">1. รับแจ้งเหตุ</h2>
+                                <span class="timeline-time">14:00 น.</span>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fa-regular fa-paper-plane-top fa-rotate-by" style="--fa-rotate-angle: 312deg;"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <h2 class="timeline-title">2. สั่งการ</h2>
+                                <span class="timeline-time">14:02 น.</span>
+                            </div>
+                            <div class="timeline-details">
+                                <div class="detail-item">
+                                    <span class="detail-label"><i class="fa-regular fa-clock"></i>ใช้เวลา (รับแจ้งเหตุ - สั่งการ)</span>
+                                    <span class="data-pill pill-time">2 นาที</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fa-regular fa-truck-medical"></i>
+
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <h2 class="timeline-title">3. ออกจากฐาน</h2>
+                                <span class="timeline-time">14:05 น.</span>
+                            </div>
+                            <div class="timeline-details">
+                                <div class="detail-item">
+                                    <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (สั่งการ - ออกจากฐาน)</span>
+                                    <span class="data-pill pill-time">3 นาที</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ออกจากฐาน)</span>
+                                    <div>
+                                        <span class="data-pill pill-time">10,500 กม.</span>
+                                        <span class="data-pill pill-distance">15 กม.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fa-regular fa-location-dot"></i>
+
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <h2 class="timeline-title">4. ถึงที่เกิดเหตุ</h2>
+                                <span class="timeline-time">14:20 น.</span>
+                            </div>
+                            <div class="timeline-details">
+                                <div class="detail-item">
+                                    <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (ออกจากฐาน - ที่เกิดเหตุ)</span>
+                                    <span class="data-pill pill-time">15 นาที</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ถึงที่เกิดเหตุ)</span>
+                                    <span class="data-pill pill-distance">10,510 กม.</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label"><i class="fa-regular fa-scribble"></i> ระยะทาง</span>
+                                    <span class="data-pill pill-distance">10 กม.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fa-regular fa-arrow-turn-left"></i>
+
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <h2 class="timeline-title">5. ออกจากที่เกิดเหตุ</h2>
+                                <span class="timeline-time">14:45 น.</span>
+                            </div>
+                            <div class="timeline-details">
+                                <div class="detail-item">
+                                    <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (รับแจ้งเหตุ - สั่งการ)</span>
+                                    <span class="data-pill pill-time">25 นาที</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="timeline-item">
+                        <div class="timeline-icon">
+                            <i class="fa-regular fa-hospital"></i>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <h2 class="timeline-title">6. ถึงโรงพยาบาล</h2>
+                                <span class="timeline-time">14:05 น.</span>
+                            </div>
+                            <div class="timeline-details">
+                                <div class="detail-item">
+                                    <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (ออกจากที่เกิดเหตุ - ถึงโรงพยาบาล)</span>
+                                    <span class="data-pill pill-time">3 นาที</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ถึงโรงพยาบาล)</span>
+                                    <div>
+                                        <span class="data-pill pill-distance">15 กม.</span>
+                                        <span class="data-pill pill-time">10,500 กม.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                    <li class="timeline-item">
+                        <div class="timeline-icon">
+                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M5.0625 9.125L1 5.0625M1 5.0625L5.0625 1M1 5.0625H9.53125C10.1181 5.0625 10.6992 5.17809 11.2414 5.40266C11.7835 5.62724 12.2762 5.9564 12.6911 6.37137C13.1061 6.78633 13.4353 7.27896 13.6598 7.82113C13.8844 8.36331 14 8.94441 14 9.53125C14 10.1181 13.8844 10.6992 13.6598 11.2414C13.4353 11.7835 13.1061 12.2762 12.6911 12.6911C12.2762 13.1061 11.7835 13.4353 11.2414 13.6598C10.6992 13.8844 10.1181 14 9.53125 14H6.6875" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-header">
+                                <h2 class="timeline-title">7. ถึงฐาน</h2>
+                                <span class="timeline-time">14:05 น.</span>
+                            </div>
+                            <div class="timeline-details">
+                                <div class="detail-item">
+                                    <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (รพ. - ถึงฐาน)</span>
+                                    <span class="data-pill pill-time">3 นาที</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ถึงฐาน)</span>
+                                    <div>
+                                        <span class="data-pill pill-distance">15 กม.</span>
+                                        <span class="data-pill pill-time">10,500 กม.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <div class="summary-card">
+                    <h2 class="summary-title">สรุปภารกิจ</h2>
+                    <div class="summary-grid">
+                        <div class="summary-item">
+                            <div class="label mb-2">รวมเวลาช่วยเหลือทั้งหมด</div>
+                            <div class="value">1 ชั่วโมง 13 นาที</div>
+                            <div class="sub-label">(ตั้งแต่รับแจ้งเหตุ - กลับถึงฐาน)</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="label mb-2">เวลาปฏิบัติงานนอกฐาน</div>
+                            <div class="value ">1 ชั่วโมง 8 นาที</div>
+                            <div class="sub-label">(ตั้งแต่ออกจากฐาน - กลับถึงฐาน)</div>
+                        </div>
+                        <div class="summary-item">
+                            <div class="label mb-2">ระยะทางทั้งหมด</div>
+                            <div class="value">33 กิโลเมตร</div>
+                            <div class="sub-label">(ออกจากฐาน - กลับถึงฐาน)</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- ---- ควบคุมการดำเนินการ ---- -->
-            <div id="card_map_operation" class="card-body p-3 d-none">
+            <div id="card_map_operation" class="card-body p-0 d-none">
                 <div id="map_monitor" style="position: relative;">
                     <!-- พื้นที่แผนที่ -->
                 </div>
@@ -792,7 +1245,7 @@
                         text-align: center !important;
                         vertical-align: middle !important;
                         border-radius: 50px;
-                         box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+                        box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
                     }
 
                     @media (max-width: 400px) {
@@ -862,12 +1315,12 @@
 
                     <!-- -------------- แสดงผลรายชื่อเจ้าหน้าที่ -------------- -->
                     <!-- <div id="div_list_officer" class="card-body p-3"> -->
-                        <!-- content By Javascript -->
+                    <!-- content By Javascript -->
                     <!-- </div> -->
                     <div class="menu-container mt-4">
                         <div class="menu-header">เจ้าหน้าที่</div>
                         <div class="menu-content">
-                            <div class="content"  id="div_list_officer" >
+                            <div class="content" id="div_list_officer">
                                 <div class="content-items">
                                     <div>
                                         <p class="mb-0 font-18 fw-bolder text-dark">officer lux</p>
@@ -973,135 +1426,149 @@
 
 <style>
     .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px;
-    border-bottom: 1px solid  #dee2e6;
-}
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 20px;
+        border-bottom: 1px solid #dee2e6;
+    }
+
     .modal-title {
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0;
-    color:  #212529;
-}
-.loader {
-    border: 5px solid #f3f3f3;
-    border-top: 5px solid #0d6efd;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 20px auto;
-}
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0;
+        color: #212529;
+    }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
+    .loader {
+        border: 5px solid #f3f3f3;
+        border-top: 5px solid #0d6efd;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 20px auto;
+    }
 
-.waiting-name {
-    margin-top: 0;
-}
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
 
-.officer-unit {
-    color:#6c757d;
-    margin: -5px 0 5px 0;
-    font-size: 16px;
-}
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 
-.timer-container {
-    margin: 20px 0;
-}
+    .waiting-name {
+        margin-top: 0;
+    }
 
-.timer-container p {
-    margin: 0;
-    font-size: 14px;
-    color: #6c757d;
-}
+    .officer-unit {
+        color: #6c757d;
+        margin: -5px 0 5px 0;
+        font-size: 16px;
+    }
 
-#timer_text {
-    font-size: 42px;
-    font-weight: 700;
-    color:  #212529;
-    letter-spacing: 2px;
-}
+    .timer-container {
+        margin: 20px 0;
+    }
 
-.warning-box {
-    background-color: #fff3cd;
-    border: 1px solid  #ffc107;
-    color: #664d03;
-    padding: 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    margin-top: 20px;
-    text-align: left;
-}
+    .timer-container p {
+        margin: 0;
+        font-size: 14px;
+        color: #6c757d;
+    }
 
-.warning-box p {
-    margin: 0;
-}
+    #timer_text {
+        font-size: 42px;
+        font-weight: 700;
+        color: #212529;
+        letter-spacing: 2px;
+    }
 
-.modal-wait-officer {
-  max-width: 420px;
-  margin: auto;
-}
+    .warning-box {
+        background-color: #fff3cd;
+        border: 1px solid #ffc107;
+        color: #664d03;
+        padding: 12px;
+        border-radius: 6px;
+        font-size: 14px;
+        margin-top: 20px;
+        text-align: left;
+    }
 
-.status-icon-wrapper {
-    margin: 0 auto 20px auto;
-}
+    .warning-box p {
+        margin: 0;
+    }
 
-.status-icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin: 0 auto;
-    position: relative;
-    box-sizing: border-box;
-    animation: scale-in 0.3s ease-in-out;
-}
+    .modal-wait-officer {
+        max-width: 420px;
+        margin: auto;
+    }
 
-@keyframes scale-in {
-    from { transform: scale(0.5); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
+    .status-icon-wrapper {
+        margin: 0 auto 20px auto;
+    }
 
-.rejection-icon {
-    background-color: #f8d7da;
-    border: 4px solid #dc3545;
-}
+    .status-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        margin: 0 auto;
+        position: relative;
+        box-sizing: border-box;
+        animation: scale-in 0.3s ease-in-out;
+    }
 
-.rejection-icon .icon-line {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 40px;
-    height: 5px;
-    background-color: #dc3545;
-    border-radius: 2px;
-}
+    @keyframes scale-in {
+        from {
+            transform: scale(0.5);
+            opacity: 0;
+        }
 
-.rejection-icon .line-1 {
-    transform: translate(-50%, -50%) rotate(45deg);
-}
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
 
-.rejection-icon .line-2 {
-    transform: translate(-50%, -50%) rotate(-45deg);
-}
+    .rejection-icon {
+        background-color: #f8d7da;
+        border: 4px solid #dc3545;
+    }
 
-.status-title {
-    font-size: 24px;
-    font-weight: 700;
-    color: #212529;
-    margin: 0 0 8px 0;
-}
+    .rejection-icon .icon-line {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 40px;
+        height: 5px;
+        background-color: #dc3545;
+        border-radius: 2px;
+    }
 
-.status-description {
-    font-size: 16px;
-    color:  #6c757d;
-    line-height: 1.6;
-    margin: 0;
-}
+    .rejection-icon .line-1 {
+        transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    .rejection-icon .line-2 {
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    .status-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #212529;
+        margin: 0 0 8px 0;
+    }
+
+    .status-description {
+        font-size: 16px;
+        color: #6c757d;
+        line-height: 1.6;
+        margin: 0;
+    }
 </style>
 <!-- Modal รอเจ้าหน้าที่ -->
 <div class="modal fade" id="wait_officer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="wait_officerLabel" aria-hidden="true">
@@ -1111,7 +1578,7 @@
                 <h5 class="modal-title" id="wait_officerLabel">Modal title</h5>
             </div>
             <div class="modal-body text-center">
-                
+
                 <!-- เนื้อหา modal -->
             </div>
             <div class="modal-footer justify-content-end">
@@ -1124,25 +1591,24 @@
 </div>
 
 <style>
+    .btn-primary-blue {
+        font-size: 16px;
+        font-weight: 500;
+        padding: 10px 20px;
+        border: 1px solid transparent;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all .15s ease-in-out;
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: #fff;
+    }
 
-
-.btn-primary-blue {
-     font-size: 16px;
-    font-weight: 500;
-    padding: 10px 20px;
-    border: 1px solid transparent;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all .15s ease-in-out;
-    background-color: #0d6efd;
-    border-color: #0d6efd;
-    color: #fff;
-}
-.btn-primary-blue:hover {
-    background-color: #0b5ed7;
-    border-color: #0b5ed7;
-    color: #fff;
-}
+    .btn-primary-blue:hover {
+        background-color: #0b5ed7;
+        border-color: #0b5ed7;
+        color: #fff;
+    }
 </style>
 <!-- Modal เจ้าหน้าที่ ปฏิเสธ -->
 <div class="modal fade" id="officer_refuse" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="officer_refuseLabel" aria-hidden="true">
@@ -1151,7 +1617,7 @@
             <div class="modal-body text-center">
                 <!-- เนื้อหา modal -->
             </div>
-            
+
             <div class="modal-footer justify-content-end">
                 <!-- <button type="button" class="btn btn-secondary-normal me-2 px-4  py-2"  data-bs-dismiss="modal">
                     ปิด
@@ -1228,7 +1694,6 @@
             center: emergency_LatLng,
             zoom: 15
         });
-
         show_data_helper();
 
     }
@@ -1285,8 +1750,8 @@
 
                             let buttonHTML = '';
 
-                            let check_UserPhoto = 'ไม่มี' ;
-                            if(result[i].user_photo){
+                            let check_UserPhoto = 'ไม่มี';
+                            if (result[i].user_photo) {
                                 check_UserPhoto = result[i].user_photo;
                             }
 
@@ -1368,7 +1833,7 @@
     }
 
 
-    function view_select_officer(officer_id ,userPhoto) {
+    function view_select_officer(officer_id, userPhoto) {
         const officerDiv = document.getElementById(`div_officer_id_${officer_id}`);
         if (!officerDiv) return;
 
@@ -1388,7 +1853,7 @@
                             <img src="{{url('/storage')}}/${userPhoto}" alt="รูปเจ้าหน้าที่">
                         </div>`;
         }
-      
+
         // เคลียร์และใส่เนื้อหาใหม่
         modalTitle.textContent = "ยืนยันการเลือกเจ้าหน้าที่";
         modalBody.innerHTML = `
@@ -1535,7 +2000,7 @@
                                     </p>
                                 `;
 
-                                    select_officer_again(data.emergency_id , officer_id , 'ปฏิเสธ')
+                                    select_officer_again(data.emergency_id, officer_id, 'ปฏิเสธ')
 
                                     // const againButton = document.querySelector('#officer_refuse_select_again');
                                     // againButton.setAttribute('onclick', `select_officer_again(${data.emergency_id}, ${officer_id}, 'ปฏิเสธ')`);
@@ -1678,33 +2143,33 @@
                     // ข้อมูลเจ้าหน้าที่
                     let user_photo = ``;
                     if (result['officer'].user_photo) {
-                        user_photo = `<img src="{{ url('/storage') }}/${result['officer'].user_photo}" class="rounded-circle p-1" style="width:110px;height: 110px;object-fit: cover;">`
+                        user_photo = `<img src="{{ url('/storage') }}/${result['officer'].user_photo}" height="70" width="70" alt="" style="border-radius: 50px; background-color: #D9D9D9;">`
                     }
 
-                    let level = `-`;
+                    let level = ``;
                     if (result['officer'].level) {
-                        level = result['officer'].level
+                        level = `<span>${result['officer'].level}</span>`;
+                    }
+
+                    let vehicle_type = ``;
+                    if (result['officer'].vehicle_type) {
+                        vehicle_type = `<span>${result['officer'].vehicle_type}</span>`;
                     }
 
                     let html = `
-                        ${user_photo}
-                        <div class="mt-3">
-                            <h4 id="info_name_officer">
-                                ${result['officer'].name_officer}
-                            </h4>
-                            <p id="info_name_unit" class="text-secondary mb-1">
-                                ${result['officer'].unit_name_unit}
-                            </p>
-                            <p id="info_type_unit" class="text-muted font-size-sm">
-                                ${result['officer'].unit_name_type_unit}
-                            </p>
-                            <button id="info_vehicle_type" class="btn btn-sm btn-outline-dark" style="width:47%;">
-                                ${result['officer'].vehicle_type}
-                            </button>
-                            <button id="info_level" class="btn btn-sm btn-outline-dark" style="width:47%;">
-                                Lv. ${level}
-                            </button>
+
+                        <div>
+                            ${user_photo}
                         </div>
+                        <div class="ms-3">
+                            <div class="d-flex flex-wrap officer-info">
+                                ${vehicle_type}
+                                ${level}
+                            </div>
+                            <p class="mb-0">${result['officer'].name_officer}</p>
+                            <p class="mb-0"> ${result['officer'].unit_name_unit} ,${result['officer'].unit_name_type_unit}</p>
+                        </div>
+                        
                     `;
 
                     div_data_info_officer.innerHTML = html;
@@ -1732,22 +2197,51 @@
             .then(response => response.json())
             .then(result => {
                 if (result) {
+                    const idc = result[0].idc;
+                    const rc = result[0].rc;
 
-                    document.querySelector('#show_text_idc').innerHTML = result[0].idc;
-                    document.querySelector('#show_text_rc').innerHTML = result[0].rc;
+                    // เปลี่ยนข้อความ
+                    document.querySelector('#show_text_idc').innerHTML = idc;
+                    document.querySelector('#show_text_rc').innerHTML = rc;
 
-                    if (old_status != result[0].status) {
-                        old_status = result[0].status
+                    // อัปเดต class สำหรับ idc
+                    const idcDiv = document.querySelector('#status_idc');
+                    idcDiv.className = 'status-rc ' + getStatusClass(idc);
+
+                    // อัปเดต class สำหรับ rc
+                    const rcDiv = document.querySelector('#status_rc');
+                    rcDiv.className = 'status-rc ' + getStatusClass(rc);
+
+                    // ตรวจสอบการเปลี่ยนสถานะ
+                    if (old_status !== result[0].status) {
+                        old_status = result[0].status;
                         alert_change_status_case(result[0].status);
                     }
 
+                    // หยุด loop ถ้าเสร็จสิ้น
                     if (result[0].status === 'เสร็จสิ้น') {
-                        clearInterval(loopInterval_case_realtime); // หยุดการ loop
-                        // console.log("เสร็จสิ้น");
+                        clearInterval(loopInterval_case_realtime);
                     }
                 }
             });
 
+    }
+
+    function getStatusClass(status) {
+        switch (status) {
+            case 'ทั่วไป':
+                return 'status-normal';
+            case 'ไม่รุนแรง':
+                return 'status-success';
+            case 'เร่งด่วน':
+                return 'status-warning';
+            case 'ฉุกเฉิน':
+                return 'status-danger';
+            case 'อื่นๆ':
+                return 'status-other';
+            default:
+                return '';
+        }
     }
 
     function alert_change_status_case(new_status) {
@@ -1951,11 +2445,11 @@
     function select_for_search(btn) {
         // เปลี่ยนคลาสของปุ่มให้เฉพาะปุ่มที่ถูกเลือกเป็น active (btn-info)
         document.querySelectorAll('.btn-group .btn').forEach(b => {
-            b.classList.remove('btn-dark' ,'text-white');
+            b.classList.remove('btn-dark', 'text-white');
             b.classList.add('btn-outline-dark');
         });
-        btn.classList.remove('btn-white' ,'text-dark');
-        btn.classList.add('btn-dark' ,'text-white');
+        btn.classList.remove('btn-white', 'text-dark');
+        btn.classList.add('btn-dark', 'text-white');
 
         // ซ่อน input ทั้งหมดก่อน แล้วค่อยโชว์อันที่ต้องการ
         document.getElementById('search_by_type').classList.add('d-none');
