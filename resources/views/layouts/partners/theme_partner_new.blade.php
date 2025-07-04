@@ -1119,257 +1119,259 @@
 
 			</ul>
 			<!--end navigation-->
+
+			<!-- เมนู เปิด-ปิด เวลาทำการ -->
+			@if( Auth::user()->role == "admin-area" )
+			<style>
+				@media (min-width: 1024px) {
+					.wrapper.toggled .card-container {
+						display: none;
+					}
+				}
+
+				.wrapper.toggled.sidebar-hovered .card-container {
+					display: flex;
+				}
+
+				:root {
+					--primary-color: #3B82F6;
+					--background-color: #F8F9FA;
+					--card-background-color: #FFFFFF;
+					--text-color: #212529;
+					--label-color: #6C757D;
+					--border-color: #E9ECEF;
+					--success-color: #198754;
+					--light-grey: #f1f1f1;
+				}
+
+				.card-container {
+					width: 100% !important;
+					max-width: 350px;
+				}
+
+				/* --- General Card Style --- */
+				.hours-card {
+					background-color: var(--card-background-color);
+					border-radius: 12px;
+					box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+					border: 1px solid var(--border-color);
+					padding: 1.25rem;
+					box-sizing: border-box;
+					transition: all 0.3s ease;
+					width: 100% !important;
+
+				}
+
+				.hours-card-header {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+					margin-bottom: 1.25rem;
+				}
+
+				.hours-card-title {
+					font-size: 1rem;
+					font-weight: 600;
+					margin: 0;
+				}
+
+				/* --- Display Card --- */
+				#timeSlots {
+					display: flex;
+					justify-content: space-around;
+					text-align: center;
+				}
+
+				#timeSlots .time-item {
+					width: 50%;
+				}
+
+				#timeSlots .time-item:first-child {
+					border-right: 1px solid var(--border-color);
+				}
+
+				#timeSlots .item-label {
+					font-size: 0.8rem;
+					color: var(--label-color);
+					margin-top: 0.5rem;
+					display: block;
+				}
+
+				#timeSlots .item-time {
+					font-size: 1.3rem;
+					font-weight: 600;
+					color: var(--primary-color);
+					display: block;
+				}
+
+				#timeSlots svg {
+					/* font-size: 28px; */
+					color: var(--primary-color);
+					opacity: 0.7;
+					width: 50px;
+					height: 50px;
+				}
+
+				/* New styles for 24h display */
+				#allDayDisplay {
+					display: none;
+					/* Hidden by default */
+					text-align: center;
+					padding: 0.5rem 0;
+				}
+
+				#allDayDisplay .item-time {
+					font-size: 1.3rem;
+					font-weight: 600;
+					color: var(--primary-color);
+				}
+
+				#allDayDisplay .item-label {
+					font-size: 1rem;
+					color: var(--label-color);
+					display: block;
+				}
+
+				#allDayDisplay i {
+					font-size: 18px;
+					color: var(--primary-color);
+					margin-bottom: 0.75rem;
+				}
+
+				.edit-btn {
+					font-size: 0.7rem;
+					font-weight: 500;
+					padding: 0.35rem 0.85rem;
+					border-radius: 8px;
+					background-color: #E7F3FF;
+					color: #0052CC;
+					text-decoration: none;
+					cursor: pointer;
+					border: none;
+				}
+
+				/* --- Edit Card --- */
+				#editCard {
+					display: none;
+				}
+
+				.form-group {
+					margin-bottom: 1rem;
+				}
+
+				.form-group label {
+					display: block;
+					margin-bottom: 0.5rem;
+					font-weight: 500;
+					color: var(--label-color);
+				}
+
+				.form-group input[type="time"] {
+					width: 100%;
+					padding: 0.5rem;
+					border: 1px solid var(--border-color);
+					border-radius: 8px;
+					font-family: 'Kanit', sans-serif;
+					font-size: .9rem;
+					box-sizing: border-box;
+				}
+
+				.form-group input[type="time"]:disabled {
+					background-color: var(--light-grey);
+					cursor: not-allowed;
+				}
+
+				/* Toggle Switch */
+				.toggle-group {
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+				}
+
+				.switch {
+					position: relative;
+					display: inline-block;
+					width: 50px;
+					height: 28px;
+				}
+
+				.switch input {
+					opacity: 0;
+					width: 0;
+					height: 0;
+				}
+
+				.slider {
+					position: absolute;
+					cursor: pointer;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					background-color: #ccc;
+					transition: .4s;
+					border-radius: 28px;
+				}
+
+				.slider:before {
+					position: absolute;
+					content: "";
+					height: 20px;
+					width: 20px;
+					left: 4px;
+					bottom: 4px;
+					background-color: white;
+					transition: .4s;
+					border-radius: 50%;
+				}
+
+				input:checked+.slider {
+					background-color: var(--primary-color);
+				}
+
+				input:checked+.slider:before {
+					transform: translateX(22px);
+				}
+
+				/* Action Buttons */
+				.form-actions {
+					margin-top: 1.5rem;
+					display: flex;
+					justify-content: flex-end;
+					gap: 0.75rem;
+				}
+
+				.btn-time {
+					padding: 0.5rem 1.25rem;
+					border: none;
+					border-radius: 8px;
+					font-size: 0.8rem;
+					font-weight: 500;
+					font-family: 'Kanit', sans-serif;
+					cursor: pointer;
+					transition: opacity 0.2s ease;
+				}
+
+				.btn-time:hover {
+					opacity: 0.85;
+				}
+
+				.btn-cancle-time {
+					background-color: #fff;
+					color: var(--label-color);
+					border: 1px solid #D5D5D5;
+				}
+
+				.btn-cancle-time:hover {
+					background-color: rgb(247, 247, 247)
+				}
+
+				.btn-submit-time {
+					background-color: var(--primary-color);
+					color: white;
+				}
+			</style>
 			<div class="" style="position: fixed; position: absolute;  bottom: 0;  left: 0;  width: 100%; padding: 5px;">
-				<style>
-					@media (min-width: 1024px) {
-						.wrapper.toggled .card-container {
-							display: none;
-						}
-					}
-
-					.wrapper.toggled.sidebar-hovered .card-container {
-						display: flex;
-					}
-
-					:root {
-						--primary-color: #3B82F6;
-						--background-color: #F8F9FA;
-						--card-background-color: #FFFFFF;
-						--text-color: #212529;
-						--label-color: #6C757D;
-						--border-color: #E9ECEF;
-						--success-color: #198754;
-						--light-grey: #f1f1f1;
-					}
-
-					.card-container {
-						width: 100% !important;
-						max-width: 350px;
-					}
-
-					/* --- General Card Style --- */
-					.hours-card {
-						background-color: var(--card-background-color);
-						border-radius: 12px;
-						box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-						border: 1px solid var(--border-color);
-						padding: 1.25rem;
-						box-sizing: border-box;
-						transition: all 0.3s ease;
-						width: 100% !important;
-
-					}
-
-					.hours-card-header {
-						display: flex;
-						justify-content: space-between;
-						align-items: center;
-						margin-bottom: 1.25rem;
-					}
-
-					.hours-card-title {
-						font-size: 1rem;
-						font-weight: 600;
-						margin: 0;
-					}
-
-					/* --- Display Card --- */
-					#timeSlots {
-						display: flex;
-						justify-content: space-around;
-						text-align: center;
-					}
-
-					#timeSlots .time-item {
-						width: 50%;
-					}
-
-					#timeSlots .time-item:first-child {
-						border-right: 1px solid var(--border-color);
-					}
-
-					#timeSlots .item-label {
-						font-size: 0.8rem;
-						color: var(--label-color);
-						margin-top: 0.5rem;
-						display: block;
-					}
-
-					#timeSlots .item-time {
-						font-size: 1.3rem;
-						font-weight: 600;
-						color: var(--primary-color);
-						display: block;
-					}
-
-					#timeSlots svg {
-						/* font-size: 28px; */
-						color: var(--primary-color);
-						opacity: 0.7;
-						width: 50px;
-						height: 50px;
-					}
-
-					/* New styles for 24h display */
-					#allDayDisplay {
-						display: none;
-						/* Hidden by default */
-						text-align: center;
-						padding: 0.5rem 0;
-					}
-
-					#allDayDisplay .item-time {
-						font-size: 1.3rem;
-						font-weight: 600;
-						color: var(--primary-color);
-					}
-
-					#allDayDisplay .item-label {
-						font-size: 1rem;
-						color: var(--label-color);
-						display: block;
-					}
-
-					#allDayDisplay i {
-						font-size: 18px;
-						color: var(--primary-color);
-						margin-bottom: 0.75rem;
-					}
-
-					.edit-btn {
-						font-size: 0.7rem;
-						font-weight: 500;
-						padding: 0.35rem 0.85rem;
-						border-radius: 8px;
-						background-color: #E7F3FF;
-						color: #0052CC;
-						text-decoration: none;
-						cursor: pointer;
-						border: none;
-					}
-
-					/* --- Edit Card --- */
-					#editCard {
-						display: none;
-					}
-
-					.form-group {
-						margin-bottom: 1rem;
-					}
-
-					.form-group label {
-						display: block;
-						margin-bottom: 0.5rem;
-						font-weight: 500;
-						color: var(--label-color);
-					}
-
-					.form-group input[type="time"] {
-						width: 100%;
-						padding: 0.5rem;
-						border: 1px solid var(--border-color);
-						border-radius: 8px;
-						font-family: 'Kanit', sans-serif;
-						font-size: .9rem;
-						box-sizing: border-box;
-					}
-
-					.form-group input[type="time"]:disabled {
-						background-color: var(--light-grey);
-						cursor: not-allowed;
-					}
-
-					/* Toggle Switch */
-					.toggle-group {
-						display: flex;
-						justify-content: space-between;
-						align-items: center;
-					}
-
-					.switch {
-						position: relative;
-						display: inline-block;
-						width: 50px;
-						height: 28px;
-					}
-
-					.switch input {
-						opacity: 0;
-						width: 0;
-						height: 0;
-					}
-
-					.slider {
-						position: absolute;
-						cursor: pointer;
-						top: 0;
-						left: 0;
-						right: 0;
-						bottom: 0;
-						background-color: #ccc;
-						transition: .4s;
-						border-radius: 28px;
-					}
-
-					.slider:before {
-						position: absolute;
-						content: "";
-						height: 20px;
-						width: 20px;
-						left: 4px;
-						bottom: 4px;
-						background-color: white;
-						transition: .4s;
-						border-radius: 50%;
-					}
-
-					input:checked+.slider {
-						background-color: var(--primary-color);
-					}
-
-					input:checked+.slider:before {
-						transform: translateX(22px);
-					}
-
-					/* Action Buttons */
-					.form-actions {
-						margin-top: 1.5rem;
-						display: flex;
-						justify-content: flex-end;
-						gap: 0.75rem;
-					}
-
-					.btn-time {
-						padding: 0.5rem 1.25rem;
-						border: none;
-						border-radius: 8px;
-						font-size: 0.8rem;
-						font-weight: 500;
-						font-family: 'Kanit', sans-serif;
-						cursor: pointer;
-						transition: opacity 0.2s ease;
-					}
-
-					.btn-time:hover {
-						opacity: 0.85;
-					}
-
-					.btn-cancle-time {
-						background-color: #fff;
-						color: var(--label-color);
-						border: 1px solid #D5D5D5;
-					}
-
-					.btn-cancle-time:hover {
-						background-color: rgb(247, 247, 247)
-					}
-
-					.btn-submit-time {
-						background-color: var(--primary-color);
-						color: white;
-					}
-				</style>
-
 				<div class="card-container">
 
 					<div class="hours-card" id="displayCard">
@@ -1380,21 +1382,11 @@
 
 						<div id="timeSlots">
 							<div class="time-item">
-								<!-- <div class="d-flex justify-content-center w-100">
-									<div style="background-color: #fff; color: #04b360;border-radius: 5px; width: fit-content;padding: 5px 10px;border: 1px solid #04b360;font-weight: bolder;">
-										open
-									</div>
-								</div> -->
-								<span class="item-time" id="displayOpenTime">09:00</span>
+								<span class="item-time" id="displayOpenTime"></span>
 								<span class="item-label">เปิดทำการ</span>
 							</div>
 							<div class="time-item">
-								<!-- <div class="d-flex justify-content-center w-100">
-									<div style="background-color: #f5424e; color: #fff;border-radius: 5px; width: fit-content;padding: 5px 10px;">
-										close
-									</div>
-								</div> -->
-								<span class="item-time" id="displayCloseTime">18:00</span>
+								<span class="item-time" id="displayCloseTime"></span>
 								<span class="item-label">ปิดทำการ</span>
 							</div>
 						</div>
@@ -1447,17 +1439,17 @@
 
 							<div class="form-group">
 								<label for="openTime">เวลาเปิด</label>
-								<input type="time" id="openTime" value="09:00">
+								<input type="time" id="openTime" name="time_start_command" value="">
 							</div>
 							<div class="form-group">
 								<label for="closeTime">เวลาปิด</label>
-								<input type="time" id="closeTime" value="18:00">
+								<input type="time" id="closeTime" name="time_end_command" value="">
 							</div>
 
 							<div class="toggle-group form-group">
 								<label for="is24h">เปิด 24 ชั่วโมง</label>
 								<label class="switch">
-									<input type="checkbox" id="is24h">
+									<input type="checkbox" id="is24h" name="check_time_command">
 									<span class="slider"></span>
 								</label>
 							</div>
@@ -1468,70 +1460,208 @@
 						</form>
 					</div>
 				</div>
-
-				<script>
-					// Get references to all elements
-					const displayCard = document.getElementById('displayCard');
-					const editCard = document.getElementById('editCard');
-
-					const editButton = document.getElementById('editButton');
-					const cancelButton = document.getElementById('cancelButton');
-					const editForm = document.getElementById('editForm');
-
-					const openTimeInput = document.getElementById('openTime');
-					const closeTimeInput = document.getElementById('closeTime');
-					const is24hInput = document.getElementById('is24h');
-
-					// Display elements
-					const timeSlots = document.getElementById('timeSlots');
-					const allDayDisplay = document.getElementById('allDayDisplay');
-					const displayOpenTime = document.getElementById('displayOpenTime');
-					const displayCloseTime = document.getElementById('displayCloseTime');
-
-					// Function to switch to Edit Mode
-					editButton.addEventListener('click', () => {
-						displayCard.style.display = 'none';
-						editCard.style.display = 'block';
-					});
-
-					// Function to switch back to Display Mode
-					function showDisplayCard() {
-						editCard.style.display = 'none';
-						displayCard.style.display = 'block';
-					}
-
-					cancelButton.addEventListener('click', showDisplayCard);
-
-					// Handle the 24-hour toggle in the edit form
-					is24hInput.addEventListener('change', () => {
-						const isDisabled = is24hInput.checked;
-						openTimeInput.disabled = isDisabled;
-						closeTimeInput.disabled = isDisabled;
-					});
-
-					// Handle form submission
-					editForm.addEventListener('submit', (event) => {
-						event.preventDefault(); // Prevent page reload
-
-						if (is24hInput.checked) {
-							// If 24h is checked, show the single display and hide the double one
-							timeSlots.style.display = 'none';
-							allDayDisplay.style.display = 'block';
-						} else {
-							// Otherwise, show the double display and hide the single one
-							allDayDisplay.style.display = 'none';
-							timeSlots.style.display = 'flex'; // Use 'grid' to restore the two-column layout
-
-							// Update the times
-							displayOpenTime.textContent = openTimeInput.value;
-							displayCloseTime.textContent = closeTimeInput.value;
-
-						}
-
-						showDisplayCard(); // Switch back to the display card
-					});
-				</script>
 			</div>
+
+			<script>
+				document.addEventListener("DOMContentLoaded", () => {
+				    check_data_area();
+				});
+
+				// --- Element References ---
+				const openTimeInput = document.getElementById('openTime');
+				const closeTimeInput = document.getElementById('closeTime');
+				const is24hInput = document.getElementById('is24h');
+				const editForm = document.getElementById('editForm');
+				const displayCard = document.getElementById('displayCard');
+				const editCard = document.getElementById('editCard');
+				const editButton = document.getElementById('editButton');
+				const cancelButton = document.getElementById('cancelButton');
+				const timeSlots = document.getElementById('timeSlots');
+				const allDayDisplay = document.getElementById('allDayDisplay');
+				const displayOpenTime = document.getElementById('displayOpenTime');
+				const displayCloseTime = document.getElementById('displayCloseTime');
+
+				const dayCheckboxes = [
+				    'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'
+				].map(id => document.getElementById(id));
+
+				let currentData = null;
+				let area_id = null;
+
+				// --- Load initial data ---
+				function check_data_area() {
+				    const user_id = "{{ Auth::user()->id }}";
+				    fetch("{{ url('/') }}/api/theme/check_data_area/" + user_id)
+				        .then(response => response.json())
+				        .then(result => {
+				            // console.log(result);
+				            if (result.length > 0) {
+				                currentData = result[0];
+				                area_id = currentData.area_id;
+				                fillForm(currentData);
+				                updateDisplayCard(currentData);
+				            }
+				        });
+				}
+
+				// --- Fill form with data ---
+				function fillForm(data) {
+				    is24hInput.checked = data.check_time_command === "No";
+				    openTimeInput.value = data.time_start_command || '';
+				    closeTimeInput.value = data.time_end_command || '';
+
+				    dayCheckboxes.forEach(cb => cb.checked = false);
+				    if (data.day_command) {
+				        const days = data.day_command.split(',');
+				        days.forEach(day => {
+				            const cb = document.getElementById(day.trim());
+				            if (cb) cb.checked = true;
+				        });
+				    }
+
+				    toggleInputs();
+				}
+
+				// --- Enable/Disable input fields ---
+				function toggleInputs() {
+				    const isDisabled = is24hInput.checked;
+
+				    dayCheckboxes.forEach(cb => cb.disabled = isDisabled);
+				    openTimeInput.disabled = isDisabled || !isAnyDayChecked();
+				    closeTimeInput.disabled = isDisabled || !isAnyDayChecked();
+
+				    if (isDisabled) {
+				        openTimeInput.value = '';
+				        closeTimeInput.value = '';
+				        dayCheckboxes.forEach(cb => cb.checked = false);
+				    }
+				}
+
+				// --- Check if any day is selected ---
+				function isAnyDayChecked() {
+				    return dayCheckboxes.some(cb => cb.checked);
+				}
+
+				// --- Validate open/close time ---
+				function isTimeValid(start, end) {
+				    return start && end && start < end;
+				}
+
+				// --- Update display card from data ---
+				function updateDisplayCard(data) {
+				    const is24h = data.check_time_command === "No";
+
+				    if (is24h) {
+				        allDayDisplay.style.display = 'block';
+				        timeSlots.style.display = 'none';
+				    } else {
+				        allDayDisplay.style.display = 'none';
+				        timeSlots.style.display = 'flex';
+				        displayOpenTime.textContent = data.time_start_command ? data.time_start_command.slice(0, 5) : '--:--';
+				        displayCloseTime.textContent = data.time_end_command ? data.time_end_command.slice(0, 5) : '--:--';
+				    }
+				}
+
+				// --- Toggle edit mode ---
+				editButton.addEventListener('click', () => {
+				    displayCard.style.display = 'none';
+				    editCard.style.display = 'block';
+				});
+
+				cancelButton.addEventListener('click', () => {
+				    editCard.style.display = 'none';
+				    displayCard.style.display = 'block';
+				});
+
+				// --- Toggle 24h switch ---
+				is24hInput.addEventListener('change', toggleInputs);
+
+				// --- Enable time inputs when any day is selected ---
+				dayCheckboxes.forEach(cb => {
+				    cb.addEventListener('change', () => {
+				        if (!is24hInput.checked) {
+				            const enableTime = isAnyDayChecked();
+				            openTimeInput.disabled = !enableTime;
+				            closeTimeInput.disabled = !enableTime;
+				        }
+				    });
+				});
+
+				// --- Handle form submit ---
+				editForm.addEventListener('submit', (e) => {
+				    e.preventDefault();
+
+				    if (!is24hInput.checked) {
+				        if (!isAnyDayChecked()) {
+				            alert("กรุณาเลือกวัน");
+				            return;
+				        }
+
+				        if (!isTimeValid(openTimeInput.value, closeTimeInput.value)) {
+				            alert("เวลาเปิดต้องน้อยกว่าเวลาปิด");
+				            return;
+				        }
+				    }
+
+				    const selectedDays = dayCheckboxes
+				        .filter(cb => cb.checked)
+				        .map(cb => cb.id);
+
+				    const formData = {
+				        check_time_command: is24hInput.checked ? "Yes" : "No",
+				        day_command: selectedDays.join(','),
+				        time_start_command: openTimeInput.value || null,
+				        time_end_command: closeTimeInput.value || null
+				    };
+
+				    if (formData.check_time_command == "No") {
+				    	formData.check_time_command = "Yes";
+				    }
+				    else if (formData.check_time_command == "Yes") {
+				    	formData.check_time_command = "No";
+				    }
+
+				    formData.id = area_id ;
+
+				    // console.log("ส่งข้อมูลทั้งหมด:", formData);
+
+				    fetch("{{ url('/api/theme/save_time_config') }}", {
+					    method: 'POST',
+					    headers: {
+					        'Content-Type': 'application/json',
+					        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+					    },
+					    body: JSON.stringify(formData)
+					})
+					.then(res => res.json())
+					.then(data => {
+					    if (data.status === "success") {
+					        // console.log("บันทึกสำเร็จ", data);
+					    } else {
+					        console.warn("มีบางอย่างผิดพลาด", data);
+					        alert("เกิดข้อผิดพลาด: " + (data.message || 'ไม่สามารถบันทึกได้'));
+					    }
+					})
+
+
+				    // --- Update displayCard directly ---
+				    if (is24hInput.checked) {
+				        allDayDisplay.style.display = 'block';
+				        timeSlots.style.display = 'none';
+				    } else {
+				        allDayDisplay.style.display = 'none';
+				        timeSlots.style.display = 'flex';
+				        displayOpenTime.textContent = formData.time_start_command.slice(0, 5);
+				        displayCloseTime.textContent = formData.time_end_command.slice(0, 5);
+				    }
+
+				    // Hide edit form
+				    editCard.style.display = 'none';
+				    displayCard.style.display = 'block';
+				});
+			</script>
+			@endif
+
 		</div>
 		<!--end sidebar wrapper -->
 
