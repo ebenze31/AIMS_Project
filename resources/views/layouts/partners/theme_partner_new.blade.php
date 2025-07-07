@@ -2009,7 +2009,68 @@
 		<!--start overlay-->
 		<div class="overlay toggle-icon"></div>
 		<!--end overlay-->
-		<!--Start Back To Top Button--> <a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+		<!--Start Back To Top Button--> 
+		<a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
+<button id="alertButton" data-bs-toggle="modal" data-bs-target="#helpRequestModal">
+        <i class="fa-solid fa-triangle-exclamation fa-beat-fade"></i>
+    </button>
+
+	 <div class="modal fade" id="helpRequestModal" tabindex="-1" aria-labelledby="helpRequestModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="helpRequestModalLabel">ขอความช่วยเหลือ </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    
+				</div>
+            </div>
+        </div>
+    </div>
+		<style>
+		.back-to-top.active-btn-top ~ #alertButton {
+			right: 60px;
+		}
+
+		#alertButton {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050; /* Ensure it's above other elements like modals */
+            background-color: #dc3545; /* สีแดง */
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.2);
+            animation: pulse 1.5s infinite alternate;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+			transition: all .15s ease-in-out;
+			width: 40px;
+			height: 40px;        
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+        #alertButton:hover {
+            background-color: #c82333;
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1.05);
+            }
+        }
+
+		
+		</style>
 		<!--End Back To Top Button-->
 		<footer class="page-footer">
 			<p class="mb-0">Power By 2B-Green</p>
