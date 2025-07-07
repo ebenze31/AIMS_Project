@@ -2012,10 +2012,14 @@
                                     window.removeEventListener('beforeunload', handleBeforeUnload);
                                     $('#wait_officer').modal('hide');
 
+                                    // Modal เจ้าหน้าที่รับเคสแล้ว Officer go to help
+
+                                    // ชุดนี้ย้ายไปหลังจากกดปุ่มใน Modal เจ้าหน้าที่รับเคสแล้ว
                                     check_show_map = "card_map_operation";
                                     document.getElementById('card_map').classList.add('d-none');
                                     document.getElementById('card_map_operation').classList.remove('d-none');
                                     open_map_monitor();
+                                    // -----------------------------------
 
                                 }
 
