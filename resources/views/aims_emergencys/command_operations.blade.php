@@ -329,7 +329,7 @@
                     <!-- <button class="btn w-100 btn-show-img">ดูรูปภาพ</button> -->
                     <div class="d-flex">
                         <button class="btn w-100 btn-outline-danger mx-1 py-1 " id="btn_order">
-                            สั่งการ
+                            <!--  -->
                         </button>
                         <button class="btn w-100 mx-1 btn-primary  py-1" id="btn_info">
                             ข้อมูลเคส
@@ -1638,6 +1638,7 @@
     document.addEventListener("DOMContentLoaded", function() {
 
         var aims_operating_officers_id = "{{ $emergency->op_aims_operating_officers_id }}";
+
         if (aims_operating_officers_id) {
             check_show_map = "card_map_operation";
             open_map_monitor();
@@ -1661,6 +1662,10 @@
     // console.log(emergency_Lng);
 
     function open_map_operating_unit() {
+
+        let btn_order = document.querySelector('#btn_order');
+        btn_order.innerHTML = "สั่งการ" ;
+        
         const emergency_LatLng = {
             lat: emergency_Lat,
             lng: emergency_Lng
@@ -1685,6 +1690,9 @@
     }
 
     function open_map_monitor() {
+        let btn_order = document.querySelector('#btn_order');
+        btn_order.innerHTML = "ติดตาม" ;
+
         const emergency_LatLng = {
             lat: emergency_Lat,
             lng: emergency_Lng
