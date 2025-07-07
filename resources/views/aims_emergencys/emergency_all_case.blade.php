@@ -225,7 +225,7 @@
 	                <nav aria-label="...">
 	                    <ul class="pagination">
 	                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-	                            <a class="page-link" href="javascript:;" tabindex="-1" aria-disabled="${currentPage == 1}" onclick="get_data_case_all({page: ${currentPage - 1}})">«</a>
+	                            <a class="page-link" href="javascript:;" tabindex="-1" aria-disabled="${currentPage == 1}" onclick="get_data_case_all({page: 1})">«</a>
 	                        </li>
 	            `;
 
@@ -247,7 +247,7 @@
 
 	            html_navigation += `
 	                        <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-	                            <a class="page-link" href="javascript:;" aria-disabled="${currentPage == totalPages}" onclick="get_data_case_all({page: ${currentPage + 1}})">»</a>
+	                            <a class="page-link" href="javascript:;" aria-disabled="${currentPage == totalPages}" onclick="get_data_case_all({page: ${totalPages}})">»</a>
 	                        </li>
 	                    </ul>
 	                </nav>
