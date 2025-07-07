@@ -1455,8 +1455,6 @@
 							            <input class="form-check-input" type="checkbox" id="friday">
 							            <label class="form-check-label" for="friday">ศ.</label>
 							        </div>
-							    </div>
-							    <div class="d-flex flex-wrap">
 							        <div class="form-check input-day">
 							            <input class="form-check-input" type="checkbox" id="saturday">
 							            <label class="form-check-label" for="saturday">ส.</label>
