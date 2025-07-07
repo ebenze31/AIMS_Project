@@ -274,6 +274,13 @@ class Aims_emergencysController extends Controller
         $check_data = Aims_emergency_operation::where('notify', 'command_id-' . $user_id)->first();
         $data_return = [];
 
+        DB::table('aims_commands')
+            ->where('user_id', $user_id)
+            ->update([
+                'last_active' => now(),
+                'updated_at' => now()
+            ]);
+
         if ($check_data) {
             // สำเนาค่าปัจจุบันก่อนอัปเดต
             $original_data = clone $check_data;

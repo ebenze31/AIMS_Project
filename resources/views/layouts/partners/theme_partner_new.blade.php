@@ -1022,6 +1022,24 @@
 			<!--navigation-->
 			<ul class="metismenu" id="menu" style="font-family: 'Baloo Bhaijaan 2', cursive;font-family: 'Prompt', sans-serif;">
 
+				<li>
+					<a href="{{ url('/') }}">
+						<div class="parent-icon">
+							<i class="fa-solid fa-chart-line"></i>
+						</div>
+						<div class="menu-title">Dashboard</div>
+					</a>
+				</li>
+
+				<li>
+					<a href="{{ url('/emergency_all_case') }}">
+						<div class="parent-icon">
+							<i class="fa-solid fa-user-headset"></i>
+						</div>
+						<div class="menu-title">ควบคุมและสั่งการ</div>
+					</a>
+				</li>
+
 				<!-- Admin -->
 				@if(Auth::check())
 				@if(Auth::user()->role == "admin-partner" || Auth::user()->role == "admin-area")
@@ -1073,13 +1091,13 @@
 						@endif
 						<li>
 							<a href="{{ url('/') }}">
-								<i class='far fa-map'></i><span> พื้นที่</span>
+								<i class="fa-regular fa-calendar-clock"></i>
+								<span> ข้อมูลองค์กร</span>
 							</a>
 						</li>
 						<li>
 							<a href="{{ url('/') }}">
-								<i class="fa-regular fa-calendar-clock"></i>
-								<span> เวลาทำการ</span>
+								<i class='far fa-map'></i><span> พื้นที่</span>
 							</a>
 						</li>
 					</ul>
@@ -1088,31 +1106,13 @@
 				@endif
 				<!-- Admin -->
 
-				<li>
-					<a href="{{ url('/') }}">
-						<div class="parent-icon">
-							<i class="fa-solid fa-chart-line"></i>
-						</div>
-						<div class="menu-title">Dashboard</div>
-					</a>
-				</li>
-
-				<li>
-					<a href="{{ url('/emergency_all_case') }}">
-						<div class="parent-icon">
-							<i class="fa-solid fa-user-headset"></i>
-						</div>
-						<div class="menu-title">ควบคุมและสั่งการ</div>
-					</a>
-				</li>
-
 				<style>
 					.container {
 						justify-content: center;
 					}
 				</style>
 
-				<div class="container">
+				<div class="container d-none">
 					<button onclick="test_toast();">Show Toast</button>
 				</div>
 				<br>
@@ -1291,7 +1291,8 @@
 				.switch {
 					position: relative;
 					display: inline-block;
-					width: 50px;
+					min-width: 50px;
+					max-width: 50px;
 					height: 28px;
 				}
 
@@ -1330,7 +1331,7 @@
 				}
 
 				input:checked+.slider:before {
-					transform: translateX(22px);
+					transform: translateX(100%);
 				}
 
 				/* Action Buttons */
@@ -1370,6 +1371,34 @@
 					background-color: var(--primary-color);
 					color: white;
 				}
+
+				.input-day{
+                    padding: 0 5px 0 0;
+                    -webkit-user-select: none;
+                    -khtml-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    -o-user-select: none;
+                    user-select: none;
+                }
+                .input-day input{
+                    display: none;
+                }
+
+                .input-day label{
+                    color: #595959;
+                    background-color: #F1F1F1;
+                    border-radius: 5px;
+                    padding: 5px 10px;
+                    transition: all .15s ease-in-out;
+                    font-size: 13.6px;
+                    cursor: pointer;
+                }
+                .input-day input:checked ~ label{
+                    background-color: #3B82F6;
+                    color: #fff;
+                }
+
 			</style>
 			<div class="" style="position: fixed; position: absolute;  bottom: 0;  left: 0;  width: 100%; padding: 5px;">
 				<div class="card-container">
@@ -1405,32 +1434,32 @@
 						<form id="editForm">
 							<div class="form-group">
 								<label for="openTime">วัน</label>
-							    <div class="d-flex flex-wrap" style="column-gap: .5rem; row-gap: .25rem;">
-							        <div class="form-check">
+							    <div class="d-flex flex-wrap">
+							        <div class="form-check input-day">
 							            <input class="form-check-input" type="checkbox" id="monday">
 							            <label class="form-check-label" for="monday">จ.</label>
 							        </div>
-							        <div class="form-check">
+							        <div class="form-check input-day">
 							            <input class="form-check-input" type="checkbox" id="tuesday">
 							            <label class="form-check-label" for="tuesday">อ.</label>
 							        </div>
-							        <div class="form-check">
+							        <div class="form-check input-day">
 							            <input class="form-check-input" type="checkbox" id="wednesday">
 							            <label class="form-check-label" for="wednesday">พ.</label>
 							        </div>
-							        <div class="form-check">
+							        <div class="form-check input-day">
 							            <input class="form-check-input" type="checkbox" id="thursday">
 							            <label class="form-check-label" for="thursday">พฤ.</label>
 							        </div>
-							        <div class="form-check">
+							        <div class="form-check input-day">
 							            <input class="form-check-input" type="checkbox" id="friday">
 							            <label class="form-check-label" for="friday">ศ.</label>
 							        </div>
-							        <div class="form-check">
+							        <div class="form-check input-day">
 							            <input class="form-check-input" type="checkbox" id="saturday">
 							            <label class="form-check-label" for="saturday">ส.</label>
 							        </div>
-							        <div class="form-check">
+							        <div class="form-check input-day">
 							            <input class="form-check-input" type="checkbox" id="sunday">
 							            <label class="form-check-label" for="sunday">อา.</label>
 							        </div>
@@ -1608,11 +1637,11 @@
 				        .map(cb => cb.id);
 
 				    const formData = {
-				        check_time_command: is24hInput.checked ? "Yes" : "No",
-				        day_command: selectedDays.join(','),
-				        time_start_command: openTimeInput.value || null,
-				        time_end_command: closeTimeInput.value || null
-				    };
+					    check_time_command: is24hInput.checked ? "Yes" : "No",
+					    day_command: selectedDays.join(','),
+					    time_start_command: openTimeInput.value ? openTimeInput.value.slice(0, -3) : null,
+					    time_end_command: closeTimeInput.value ? closeTimeInput.value.slice(0, -3) : null
+					};
 
 				    if (formData.check_time_command == "No") {
 				    	formData.check_time_command = "Yes";
@@ -1840,23 +1869,15 @@
 					<div class="containerStatusofficer ms-auto">
 						<div id="switcher_status_command" class="tabsStatusOfficer d-none">
 							<!-- ปุ่ม modal -->
-							<input type="radio" id="officerHelping" name="tabsStatusOfficer" onclick="click_switch_officer_1669();">
+							<input type="radio" id="officerHelping" name="tabsStatusOfficer" onclick="click_switch_command();">
 							<label class="tabOfficer radio-1" for="officerHelping">
 								ช่วยเหลือ
-								<span id="notiStatusOfficer" class="notiStatusOfficer">
-									<div class="lds-ring">
-										<div></div>
-										<div></div>
-										<div></div>
-										<div></div>
-									</div>
-								</span>
 							</label>
 
-							<input type="radio" id="officerStandby" name="tabsStatusOfficer" onclick="click_switch_officer_1669();">
+							<input type="radio" id="officerStandby" name="tabsStatusOfficer" onclick="click_switch_command();">
 							<label class="tabOfficer radio-2" for="officerStandby">พร้อม</label>
 
-							<input type="radio" id="officerNAN" name="tabsStatusOfficer" onclick="click_switch_officer_1669();">
+							<input type="radio" id="officerNAN" name="tabsStatusOfficer" onclick="click_switch_command();">
 							<label class="tabOfficer radio-3" for="officerNAN">ไม่พร้อม</label>
 							<span class="glider"></span>
 						</div>
@@ -2311,10 +2332,10 @@
 			// ตั้งให้ทำซ้ำทุก 5 วินาที
 			setInterval(check_sos_alarm, 5000);
 
-			if ("{{ $officer_role }}" == "admin-partner") {
-				document.querySelector('#switcher_status_command').classList.add('d-none');
-			} else {
+			if ("{{ $officer_role }}" == "admin-area" || "{{ $officer_role }}" == "operator-area") {
 				document.querySelector('#switcher_status_command').classList.remove('d-none');
+			} else {
+				document.querySelector('#switcher_status_command').classList.add('d-none');
 			}
 		});
 
@@ -2340,20 +2361,23 @@
 
 						if (result[0].command_role == "operator-area") {
 							command_role.innerHTML = "เจ้าหน้าที่สั่งการ";
-						} else if (result[0].command_role == "admin-area") {
+							change_switch_officer_to(result[0].status_command);
+						}
+						else if (result[0].command_role == "admin-area") {
 							command_role.innerHTML = "แอดมินพื้นที่";
-						} else if (result[0].command_role == "admin-partner") {
+							change_switch_officer_to(result[0].status_command);
+						}
+						else if (result[0].command_role == "admin-partner") {
 							command_role.innerHTML = "แอดมินองค์กร";
 						}
 
-						change_switch_officer_to(result[0].status_command);
 					}
 
 				});
 
 		}
 
-		function click_switch_officer_1669() {
+		function click_switch_command() {
 			let switch_officer = document.querySelector('#officerStandby');
 			let officer_helping = document.querySelector('#officerHelping');
 
@@ -2401,7 +2425,7 @@
 				.then(result => {
 
 					if (result['status'] == "alarm") {
-						console.log(result);
+						// console.log(result);
 						audio.play();
 						toast(result);
 						// alert("รับแจ้งเหตุ SOS ID : " + result['data'].aims_emergency_id);
