@@ -2014,6 +2014,19 @@
 		<footer class="page-footer">
 			<p class="mb-0">Power By 2B-Green</p>
 		</footer>
+		<script>
+			setInterval(function () {
+				const backToTop = document.querySelector('.back-to-top');
+				if (backToTop) {
+					const isVisible = $(backToTop).is(':visible');
+					if (isVisible) {
+						backToTop.classList.add('active-btn-top');
+					} else {
+						backToTop.classList.remove('active-btn-top');
+					}
+				}
+			}, 100); // ตรวจสอบทุก 100ms
+		</script>
 	</div>
 	<!--end wrapper-->
 
