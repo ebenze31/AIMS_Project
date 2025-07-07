@@ -1391,7 +1391,7 @@
                     border-radius: 5px;
                     padding: 5px 10px;
                     transition: all .15s ease-in-out;
-                    font-size: 13.6px;
+                    font-size: 12px;
                     cursor: pointer;
                 }
                 .input-day input:checked ~ label{
@@ -1455,6 +1455,8 @@
 							            <input class="form-check-input" type="checkbox" id="friday">
 							            <label class="form-check-label" for="friday">ศ.</label>
 							        </div>
+							    </div>
+							    <div class="d-flex flex-wrap">
 							        <div class="form-check input-day">
 							            <input class="form-check-input" type="checkbox" id="saturday">
 							            <label class="form-check-label" for="saturday">ส.</label>
@@ -1637,10 +1639,10 @@
 				        .map(cb => cb.id);
 
 				    const formData = {
-					    check_time_command: is24hInput.checked ? "Yes" : "No",
-					    day_command: selectedDays.join(','),
-					    time_start_command: openTimeInput.value ? openTimeInput.value.slice(0, -3) : null,
-					    time_end_command: closeTimeInput.value ? closeTimeInput.value.slice(0, -3) : null
+						check_time_command: is24hInput.checked ? "Yes" : "No",
+						day_command: selectedDays.join(','),
+						time_start_command: openTimeInput.value ? openTimeInput.value.slice(0, 5) : null,
+						time_end_command: closeTimeInput.value ? closeTimeInput.value.slice(0, 5) : null
 					};
 
 				    if (formData.check_time_command == "No") {
