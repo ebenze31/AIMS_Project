@@ -1139,7 +1139,7 @@
 			<!--end navigation-->
 
 			<!-- เมนู เปิด-ปิด เวลาทำการ -->
-			@if( Auth::user()->role == "admin-area" )
+			@if( Auth::user()->role == "admin-area" || Auth::user()->role == "operator-area" )
 			<style>
 				@media (min-width: 1024px) {
 					.wrapper.toggled .card-container {
@@ -1424,7 +1424,9 @@
 					<div class="hours-card" id="displayCard">
 						<div class="hours-card-header">
 							<h3 class="hours-card-title">เวลาทำการ</h3>
-							<button class="edit-btn" id="editButton">แก้ไข</button>
+							@if( Auth::user()->role == "admin-area")
+								<button class="edit-btn" id="editButton">แก้ไข</button>
+							@endif
 						</div>
 
 						<div id="timeSlots">
