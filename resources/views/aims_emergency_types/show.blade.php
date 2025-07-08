@@ -2,6 +2,51 @@
 
 @section('content')
 
+<div class="modal fade" id="add_types_for_auto" tabindex="-1" aria-labelledby="add_types_for_auto" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="card border-top border-0 border-4 border-info">
+                <div class="card-body">
+                    <div class="border p-4 rounded">
+                        <div class="card-title d-flex align-items-center">
+                            <h5 class="mb-0 text-info">
+                                <i class="fa-solid fa-messages-question me-1 font-22 text-info"></i>เพิ่มประเภทหน่วยปฏิบัติการ
+                                <br>
+                                <span class="text-danger" style="font-size: 14px;">(สำหรับแท็กการส่งเคสอัตโนมัติ)</span>
+                            </h5>
+                        </div>
+                        <hr>
+                        <div class="row mb-3">
+                            <label for="name_type_unit" class="col-sm-3 col-form-label">ประเภทหน่วยปฏิบัติการ</label>
+                            <div class="col-sm-9">
+                                <select class="form-select add_data" id="name_type_unit" name="name_type_unit" onchange="check_title();">
+                                    <option value="">กรุณาเลือกประเภท</option>
+                                    @foreach( $data_aims_type_units as $item )
+                                        <option value="{{ $item->name_type_unit }}">{{ $item->name_type_unit }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label for="priority" class="col-sm-3 col-form-label">ลำดับความสำคัญ</label>
+                            <div class="col-sm-9">
+                                <input type="number" class="form-control mt-2" id="priority" name="priority" placeholder="ลำดับความสำคัญ" value="" oninput="check_title();">
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <div class="d-inline-flex gap-3">
+                                <button type="button" class="btn btn-secondary w-100" style="min-width: 120px;" data-dismiss="modal">ปิด</button>
+                                <button id="btn_submit" disabled type="button" class="btn btn-success w-100" style="min-width: 120px;" onclick="submit_add_types_for_auto();">ยืนยัน</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="card radius-10 border-top border-0 border-4 border-primary">
     <div class="card-body p-3">
         <div class="card-title d-flex align-items-center">
@@ -9,8 +54,13 @@
                 <i class='fa-solid fa-messages-question me-1 font-22'></i>
             </div>
             <h5 class="mb-0">
-                {{ $name_title }}
+                หัวข้อการช่วยเหลือ : {{ $name_title }}
             </h5>
+            @if( $officer_role == "admin-area")
+                <button style="margin-left: 10px;margin-right: 10px;" type="button" class="btn btn-success radius-10 float-end ms-auto" data-toggle="modal" data-target="#add_types_for_auto">
+                    <i class="fa fa-plus"></i> เพิ่ม
+                </button>
+            @endif
         </div>
         <hr>
         <div>
@@ -50,14 +100,17 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     const id = "{{ $id }}";
+    const user_id = "{{ Auth::user()->id }}";
 
-    fetch(`{{ url('/') }}/api/get_priority_units/${id}`)
+    fetch(`{{ url('/') }}/api/get_priority_units/${id}/${user_id}`)
         .then(response => response.json())
         .then(data => {
+            // console.log(data);
+
             const container = document.getElementById('priority-units');
             container.innerHTML = '';
 
-            if (Array.isArray(data)) {
+            if (data.length > 0) {
                 data.forEach((unit, index) => {
                     const unitId = `unit-${index}`;
                     const realId = unit.id;
@@ -178,6 +231,59 @@ function send_savePriority(realId, finalPriority) {
         console.error('เกิดข้อผิดพลาด:', error);
     });
 }
+
+function check_title(){
+    let name_type_unit = document.querySelector('#name_type_unit');
+    let btn_submit = document.querySelector('#btn_submit');
+
+    if (name_type_unit.value.trim() !== "") {
+        btn_submit.disabled = false;
+    } else {
+        btn_submit.disabled = true;
+    }
+}
+
+
+function submit_add_types_for_auto() {
+    const emergency_name_title = "{{ $name_title }}";
+    const emergency_type_id = "{{ $id }}";
+
+    const name_type_unit = document.getElementById('name_type_unit').value;
+    const priority = document.getElementById('priority').value;
+
+    if (!name_type_unit) {
+        alert('กรุณาเลือกประเภทหน่วย');
+        return;
+    }
+
+    const dataToSend = {
+        name_type_unit: name_type_unit,
+        emergency_type_id: emergency_type_id,
+        name_emergency_type: emergency_name_title,
+        priority: priority
+    };
+
+    // console.log(dataToSend);
+
+    fetch('{{ url("/") }}/api/update_emergency_type', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify(dataToSend)
+    })
+    .then(response => response.json())
+    .then(result => {
+        // console.log('ผลลัพธ์:', result);
+        window.location.reload();
+    })
+    .catch(error => {
+        console.error('เกิดข้อผิดพลาด:', error);
+    });
+}
+
+
 
 </script>
 

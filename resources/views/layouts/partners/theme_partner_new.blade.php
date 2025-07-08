@@ -855,7 +855,21 @@
 			font-size: 18px;
 			z-index: 9999;
 		}
-	</style>
+
+		@keyframes flashWhiteRed {
+		    0%, 100% {
+		        color: #d31717;
+		    }
+		    50% {
+		        color: white; /* สีแดง */
+		    }
+		}
+
+		.flash-white-red {
+		    animation: flashWhiteRed 1s infinite;
+		}
+</style>
+
 
 </head>
 
@@ -1049,6 +1063,7 @@
 							<i class="fas fa-user-shield"></i>
 						</div>
 						<div class="menu-title">การจัดการ</div>
+						<i id="icon_warn_emergency_types_1" class="fa-solid fa-circle-exclamation fa-bounce mx-2 flash-white-red d-none"></i>
 					</a>
 					<ul>
 						<li>
@@ -1057,8 +1072,11 @@
 							</a>
 						</li>
 						<li>
-							<a href="{{ url('/aims_emergency_types') }}">
-								<i class="fa-solid fa-messages-question"></i> ประเภทการช่วยเหลือ
+							<a href="{{ url('/aims_emergency_types') }}"
+							   class="d-flex align-items-center">
+								<i class="fa-solid fa-messages-question me-2"></i>
+								<span>หัวข้อการช่วยเหลือ</span>
+								<i id="icon_warn_emergency_types_2" class="fa-solid fa-circle-exclamation fa-bounce ms-auto flash-white-red d-none"></i>
 							</a>
 						</li>
 						<li>
@@ -2408,6 +2426,8 @@
 
 			if ("{{ $officer_role }}" == "admin-area" || "{{ $officer_role }}" == "operator-area") {
 				document.querySelector('#switcher_status_command').classList.remove('d-none');
+				check_auto_emergency_types();
+				check_case_pending();
 			} else {
 				document.querySelector('#switcher_status_command').classList.add('d-none');
 			}
@@ -2505,6 +2525,61 @@
 						// alert("รับแจ้งเหตุ SOS ID : " + result['data'].aims_emergency_id);
 					}
 				});
+		}
+
+		function check_auto_emergency_types(){
+
+			const user_id = "{{ Auth::user()->id }}";
+		    fetch("{{ url('/') }}/api/theme/check_auto_emergency_types/" + user_id)
+		        .then(response => response.json())
+		        .then(result => {
+		            // console.log(result);
+
+		        	let icon_warn_1 = document.querySelector('#icon_warn_emergency_types_1');
+		        	let icon_warn_2 = document.querySelector('#icon_warn_emergency_types_2');
+
+		        	let missing = result.missing_emergency_types ;
+		        	let has = result.has_emergency_types ;
+
+					let table_index = document.querySelector('#table_index_emergency_types');
+					if (table_index) {
+						table_index.querySelectorAll('.name_td').forEach(td => {
+						    td.innerHTML = '';
+						});
+					}
+
+		            if(missing.length > 0){
+						icon_warn_1.classList.remove('d-none');
+						icon_warn_2.classList.remove('d-none');
+
+						setTimeout(() => {
+							if (table_index) {
+								for (let i = 0; i < missing.length; i++) {
+									document.querySelector(`td[name_td="${missing[i].name_emergency_type}"]`).innerHTML = `<i class="fa-solid fa-circle-exclamation fa-bounce mx-2 flash-white-red"></i>`;
+								}
+							}
+						}, 300);
+		            }
+		            else{
+		            	icon_warn_1.classList.add('d-none');
+						icon_warn_2.classList.add('d-none');
+		            }
+
+		            if(has.length > 0){
+		            	setTimeout(() => {
+							if (table_index) {
+								for (let i = 0; i < has.length; i++) {
+									document.querySelector(`td[name_td="${has[i].name_emergency_type}"]`).innerHTML = `${has[i].unit_count} ประเภท`;
+								}
+							}
+						}, 300);
+		            }
+		        });
+
+		}
+
+		function check_case_pending(){
+
 		}
 	</script>
 

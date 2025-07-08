@@ -517,6 +517,7 @@ Route::post('/create_data_time_repair', 'Maintain_notisController@create_data_ti
 // ============> AIMS <============ //
 Route::get('/theme/check_data_partner/{user_id}', 'Aims_adminController@check_data_partner');
 Route::get('/theme/check_data_area/{user_id}', 'Aims_adminController@check_data_area');
+Route::get('/theme/check_auto_emergency_types/{user_id}', 'Aims_adminController@check_auto_emergency_types');
 Route::post('/theme/save_time_config', 'Aims_adminController@save_time_config');
 Route::get('/change_status_command/{change_to}/{user_id}', 'Aims_adminController@change_status_command');
 // Route::post('/receive-data', 'API\WebhookController@handle');
@@ -553,7 +554,8 @@ Route::post('/officer_reg_to_unit', 'Aims_operating_officersController@officer_r
 Route::post('/cf_edit_profile_officer', 'AimsProfileController@cf_edit_profile_officer');
 Route::get('/get_data_by_unit/{unit_id}', 'Aims_operating_unitsController@get_data_by_unit');
 Route::post('/update_operating_unit', 'Aims_operating_unitsController@update_operating_unit');
-Route::get('/get_priority_units/{id}', 'Aims_emergency_typesController@getPriorityUnits');
+Route::get('/get_priority_units/{id}/{user_id}', 'Aims_emergency_typesController@getPriorityUnits');
 Route::post('/update_priority_unit', 'Aims_emergency_typesController@updatePriorityUnit');
+Route::post('/update_emergency_type', 'Aims_emergency_typesController@updateEmergencyType');
 
 // ============> END AIMS <============ //

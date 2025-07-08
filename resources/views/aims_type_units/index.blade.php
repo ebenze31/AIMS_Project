@@ -34,7 +34,7 @@
                         </div>
                         <div class="row mb-3">
                             <label for="status" class="col-sm-3 col-form-label">
-                                ประเภทการช่วยเหลือ <br>
+                                หัวข้อการช่วยเหลือ <br>
                                 <span class="text-danger" style="font-size: 14px;">(สำหรับแท็กการส่งเคสอัตโนมัติ)</span>
                             </label>
                             <div class="col-sm-9">

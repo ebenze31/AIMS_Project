@@ -109,4 +109,89 @@ class Aims_adminController extends Controller
             'data' => $updateData
         ]);
     }
+
+    function check_auto_emergency_types($user_id)
+    {
+        // 1. หาพื้นที่จาก user_id
+        $data = DB::table('aims_commands')
+            ->where('user_id', $user_id)
+            ->select('aims_area_id')
+            ->first();
+
+        if (!$data) {
+            return response()->json(['error' => 'ไม่พบ aims_area_id'], 404);
+        }
+
+        $aims_area_id = $data->aims_area_id;
+
+        // 2. ดึง emergency_types จากพื้นที่นั้น
+        $emergency_types = DB::table('aims_emergency_types')
+            ->where('aims_area_id', $aims_area_id)
+            ->where('status', "Active")
+            ->pluck('name_emergency_type')
+            ->toArray();
+
+        // 3. เพิ่ม "ผู้ใช้ไม่ได้กรอก" เข้าไป
+        $emergency_types[] = 'ผู้ใช้ไม่ได้กรอก';
+
+        // 4. ดึงหน่วยทั้งหมดในพื้นที่
+        $all_units = DB::table('aims_type_units')
+            ->where('aims_area_id', $aims_area_id)
+            ->get();
+
+        // 5. สร้างรายการ emergency_type ทั้งหมดที่ปรากฏจริงใน aims_type_units
+        $existing_emergency_types = $all_units
+            ->pluck('emergency_type')
+            ->map(function ($json) {
+                $decoded = json_decode($json, true);
+                if (is_array($decoded)) {
+                    return collect($decoded)->pluck('name_emergency_type')->toArray();
+                }
+                return [];
+            })
+            ->flatten()
+            ->unique()
+            ->toArray();
+
+        // 6. แยกประเภทที่ขาด และที่มีอยู่
+        $missing_emergency_types = [];
+        $has_emergency_types = [];
+
+        foreach ($emergency_types as $type_name) {
+            $unit_count = 0;
+
+            foreach ($all_units as $unit) {
+                $decoded = json_decode($unit->emergency_type, true);
+                if (is_array($decoded)) {
+                    foreach ($decoded as $item) {
+                        if (
+                            isset($item['name_emergency_type']) &&
+                            $item['name_emergency_type'] === $type_name
+                        ) {
+                            $unit_count++;
+                            break; // เจอใน unit นี้พอแล้ว
+                        }
+                    }
+                }
+            }
+
+            if ($unit_count === 0) {
+                $missing_emergency_types[] = [
+                    'name_emergency_type' => $type_name
+                ];
+            } else {
+                $has_emergency_types[] = [
+                    'name_emergency_type' => $type_name,
+                    'unit_count' => $unit_count
+                ];
+            }
+        }
+
+        return response()->json([
+            'aims_area_id' => $aims_area_id,
+            'has_emergency_types' => $has_emergency_types,
+            'missing_emergency_types' => $missing_emergency_types,
+        ]);
+    }
+
 }

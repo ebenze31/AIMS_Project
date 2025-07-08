@@ -13,7 +13,7 @@
                             <div>
                                 <i class="fa-solid fa-messages-question me-1 font-22 text-info"></i>
                             </div>
-                            <h5 class="mb-0 text-info">เพิ่มหัวข้อประเภทการช่วยเหลือ</h5>
+                            <h5 class="mb-0 text-info">เพิ่มหัวข้อการช่วยเหลือ</h5>
                         </div>
                         <hr>
                         <div class="row mb-3">
@@ -62,7 +62,7 @@
                 <i class='fa-solid fa-messages-question me-1 font-22'></i>
             </div>
             <h5 class="mb-0">
-                ประเภทการช่วยเหลือ
+                หัวข้อการช่วยเหลือ
             </h5>
             @if( $officer_role == "admin-area")
                 <button style="margin-left: 10px;margin-right: 10px;" type="button" class="btn btn-success radius-10 float-end ms-auto" data-toggle="modal" data-target="#add_emergency_types">
@@ -71,12 +71,13 @@
             @endif
         </div>
         <hr>
-        <div class="table-responsive">
+        <div id="table_index_emergency_types" class="table-responsive">
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th style="text-align: center;">หัวข้อ</th>
                         <th style="text-align: center;">พื้นที่</th>
+                        <th style="text-align: center;">สั่งการอัตโนมัติ</th>
                         <th style="text-align: center;">สถานะ</th>
                         <th></th>
                     </tr>
@@ -85,6 +86,9 @@
                     <tr>
                         <td><h6><b>ผู้ใช้ไม่ได้กรอก</b></h6></td>
                         <td><h6>{{ $data_for_add->name_area }}</h6></td>
+                        <td class="name_td" name_td="ผู้ใช้ไม่ได้กรอก" style="white-space: nowrap;width: 13%;text-align: center;">
+                            <!--  -->
+                        </td>
                         <td style="white-space: nowrap;width: 13%;">
                             <center>
                                 <span class="text-success"><b>Active</b></span>
@@ -100,6 +104,9 @@
                         <tr>
                             <td><h6><b>{{ $item->name_emergency_type }}</b></h6></td>
                             <td><h6>{{ $item->name_area }}</h6></td>
+                            <td class="name_td" name_td="{{ $item->name_emergency_type }}" style="white-space: nowrap;width: 13%;text-align: center;">
+                                <!--  -->
+                            </td>
                             <td id="text_status_{{ $item->id }}" style="white-space: nowrap;width: 13%;">
                                 <i class="btn fa-regular fa-arrows-repeat" onclick="change_status('{{ $item->id }}','{{ $item->status }}')"></i>
                                 @if($item->status == "Active")
@@ -159,6 +166,9 @@ function change_status(id , old_status){
                 }
 
                 text_status.innerHTML = html ;
+
+                // ฟังก์ชันนี้อยู่หน้า Theme
+                check_auto_emergency_types();
             }
         });
 

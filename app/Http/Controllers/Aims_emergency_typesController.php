@@ -190,58 +190,76 @@ class Aims_emergency_typesController extends Controller
             $name_title = $aims_emergency_type->name_emergency_type ;
         }
 
-        return view('aims_emergency_types.show', compact('name_title', 'id'));
+        $data_user = Auth::user();
+        $aims_commands = Aims_command::where('user_id' , $data_user->id)->first();
+        $officer_role = $aims_commands->officer_role ;
+
+        $data_aims_type_units = DB::table('aims_type_units')
+            ->where('aims_area_id', $aims_commands->aims_area_id)
+            ->select('name_type_unit')
+            ->get();
+
+        return view('aims_emergency_types.show', compact('name_title', 'id','officer_role','data_aims_type_units'));
     }
 
-    public function getPriorityUnits($id)
+    public function getPriorityUnits($id, $user_id)
     {
-        $aims_emergency_type = Aims_emergency_type::find($id);
+        // ดึง emergency type จาก id
+        $aims_emergency_type = Aims_emergency_type::where('id', $id)->first();
 
-        if (!$aims_emergency_type) {
-            return response()->json(['error' => 'ไม่พบข้อมูล'], 404);
+        if ( !empty($aims_emergency_type->name_emergency_type) ) {
+            $name_title = $aims_emergency_type->name_emergency_type;
+        }
+        else{
+            $name_title = 'ผู้ใช้ไม่ได้กรอก';
         }
 
-        $name_title = $aims_emergency_type->name_emergency_type ?? 'ผู้ใช้ไม่ได้กรอก';
+        $aims_commands = DB::table('aims_commands')
+            ->where('user_id', $user_id)
+            ->select('aims_area_id')
+            ->first();
 
-        $units = Aims_type_unit::all()->filter(function ($unit) use ($id, $name_title) {
-            $emergency_types = json_decode($unit->emergency_type, true);
-            if (is_array($emergency_types)) {
-                foreach ($emergency_types as $item) {
-                    if (
-                        isset($item['id'], $item['name_emergency_type']) &&
-                        $item['id'] == $id &&
-                        $item['name_emergency_type'] == $name_title
-                    ) {
-                        return true;
+        $aims_area_id = $aims_commands->aims_area_id;
+
+        // ดึงเฉพาะ aims_type_units ที่ตรงกับ aims_area_id
+        $units = Aims_type_unit::where('aims_area_id', $aims_area_id)
+            ->get()
+            ->filter(function ($unit) use ($name_title) {
+                $emergency_types = json_decode($unit->emergency_type, true);
+                if (is_array($emergency_types)) {
+                    foreach ($emergency_types as $item) {
+                        if ($item['name_emergency_type'] === $name_title) {
+                            return true;
+                        }
                     }
                 }
-            }
-            return false;
-        })->map(function ($unit) use ($id, $name_title) {
-            $emergency_types = json_decode($unit->emergency_type, true);
-            $priority = null;
-            if (is_array($emergency_types)) {
-                foreach ($emergency_types as $item) {
-                    if (
-                        $item['id'] == $id &&
-                        $item['name_emergency_type'] == $name_title
-                    ) {
-                        $priority = $item['priority'] ?? null;
-                        break;
+                return false;
+            })
+            ->map(function ($unit) use ($name_title) {
+                $emergency_types = json_decode($unit->emergency_type, true);
+                $priority = null;
+                if (is_array($emergency_types)) {
+                    foreach ($emergency_types as $item) {
+                        if ( $item['name_emergency_type'] === $name_title) {
+                            $priority = $item['priority'] ?? null;
+                            break;
+                        }
                     }
                 }
-            }
-            return [
-                'id' => $unit->id,
-                'name_type_unit' => $unit->name_type_unit,
-                'priority' => $priority
-            ];
-        })->sortBy(function ($unit) {
-            return $unit['priority'] ?? PHP_INT_MAX;
-        })->values();
+                return [
+                    'id' => $unit->id,
+                    'name_type_unit' => $unit->name_type_unit,
+                    'priority' => $priority
+                ];
+            })
+            ->sortBy(function ($unit) {
+                return $unit['priority'] ?? PHP_INT_MAX;
+            })
+            ->values();
 
         return response()->json($units);
     }
+
 
     public function updatePriorityUnit(Request $request)
     {
@@ -301,5 +319,74 @@ class Aims_emergency_typesController extends Controller
 
         return response()->json(['message' => 'อัปเดตเรียบร้อย', 'data' => $emergency_types]);
     }
+
+    public function updateEmergencyType(Request $request)
+    {
+        $name_type_unit = $request->input('name_type_unit');
+        $emergency_type_id = $request->input('emergency_type_id');
+        $name_emergency_type = $request->input('name_emergency_type');
+        $priority = $request->input('priority');
+
+        $aims_emergency_types = DB::table('aims_emergency_types')
+            ->where('name_emergency_type', $name_emergency_type)
+            ->first();
+
+        if( !empty($aims_emergency_types->id) ){
+            $types_id = $aims_emergency_types->id;
+        }
+        else{
+            $types_id = "0" ;
+        }
+
+        // 1. ค้นหา aims_type_units ตาม name_type_unit
+        $unit = DB::table('aims_type_units')
+            ->where('name_type_unit', $name_type_unit)
+            ->first();
+
+        if (!$unit) {
+            return response()->json(['message' => 'ไม่พบข้อมูลหน่วยที่ระบุ'], 404);
+        }
+
+        // 2. ดึง emergency_type มาเป็น array
+        $emergencyTypes = json_decode($unit->emergency_type, true) ?? [];
+
+        // 3. เพิ่มหรืออัปเดตข้อมูลใน emergencyTypes
+        $found = false;
+
+        foreach ($emergencyTypes as &$item) {
+            if ($item['name_emergency_type'] === $name_emergency_type) {
+                // ถ้าชื่อซ้ำ → อัปเดต priority และ id
+                $item['priority'] = $priority;
+                $item['id'] = $types_id;
+                $found = true;
+                break;
+            }
+        }
+
+        unset($item); // ป้องกันปัญหาการอ้างอิงตัวแปรใน foreach
+
+        if (!$found) {
+            // ถ้าไม่ซ้ำ → เพิ่มใหม่
+            $emergencyTypes[] = [
+                'id' => $types_id,
+                'name_emergency_type' => $name_emergency_type,
+                'priority' => $priority,
+            ];
+        }
+
+        // 4. อัปเดตข้อมูล
+        DB::table('aims_type_units')
+            ->where('id', $unit->id)
+            ->update([
+                'emergency_type' => json_encode($emergencyTypes, JSON_UNESCAPED_UNICODE),
+                'updated_at' => now(),
+            ]);
+
+        return response()->json([
+            'message' => 'อัปเดตเรียบร้อยแล้ว',
+            'data' => $emergencyTypes,
+        ]);
+    }
+
 
 }
