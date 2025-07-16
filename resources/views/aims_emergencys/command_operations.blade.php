@@ -131,7 +131,23 @@
         .data-oparating {
             max-width: 300px;
             min-width: 300px;
+            overflow: auto;
         }
+
+        .data-oparating::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            background-color: #F5F5F5;
+        }
+
+        .data-oparating::-webkit-scrollbar {
+            width: 4px;
+            background-color: #F5F5F5;
+        }
+
+        .data-oparating::-webkit-scrollbar-thumb {
+            background-color: #898989;
+        }
+
     }
 
     @media (min-width: 767px) {
@@ -198,8 +214,6 @@
         align-items: center;
         overflow: auto;
         height: calc(100dvh - 350px);
-
-
     }
 
     /*
@@ -318,7 +332,96 @@
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 
     }
+
+    .icon-box {
+        font-size: 4rem;
+        color: #198754;
+        /* สีเขียว Success */
+        margin-bottom: 1rem;
+    }
+
+    .modal-prompt-question {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+        color: #212529;
+    }
+
+    .info-text {
+        background-color: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        font-size: 0.75rem;
+        color: #6c757d;
+        text-align: left;
+        margin-top: 2rem;
+        border: 1px solid #dee2e6;
+    }
+
+    .info-text p {
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+    }
+
+    .info-text p:last-child {
+        margin-bottom: 0;
+    }
+
+    .info-text i {
+        margin-right: 0.5rem;
+    }
+
+    /* ปุ่มขนาดใหญ่ขึ้นเพื่อการกดที่ง่าย */
+    .btn-lg {
+        padding: 0.75rem 1.25rem;
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    #statusPromptModalLabel {
+        font-size: 18px !important;
+    }
+
+    .btn-ready {
+        background-color: #198754;
+        padding: 12px 20px;
+        color: #fff;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+    }
+
+    .btn-ready:hover {
+        color: #fff;
+        background-color: #146c43;
+    }
+
+    .btn-not-ready {
+        background-color: #6c757d;
+        padding: 12px 20px;
+        color: #fff;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+    }
+
+    .btn-not-ready:hover {
+        color: #fff;
+        background-color: #5c636a;
+    }
+
+    .btn-ready i,
+    .btn-not-ready i {
+        font-size: 12px;
+    }
 </style>
+
+<div id="notification-container"></div>
+
 <div class="col  radius-10 align-items-center test">
     <div class="card radius-10 w-100   mt-4 container-oparating" style="">
         <div class="h-100 content-oparating m-0 ">
@@ -335,7 +438,208 @@
                             ข้อมูลเคส
                         </button>
                     </div>
+                    <style>
+                        /* --- Notification Container --- */
+                        #notification-container {
+                            position: fixed;
+                            top: 20px;
+                            right: 20px;
+                            z-index: 9999;
+                            display: flex;
+                            flex-direction: column;
+                            gap: 12px;
+                        }
+
+                        
+
+                        /* --- Toast Notification Styling --- */
+                        .toast {
+                            display: flex;
+                            align-items: center;
+                            gap: 15px;
+                            background-color: var(--white);
+                            border-radius: 8px;
+                            padding: 16px;
+                            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                            border: 1px solid var(--border-color);
+                            width: 400px;
+                            position: relative;
+                            overflow: hidden;
+                            animation: slideInRight 0.4s ease-out;
+                        }   
+
+                        @media (max-width: 460px) {
+       
+                        }
+
+
+                        .toast.closing {
+                            animation: slideOutRight 0.4s ease-in forwards;
+                        }
+
+                        .toast-icon {
+                            flex-shrink: 0;
+                            width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            background-color: #0d6efd;
+                            color: var(--white);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
+
+                        .toast-icon.success {
+                            background-color: #198754;
+                        }
+
+                        .toast-icon svg {
+                            width: 22px;
+                            height: 22px;
+                        }
+
+                        .toast-content {
+                            flex-grow: 1;
+                        }
+
+                        .toast-title {
+                            font-size: 16px;
+                            font-weight: 700;
+                            margin: 0 0 2px 0;
+                        }
+
+                        .toast-message {
+                            font-size: 14px;
+                            color: var(--text-muted);
+                            margin: 0;
+                        }
+
+                        .toast-message strong {
+                            color: #212529;
+                        }
+
+                        /* Progress Bar */
+                        .toast-progress {
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            height: 4px;
+                            background-color: #0d6efd;
+                            animation: progress 3s linear forwards;
+                        }
+
+                        .toast.success .toast-progress {
+                            background-color: #198754;
+                        }
+
+                        /* --- Animations --- */
+                        @keyframes slideInRight {
+                            from {
+                                transform: translateX(120%);
+                                opacity: 0;
+                            }
+
+                            to {
+                                transform: translateX(0);
+                                opacity: 1;
+                            }
+                        }
+
+                        @keyframes slideOutRight {
+                            from {
+                                transform: translateX(0);
+                                opacity: 1;
+                            }
+
+                            to {
+                                transform: translateX(120%);
+                                opacity: 0;
+                            }
+                        }
+
+                        @keyframes progress {
+                            from {
+                                width: 100%;
+                            }
+
+                            to {
+                                width: 0%;
+                            }
+                        }
+
+                        .toast:not(.showing):not(.show) {
+                            opacity: 1 !important;
+                        }
+                    </style>
+                    <!-- <div class="test-buttons">
+                        <button class="btn" onclick="showNotification('ออกจากฐาน')">ออกจากฐาน</button>
+                        <button class="btn" onclick="showNotification('ถึงที่เกิดเหตุ')">ถึงที่เกิดเหตุ</button>
+                        <button class="btn" onclick="showNotification('ออกจากที่เกิดเหตุ')">ออกจากที่เกิดเหตุ</button>
+                        <button class="btn" onclick="showNotification('ถึงโรงพยาบาล')">ถึง รพ.</button>
+                        <button class="btn" onclick="showNotification('กำลังกลับฐาน')">กำลังกลับฐาน</button>
+                        <button class="btn" onclick="showNotification('เสร็จสิ้น')">เสร็จสิ้น</button>
+                    </div> -->
                 </div>
+                <script>
+                    const notificationContainer = document.getElementById('notification-container');
+
+                    // ไอคอนสำหรับแต่ละสถานะ (SVG)
+                    const ICONS = {
+                        'ออกจากฐาน': `<i class="fa-solid fa-bell"></i>`,
+                        'ถึงที่เกิดเหตุ': `<i class="fa-solid fa-location-dot"></i>`,
+                        'ออกจากที่เกิดเหตุ': `<i class="fa-solid fa-siren-on"></i>`,
+                        'ถึงโรงพยาบาล': `<i class="fa-solid fa-hospital"></i>`,
+                        'กำลังกลับฐาน': `<i class="fa-solid fa-arrow-turn-left"></i>`,
+                        'เสร็จสิ้น': `<i class="fa-solid fa-circle-check"></i>`,
+                    };
+
+                    // ข้อความสำหรับแต่ละสถานะ
+                    const MESSAGES = {
+                        'ออกจากฐาน': 'เจ้าหน้าที่ได้ <strong>ออกจากฐาน</strong> เรียบร้อยแล้ว',
+                        'ถึงที่เกิดเหตุ': 'เจ้าหน้าที่ได้ <strong>ถึงที่เกิดเหตุ</strong> เรียบร้อยแล้ว',
+                        'ออกจากที่เกิดเหตุ': 'เจ้าหน้าที่ได้ <strong>ออกจากที่เกิดเหตุ</strong> เรียบร้อยแล้ว',
+                        'ถึงโรงพยาบาล': 'เจ้าหน้าที่ได้นำผู้ป่วย <strong>ถึงโรงพยาบาล</strong> เรียบร้อยแล้ว',
+                        'กำลังกลับฐาน': 'เจ้าหน้าที่กำลัง <strong>เดินทางกลับฐาน</strong>',
+                        'เสร็จสิ้น': 'เคสนี้ <strong>เสร็จสิ้น</strong> เรียบร้อยแล้ว',
+                    };
+
+
+                    function showNotification(status) {
+                        const toast = document.createElement('div');
+                        toast.classList.add('toast');
+
+                        const message = MESSAGES[status] || 'อัปเดตสถานะ';
+                        const icon = ICONS[status] || '';
+                        const isSuccess = status === 'เสร็จสิ้น';
+
+                        if (isSuccess) {
+                            toast.classList.add('success');
+                        }
+
+                        toast.innerHTML = `
+                            <div class="toast-icon ${isSuccess ? 'success' : ''}">
+                                ${icon}
+                            </div>
+                            <div class="toast-content">
+                                <h4 class="toast-title">${isSuccess ? 'สำเร็จ' : 'อัปเดตสถานะ'}</h4>
+                                <p class="toast-message">${message}</p>
+                            </div>
+                            <div class="toast-progress"></div>
+                        `;
+
+                        notificationContainer.appendChild(toast);
+
+                        setTimeout(() => {
+                            toast.classList.add('closing');
+
+                            // **สำคัญ:** รอให้ animation 'closing' เล่นจนจบแล้วค่อยลบ Element
+                            toast.addEventListener('animationend', () => {
+                                toast.remove();
+                            });
+
+                        }, 3000); // 3 วินาที
+                    }
+                </script>
                 <div class="px-4 py-3" style="border-bottom:  1px solid #DADADA;;">
                     <div class="header">ข้อมูลผู้ข้อความช่วยเหลือ</div>
                     <p class="mb-0">ชื่อผู้แจ้ง : {{ $emergency->name_reporter ?? 'ไม่ได้ระบุ' }}</p>
@@ -439,6 +743,213 @@
                         </div> -->
                     </div>
                 </div>
+                <style>
+                    :root {
+                        --primary-blue: #0d6efd;
+                        --star-color: #ffc107;
+                        /* Yellow for stars */
+                        --star-background: #e9ecef;
+                        /* Light gray for empty stars */
+                        --background-color: #f8f9fa;
+                        --text-dark: #212529;
+                        --text-muted: #6c757d;
+                        --border-color: #dee2e6;
+                        --white: #ffffff;
+                        --font-family: 'Sarabun', sans-serif;
+                    }
+
+                    /* --- Satisfaction Card --- */
+                    .satisfaction-card {
+                        background-color: var(--white);
+                        border: 1px solid var(--border-color);
+                        width: 100%;
+                        max-width: 550px;
+                        overflow: hidden;
+                    }
+
+                    .card-header {
+                        padding: 20px 25px;
+                        background-color: var(--background-color);
+                        border-bottom: 1px solid var(--border-color);
+                    }
+
+                    .card-header h2 {
+                        font-size: 22px;
+                        margin: 0 0 4px 0;
+                    }
+
+                    .card-header p {
+                        font-size: 16px;
+                        color: var(--text-muted);
+                        margin: 0;
+                    }
+
+                    .card-body {
+                        padding: 0 25px 30px 25px;
+                    }
+
+                    /* --- Average Score Section --- */
+                    .average-score-section {
+                        text-align: center;
+                        border-bottom: 1px solid var(--border-color);
+                        padding-bottom: 25px;
+                        margin-bottom: 25px;
+                    }
+
+                    .average-score-value {
+                        font-size: 62px;
+                        font-weight: 700;
+                        line-height: 1;
+                        color: var(--text-dark);
+                    }
+
+                    .average-stars {
+                        margin: 10px auto;
+                        font-size: 32px;
+                        /* Set size of average stars */
+                    }
+
+                    .average-score-label {
+                        font-size: 16px;
+                        font-weight: 500;
+                        color: var(--text-muted);
+                        margin: 0;
+                    }
+
+                    /* --- Star Rating Component --- */
+                    .star-rating {
+                        display: inline-block;
+                        font-size: 20px;
+                        /* Default size of stars */
+                        position: relative;
+                        vertical-align: middle;
+                    }
+
+                    .star-rating::before {
+                        content: '★★★★★';
+                        color: var(--star-background);
+                        -webkit-text-stroke: 1px var(--border-color);
+                        /* Optional: add a light stroke */
+                    }
+
+                    .star-rating-filled {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 100%;
+                        overflow: hidden;
+                        white-space: nowrap;
+                    }
+
+                    .star-rating-filled::before {
+                        content: '★★★★★';
+                        color: var(--star-color);
+                    }
+
+
+                    /* --- Score Breakdown --- */
+                    .score-breakdown {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 15px;
+                    }
+
+                    .score-item {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+
+                    .score-label {
+                        font-size: 14px;
+                        font-weight: 500;
+                    }
+
+                    /* --- Feedback Section --- */
+                    .feedback-section {
+                        margin-top: 30px;
+                    }
+
+                    .feedback-section h3 {
+                        font-size: 18px;
+                        margin-bottom: 10px;
+                    }
+
+                    .feedback-section blockquote {
+                        font-size: 14px;
+                        line-height: 1.7;
+                        margin: 0;
+                        padding: 15px 20px;
+                        background-color: var(--background-color);
+                        border-left: 4px solid var(--primary-blue);
+                        border-radius: 0 8px 8px 0;
+                        color: var(--text-muted);
+                    }
+
+                    /* --- Responsive Design --- */
+                    @media (max-width: 480px) {
+                        .card-header h2 {
+                            font-size: 20px;
+                        }
+
+                        .card-body {
+                            padding: 25px 20px;
+                        }
+
+                        .average-score-value {
+                            font-size: 60px;
+                        }
+
+                        .average-stars {
+                            font-size: 28px;
+                        }
+
+                        .score-item {
+                            flex-direction: column;
+                            align-items: flex-start;
+                            gap: 5px;
+                        }
+                    }
+                </style>
+
+                @if(!empty($emergency->score_total))
+
+                <div class="satisfaction-card">
+                    <div class="header px-4 py-3">ประเมินความพึงพอใจ</div>
+                    <div class="card-body">
+                        <div class="average-score-section">
+                            <div class="average-score-value">{{$emergency->score_total}}</div>
+                            <div class="star-rating average-stars" title="คะแนนเฉลี่ย 4.5/5">
+                                <div class="star-rating-filled" style="width: 90%;"></div>
+                            </div>
+                            <p class="average-score-label">คะแนนรวม (เฉลี่ย)</p>
+                        </div>
+
+                        <div class="score-breakdown">
+                            <div class="score-item">
+                                <span class="score-label">ความประทับใจ</span>
+                                <div class="star-rating" title="5/5">
+                                    <div class="star-rating-filled" style="width: 100%;"></div>
+                                </div>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-label">ความรวดเร็ว</span>
+                                <div class="star-rating" title="4/5">
+                                    <div class="star-rating-filled" style="width: 80%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        @if(!empty($emergency->comment_help))
+                        <div class="feedback-section">
+                            <h3>คำแนะนำ / ติชม</h3>
+                            <blockquote>
+                                {{$emergency->comment_help}}
+                            </blockquote>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+                @endif
             </div>
             <div class="w-100 p-0 overflow-auto px-4 py-3" style="" id="data_case">
                 <div class="header">ข้อมูลผู้ข้อความช่วยเหลือ</div>
@@ -925,7 +1436,7 @@
 
                     .summary-item {
                         background-color: #fff;
-                        padding: 20px 10px;
+                        padding: 15px 10px;
                         border-radius: 5px;
                     }
 
@@ -1057,7 +1568,7 @@
                                     <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ออกจากฐาน)</span>
                                     <div>
                                         <span class="data-pill pill-time">10,500 กม.</span>
-                                        <span class="data-pill pill-distance">15 กม.</span>
+                                        <span class="data-pill pill-distance">รวม 15 กม.</span>
                                     </div>
                                 </div>
                             </div>
@@ -1080,12 +1591,11 @@
                                     <span class="data-pill pill-time">15 นาที</span>
                                 </div>
                                 <div class="detail-item">
-                                    <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ถึงที่เกิดเหตุ)</span>
-                                    <span class="data-pill pill-distance">10,510 กม.</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="detail-label"><i class="fa-regular fa-scribble"></i> ระยะทาง</span>
-                                    <span class="data-pill pill-distance">10 กม.</span>
+                                    <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ออกจากฐาน)</span>
+                                    <div>
+                                        <span class="data-pill pill-time">10,500 กม.</span>
+                                        <span class="data-pill pill-distance">รวม 15 กม.</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1127,8 +1637,8 @@
                                 <div class="detail-item">
                                     <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ถึงโรงพยาบาล)</span>
                                     <div>
-                                        <span class="data-pill pill-distance">15 กม.</span>
                                         <span class="data-pill pill-time">10,500 กม.</span>
+                                        <span class="data-pill pill-distance">รวม 15 กม.</span>
                                     </div>
                                 </div>
                             </div>
@@ -1154,8 +1664,8 @@
                                 <div class="detail-item">
                                     <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ถึงฐาน)</span>
                                     <div>
-                                        <span class="data-pill pill-distance">15 กม.</span>
                                         <span class="data-pill pill-time">10,500 กม.</span>
+                                        <span class="data-pill pill-distance">รวม 15 กม.</span>
                                     </div>
                                 </div>
                             </div>
@@ -1167,12 +1677,12 @@
                     <h2 class="summary-title">สรุปภารกิจ</h2>
                     <div class="summary-grid">
                         <div class="summary-item">
-                            <div class="label mb-2">รวมเวลาช่วยเหลือทั้งหมด</div>
+                            <div class="label mb-2">เวลาในการช่วยเหลือ</div>
                             <div class="value">1 ชั่วโมง 13 นาที</div>
-                            <div class="sub-label">(ตั้งแต่รับแจ้งเหตุ - กลับถึงฐาน)</div>
+                            <div class="sub-label">(ตั้งแต่ออกจากฐาน - เสร็จสิ้น)</div>
                         </div>
                         <div class="summary-item">
-                            <div class="label mb-2">เวลาปฏิบัติงานนอกฐาน</div>
+                            <div class="label mb-2">เวลารวมทั้งหมด</div>
                             <div class="value ">1 ชั่วโมง 8 นาที</div>
                             <div class="sub-label">(ตั้งแต่ออกจากฐาน - กลับถึงฐาน)</div>
                         </div>
@@ -1184,6 +1694,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- ---- ควบคุมการดำเนินการ ---- -->
             <div id="card_map_operation" class="card-body p-0 d-none">
@@ -1401,6 +1912,37 @@
     </div>
 </div>
 
+<!-- Modal เจ้าหน้าที่รับเคส -->
+<div class="modal fade" id="statusPromptModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="statusPromptModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+
+                <div class="icon-box mt-3">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <h5 class="modal-title fs-4 mb-3" id="statusPromptModalLabel">รับเคสเรียบร้อยแล้ว</h5>
+
+                <p class="modal-prompt-question">คุณพร้อมสำหรับเคสถัดไปหรือไม่?</p>
+
+                <div class="d-grid gap-2 col-10 mx-auto">
+                    <button type="button" class="btn btn-ready btn-lg" onclick="setStatusOfficerCommand('พร้อม')">
+                        <i class="fa-solid fa-user-check me-2"></i>พร้อมรับเคส
+                    </button>
+                    <button type="button" class="btn btn-not-ready btn-lg" data-bs-dismiss="modal" onclick="setStatusOfficerCommand('ไม่พร้อม')">
+                        <i class="fa-solid fa-user-xmark me-2"></i> ไม่พร้อม
+                    </button>
+                </div>
+
+                <div class="info-text mb-3">
+                    <p><i class="fa-solid fa-circle-info"></i>สถานะจะเปลี่ยนเป็น "พร้อม" โดยอัตโนมัติ เมื่อทุกเคสที่คุณช่วยเหลืออยู่เสร็จสิ้น</p>
+                    <p><i class="fa-solid fa-circle-info"></i>คุณสามารถปรับสถานะเป็น "พร้อม" ได้ทุกเมื่อที่เมนูเปลี่ยนสถานะด้านบนขวา</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal เลือกเจ้าหน้าที่ -->
 <div class="modal fade" id="modal_view_select_officer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modal_view_select_officerLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -1664,8 +2206,8 @@
     function open_map_operating_unit() {
 
         let btn_order = document.querySelector('#btn_order');
-        btn_order.innerHTML = "สั่งการ" ;
-        
+        btn_order.innerHTML = "สั่งการ";
+
         const emergency_LatLng = {
             lat: emergency_Lat,
             lng: emergency_Lng
@@ -1691,7 +2233,7 @@
 
     function open_map_monitor() {
         let btn_order = document.querySelector('#btn_order');
-        btn_order.innerHTML = "ติดตาม" ;
+        btn_order.innerHTML = "ติดตาม";
 
         const emergency_LatLng = {
             lat: emergency_Lat,
@@ -2021,14 +2563,7 @@
                                     $('#wait_officer').modal('hide');
 
                                     // Modal เจ้าหน้าที่รับเคสแล้ว Officer go to help
-
-                                    // ชุดนี้ย้ายไปหลังจากกดปุ่มใน Modal เจ้าหน้าที่รับเคสแล้ว
-                                    check_show_map = "card_map_operation";
-                                    document.getElementById('card_map').classList.add('d-none');
-                                    document.getElementById('card_map_operation').classList.remove('d-none');
-                                    open_map_monitor();
-                                    // -----------------------------------
-
+                                    $('#statusPromptModal').modal('show');
                                 }
 
                             })
@@ -2045,7 +2580,17 @@
             });
     }
 
+    function setStatusOfficerCommand(status) {
+            console.log('setStatusOfficerCommand');
+          // ชุดนี้ย้ายไปหลังจากกดปุ่มใน Modal เจ้าหน้าที่รับเคสแล้ว
+            $('#statusPromptModal').modal('hide');
 
+            check_show_map = "card_map_operation";
+            document.getElementById('card_map').classList.add('d-none');
+            document.getElementById('card_map_operation').classList.remove('d-none');
+            open_map_monitor();
+            // -----------------------------------
+    }
     function select_officer_again(emergency_id, officer_id, type) {
         // console.log("เลือกใหม่:", emergency_id, officer_id);
 
@@ -2258,7 +2803,8 @@
 
     function alert_change_status_case(new_status) {
         document.querySelector('#show_status').innerHTML = `สถานะ : ${new_status}`;
-        alert(new_status)
+        // alert(new_status)
+        showNotification(new_status);
     }
 
     let emergencyMarker = null;
