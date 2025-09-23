@@ -436,6 +436,8 @@
                 <!-- <label>ประเภทผู้ขอความช่วยเหลือ <span></span></label> -->
                 <input type="text" class="data_for_ask hidden" name="type_reporter" id="type_reporter" value="{{ htmlspecialchars($formData['type_reporter'] ?? '') }}" placeholder="Enter type_reporter">
 
+                <input type="text" class="data_for_ask " name="uuid" id="uuid" value="{{ htmlspecialchars($formData['uuid'] ?? '') }}" placeholder="Enter uuid">
+
                 <hr>
             </div>
             <!-- END Date API -->
@@ -741,7 +743,7 @@
         })
         .then(response => response.json())
         .then(result => {
-            // console.log(result);
+            console.log(result);
             if (result.status == "success") {
                 window.location.href = "{{ url('/user_wait_officer') }}" + "/" + result.emergency_id;
             }

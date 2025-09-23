@@ -5,6 +5,8 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Aims_emergency;
+use Illuminate\Support\Facades\Http;
+use App\Models\MyLog; 
 
 class WebhookController extends Controller
 {
@@ -70,6 +72,51 @@ class WebhookController extends Controller
                 'status' => 'error',
                 'message' => 'An error occurred: ' . $e->getMessage()
             ], 500);
+        }
+    }
+
+    public static function sendSosStatus($data_for_api)
+    {
+        // URL ของ API ปลายทาง
+        $apiUrl = 'https://helloapi.kivaru.com/api/v1.0/openapi/form-sos-status';
+
+        try {
+            // ใช้ Http facade เพื่อส่ง POST request โดยใช้ $data_for_api โดยตรง
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+            ])->post($apiUrl, $data_for_api); // <-- แก้ไขตรงนี้ ใช้ $data_for_api ได้เลย
+
+            // ตรวจสอบว่า request สำเร็จหรือไม่
+            if ($response->successful()) {
+                // ----- SAVE LOG (กรณีสำเร็จ) -----
+                MyLog::create([
+                    "title" => "ส่งข้อมูล SOS สำเร็จ: " . $data_for_api['case_id'],
+                    "content" => $response->body()
+                ]);
+                // ------------------------------------
+                return $response; // ส่ง response กลับไปให้ตัวเรียกใช้งานต่อ
+            }
+
+            // กรณีที่ request ไม่สำเร็จ
+            // ----- SAVE LOG (กรณีผิดพลาดจาก API) -----
+            MyLog::create([
+                "title" => "ส่งข้อมูล SOS ไม่สำเร็จ (API Error): " . $data_for_api['case_id'],
+                "content" => $response->body()
+            ]);
+            // ------------------------------------
+            return $response; // ส่ง response กลับไปให้ตัวเรียกใช้งานต่อ
+
+        } catch (\Exception $e) {
+            // ดักจับข้อผิดพลาดอื่นๆ ที่อาจเกิดขึ้น เช่น API ปลายทางล่ม
+            // ----- SAVE LOG (กรณีเชื่อมต่อไม่ได้) -----
+            MyLog::create([
+                "title" => "ไม่สามารถเชื่อมต่อ API-SOS ได้: " . $data_for_api['case_id'],
+                "content" => $e->getMessage()
+            ]);
+            // ------------------------------------
+
+            // สามารถ return null หรือ re-throw exception เพื่อให้โค้ดที่เรียกใช้รู้ว่าเกิดข้อผิดพลาด
+            return null;
         }
     }
 }

@@ -27,6 +27,7 @@ use App\Models\Sos_1669_form_blue;
 use App\Models\Maintain_noti;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
+use App\Http\Controllers\API\WebhookController;
 
 class LineApiController extends Controller
 {
@@ -797,6 +798,7 @@ class LineApiController extends Controller
         $emergency_id = $data_data[0] ;
         $aims_area_id = $data_data[1] ;
 
+        $data_emergency = DB::table('aims_emergencys')->where('id', $emergency_id)->first();
         $user_officer = DB::table('users')->where('provider_id', $provider_id)->first();
         $data_officer = DB::table('aims_operating_officers')->where('user_id', $user_officer->id)->first();
 
@@ -830,6 +832,17 @@ class LineApiController extends Controller
                 'updated_at' => now()
             ]);
 
+        if( !empty($data_emergency->uuid) ){
+            $data_for_api = [
+                'uuid' => $data_emergency->uuid,
+                'case_id' => $emergency_id,
+                'case_type' => $data_emergency->emergency_type,
+                'case_status' => "กำลังไปช่วยเหลือ",
+            ];
+
+            $Webhook = new WebhookController();
+            $send_api_update = $Webhook->sendSosStatus($data_for_api);
+        }
 
         $columns = Schema::getColumnListing('aims_emergency_operations');
         $selects = array_map(function ($col) {
