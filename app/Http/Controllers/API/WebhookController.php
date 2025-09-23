@@ -80,6 +80,10 @@ class WebhookController extends Controller
         // URL ของ API ปลายทาง
         $apiUrl = 'https://helloapi.kivaru.com/api/v1.0/openapi/form-sos-status';
 
+        if( empty($data_for_api['case_type']) ){
+            $data_for_api['case_type'] = "ขอความช่วยเหลือ";
+        }
+
         try {
             // ใช้ Http facade เพื่อส่ง POST request โดยใช้ $data_for_api โดยตรง
             $response = Http::withHeaders([
