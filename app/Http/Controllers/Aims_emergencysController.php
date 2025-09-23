@@ -194,17 +194,17 @@ class Aims_emergencysController extends Controller
 
         $emergency = Aims_emergency::create($requestData);
 
-        if( !empty($emergency->uuid) ){
-            $data_for_api = [
-                'uuid' => $emergency->uuid,
-                'case_id' => $emergency->id,
-                'case_type' => $emergency->emergency_type,
-                'case_status' => "กำลังไปช่วยเหลือ",
-            ];
+        // if( !empty($emergency->uuid) ){
+        //     $data_for_api = [
+        //         'uuid' => $emergency->uuid,
+        //         'case_id' => $emergency->id,
+        //         'case_type' => $emergency->emergency_type,
+        //         'case_status' => "กำลังไปช่วยเหลือ",
+        //     ];
 
-            $Webhook = new WebhookController();
-            $send_api_update = $Webhook->sendSosStatus($data_for_api);
-        }
+        //     $Webhook = new WebhookController();
+        //     $send_api_update = $Webhook->sendSosStatus($data_for_api);
+        // }
 
         // เช็คสถานะเปิดทำการของ Partner
         $status_message = 'ไม่เปิดทำการ';
