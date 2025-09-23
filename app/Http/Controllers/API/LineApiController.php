@@ -840,8 +840,9 @@ class LineApiController extends Controller
                 'case_status' => "กำลังไปช่วยเหลือ",
             ];
 
+            $report_platform = $data_emergency->report_platform ;
             $Webhook = new WebhookController();
-            $send_api_update = $Webhook->sendSosStatus($data_for_api);
+            $send_api_update = $Webhook->sendSosStatus($data_for_api,$report_platform);
         }
 
         $columns = Schema::getColumnListing('aims_emergency_operations');

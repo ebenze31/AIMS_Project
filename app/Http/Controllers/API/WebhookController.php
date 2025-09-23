@@ -75,10 +75,13 @@ class WebhookController extends Controller
         }
     }
 
-    public static function sendSosStatus($data_for_api)
+    public static function sendSosStatus($data_for_api , $report_platform)
     {
         // URL ของ API ปลายทาง
-        $apiUrl = 'https://helloapi.kivaru.com/api/v1.0/openapi/form-sos-status';
+        $apiUrl = "";
+        if($report_platform == "Line OA Hello"){
+            $apiUrl = 'https://helloapi.kivaru.com/api/v1.0/openapi/form-sos-status';
+        }
 
         if (empty($data_for_api['case_type'])) {
             $data_for_api['case_type'] = "ขอความช่วยเหลือ";
