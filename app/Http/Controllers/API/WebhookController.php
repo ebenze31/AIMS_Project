@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Aims_emergency;
 use Illuminate\Support\Facades\Http;
-use App\Models\MyLog; 
+use App\Models\Mylog;
 
 class WebhookController extends Controller
 {
@@ -105,6 +105,7 @@ class WebhookController extends Controller
                 "title" => "API Response for case: " . $data_for_api['case_id'],
                 "content" => $response->body()
             ]);
+
 
             // ส่วนที่เหลือยังคงทำงานเหมือนเดิมเพื่อส่งค่ากลับ
             return $response;
