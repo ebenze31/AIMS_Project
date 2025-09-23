@@ -80,46 +80,42 @@ class WebhookController extends Controller
         // URL ของ API ปลายทาง
         $apiUrl = 'https://helloapi.kivaru.com/api/v1.0/openapi/form-sos-status';
 
-        if( empty($data_for_api['case_type']) ){
+        if (empty($data_for_api['case_type'])) {
             $data_for_api['case_type'] = "ขอความช่วยเหลือ";
         }
 
         try {
-            // ใช้ Http facade เพื่อส่ง POST request โดยใช้ $data_for_api โดยตรง
+            // --- ย้ายการบันทึก Log มาไว้ตรงนี้ ---
+            // บันทึก "ความพยายาม" ในการส่งข้อมูลก่อนเสมอ
+            MyLog::create([
+                "title" => "Send Update API " . $data_for_api['case_id'],
+                // บันทึกข้อมูลที่ "กำลังจะส่ง" ไปด้วยเพื่อการตรวจสอบ
+                "content" => json_encode($data_for_api, JSON_UNESCAPED_UNICODE)
+            ]);
+            // ------------------------------------
+
+            // ใช้ Http facade เพื่อส่ง POST request
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
-            ])->post($apiUrl, $data_for_api); // <-- แก้ไขตรงนี้ ใช้ $data_for_api ได้เลย
+            ])->post($apiUrl, $data_for_api);
 
-            // ตรวจสอบว่า request สำเร็จหรือไม่
-            if ($response->successful()) {
-                // ----- SAVE LOG (กรณีสำเร็จ) -----
-                MyLog::create([
-                    "title" => "ส่งข้อมูล SOS สำเร็จ: " . $data_for_api['case_id'],
-                    "content" => $response->body()
-                ]);
-                // ------------------------------------
-                return $response; // ส่ง response กลับไปให้ตัวเรียกใช้งานต่อ
-            }
-
-            // กรณีที่ request ไม่สำเร็จ
-            // ----- SAVE LOG (กรณีผิดพลาดจาก API) -----
+            // หลังจากยิง API แล้ว เรายังสามารถบันทึก "ผลลัพธ์" เพิ่มเติมได้
+            // (ส่วนนี้จะใส่หรือไม่ก็ได้ แต่แนะนำให้มีเพื่อดูว่า API ตอบอะไรกลับมา)
             MyLog::create([
-                "title" => "ส่งข้อมูล SOS ไม่สำเร็จ (API Error): " . $data_for_api['case_id'],
+                "title" => "API Response for case: " . $data_for_api['case_id'],
                 "content" => $response->body()
             ]);
-            // ------------------------------------
-            return $response; // ส่ง response กลับไปให้ตัวเรียกใช้งานต่อ
+
+            // ส่วนที่เหลือยังคงทำงานเหมือนเดิมเพื่อส่งค่ากลับ
+            return $response;
 
         } catch (\Exception $e) {
-            // ดักจับข้อผิดพลาดอื่นๆ ที่อาจเกิดขึ้น เช่น API ปลายทางล่ม
-            // ----- SAVE LOG (กรณีเชื่อมต่อไม่ได้) -----
+            // กรณีเชื่อมต่อไม่ได้ ก็ควรบันทึก Log เช่นกัน
             MyLog::create([
-                "title" => "ไม่สามารถเชื่อมต่อ API-SOS ได้: " . $data_for_api['case_id'],
+                "title" => "Connection Error for case: " . $data_for_api['case_id'],
                 "content" => $e->getMessage()
             ]);
-            // ------------------------------------
 
-            // สามารถ return null หรือ re-throw exception เพื่อให้โค้ดที่เรียกใช้รู้ว่าเกิดข้อผิดพลาด
             return null;
         }
     }
