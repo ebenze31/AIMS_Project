@@ -84,12 +84,13 @@
 				    <div>
 				        <label class="block text-sm font-medium text-gray-700">เพศ</label>
 				        <select name="sex"
-				            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
-				            <option value="">-- เลือกเพศ --</option>
-				            <option value="ชาย" {{ $data_officer->sex == 'ชาย' ? 'selected' : '' }}>ชาย</option>
-				            <option value="หญิง" {{ $data_officer->sex == 'หญิง' ? 'selected' : '' }}>หญิง</option>
-				            <option value="อื่นๆ" {{ $data_officer->sex == 'อื่นๆ' ? 'selected' : '' }}>อื่นๆ</option>
-				        </select>
+						    class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400">
+						    <option value="">-- เลือกเพศ --</option>
+						    <option value="ชาย" {{ $data_officer->sex == 'ชาย' ? 'selected' : '' }}>ชาย</option>
+						    <option value="หญิง" {{ $data_officer->sex == 'หญิง' ? 'selected' : '' }}>หญิง</option>
+						    <option value="อื่นๆ" {{ $data_officer->sex == 'อื่นๆ' ? 'selected' : '' }}>อื่นๆ</option>
+						</select>
+
 				    </div>
 				</div>
 
