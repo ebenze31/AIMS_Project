@@ -2031,8 +2031,8 @@
 		<!--end overlay-->
 		<!--Start Back To Top Button--> 
 		<a href="javaScript:;" class="back-to-top"><i class='bx bxs-up-arrow-alt'></i></a>
-<button id="alertButton" data-bs-toggle="modal" data-bs-target="#helpRequestModal">
-        <i class="fa-solid fa-triangle-exclamation fa-beat-fade"></i>
+	<button id="alertButton" data-bs-toggle="modal" data-bs-target="#helpRequestModal">
+        <i class="fa-solid fa-triangle-exclamation fa-beat-fade d-none"></i>
     </button>
 
 	 <div class="modal fade" id="helpRequestModal" tabindex="-1" aria-labelledby="helpRequestModalLabel" aria-hidden="true">
