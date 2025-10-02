@@ -557,5 +557,5 @@ Route::post('/update_operating_unit', 'Aims_operating_unitsController@update_ope
 Route::get('/get_priority_units/{id}/{user_id}', 'Aims_emergency_typesController@getPriorityUnits');
 Route::post('/update_priority_unit', 'Aims_emergency_typesController@updatePriorityUnit');
 Route::post('/update_emergency_type', 'Aims_emergency_typesController@updateEmergencyType');
-
+Route::post('/SaveDataEmergency/{emergency_id}', 'Aims_emergencysController@SaveDataEmergency');
 // ============> END AIMS <============ //

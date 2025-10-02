@@ -1429,5 +1429,97 @@ class Aims_emergencysController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function SaveDataEmergency(Request $request, $id)
+    {
+        $emergency = Aims_emergency::findOrFail($id);
+
+        $currentData  = $request->input('currentData', []);
+        $originalData = $request->input('originalData', []);
+        $changedData  = $request->input('changedData', []);
+
+        // กำหนดชื่อฟิลด์ที่เก็บข้อมูลเป็น Array (comma-separated string)
+        $arrayFields = ['symptom'];
+
+        // กรณีบังคับบันทึกทับ (หลังจากผู้ใช้เลือกใน Modal)
+        if (!empty($changedData)) {
+            foreach ($changedData as $field => $value) {
+                // ถ้าเป็นฟิลด์ array, ให้แปลงกลับเป็น string ก่อนบันทึก
+                if (in_array($field, $arrayFields)) {
+                    $valuesAsArray = is_array($value) ? $value : (!empty($value) ? explode(',', $value) : []);
+                    sort($valuesAsArray); // จัดเรียงเพื่อให้ข้อมูลมี format เดียวกันเสมอ
+                    $emergency->$field = implode(',', $valuesAsArray);
+                } else {
+                    $emergency->$field = $value;
+                }
+            }
+            $emergency->save();
+            return response()->json(['status' => 'success']);
+        }
+
+        // กรณีบันทึกปกติ (ตรวจสอบ Conflict)
+        $conflicts = [];
+        $fieldsToUpdate = [];
+
+        foreach ($currentData as $field => $newValue) {
+            $dbValue = $emergency->$field;
+            $originalValue = $originalData[$field] ?? null;
+            $isConflict = false;
+
+            if (in_array($field, $arrayFields)) {
+                // --- Logic สำหรับฟิลด์ที่เป็น Array ---
+                $dbValues = !empty($dbValue) ? array_map('trim', explode(',', $dbValue)) : [];
+                $originalValues = is_array($originalValue) ? $originalValue : (!empty($originalValue) ? array_map('trim', explode(',', (string)$originalValue)) : []);
+                
+                sort($dbValues);
+                sort($originalValues);
+
+                // เปรียบเทียบ Array ที่จัดเรียงแล้ว
+                if ($dbValues !== $originalValues) {
+                    $isConflict = true;
+                }
+            } else {
+                // --- Logic สำหรับฟิลด์ทั่วไป ---
+                if ((string) trim($dbValue) != (string) trim($originalValue)) {
+                    $isConflict = true;
+                }
+            }
+
+            if ($isConflict) {
+                $conflicts[$field] = [
+                    'current' => $dbValue,
+                    'new'     => is_array($newValue) ? implode(',', $newValue) : $newValue,
+                ];
+            } else {
+                // ถ้าไม่ชน ก็เตรียมข้อมูลไว้สำหรับอัปเดต
+                $fieldsToUpdate[$field] = $newValue;
+            }
+        }
+
+        // บันทึกฟิลด์ที่ไม่เกิด Conflict ลงฐานข้อมูลก่อน
+        if (!empty($fieldsToUpdate)) {
+            foreach ($fieldsToUpdate as $field => $value) {
+                if (in_array($field, $arrayFields) && is_array($value)) {
+                    sort($value);
+                    $emergency->$field = implode(',', $value);
+                } else {
+                    $emergency->$field = $value;
+                }
+            }
+            $emergency->save();
+        }
+        
+        // ถ้ามี Conflict ให้ส่งกลับไปให้ User เลือก
+        if (!empty($conflicts)) {
+            return response()->json([
+                'status'    => 'conflict',
+                'conflicts' => $conflicts,
+            ]);
+        }
+
+        // ถ้าไม่มี Conflict เลย ก็ถือว่าสำเร็จ
+        return response()->json(['status' => 'success']);
+    }
+    
+
 
 }

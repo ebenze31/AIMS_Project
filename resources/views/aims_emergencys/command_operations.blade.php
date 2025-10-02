@@ -424,7 +424,7 @@
 
 <div class="col  radius-10 align-items-center test">
     <div class="card radius-10 w-100   mt-4 container-oparating" style="">
-        <div class="h-100 content-oparating m-0 ">
+        <div class="h-100 content-oparating m-0 main-shadow main-radius">
             <div class="data-oparating h-100 m-0 p-0" style="border-right: 1px solid #DADADA;">
                 <div class="px-4 py-3" style="border-bottom:  1px solid #DADADA;;">
                     <div class="header mb-0">รหัสปฏิบัติการ</div>
@@ -951,47 +951,75 @@
                 </div>
                 @endif
             </div>
+
+            <style>
+                #save-button-container {
+                    position: sticky; /* ใช้ sticky แทน fixed/absolute */
+                    bottom: -20px;        /* ให้ติดขอบล่างของกล่อง scroll */
+                    
+                    /* สไตล์เพื่อความสวยงาม (เหมือนเดิม) */
+                    background-color: rgba(255, 255, 255, 0.9);
+                    padding: 1rem;
+                    padding-right: 2rem; /* เพิ่ม padding ด้านขวาเล็กน้อย */
+                    box-shadow: 0 -2px G10px rgba(0, 0, 0, 0.1);
+                    border-top: 1px solid #e9ecef;
+                    z-index: 1000;
+                    backdrop-filter: blur(5px);
+                    -webkit-backdrop-filter: blur(5px);
+                    
+                    /* จัดปุ่มไปทางขวา */
+                    display: flex;
+                    justify-content: flex-end;
+                }
+
+                #save-button-container .btn {
+                    padding: 0.5rem 1.5rem;
+                    font-size: 1rem;
+                }
+            </style>
+
             <div class="w-100 p-0 overflow-auto px-4 py-3" style="" id="data_case">
+
                 <div class="header">ข้อมูลผู้ข้อความช่วยเหลือ</div>
 
                 <div class="row g-3">
                     <div class="col-lg-6">
                         <label for="name_reporter" class="form-label">ผู้แจ้งเหตุ</label>
-                        <input id="name_reporter" name="name_reporter" type="text" class="form-control" placeholder="ผู้แจ้งเหตุ" value="{{ $emergency->name_reporter }}">
+                        <input id="name_reporter" name="name_reporter" type="text" class="form-control" placeholder="ผู้แจ้งเหตุ" value="{{ $emergency->name_reporter }}" data-original="{{ $emergency->name_reporter }}">
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <label for="phone_reporter" class="form-label">เบอร์ผู้แจ้งเหตุ</label>
-                        <input id="phone_reporter" name="phone_reporter" type="text" class="form-control" placeholder="เบอร์ผู้แจ้งเหตุ" value="{{ $emergency->phone_reporter }}">
+                        <input id="phone_reporter" name="phone_reporter" type="text" class="form-control" placeholder="เบอร์ผู้แจ้งเหตุ" value="{{ $emergency->phone_reporter }}" data-original="{{ $emergency->phone_reporter }}">
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <label for="type_reporter" class="form-label">ประเภทผู้แจ้ง</label>
-                        <input id="type_reporter" name="type_reporter" type="text" class="form-control" placeholder="ประเภทผู้แจ้ง" value="{{ $emergency->type_reporter }}">
+                        <input id="type_reporter" name="type_reporter" type="text" class="form-control" placeholder="ประเภทผู้แจ้ง" value="{{ $emergency->type_reporter }}" data-original="{{ $emergency->type_reporter }}">
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <label for="report_platform" class="form-label">แพลตฟอร์มการแจ้ง</label>
-                        <input id="report_platform" name="report_platform" type="text" class="form-control" readonly value="{{ $emergency->report_platform }}">
+                        <input id="report_platform" name="report_platform" type="text" class="form-control" readonly value="{{ $emergency->report_platform }}" data-original="{{ $emergency->report_platform }}">
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <label for="emergency_lat" class="form-label">latitude ที่เกิดเหตุ</label>
-                        <input id="emergency_lat" name="emergency_lat" type="text" class="form-control" readonly value="{{ $emergency->emergency_lat }}">
+                        <input id="emergency_lat" name="emergency_lat" type="text" class="form-control" readonly value="{{ $emergency->emergency_lat }}" data-original="{{ $emergency->emergency_lat }}">
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <label for="emergency_lng" class="form-label">longitude ที่เกิดเหตุ</label>
-                        <input id="emergency_lng" name="emergency_lng" type="text" class="form-control" readonly value="{{ $emergency->emergency_lng }}">
+                        <input id="emergency_lng" name="emergency_lng" type="text" class="form-control" readonly value="{{ $emergency->emergency_lng }}" data-original="{{ $emergency->emergency_lng }}">
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <label for="emergency_type" class="form-label">ประเภทเหตุ</label>
-                        <input id="emergency_type" name="emergency_type" type="text" class="form-control" placeholder="ประเภทเหตุ" value="{{ $emergency->emergency_type }}">
+                        <input id="emergency_type" name="emergency_type" type="text" class="form-control" placeholder="ประเภทเหตุ" value="{{ $emergency->emergency_type }}" data-original="{{ $emergency->emergency_type }}">
                     </div>
 
                     <div class="col-12">
                         <label for="emergency_location" class="form-label">รายละเอียดสถานที่เกิดเหตุ</label>
-                        <textarea id="emergency_location" name="emergency_location" class="form-control" placeholder="รายละเอียดสถานที่เกิดเหตุ">{{ $emergency->emergency_location }}</textarea>
+                        <textarea id="emergency_location" name="emergency_location" class="form-control" placeholder="รายละเอียดสถานที่เกิดเหตุ" data-original="{{ $emergency->emergency_location }}">{{ $emergency->emergency_location }}</textarea>
                     </div>
 
                     <div class="col-12">
                         <label for="emergency_detail" class="form-label">รายละเอียดเหตุการณ์</label>
-                        <textarea id="emergency_detail" name="emergency_detail" class="form-control" placeholder="รายละเอียดเหตุการณ์">{{ $emergency->emergency_detail }}</textarea>
+                        <textarea id="emergency_detail" name="emergency_detail" class="form-control" placeholder="รายละเอียดเหตุการณ์" data-original="{{ $emergency->emergency_detail }}">{{ $emergency->emergency_detail }}</textarea>
                     </div>
                 </div>
 
@@ -1002,6 +1030,7 @@
                         border: solid 1px #ced4da;
                         margin: 0 10px 10px 0;
                         transition: all .15s ease-in-out;
+                        cursor: pointer;
                     }
 
                     .checkbox-symptom:hover label,
@@ -1015,11 +1044,63 @@
                         display: none;
                     }
                 </style>
+
+
+                @php
+                    $symptoms = explode(',', $emergency->symptom ?? '');
+                @endphp
+
                 <div class="header  mt-5">การประเมินอาการ</div>
                 <div class="row g-3">
                     <div class="col-12 ">
                         <label for="inputCity" class="form-label">อาการเบื้องต้น</label>
+
                         <div class="d-flex flex-wrap">
+                            @php
+                                $symptomList = [
+                                    "ปวดท้อง หลัง เชิงกราน และขาหนีบ",
+                                    "แอนนาฟิแลกซิส ปฏิกิริยาภูมิแพ้/แมลงกัด",
+                                    "สัตว์กัด",
+                                    "เลือดออกไม่ใช่จากการบาดเจ็บ",
+                                    "หายใจลำบาก",
+                                    "หัวใจหยุดเต้น",
+                                    "เจ็บแน่นทรางออก หัวใจ",
+                                    "สำลักอุดทางเดินหายใจ",
+                                    "เบาหวาน",
+                                    "อันตรายจากสภาพแวดล้อม",
+                                    "ปวดศรีษะ ลำคอ",
+                                    "คลุ้มคลั่ง จิตประสาท อารมณ์",
+                                    "ยาเกิดขนาด ได้รับพิษ",
+                                    "มีครรภ คลอด นรี",
+                                    "ชัก",
+                                    "ป่วย อ่อนเพลีย",
+                                    "อัมพาต (หลอดเลือดสมองตีบ แตก)",
+                                    "หมดสติ ไม่ตอบสนอง หมดสติชั่ววูบ",
+                                    "เด็ก ทารก (กุมารเวชกรรม)",
+                                    "ถูกทำร้าย บาดเจ็บ",
+                                    "ไฟไหม้ ลวก ความร้อน กระแสไฟฟ้า สารเคมี",
+                                    "จมน้ำ หน้าคว่ำจมน้ำ บาดเจ็บเหตุดำน้ำ บาดเจ็บทางน้ำ",
+                                    "พลัดตกหลุม อุบัติเหตุ",
+                                    "อุบัติเหตุยานยนต์"
+                                ];
+                            @endphp
+
+                            @foreach($symptomList as $i => $item)
+                                <div class="checkbox-symptom me-3">
+                                    <input type="checkbox" 
+                                           name="symptom[]" 
+                                           id="symptom_{{ $i+1 }}" 
+                                           value="{{ $item }}"
+                                           data-original="{{ in_array($item, $symptoms) ? 'checked' : '' }}"
+                                           {{ in_array($item, $symptoms) ? 'checked' : '' }}>
+                                    <label for="symptom_{{ $i+1 }}">
+                                        {{ $i+1 }}. {{ $item }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- <div class="d-flex flex-wrap">
                             <div class="checkbox-symptom">
                                 <input value="ปวดท้อง หลัง เชิงกราน และขาหนีบ" type="checkbox" name="symptom" id="symptom_1">
                                 <label for="symptom_1">
@@ -1185,11 +1266,11 @@
                                     ๒๔.อุบัติเหตุยานยนต์
                                 </label>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="col-12">
                         <label for="inputAddress2" class="form-label">อาการอื่นๆ</label>
-                        <textarea id="symptom_other" name="symptom_other" class="form-control" rows="3" placeholder="กรอกข้อมูลอาการนำสำคัญ">{{ $emergency->symptom_other }}</textarea>
+                        <textarea id="symptom_other" name="symptom_other" class="form-control" rows="3" placeholder="กรอกข้อมูลอาการนำสำคัญ" data-original="{{ $emergency->symptom_other }}">{{ $emergency->symptom_other }}</textarea>
                     </div>
 
 
@@ -1199,61 +1280,57 @@
                 <div class="row g-3">
                     <div class="col-md-12 col-lg-6">
                         <label for="patient_name" class="form-label">ชื่อ-นามสกุล</label>
-                        <input id="patient_name" name="patient_name" type="text" class="form-control" placeholder="ชื่อ-นามสกุล ผู้ป่วย" value="{{ $emergency->patient_name }}">
+                        <input id="patient_name" name="patient_name" type="text" class="form-control" placeholder="ชื่อ-นามสกุล ผู้ป่วย" value="{{ $emergency->patient_name }}" data-original="{{ $emergency->patient_name }}">
                     </div>
                     <div class="col-md-6 col-lg-3">
                         <label for="patient_birth" class="form-label">วัน/เดือน/ปี เกิด</label>
-                        <input id="patient_birth" name="patient_birth" type="date" class="form-control" placeholder="วันเดือนปีเกิดผู้ป่วย" value="{{ $emergency->patient_birth }}">
+                        <input id="patient_birth" name="patient_birth" type="date" class="form-control" placeholder="วันเดือนปีเกิดผู้ป่วย" value="{{ $emergency->patient_birth }}" data-original="{{ $emergency->patient_birth }}">
                     </div>
                     <div class="col-md-6 col-lg-3">
                         <label for="patient_identification" class="form-label">เลขประจำตัวประชาชนผู้ป่วย</label>
-                        <input id="patient_identification" name="patient_identification" type="text" class="form-control" placeholder="เลขประจำตัวประชาชนผู้ป่วย" value="{{ $emergency->patient_identification }}">
+                        <input id="patient_identification" name="patient_identification" type="text" class="form-control" placeholder="เลขประจำตัวประชาชนผู้ป่วย" value="{{ $emergency->patient_identification }}" data-original="{{ $emergency->patient_identification }}">
                     </div>
                     <div class="col-md-12 col-lg-4">
                         <label for="patient_phone" class="form-label">เบอร์โทรศัพท์ผู้ป่วย</label>
-                        <input id="patient_phone" name="patient_phone" type="text" class="form-control" placeholder="เบอร์โทรศัพท์ผู้ป่วย" value="{{ $emergency->patient_phone }}">
+                        <input id="patient_phone" name="patient_phone" type="text" class="form-control" placeholder="เบอร์โทรศัพท์ผู้ป่วย" value="{{ $emergency->patient_phone }}" data-original="{{ $emergency->patient_phone }}">
                     </div>
                     <div class="col-md-6 col-lg-4">
                         <label for="patient_gender" class="form-label">เพศผู้ป่วย</label>
-                        <input id="patient_gender" name="patient_gender" type="text" class="form-control" placeholder="เพศผู้ป่วย" value="{{ $emergency->patient_gender }}">
+                        <input id="patient_gender" name="patient_gender" type="text" class="form-control" placeholder="เพศผู้ป่วย" value="{{ $emergency->patient_gender }}" data-original="{{ $emergency->patient_gender }}">
                     </div>
+
                     <div class="col-md-6 col-lg-4">
                         <label for="patient_blood_type" class="form-label">กรุ๊ปเลือดผู้ป่วย</label>
-                        <select name="patient_blood_type" id="patient_blood_type" class="form-control">
+                        <select name="patient_blood_type" id="patient_blood_type" 
+                                class="form-control"
+                                data-original="{{ $emergency->patient_blood_type }}">
                             <option value="">-- เลือกกรุ๊ปเลือด --</option>
-                            <option value="A+">A+</option>
-                            <option value="A-">A-</option>
-                            <option value="B+">B+</option>
-                            <option value="B-">B-</option>
-                            <option value="AB+">AB+</option>
-                            <option value="AB-">AB-</option>
-                            <option value="O+">O+</option>
-                            <option value="O-">O-</option>
+                            @foreach(['A+','A-','B+','B-','AB+','AB-','O+','O-'] as $blood)
+                                <option value="{{ $blood }}" {{ $emergency->patient_blood_type == $blood ? 'selected' : '' }}>
+                                    {{ $blood }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
 
                     <div class="col-md-4">
                         <label for="patient_congenital_disease" class="form-label">โรคประจำตัวผู้ป่วย</label>
-                        <input id="patient_congenital_disease" name="patient_congenital_disease" type="text" class="form-control" placeholder="โรคประจำตัวผู้ป่วย" value="{{ $emergency->patient_congenital_disease }}">
+                        <input id="patient_congenital_disease" name="patient_congenital_disease" type="text" class="form-control" placeholder="โรคประจำตัวผู้ป่วย" value="{{ $emergency->patient_congenital_disease }}" data-original="{{ $emergency->patient_congenital_disease }}">
                     </div>
                     <div class="col-md-4">
                         <label for="patient_allergic_drugs" class="form-label">ยาที่แพ้</label>
-                        <input id="patient_allergic_drugs" name="patient_allergic_drugs" type="text" class="form-control" placeholder="ยาที่แพ้" value="{{ $emergency->patient_allergic_drugs }}">
+                        <input id="patient_allergic_drugs" name="patient_allergic_drugs" type="text" class="form-control" placeholder="ยาที่แพ้" value="{{ $emergency->patient_allergic_drugs }}" data-original="{{ $emergency->patient_allergic_drugs }}">
                     </div>
                     <div class="col-md-4">
                         <label for="patient_regularly_medications" class="form-label">ยาที่ใช้ประจำ</label>
-                        <input id="patient_regularly_medications" name="patient_regularly_medications" type="text" class="form-control" placeholder="ยาที่ใช้ประจำ" value="{{ $emergency->patient_regularly_medications }}">
+                        <input id="patient_regularly_medications" name="patient_regularly_medications" type="text" class="form-control" placeholder="ยาที่ใช้ประจำ" value="{{ $emergency->patient_regularly_medications }}" data-original="{{ $emergency->patient_regularly_medications }}">
                     </div>
                     <div class="col-12">
                         <label for="patient_address" class="form-label">ที่อยู่ผู้ป่วย</label>
-                        <textarea id="patient_address" name="patient_address" class="form-control" placeholder="ที่อยู่ผู้ป่วย" rows="3">{{ $emergency->patient_address }}</textarea>
-
+                        <textarea id="patient_address" name="patient_address" class="form-control" placeholder="ที่อยู่ผู้ป่วย" rows="3" data-original="{{ $emergency->patient_address }}">{{ $emergency->patient_address }}</textarea>
                     </div>
 
                 </div>
-
-                <hr class="my-5">
-
 
                 <style>
                     :root {
@@ -1517,182 +1594,194 @@
                         }
                     }
                 </style>
-                <div class="header  mt-5">ไทม์ไลน์การช่วยเหลือ</div>
-                <ul class="timeline">
-                    <li class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fa-regular fa-phone"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <h2 class="timeline-title">1. รับแจ้งเหตุ</h2>
-                                <span class="timeline-time">14:00 น.</span>
-                            </div>
-                        </div>
-                    </li>
 
-                    <li class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fa-regular fa-paper-plane-top fa-rotate-by" style="--fa-rotate-angle: 312deg;"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <h2 class="timeline-title">2. สั่งการ</h2>
-                                <span class="timeline-time">14:02 น.</span>
+                <hr class="my-5 d-none">
+
+                <div id="timeline-section" class="mb-4 d-none">
+                    <div class="header  mt-5">ไทม์ไลน์การช่วยเหลือ</div>
+                    <ul class="timeline">
+                        <li class="timeline-item">
+                            <div class="timeline-icon">
+                                <i class="fa-regular fa-phone"></i>
                             </div>
-                            <div class="timeline-details">
-                                <div class="detail-item">
-                                    <span class="detail-label"><i class="fa-regular fa-clock"></i>ใช้เวลา (รับแจ้งเหตุ - สั่งการ)</span>
-                                    <span class="data-pill pill-time">2 นาที</span>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h2 class="timeline-title">1. รับแจ้งเหตุ</h2>
+                                    <span class="timeline-time">14:00 น.</span>
                                 </div>
                             </div>
-                        </div>
-                    </li>
+                        </li>
 
-                    <li class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fa-regular fa-truck-medical"></i>
-
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <h2 class="timeline-title">3. ออกจากฐาน</h2>
-                                <span class="timeline-time">14:05 น.</span>
+                        <li class="timeline-item">
+                            <div class="timeline-icon">
+                                <i class="fa-regular fa-paper-plane-top fa-rotate-by" style="--fa-rotate-angle: 312deg;"></i>
                             </div>
-                            <div class="timeline-details">
-                                <div class="detail-item">
-                                    <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (สั่งการ - ออกจากฐาน)</span>
-                                    <span class="data-pill pill-time">3 นาที</span>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h2 class="timeline-title">2. สั่งการ</h2>
+                                    <span class="timeline-time">14:02 น.</span>
                                 </div>
-                                <div class="detail-item">
-                                    <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ออกจากฐาน)</span>
-                                    <div>
-                                        <span class="data-pill pill-time">10,500 กม.</span>
-                                        <span class="data-pill pill-distance">รวม 15 กม.</span>
+                                <div class="timeline-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label"><i class="fa-regular fa-clock"></i>ใช้เวลา (รับแจ้งเหตุ - สั่งการ)</span>
+                                        <span class="data-pill pill-time">2 นาที</span>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
+                        </li>
 
-                    <li class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fa-regular fa-location-dot"></i>
+                        <li class="timeline-item">
+                            <div class="timeline-icon">
+                                <i class="fa-regular fa-truck-medical"></i>
 
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <h2 class="timeline-title">4. ถึงที่เกิดเหตุ</h2>
-                                <span class="timeline-time">14:20 น.</span>
                             </div>
-                            <div class="timeline-details">
-                                <div class="detail-item">
-                                    <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (ออกจากฐาน - ที่เกิดเหตุ)</span>
-                                    <span class="data-pill pill-time">15 นาที</span>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h2 class="timeline-title">3. ออกจากฐาน</h2>
+                                    <span class="timeline-time">14:05 น.</span>
                                 </div>
-                                <div class="detail-item">
-                                    <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ออกจากฐาน)</span>
-                                    <div>
-                                        <span class="data-pill pill-time">10,500 กม.</span>
-                                        <span class="data-pill pill-distance">รวม 15 กม.</span>
+                                <div class="timeline-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (สั่งการ - ออกจากฐาน)</span>
+                                        <span class="data-pill pill-time">3 นาที</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ออกจากฐาน)</span>
+                                        <div>
+                                            <span class="data-pill pill-time">10,500 กม.</span>
+                                            <span class="data-pill pill-distance">รวม 15 กม.</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
+                        </li>
 
-                    <li class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fa-regular fa-arrow-turn-left"></i>
+                        <li class="timeline-item">
+                            <div class="timeline-icon">
+                                <i class="fa-regular fa-location-dot"></i>
 
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <h2 class="timeline-title">5. ออกจากที่เกิดเหตุ</h2>
-                                <span class="timeline-time">14:45 น.</span>
                             </div>
-                            <div class="timeline-details">
-                                <div class="detail-item">
-                                    <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (รับแจ้งเหตุ - สั่งการ)</span>
-                                    <span class="data-pill pill-time">25 นาที</span>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h2 class="timeline-title">4. ถึงที่เกิดเหตุ</h2>
+                                    <span class="timeline-time">14:20 น.</span>
                                 </div>
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="timeline-item">
-                        <div class="timeline-icon">
-                            <i class="fa-regular fa-hospital"></i>
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <h2 class="timeline-title">6. ถึงโรงพยาบาล</h2>
-                                <span class="timeline-time">14:05 น.</span>
-                            </div>
-                            <div class="timeline-details">
-                                <div class="detail-item">
-                                    <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (ออกจากที่เกิดเหตุ - ถึงโรงพยาบาล)</span>
-                                    <span class="data-pill pill-time">3 นาที</span>
-                                </div>
-                                <div class="detail-item">
-                                    <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ถึงโรงพยาบาล)</span>
-                                    <div>
-                                        <span class="data-pill pill-time">10,500 กม.</span>
-                                        <span class="data-pill pill-distance">รวม 15 กม.</span>
+                                <div class="timeline-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (ออกจากฐาน - ที่เกิดเหตุ)</span>
+                                        <span class="data-pill pill-time">15 นาที</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ออกจากฐาน)</span>
+                                        <div>
+                                            <span class="data-pill pill-time">10,500 กม.</span>
+                                            <span class="data-pill pill-distance">รวม 15 กม.</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
+                        </li>
 
-                    <li class="timeline-item">
-                        <div class="timeline-icon">
-                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M5.0625 9.125L1 5.0625M1 5.0625L5.0625 1M1 5.0625H9.53125C10.1181 5.0625 10.6992 5.17809 11.2414 5.40266C11.7835 5.62724 12.2762 5.9564 12.6911 6.37137C13.1061 6.78633 13.4353 7.27896 13.6598 7.82113C13.8844 8.36331 14 8.94441 14 9.53125C14 10.1181 13.8844 10.6992 13.6598 11.2414C13.4353 11.7835 13.1061 12.2762 12.6911 12.6911C12.2762 13.1061 11.7835 13.4353 11.2414 13.6598C10.6992 13.8844 10.1181 14 9.53125 14H6.6875" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
-                        <div class="timeline-content">
-                            <div class="timeline-header">
-                                <h2 class="timeline-title">7. ถึงฐาน</h2>
-                                <span class="timeline-time">14:05 น.</span>
+                        <li class="timeline-item">
+                            <div class="timeline-icon">
+                                <i class="fa-regular fa-arrow-turn-left"></i>
+
                             </div>
-                            <div class="timeline-details">
-                                <div class="detail-item">
-                                    <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (รพ. - ถึงฐาน)</span>
-                                    <span class="data-pill pill-time">3 นาที</span>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h2 class="timeline-title">5. ออกจากที่เกิดเหตุ</h2>
+                                    <span class="timeline-time">14:45 น.</span>
                                 </div>
-                                <div class="detail-item">
-                                    <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ถึงฐาน)</span>
-                                    <div>
-                                        <span class="data-pill pill-time">10,500 กม.</span>
-                                        <span class="data-pill pill-distance">รวม 15 กม.</span>
+                                <div class="timeline-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (รับแจ้งเหตุ - สั่งการ)</span>
+                                        <span class="data-pill pill-time">25 นาที</span>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
 
-                <div class="summary-card">
-                    <h2 class="summary-title">สรุปภารกิจ</h2>
-                    <div class="summary-grid">
-                        <div class="summary-item">
-                            <div class="label mb-2">เวลาในการช่วยเหลือ</div>
-                            <div class="value">1 ชั่วโมง 13 นาที</div>
-                            <div class="sub-label">(ตั้งแต่ออกจากฐาน - เสร็จสิ้น)</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="label mb-2">เวลารวมทั้งหมด</div>
-                            <div class="value ">1 ชั่วโมง 8 นาที</div>
-                            <div class="sub-label">(ตั้งแต่ออกจากฐาน - กลับถึงฐาน)</div>
-                        </div>
-                        <div class="summary-item">
-                            <div class="label mb-2">ระยะทางทั้งหมด</div>
-                            <div class="value">33 กิโลเมตร</div>
-                            <div class="sub-label">(ออกจากฐาน - กลับถึงฐาน)</div>
+                        <li class="timeline-item">
+                            <div class="timeline-icon">
+                                <i class="fa-regular fa-hospital"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h2 class="timeline-title">6. ถึงโรงพยาบาล</h2>
+                                    <span class="timeline-time">14:05 น.</span>
+                                </div>
+                                <div class="timeline-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (ออกจากที่เกิดเหตุ - ถึงโรงพยาบาล)</span>
+                                        <span class="data-pill pill-time">3 นาที</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ถึงโรงพยาบาล)</span>
+                                        <div>
+                                            <span class="data-pill pill-time">10,500 กม.</span>
+                                            <span class="data-pill pill-distance">รวม 15 กม.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="timeline-item">
+                            <div class="timeline-icon">
+                                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.0625 9.125L1 5.0625M1 5.0625L5.0625 1M1 5.0625H9.53125C10.1181 5.0625 10.6992 5.17809 11.2414 5.40266C11.7835 5.62724 12.2762 5.9564 12.6911 6.37137C13.1061 6.78633 13.4353 7.27896 13.6598 7.82113C13.8844 8.36331 14 8.94441 14 9.53125C14 10.1181 13.8844 10.6992 13.6598 11.2414C13.4353 11.7835 13.1061 12.2762 12.6911 12.6911C12.2762 13.1061 11.7835 13.4353 11.2414 13.6598C10.6992 13.8844 10.1181 14 9.53125 14H6.6875" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <div class="timeline-content">
+                                <div class="timeline-header">
+                                    <h2 class="timeline-title">7. ถึงฐาน</h2>
+                                    <span class="timeline-time">14:05 น.</span>
+                                </div>
+                                <div class="timeline-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (รพ. - ถึงฐาน)</span>
+                                        <span class="data-pill pill-time">3 นาที</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ถึงฐาน)</span>
+                                        <div>
+                                            <span class="data-pill pill-time">10,500 กม.</span>
+                                            <span class="data-pill pill-distance">รวม 15 กม.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="summary-card">
+                        <h2 class="summary-title">สรุปภารกิจ</h2>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="label mb-2">เวลาในการช่วยเหลือ</div>
+                                <div class="value">1 ชั่วโมง 13 นาที</div>
+                                <div class="sub-label">(ตั้งแต่ออกจากฐาน - เสร็จสิ้น)</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="label mb-2">เวลารวมทั้งหมด</div>
+                                <div class="value ">1 ชั่วโมง 8 นาที</div>
+                                <div class="sub-label">(ตั้งแต่ออกจากฐาน - กลับถึงฐาน)</div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="label mb-2">ระยะทางทั้งหมด</div>
+                                <div class="value">33 กิโลเมตร</div>
+                                <div class="sub-label">(ออกจากฐาน - กลับถึงฐาน)</div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div id="save-button-container">
+                    <button id="main-save-btn" type="button" class="btn btn-success" onclick="saveEmergency()" style="width: 30%;">
+                        บันทึกข้อมูล
+                    </button>
+                </div>
+
             </div>
 
 
@@ -2171,6 +2260,53 @@
         </div>
     </div>
 </div>
+
+
+<!-- Modal Conflict -->
+<style>
+    #conflictTable td.highlighted-cell {
+        background-color: #e6ffed !important; /* สีเขียวอ่อน */
+        transition: background-color 0.3s ease;
+    }
+
+    #resolveBtn:disabled {
+        cursor: not-allowed;
+        opacity: 0.65;
+    }
+
+    #conflictTable td.choice-cell {
+        cursor: pointer;
+    }
+</style>
+
+<div class="modal fade" id="conflictModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">พบข้อมูลที่เปลี่ยนแปลง</h5>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered" id="conflictTable">
+          <thead>
+            <tr>
+              <th>Field</th>
+              <th>ข้อมูลปัจจุบัน (DB)</th>
+              <th>ข้อมูลใหม่ (คุณ)</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="resolveBtn" class="btn btn-primary">บันทึกค่าที่เลือก</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
 
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBgrxXDgk1tgXngalZF3eWtcTWI-LPdeus&language=th"></script>
 
@@ -3100,6 +3236,254 @@
             }
         });
     }
+</script>
+
+
+<!-- บันทึกและส่งข้อมูล -->
+<script>
+    let originalData = {};
+
+    // เพิ่ม Label ของฟิลด์ต่างๆ เพื่อให้แสดงชื่อที่สวยงามใน Modal
+    const fieldLabels = {
+        name_reporter: "ผู้แจ้งเหตุ",
+        phone_reporter: "เบอร์ผู้แจ้งเหตุ",
+        type_reporter: "ประเภทผู้แจ้ง",
+        emergency_location: "รายละเอียดสถานที่เกิดเหตุ",
+        emergency_detail: "รายละเอียดเหตุการณ์",
+        symptom: "อาการเบื้องต้น",
+        symptom_other: "อาการอื่นๆ",
+        patient_name: "ชื่อ-นามสกุลผู้ป่วย",
+        patient_birth: "วันเกิดผู้ป่วย",
+        patient_identification: "เลขประจำตัวประชาชนผู้ป่วย",
+        patient_phone: "เบอร์โทรศัพท์ผู้ป่วย",
+        patient_gender: "เพศผู้ป่วย",
+        patient_blood_type: "กรุ๊ปเลือดผู้ป่วย",
+        patient_congenital_disease: "โรคประจำตัวผู้ป่วย",
+        patient_allergic_drugs: "ยาที่แพ้",
+        patient_regularly_medications: "ยาที่ใช้ประจำ",
+        patient_address: "ที่อยู่ผู้ป่วย",
+    };
+
+    /**
+     * ฟังก์ชันสำหรับรวบรวมข้อมูลทั้งหมดจาก div container
+     * @param {string} containerId - ID ของ <div> ที่ครอบ input ทั้งหมด
+     * @returns {object}
+     */
+    function getFormData(containerId) {
+        const data = {};
+        const container = document.getElementById(containerId);
+        if (!container) {
+            console.error(`Element with ID '${containerId}' not found.`);
+            return data;
+        }
+
+        const elements = container.querySelectorAll("[name]");
+        const processedNames = new Set();
+
+        elements.forEach(el => {
+            const name = el.name;
+            if (processedNames.has(name)) return;
+
+            if (el.type === 'radio') {
+                const checkedRadio = container.querySelector(`input[name="${name}"]:checked`);
+                data[name] = checkedRadio ? checkedRadio.value : null;
+                processedNames.add(name);
+            } else if (name.endsWith('[]')) { // สำหรับ Checkbox
+                const baseName = name.replace('[]', '');
+                const checkedCheckboxes = container.querySelectorAll(`input[name="${name}"]:checked`);
+                data[baseName] = Array.from(checkedCheckboxes).map(cb => cb.value);
+                processedNames.add(name);
+            } else { // สำหรับ input, textarea, select
+                data[name] = el.value;
+            }
+        });
+        return data;
+    }
+
+
+    // เก็บ originalData ตอนโหลดหน้า
+    function initOriginalData() {
+        originalData = getFormData("data_case");
+    }
+
+    // ฟังก์ชันสำหรับเล่น Animation ตอนบันทึกสำเร็จ
+    function playSuccessAnimation(buttonElement) {
+        // เก็บสถานะเดิมของปุ่ม
+        const originalHtml = buttonElement.dataset.originalHtml || buttonElement.innerHTML;
+        const originalClasses = buttonElement.className;
+
+        // เปลี่ยนเป็นสถานะ "สำเร็จ"
+        buttonElement.disabled = true;
+        buttonElement.classList.remove('btn-primary');
+        buttonElement.classList.add('btn-success');
+        buttonElement.innerHTML = `<i class="fa-solid fa-check"></i> บันทึกสำเร็จ`;
+
+        // ตั้งเวลา 3 วินาทีเพื่อเปลี่ยนกลับ
+        setTimeout(() => {
+            buttonElement.innerHTML = originalHtml;
+            buttonElement.className = originalClasses;
+            buttonElement.disabled = false;
+        }, 3000);
+    }
+
+    // ฟังก์ชันบันทึก
+    async function saveEmergency() {
+
+        const saveBtn = document.getElementById('main-save-btn');
+        const originalHtml = saveBtn.innerHTML;
+        saveBtn.dataset.originalHtml = originalHtml; // เก็บ HTML เดิมไว้
+
+        // แสดง Spinner และปิดปุ่ม
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...`;
+
+        const currentData = getFormData("data_case");
+
+        const response = await fetch("{{ url('/') }}/api/SaveDataEmergency/{{ $emergency->id }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: JSON.stringify({
+                currentData: currentData,
+                originalData: originalData
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.status === "conflict") {
+
+            // ถ้าข้อมูลชนกัน ให้คืนค่าปุ่มเป็นปกติก่อนเปิด Modal
+            saveBtn.innerHTML = originalHtml;
+            saveBtn.disabled = false;
+
+            const tbody = document.querySelector("#conflictTable tbody");
+            tbody.innerHTML = "";
+
+            for (let field in result.conflicts) {
+                const label = fieldLabels[field] || field;
+                const dbValue = result.conflicts[field].current || "-";
+                const newValue = result.conflicts[field].new || "-";
+
+                const row = `
+                <tr>
+                    <td>${label}</td>
+                    <td class="choice-cell">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="resolve_${field}" value="db" id="db_${field}">
+                            <label class="form-check-label" for="db_${field}">${dbValue}</label>
+                        </div>
+                    </td>
+                    <td class="choice-cell">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="resolve_${field}" value="new" id="new_${field}">
+                            <label class="form-check-label" for="new_${field}">${newValue}</label>
+                        </div>
+                    </td>
+                </tr>`;
+                tbody.insertAdjacentHTML("beforeend", row);
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById("conflictModal"));
+            modal.show();
+
+            const resolveBtn = document.getElementById('resolveBtn');
+            resolveBtn.disabled = true;
+
+            const totalConflicts = Object.keys(result.conflicts).length;
+
+            tbody.addEventListener('click', function(event) {
+                // หา <td> ที่เป็น choice-cell ที่ถูกคลิก
+                const cell = event.target.closest('td.choice-cell');
+                if (!cell) return; // ถ้าไม่ได้คลิกในช่องที่ต้องการ ก็ไม่ต้องทำอะไร
+
+                // หา radio button ที่อยู่ใน cell นั้น
+                const radio = cell.querySelector('input[type="radio"]');
+                if (radio && !radio.checked) {
+                    radio.checked = true; // สั่งให้ radio ถูกเลือก
+                }
+
+                // --- ส่วนจัดการ UI (ทำงานเหมือนเดิม แต่ถูกกระตุ้นด้วยการคลิกที่ cell) ---
+                const row = cell.closest('tr');
+                row.querySelectorAll('td').forEach(td => td.classList.remove('highlighted-cell'));
+                cell.classList.add('highlighted-cell');
+
+                const checkedCount = tbody.querySelectorAll('input[type="radio"]:checked').length;
+                resolveBtn.disabled = (checkedCount !== totalConflicts);
+            });
+
+            document.getElementById("resolveBtn").onclick = async function() {
+
+                const resolveBtnOriginalHtml = resolveBtn.innerHTML;
+                resolveBtn.dataset.originalHtml = resolveBtnOriginalHtml;
+
+                // แสดง Spinner บนปุ่มใน Modal
+                resolveBtn.disabled = true;
+                resolveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> กำลังบันทึก...`;
+
+                let resolvedData = {};
+                for (let field in result.conflicts) {
+                    const choice = document.querySelector(`input[name="resolve_${field}"]:checked`).value;
+                    resolvedData[field] = (choice === "db") ? result.conflicts[field].current : result.conflicts[field].new;
+                }
+
+                const overwriteResponse = await fetch("{{ url('/') }}/api/SaveDataEmergency/{{ $emergency->id }}", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content },
+                    body: JSON.stringify({
+                        changedData: resolvedData,
+                        originalData: {} // บังคับ overwrite
+                    })
+                });
+
+                const overwriteResult = await overwriteResponse.json();
+
+                if (overwriteResult.status === "success") {
+                    // อัปเดตค่าในฟอร์มให้ตรงกับที่เลือก
+                    for (const field in resolvedData) {
+                        const chosenValue = resolvedData[field];
+
+                        if (field === 'symptom') {
+                            const chosenSymptoms = chosenValue ? chosenValue.split(',') : [];
+                            const allCheckboxes = document.querySelectorAll(`input[name="symptom[]"]`);
+                            allCheckboxes.forEach(checkbox => {
+                                checkbox.checked = chosenSymptoms.includes(checkbox.value);
+                            });
+                        } else {
+                            const element = document.querySelector(`[name="${field}"]`);
+                            if (element) {
+                                if (element.type === 'radio') {
+                                    const radioToSelect = document.querySelector(`input[name="${field}"][value="${chosenValue}"]`);
+                                    if (radioToSelect) radioToSelect.checked = true;
+                                } else { // สำหรับ text, textarea, select
+                                    element.value = chosenValue;
+                                }
+                            }
+                        }
+                    }
+                    
+                    initOriginalData(); // อัปเดต originalData ให้เป็นข้อมูลล่าสุด
+                    modal.hide();
+                    console.log("บันทึกข้อมูลที่เลือกสำเร็จ");
+                    playSuccessAnimation(resolveBtn);
+                }
+                else {
+                    // ถ้ามีปัญหา ให้คืนค่าปุ่ม
+                    resolveBtn.innerHTML = resolveBtnOriginalHtml;
+                    resolveBtn.disabled = false;
+                    alert('เกิดข้อผิดพลาดในการบันทึก');
+                }
+            };
+        } else if (result.status === "success") {
+            originalData = currentData; // อัปเดต originalData เป็นข้อมูลชุดล่าสุด
+            console.log("บันทึกสำเร็จ");
+            playSuccessAnimation(saveBtn);
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", initOriginalData);
 </script>
 
 @endsection
