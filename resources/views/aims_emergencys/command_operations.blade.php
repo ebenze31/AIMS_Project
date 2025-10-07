@@ -1812,7 +1812,7 @@
                             </div>
                             <div class="summary-item">
                                 <div class="label mb-2">ระยะทางทั้งหมด</div>
-                                <div class="value">{{ $emergency->op_km_sum ?? '-' }} กม.</div>
+                                <div class="value">{{ $emergency->op_km_sum ?? '-' }}</div>
                                 <div class="sub-label">(ออกจากฐาน - กลับถึงฐาน)</div>
                             </div>
                         </div>
