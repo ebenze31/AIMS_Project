@@ -1818,23 +1818,13 @@
                             @php
                                 $bgColorClass = '';
                                 if (!empty($emergency->op_time_sum_sos)) {
-                                    $timeStr = $emergency->op_time_sum_sos;
-                                    $totalMinutes = 0;
-
-                                    // ดึงจำนวนชั่วโมง (ถ้ามี)
-                                    if (preg_match('/(\d+)\s*ชั่วโมง/', $timeStr, $hours)) {
-                                        $totalMinutes += (int)$hours[1] * 60;
-                                    }
-                                    // ดึงจำนวนนาที (ถ้ามี)
-                                    if (preg_match('/(\d+)\s*นาที/', $timeStr, $minutes)) {
-                                        $totalMinutes += (int)$minutes[1];
-                                    }
+                                    $minutes = intval($emergency->op_time_sum_sos);
 
                                     // กำหนด class สีตามเงื่อนไข
-                                    if ($totalMinutes > 0) {
-                                        if ($totalMinutes <= 8) {
+                                    if ($minutes > 0) {
+                                        if ($minutes <= 8) {
                                             $bgColorClass = 'bg-success-light';
-                                        } elseif ($totalMinutes <= 12) {
+                                        } elseif ($minutes <= 12) {
                                             $bgColorClass = 'bg-warning-light';
                                         } else {
                                             $bgColorClass = 'bg-danger-light';
