@@ -1795,12 +1795,54 @@
                         @endif
                     </ul>
 
+                    <style>
+                        .summary-item.bg-success-light {
+                            background-color: #e6ffed !important; /* สีเขียวอ่อน */
+                            border: 1px solid #b7e1c7;
+                        }
+                        .summary-item.bg-warning-light {
+                            background-color: #fff4e5 !important; /* สีเหลืองส้มอ่อน */
+                            border: 1px solid #ffdcb0;
+                        }
+                        .summary-item.bg-danger-light {
+                            background-color: #ffebee !important; /* สีแดงอ่อน */
+                            border: 1px solid #ffcdd2;
+                        }
+                    </style>
+
                     <!-- แสดงส่วนสรุปภารกิจ ต่อเมื่อสถานะเป็น "เสร็จสิ้น" เท่านั้น -->
                     @if($emergency->op_status == 'เสร็จสิ้น')
                     <div class="summary-card">
                         <h2 class="summary-title">สรุปภารกิจ</h2>
                         <div class="summary-grid">
-                            <div class="summary-item">
+                            @php
+                                $bgColorClass = '';
+                                if (!empty($emergency->op_time_sum_sos)) {
+                                    $timeStr = $emergency->op_time_sum_sos;
+                                    $totalMinutes = 0;
+
+                                    // ดึงจำนวนชั่วโมง (ถ้ามี)
+                                    if (preg_match('/(\d+)\s*ชั่วโมง/', $timeStr, $hours)) {
+                                        $totalMinutes += (int)$hours[1] * 60;
+                                    }
+                                    // ดึงจำนวนนาที (ถ้ามี)
+                                    if (preg_match('/(\d+)\s*นาที/', $timeStr, $minutes)) {
+                                        $totalMinutes += (int)$minutes[1];
+                                    }
+
+                                    // กำหนด class สีตามเงื่อนไข
+                                    if ($totalMinutes > 0) {
+                                        if ($totalMinutes <= 8) {
+                                            $bgColorClass = 'bg-success-light';
+                                        } elseif ($totalMinutes <= 12) {
+                                            $bgColorClass = 'bg-warning-light';
+                                        } else {
+                                            $bgColorClass = 'bg-danger-light';
+                                        }
+                                    }
+                                }
+                            @endphp
+                            <div class="summary-item {{ $bgColorClass }}">
                                 <div class="label mb-2">เวลาในการช่วยเหลือ</div>
                                 <div class="value">{{ $emergency->op_time_sum_sos ?? '-' }}</div>
                                 <div class="sub-label">(ตั้งแต่ออกจากฐาน - เสร็จสิ้น)</div>
