@@ -635,4 +635,17 @@ Route::get('/demo/aims_sos_oparating', function () {
 Route::get('/demo/aims_sos_form', function () {
     return view('demo/aims_sos_form');
 });
+Route::get('/demo/aims_timeline', function () {
+    return view('demo/aims_timeline');
+});
+
+Route::get('/demo/aims_rating', function () {
+    return view('demo/aims_rating');
+});
+Route::get('/demo/aims_home', function () {
+    return view('demo/home');
+});
+Route::get('/demo/dashboard', function () {
+    return view('demo/dashboard');
+});
 // ============> end demo aims <============//

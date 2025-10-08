@@ -12,7 +12,7 @@
     <link rel="shortcut icon" href="{{ asset('/partner_new/images/logo/aims logo.png') }}" type="image/x-icon" />
     <!-- Favicons -->
     <!-- icon -->
-    <link href="https://kit-pro.fontawesome.com/releases/v6.4.0/css/pro.min.css" rel="stylesheet">
+    <link href="https://kit-pro.fontawesome.com/releases/v6.7.0/css/pro.min.css" rel="stylesheet">
 
     <!-- tailwind -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
