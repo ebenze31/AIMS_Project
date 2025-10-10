@@ -824,24 +824,30 @@ function get_data_individual_officer(){
 
         if(result){
             // console.log(result);
-            let content_aims_officer = document.querySelector('#content_aims_officer');
-                content_aims_officer.innerHTML = "" ;
 
-            let html_photo = ``;
-            if(result[0].photo){
-                html_photo = `<img src="{{ url('storage')}}/${result[0].photo}" class="w-14 h-14 rounded-full object-cover mr-4">`;
+            try{
+                let content_aims_officer = document.querySelector('#content_aims_officer');
+                    content_aims_officer.innerHTML = "" ;
+
+                let html_photo = ``;
+                if(result[0].photo){
+                    html_photo = `<img src="{{ url('storage')}}/${result[0].photo}" class="w-14 h-14 rounded-full object-cover mr-4">`;
+                }
+
+                let html = `
+                    ${html_photo}
+                    <div>
+                        <h2 class="text-lg font-semibold text-gray-800">${result[0].name_officer}</h2>
+                        <p class="text-sm text-gray-500">${result[0].name_unit}</p>
+                        <p class="text-sm text-gray-500">${result[0].name_type_unit}</p>
+                    </div>
+                `;
+
+                content_aims_officer.insertAdjacentHTML('beforeend',html); // แทรกล่างสุด
             }
-
-            let html = `
-                ${html_photo}
-                <div>
-                    <h2 class="text-lg font-semibold text-gray-800">${result[0].name_officer}</h2>
-                    <p class="text-sm text-gray-500">${result[0].name_unit}</p>
-                    <p class="text-sm text-gray-500">${result[0].name_type_unit}</p>
-                </div>
-            `;
-
-            content_aims_officer.insertAdjacentHTML('beforeend',html); // แทรกล่างสุด
+            catch{
+                window.location.reload();
+            }
         }
 
     });
