@@ -519,6 +519,36 @@
     </div>
     @endif
 
+        <br><br>
+        <style>
+            .floating-btn {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                text-align: center;
+                padding: 15px 0;
+                background-color: #0D6EFD;
+                color: #fff;
+                font-size: 1rem;
+                font-weight: 600;
+                text-decoration: none;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+                z-index: 9999;
+            }
+
+            .floating-btn:hover {
+                background-color: #0b5ed7;
+                transform: translateY(-3px);
+            }
+        </style>
+        
+        <div>
+            <a href="{{ url('/officer_change_status') }}" class="floating-btn">
+                ไปยังหน้าเปิดสถานะ
+            </a>
+        </div>
+
     </div>
 </div>
 @endsection

@@ -267,7 +267,6 @@
 
     <div class="mx-3">
 
-        <div class="header  mt-5">ไทม์ไลน์การช่วยเหลือ</div>
         <ul class="timeline">
             <li class="timeline-item">
                 <div class="timeline-icon">
@@ -292,7 +291,7 @@
                     </div>
                     <div class="timeline-details">
                         <div class="detail-item">
-                            <span class="detail-label"><i class="fa-regular fa-clock"></i>ใช้เวลา (รับแจ้งเหตุ - สั่งการ)</span>
+                            <span class="detail-label"><i class="fa-regular fa-clock"></i>ใช้เวลา</span>
                             <span class="data-pill pill-time">2 นาที</span>
                         </div>
                     </div>
@@ -311,11 +310,11 @@
                     </div>
                     <div class="timeline-details">
                         <div class="detail-item">
-                            <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (สั่งการ - ออกจากฐาน)</span>
+                            <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา</span>
                             <span class="data-pill pill-time">3 นาที</span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ออกจากฐาน)</span>
+                            <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร</span>
                             <div>
                                 <span class="data-pill pill-time">10,500 กม.</span>
                                 <span class="data-pill pill-distance">รวม 15 กม.</span>
@@ -337,11 +336,11 @@
                     </div>
                     <div class="timeline-details">
                         <div class="detail-item">
-                            <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (ออกจากฐาน - ที่เกิดเหตุ)</span>
+                            <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา</span>
                             <span class="data-pill pill-time">15 นาที</span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ออกจากฐาน)</span>
+                            <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร</span>
                             <div>
                                 <span class="data-pill pill-time">10,500 กม.</span>
                                 <span class="data-pill pill-distance">รวม 15 กม.</span>
@@ -363,7 +362,7 @@
                     </div>
                     <div class="timeline-details">
                         <div class="detail-item">
-                            <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (รับแจ้งเหตุ - สั่งการ)</span>
+                            <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา</span>
                             <span class="data-pill pill-time">25 นาที</span>
                         </div>
                     </div>
@@ -381,11 +380,11 @@
                     </div>
                     <div class="timeline-details">
                         <div class="detail-item">
-                            <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (ออกจากที่เกิดเหตุ - ถึงโรงพยาบาล)</span>
+                            <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา</span>
                             <span class="data-pill pill-time">3 นาที</span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ถึงโรงพยาบาล)</span>
+                            <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร</span>
                             <div>
                                 <span class="data-pill pill-time">10,500 กม.</span>
                                 <span class="data-pill pill-distance">รวม 15 กม.</span>
@@ -408,11 +407,11 @@
                     </div>
                     <div class="timeline-details">
                         <div class="detail-item">
-                            <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา (รพ. - ถึงฐาน)</span>
+                            <span class="detail-label"><i class="fa-regular fa-clock"></i> ใช้เวลา</span>
                             <span class="data-pill pill-time">3 นาที</span>
                         </div>
                         <div class="detail-item">
-                            <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร (ถึงฐาน)</span>
+                            <span class="detail-label"><i class="fa-regular fa-location-dot"></i>เลขกิโลเมตร</span>
                             <div>
                                 <span class="data-pill pill-time">10,500 กม.</span>
                                 <span class="data-pill pill-distance">รวม 15 กม.</span>
@@ -443,6 +442,36 @@
                 </div>
             </div>
         </div>
+
+        <br><br>
+        <style>
+        .floating-btn {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 15px 0;
+            background-color: #0D6EFD;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.15);
+            z-index: 9999;
+        }
+
+        .floating-btn:hover {
+            background-color: #0b5ed7;
+            transform: translateY(-3px);
+        }
+    </style>
+    
+    <div>
+        <a href="{{ url('/officer_change_status') }}" class="floating-btn">
+            ไปยังหน้าเปิดสถานะ
+        </a>
+    </div>
     </div>
 </div>
 @endsection

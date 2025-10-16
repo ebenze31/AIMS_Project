@@ -1272,9 +1272,74 @@
                         <label for="inputAddress2" class="form-label">อาการอื่นๆ</label>
                         <textarea id="symptom_other" name="symptom_other" class="form-control" rows="3" placeholder="กรอกข้อมูลอาการนำสำคัญ" data-original="{{ $emergency->symptom_other }}">{{ $emergency->symptom_other }}</textarea>
                     </div>
-
-
                 </div>
+
+                <div class="header mt-5">การให้รหัสความรุนแรง</div>
+                <div class="row g-3">
+                    <div class="col-12 ">
+                        <label for="inputCity" class="form-label">การประเมินจากศูนย์</label>
+
+                        <div class="d-flex flex-wrap">
+                            @php
+                                $idcs = explode(',', $emergency->idc ?? '');
+
+                                $IDC_List = [
+                                    ["ฉุกเฉิน", "#dc3545"],
+                                    ["เร่งด่วน", "#ffc107"],
+                                    ["ไม่รุนแรง", "#198754"],
+                                    ["ทั่วไป", "#0d6efd"],
+                                    ["อื่นๆ", "#212529"],
+                                ];
+                            @endphp
+
+                            @foreach($IDC_List as $i => [$item, $color])
+                                @php
+                                    $checked = in_array($item, $idcs);
+                                @endphp
+                                <div class="radio-idc me-3 mb-2">
+                                    <input 
+                                        type="radio" 
+                                        name="idc"
+                                        id="idc_{{ $i+1 }}" 
+                                        value="{{ $item }}"
+                                        data-color="{{ $color }}"
+                                        {{ $checked ? 'checked' : '' }}
+                                    >
+                                    <label for="idc_{{ $i+1 }}" style="--idc-color: {{ $color }}">
+                                        {{ $i+1 }}. {{ $item }}
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                <style>
+                    .radio-idc input[type="radio"] {
+                        display: none;
+                    }
+
+                    .radio-idc label {
+                        display: inline-block;
+                        padding: 8px 14px;
+                        border: 2px solid var(--idc-color);
+                        border-radius: 8px;
+                        color: var(--idc-color);
+                        cursor: pointer;
+                        transition: all 0.2s;
+                        user-select: none;
+                    }
+
+                    .radio-idc label:hover {
+                        opacity: 0.8;
+                    }
+
+                    .radio-idc input[type="radio"]:checked + label {
+                        background-color: var(--idc-color);
+                        color: white;
+                    }
+                </style>
+
 
                 <div class="header  mt-5">ข้อมูลผู้ป่วย</div>
                 <div class="row g-3">
@@ -2392,8 +2457,13 @@
     document.addEventListener("DOMContentLoaded", function() {
 
         var aims_operating_officers_id = "{{ $emergency->op_aims_operating_officers_id }}";
+        let start_status = "{{ $emergency->op_status }}";
 
-        if (aims_operating_officers_id) {
+        if(start_status == "เสร็จสิ้น"){
+            check_show_map = "card_map_operation";
+            open_map_status_ssuccess();
+        }
+        else if (aims_operating_officers_id) {
             check_show_map = "card_map_operation";
             open_map_monitor();
         } else {
@@ -2440,6 +2510,31 @@
         });
 
         get_data_officer();
+
+    }
+
+    function open_map_status_ssuccess() {
+        let btn_order = document.querySelector('#btn_order');
+        btn_order.innerHTML = "จุดเกิดเหตุ";
+
+        const emergency_LatLng = {
+            lat: emergency_Lat,
+            lng: emergency_Lng
+        };
+
+        map_monitor = new google.maps.Map(document.getElementById("map_monitor"), {
+            center: emergency_LatLng,
+            zoom: 15
+        });
+
+        let successMarker = new google.maps.Marker({
+            position: emergency_LatLng,
+            map: map_monitor,
+            icon: {
+                url: aims_marker,
+                scaledSize: new google.maps.Size(45, 45)
+            },
+        });
 
     }
 
@@ -3338,6 +3433,7 @@
         patient_allergic_drugs: "ยาที่แพ้",
         patient_regularly_medications: "ยาที่ใช้ประจำ",
         patient_address: "ที่อยู่ผู้ป่วย",
+        idc: "การให้รหัสความรุนแรง",
     };
 
     /**
@@ -3544,6 +3640,7 @@
                     modal.hide();
                     console.log("บันทึกข้อมูลที่เลือกสำเร็จ");
                     playSuccessAnimation(resolveBtn);
+                    get_data_case_realtime("{{ $emergency->id }}");
                 }
                 else {
                     // ถ้ามีปัญหา ให้คืนค่าปุ่ม
@@ -3556,6 +3653,7 @@
             originalData = currentData; // อัปเดต originalData เป็นข้อมูลชุดล่าสุด
             console.log("บันทึกสำเร็จ");
             playSuccessAnimation(saveBtn);
+            get_data_case_realtime("{{ $emergency->id }}");
         }
     }
 
