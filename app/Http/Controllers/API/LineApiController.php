@@ -325,6 +325,8 @@ class LineApiController extends Controller
         $data_partner = Partner::where('id' , $data_groupline->partner_id)->first();
         $data_user = User::where('provider_id',$event["source"]["userId"])->first();
 
+        $string_json = null;
+
         if ( $event["message"]["text"] == "น้องวี")  {
 
             $template_path = storage_path('../public/json/text_done.json');
@@ -345,30 +347,48 @@ class LineApiController extends Controller
             $string_json = str_replace("https://www.viicheck.com/sos_partner_officers", $registration_url, $string_json);
 
         }
+        else if($event["message"]["text"] == "GET Group Code"){
 
-        $messages = [ json_decode($string_json, true) ];
+            $text_groupCode = "";
+            if (!empty($data_groupline->groupCode)) {
+                $text_groupCode = $data_groupline->groupCode;
+            } else {
+                $text_groupCode = "เกิดข้อผิดพลาด!";
+            }
 
-        $body = [
-            "replyToken" => $event["replyToken"],
-            "messages" => $messages,
-        ];
+            $template_path = storage_path('../public/json/aims/send_groupCode.json');
+            $string_json = file_get_contents($template_path);
+            $string_json = str_replace("ตัวอย่าง","Group Code",$string_json);
+            $string_json = str_replace("<groupCode>",$text_groupCode,$string_json);
 
-        $opts = [
-            'http' =>[
-                'method'  => 'POST',
-                'header'  => "Content-Type: application/json \r\n".
-                            'Authorization: Bearer '.env('CHANNEL_ACCESS_TOKEN'),
-                'content' => json_encode($body, JSON_UNESCAPED_UNICODE),
-                //'timeout' => 60
-            ]
-        ];
+        }
 
-        $context  = stream_context_create($opts);
-        //https://api-data.line.me/v2/bot/message/11914912908139/content
-        $url = "https://api.line.me/v2/bot/message/reply";
-        $result = file_get_contents($url, false, $context);
+        if (!empty($string_json)) {
 
-        // $event["message"]["text"] == "ติดต่อ ViiCHECK" ;
+            $messages = [ json_decode($string_json, true) ];
+
+            $body = [
+                "replyToken" => $event["replyToken"],
+                "messages" => $messages,
+            ];
+
+            $opts = [
+                'http' =>[
+                    'method'  => 'POST',
+                    'header'  => "Content-Type: application/json \r\n".
+                                'Authorization: Bearer '.env('CHANNEL_ACCESS_TOKEN'),
+                    'content' => json_encode($body, JSON_UNESCAPED_UNICODE),
+                    //'timeout' => 60
+                ]
+            ];
+
+            $context  = stream_context_create($opts);
+            //https://api-data.line.me/v2/bot/message/11914912908139/content
+            $url = "https://api.line.me/v2/bot/message/reply";
+            $result = file_get_contents($url, false, $context);
+
+            // $event["message"]["text"] == "ติดต่อ ViiCHECK" ;
+        }
 
     }
 
