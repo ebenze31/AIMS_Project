@@ -648,4 +648,11 @@ Route::get('/demo/aims_home', function () {
 Route::get('/demo/dashboard', function () {
     return view('demo/dashboard');
 });
+
+Route::get('/demo/aims_create_map', function () {
+    return view('demo/aims_create_map');
+});
+Route::get('/demo/aims_area', function () {
+    return view('demo/aims_area');
+});
 // ============> end demo aims <============//
