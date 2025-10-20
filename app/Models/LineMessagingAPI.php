@@ -2138,7 +2138,7 @@ class LineMessagingAPI extends Model
         $messages = [ json_decode($string_json, true) ];
 
         $body = [
-            "replyToken" => $event["replyToken"],
+            "to" => $save_name_group['groupId'],
             "messages" => $messages,
         ];
 
@@ -2154,12 +2154,12 @@ class LineMessagingAPI extends Model
 
         $context  = stream_context_create($opts);
         //https://api-data.line.me/v2/bot/message/11914912908139/content
-        $url = "https://api.line.me/v2/bot/message/reply";
+        $url = "https://api.line.me/v2/bot/message/push";
         $result = file_get_contents($url, false, $context);
 
         //SAVE LOG
         $data = [
-            "title" => "Send Group Code",
+            "title" => "Send Group Code (Push)",
             "content" => json_encode($result, JSON_UNESCAPED_UNICODE),
         ];
 

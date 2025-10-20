@@ -347,10 +347,17 @@ class LineApiController extends Controller
         }
         else if($event["message"]["text"] == "GET Group Code"){
 
+            $text_groupCode = "";
+            if( !empty($data_groupline->groupCode) ){
+                $text_groupCode = $data_groupline->groupCode;
+            }else{
+                $text_groupCode = "เกิดข้อผิดพลาด!";
+            }
+
             $template_path = storage_path('../public/json/aims/send_groupCode.json');
             $string_json = file_get_contents($template_path);
             $string_json = str_replace("ตัวอย่าง","Group Code",$string_json);
-            $string_json = str_replace("<groupCode>",$save_name_group['groupCode'],$string_json);
+            $string_json = str_replace("<groupCode>",$text_groupCode,$string_json);
 
         }
 
