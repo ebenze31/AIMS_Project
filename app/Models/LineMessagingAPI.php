@@ -2124,6 +2124,8 @@ class LineMessagingAPI extends Model
 
         MyLog::create($data);
 
+        $this->send_GroupCode($event,$save_name_group);
+
     }
 
     public function send_GroupCode($event,$save_name_group)
