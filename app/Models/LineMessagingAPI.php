@@ -2126,6 +2126,44 @@ class LineMessagingAPI extends Model
 
     }
 
+    public function send_GroupCode($event,$save_name_group)
+    {
+        $template_path = storage_path('../public/json/aims/send_groupCode.json');
+        $string_json = file_get_contents($template_path);
+        $string_json = str_replace("ตัวอย่าง","Group Code",$string_json);
+        $string_json = str_replace("<groupCode>",$save_name_group['groupCode'],$string_json);
+
+        $messages = [ json_decode($string_json, true) ];
+
+        $body = [
+            "replyToken" => $event["replyToken"],
+            "messages" => $messages,
+        ];
+
+        $opts = [
+            'http' =>[
+                'method'  => 'POST',
+                'header'  => "Content-Type: application/json \r\n".
+                            'Authorization: Bearer '.env('CHANNEL_ACCESS_TOKEN'),
+                'content' => json_encode($body, JSON_UNESCAPED_UNICODE),
+                //'timeout' => 60
+            ]
+        ];
+
+        $context  = stream_context_create($opts);
+        //https://api-data.line.me/v2/bot/message/11914912908139/content
+        $url = "https://api.line.me/v2/bot/message/reply";
+        $result = file_get_contents($url, false, $context);
+
+        //SAVE LOG
+        $data = [
+            "title" => "Send Group Code",
+            "content" => json_encode($result, JSON_UNESCAPED_UNICODE),
+        ];
+
+        MyLog::create($data);
+    }
+
     public function language_for_user($data_topic, $to_user)
     {
         $data_users = DB::table('users')

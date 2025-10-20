@@ -345,6 +345,14 @@ class LineApiController extends Controller
             $string_json = str_replace("https://www.viicheck.com/sos_partner_officers", $registration_url, $string_json);
 
         }
+        else if($event["message"]["text"] == "GET Group Code"){
+
+            $template_path = storage_path('../public/json/aims/send_groupCode.json');
+            $string_json = file_get_contents($template_path);
+            $string_json = str_replace("ตัวอย่าง","Group Code",$string_json);
+            $string_json = str_replace("<groupCode>",$save_name_group['groupCode'],$string_json);
+
+        }
 
         $messages = [ json_decode($string_json, true) ];
 
@@ -390,12 +398,15 @@ class LineApiController extends Controller
 
         $data_group_line = json_decode($result);
 
+        $newGroupCode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
         $save_name_group = [
             "groupId" => $data_group_line->groupId,
             "groupName" => $data_group_line->groupName,
             "pictureUrl" => $data_group_line->pictureUrl,
             "time_zone" => "Asia/Bangkok",
-            "language" => "en",
+            "language" => "th",
+            "groupCode" => $newGroupCode,
         ];
 
         Group_line::firstOrCreate($save_name_group);
