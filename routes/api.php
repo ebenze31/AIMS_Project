@@ -558,4 +558,5 @@ Route::get('/get_priority_units/{id}/{user_id}', 'Aims_emergency_typesController
 Route::post('/update_priority_unit', 'Aims_emergency_typesController@updatePriorityUnit');
 Route::post('/update_emergency_type', 'Aims_emergency_typesController@updateEmergencyType');
 Route::post('/SaveDataEmergency/{emergency_id}', 'Aims_emergencysController@SaveDataEmergency');
+Route::get('/search_groupcode/{groupCode}/{user_id}/{emergency_type_id}', 'API\LineApiController@search_groupcode');
 // ============> END AIMS <============ //

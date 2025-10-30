@@ -190,6 +190,8 @@ class Aims_emergency_typesController extends Controller
             $name_title = $aims_emergency_type->name_emergency_type ;
         }
 
+        $send_auto_to = $aims_emergency_type->send_auto_to ;
+
         $data_user = Auth::user();
         $aims_commands = Aims_command::where('user_id' , $data_user->id)->first();
         $officer_role = $aims_commands->officer_role ;
@@ -199,7 +201,7 @@ class Aims_emergency_typesController extends Controller
             ->select('name_type_unit')
             ->get();
 
-        return view('aims_emergency_types.show', compact('name_title', 'id','officer_role','data_aims_type_units'));
+        return view('aims_emergency_types.show', compact('name_title', 'id','officer_role','data_aims_type_units','send_auto_to'));
     }
 
     public function getPriorityUnits($id, $user_id)
@@ -266,6 +268,7 @@ class Aims_emergency_typesController extends Controller
         $realId = $request->input('realId');
         $finalPriority = $request->input('finalPriority');
         $name_title = $request->input('name_title');
+        $emergency_type_id = $request->input('emergency_type_id');
 
         $unit = Aims_type_unit::find($realId);
 
@@ -291,6 +294,13 @@ class Aims_emergency_typesController extends Controller
             // ลบ object ออก
             if (!is_null($indexToUpdate)) {
                 array_splice($emergency_types, $indexToUpdate, 1);
+            }
+
+            if (count($emergency_types) === 0) {
+            // ถ้าไม่มีเหลือ ให้ update aims_emergency_types.send_auto_to = null
+            DB::table('aims_emergency_types')
+                ->where('id', $emergency_type_id)
+                ->update(['send_auto_to' => null]);
             }
         } elseif ($finalPriority == 'สุดท้าย') {
             // ตั้ง priority เป็น null

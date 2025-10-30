@@ -2595,6 +2595,57 @@ class LineApiController extends Controller
 
     }
 
+
+    public function search_groupcode($groupCode,$user_id,$emergency_type_id)
+    {
+
+        $user_commands = DB::table('aims_commands')->where('user_id', $user_id)->first();
+        $aims_partners = DB::table('aims_partners')->where('id', $user_commands->aims_partner_id)->first();
+
+        // ค้นหาข้อมูลในตาราง group_lines โดยใช้ groupCode
+        $result = DB::table('group_lines')
+                    ->where('groupCode', $groupCode)
+                    ->get();
+
+        if ($result->isEmpty()) {
+            return response()->json([
+                'status' => 'not_found',
+                'message' => 'ไม่พบข้อมูลที่ค้นหา'
+            ]);
+        }
+
+        $data_group_lines = DB::table('group_lines')->where('groupCode', $groupCode)->first();
+
+        DB::table('group_lines')
+            ->where([
+                    ['groupCode', $groupCode],
+                ])
+            ->update([
+                'groupCode' => null,
+                'partner_id' => $user_commands->aims_partner_id,
+                'partners_area_id' => $user_commands->aims_area_id,
+                'status' => "active",
+                'owner' => $aims_partners->name,
+            ]);
+
+
+        DB::table('aims_emergency_types')
+            ->where([
+                    ['id', $emergency_type_id],
+                ])
+            ->update([
+                'send_auto_to' => "group_line",
+                'groupID' => $data_group_lines->groupId,
+            ]);
+
+        // จัดการลบ หน่วยปฏิบัติการ หากเปลรายนมาเป็นไลน์
+
+        return response()->json([
+            'status' => 'success',
+            'result' => $result,
+        ]);
+    }
+
 }
 
 

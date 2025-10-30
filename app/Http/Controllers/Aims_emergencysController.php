@@ -293,178 +293,191 @@ class Aims_emergencysController extends Controller
                 $name_emergency_type = "ผู้ใช้ไม่ได้กรอก";
             }
 
-            // 2. ค้นหา aims_type_units ที่มี emergency_type ตรงกับ name_emergency_type
-            $type_units = DB::table('aims_type_units')
-                ->get()
-                ->filter(function ($row) use ($name_emergency_type) {
-                    $emergencyTypes = json_decode($row->emergency_type, true);
 
-                    if (!is_array($emergencyTypes)) {
-                        return false; // ข้าม row นี้ไป
-                    }
+            $check_send_auto_to = DB::table('aims_emergency_types')
+                ->where('aims_partner_id', "partner_id")
+                ->where('aims_area_id', "area_id")
+                ->where('name_emergency_type', $name_emergency_type)
+                ->first();
 
-                    foreach ($emergencyTypes as $emergency) {
-                        if ($emergency['name_emergency_type'] === $name_emergency_type) {
-                            $row->priority = $emergency['priority'] ?? null;
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                ->sort(function ($a, $b) {
-                    $aPriority = is_null($a->priority) ? 9999 : (int) $a->priority;
-                    $bPriority = is_null($b->priority) ? 9999 : (int) $b->priority;
-                    return $aPriority <=> $bPriority;
-                })
-                ->values();
-
-            // 3. ดึง id ของ type_unit
-            $type_unit_ids = $type_units->pluck('id');
-
-            // 4. หา aims_operating_units ที่ status = 'Active' และ type_unit_id อยู่ในกลุ่ม
-            $operating_units = DB::table('aims_operating_units')
-                ->whereIn('aims_type_unit_id', $type_unit_ids)
-                ->where('status', 'Active')
-                ->select('id', 'name_unit', 'aims_type_unit_id')
-                ->get();
-
-            // 5. รวมข้อมูลให้เป็น array ของชุด {name_emergency_type, name_type_unit, name_unit}
-            $groupedResults = [];
-
-            // 5. รวมข้อมูลโดยจัดกลุ่มตาม priority
-            foreach ($type_units as $type_unit) {
-                foreach ($operating_units as $unit) {
-                    if ($unit->aims_type_unit_id == $type_unit->id) {
-                        $priority = $type_unit->priority ?? 9999;
-
-                        if (!isset($groupedResults[$priority])) {
-                            $groupedResults[$priority] = [
-                                'priority' => $priority,
-                                'name_type_unit' => [],
-                                'name_unit' => [],
-                            ];
-                        }
-
-                        // เพิ่มเฉพาะถ้ายังไม่เคยมีชื่อซ้ำ
-                        if (!in_array($type_unit->name_type_unit, $groupedResults[$priority]['name_type_unit'])) {
-                            $groupedResults[$priority]['name_type_unit'][] = $type_unit->name_type_unit;
-                        }
-
-                        if (!in_array($unit->name_unit, $groupedResults[$priority]['name_unit'])) {
-                            $groupedResults[$priority]['name_unit'][] = $unit->name_unit;
-                        }
-                    }
-                }
+            if($check_send_auto_to && $check_send_auto_to == "group_line"){
+                // ส่งเข้ากลุ่มไลน์
+                $groupID = $check_send_auto_to->groupID;
+                $this->auto_send_sos_to_group_line($emergency->id,$groupID);
             }
+            else{
+                // 2. ค้นหา aims_type_units ที่มี emergency_type ตรงกับ name_emergency_type
+                $type_units = DB::table('aims_type_units')
+                    ->get()
+                    ->filter(function ($row) use ($name_emergency_type) {
+                        $emergencyTypes = json_decode($row->emergency_type, true);
 
-            // แปลงผลลัพธ์ให้เรียงตาม priority
-            $results = collect($groupedResults)
-                ->sortBy('priority')
-                ->values()
-                ->toArray();
+                        if (!is_array($emergencyTypes)) {
+                            return false; // ข้าม row นี้ไป
+                        }
 
-            function haversine($lat1, $lon1, $lat2, $lon2) {
-                $earthRadius = 6371;
-                $dLat = deg2rad($lat2 - $lat1);
-                $dLon = deg2rad($lon2 - $lon1);
-                $a = sin($dLat / 2) * sin($dLat / 2) +
-                     cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
-                     sin($dLon / 2) * sin($dLon / 2);
-                $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-                return $earthRadius * $c;
-            }
+                        foreach ($emergencyTypes as $emergency) {
+                            if ($emergency['name_emergency_type'] === $name_emergency_type) {
+                                $row->priority = $emergency['priority'] ?? null;
+                                return true;
+                            }
+                        }
+                        return false;
+                    })
+                    ->sort(function ($a, $b) {
+                        $aPriority = is_null($a->priority) ? 9999 : (int) $a->priority;
+                        $bPriority = is_null($b->priority) ? 9999 : (int) $b->priority;
+                        return $aPriority <=> $bPriority;
+                    })
+                    ->values();
 
-            $foundOfficer = null;
-            $emergencyLat = $requestData['emergency_lat'];
-            $emergencyLng = $requestData['emergency_lng'];
+                // 3. ดึง id ของ type_unit
+                $type_unit_ids = $type_units->pluck('id');
 
-            foreach ($results as $group) {
-                $unitNames = $group['name_unit'];
-
-                $unitIds = DB::table('aims_operating_units')
-                    ->where('status' , 'Active')
-                    ->whereIn('name_unit', $unitNames)
-                    ->pluck('id');
-
-                $officers = DB::table('aims_operating_officers')
-                    ->where('status' , 'Standby')
-                    ->whereIn('aims_operating_unit_id', $unitIds)
-                    ->whereNotNull('lat')
-                    ->whereNotNull('lng')
-                    ->get();
-
-                $officersWithinRange = $officers->map(function ($officer) use ($emergencyLat, $emergencyLng) {
-                    $distance = haversine($emergencyLat, $emergencyLng, $officer->lat, $officer->lng);
-                    $officer->distance = $distance;
-                    return $officer;
-                })->filter(function ($officer) {
-                    return $officer->distance <= 20;
-                })->sortBy('distance')->values();
-
-                if ($officersWithinRange->isNotEmpty()) {
-                    $foundOfficer = $officersWithinRange->first();
-                    break;
-                }
-            }
-
-            if (!$foundOfficer) {
-                // ดึงชื่อหน่วยทั้งหมดจากทุก priority group
-                $allUnitNames = collect($results)->flatMap(function ($group) {
-                    return $group['name_unit'];
-                })->unique();
-
-                // หาหน่วยที่ Active
-                $unitIds = DB::table('aims_operating_units')
+                // 4. หา aims_operating_units ที่ status = 'Active' และ type_unit_id อยู่ในกลุ่ม
+                $operating_units = DB::table('aims_operating_units')
+                    ->whereIn('aims_type_unit_id', $type_unit_ids)
                     ->where('status', 'Active')
-                    ->whereIn('name_unit', $allUnitNames)
-                    ->pluck('id');
-
-                // หาจนท. ที่ Standby และมี lat/lng
-                $officers = DB::table('aims_operating_officers')
-                    ->where('status', 'Standby')
-                    ->whereIn('aims_operating_unit_id', $unitIds)
-                    ->whereNotNull('lat')
-                    ->whereNotNull('lng')
+                    ->select('id', 'name_unit', 'aims_type_unit_id')
                     ->get();
 
-                // คำนวณระยะทางทั้งหมด แล้วหาคนที่ใกล้สุด
-                $officersSortedByDistance = $officers->map(function ($officer) use ($emergencyLat, $emergencyLng) {
-                    $distance = haversine($emergencyLat, $emergencyLng, $officer->lat, $officer->lng);
-                    $officer->distance = $distance;
-                    return $officer;
-                })->sortBy('distance')->values();
+                // 5. รวมข้อมูลให้เป็น array ของชุด {name_emergency_type, name_type_unit, name_unit}
+                $groupedResults = [];
 
-                if ($officersSortedByDistance->isNotEmpty()) {
-                    $foundOfficer = $officersSortedByDistance->first();
+                // 5. รวมข้อมูลโดยจัดกลุ่มตาม priority
+                foreach ($type_units as $type_unit) {
+                    foreach ($operating_units as $unit) {
+                        if ($unit->aims_type_unit_id == $type_unit->id) {
+                            $priority = $type_unit->priority ?? 9999;
+
+                            if (!isset($groupedResults[$priority])) {
+                                $groupedResults[$priority] = [
+                                    'priority' => $priority,
+                                    'name_type_unit' => [],
+                                    'name_unit' => [],
+                                ];
+                            }
+
+                            // เพิ่มเฉพาะถ้ายังไม่เคยมีชื่อซ้ำ
+                            if (!in_array($type_unit->name_type_unit, $groupedResults[$priority]['name_type_unit'])) {
+                                $groupedResults[$priority]['name_type_unit'][] = $type_unit->name_type_unit;
+                            }
+
+                            if (!in_array($unit->name_unit, $groupedResults[$priority]['name_unit'])) {
+                                $groupedResults[$priority]['name_unit'][] = $unit->name_unit;
+                            }
+                        }
+                    }
                 }
+
+                // แปลงผลลัพธ์ให้เรียงตาม priority
+                $results = collect($groupedResults)
+                    ->sortBy('priority')
+                    ->values()
+                    ->toArray();
+
+                function haversine($lat1, $lon1, $lat2, $lon2) {
+                    $earthRadius = 6371;
+                    $dLat = deg2rad($lat2 - $lat1);
+                    $dLon = deg2rad($lon2 - $lon1);
+                    $a = sin($dLat / 2) * sin($dLat / 2) +
+                         cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+                         sin($dLon / 2) * sin($dLon / 2);
+                    $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+                    return $earthRadius * $c;
+                }
+
+                $foundOfficer = null;
+                $emergencyLat = $requestData['emergency_lat'];
+                $emergencyLng = $requestData['emergency_lng'];
+
+                foreach ($results as $group) {
+                    $unitNames = $group['name_unit'];
+
+                    $unitIds = DB::table('aims_operating_units')
+                        ->where('status' , 'Active')
+                        ->whereIn('name_unit', $unitNames)
+                        ->pluck('id');
+
+                    $officers = DB::table('aims_operating_officers')
+                        ->where('status' , 'Standby')
+                        ->whereIn('aims_operating_unit_id', $unitIds)
+                        ->whereNotNull('lat')
+                        ->whereNotNull('lng')
+                        ->get();
+
+                    $officersWithinRange = $officers->map(function ($officer) use ($emergencyLat, $emergencyLng) {
+                        $distance = haversine($emergencyLat, $emergencyLng, $officer->lat, $officer->lng);
+                        $officer->distance = $distance;
+                        return $officer;
+                    })->filter(function ($officer) {
+                        return $officer->distance <= 20;
+                    })->sortBy('distance')->values();
+
+                    if ($officersWithinRange->isNotEmpty()) {
+                        $foundOfficer = $officersWithinRange->first();
+                        break;
+                    }
+                }
+
+                if (!$foundOfficer) {
+                    // ดึงชื่อหน่วยทั้งหมดจากทุก priority group
+                    $allUnitNames = collect($results)->flatMap(function ($group) {
+                        return $group['name_unit'];
+                    })->unique();
+
+                    // หาหน่วยที่ Active
+                    $unitIds = DB::table('aims_operating_units')
+                        ->where('status', 'Active')
+                        ->whereIn('name_unit', $allUnitNames)
+                        ->pluck('id');
+
+                    // หาจนท. ที่ Standby และมี lat/lng
+                    $officers = DB::table('aims_operating_officers')
+                        ->where('status', 'Standby')
+                        ->whereIn('aims_operating_unit_id', $unitIds)
+                        ->whereNotNull('lat')
+                        ->whereNotNull('lng')
+                        ->get();
+
+                    // คำนวณระยะทางทั้งหมด แล้วหาคนที่ใกล้สุด
+                    $officersSortedByDistance = $officers->map(function ($officer) use ($emergencyLat, $emergencyLng) {
+                        $distance = haversine($emergencyLat, $emergencyLng, $officer->lat, $officer->lng);
+                        $officer->distance = $distance;
+                        return $officer;
+                    })->sortBy('distance')->values();
+
+                    if ($officersSortedByDistance->isNotEmpty()) {
+                        $foundOfficer = $officersSortedByDistance->first();
+                    }
+                }
+
+                $check_foundOfficer = [
+                    'status' => $foundOfficer ? 'found' : 'not found',
+                    'emergency_id' => $emergency->id,
+                    'name_emergency_type' => $name_emergency_type,
+                    'closest_officer' => $foundOfficer,
+                    'grouped_data' => $results
+                ];
+
+                $data_for_send_auto = [
+                    'emergency_id' => $emergency->id,
+                    'aims_operating_officers_id' => $check_foundOfficer['closest_officer']->id,
+                ];
+
+
+                // เจอเจ้าหน้าที่ในพื้นที่
+                if( $check_foundOfficer['status'] == "found" ){
+                    // $this->auto_send_sos_to_officer($data_for_send_auto);
+                    $this->send_test_Artisan_call($requestData['name_reporter']);
+                }
+                // ไม่เจอเจ้าหน้าที่ในพื้นที่ ส่งหาชาลี
+                else {
+
+                }
+
+                return $check_foundOfficer ;
             }
-
-            $check_foundOfficer = [
-                'status' => $foundOfficer ? 'found' : 'not found',
-                'emergency_id' => $emergency->id,
-                'name_emergency_type' => $name_emergency_type,
-                'closest_officer' => $foundOfficer,
-                'grouped_data' => $results
-            ];
-
-            $data_for_send_auto = [
-                'emergency_id' => $emergency->id,
-                'aims_operating_officers_id' => $check_foundOfficer['closest_officer']->id,
-            ];
-
-
-            // เจอเจ้าหน้าที่ในพื้นที่
-            if( $check_foundOfficer['status'] == "found" ){
-                // $this->auto_send_sos_to_officer($data_for_send_auto);
-                $this->send_test_Artisan_call($requestData['name_reporter']);
-            }
-            // ไม่เจอเจ้าหน้าที่ในพื้นที่ ส่งหาชาลี
-            else {
-
-            }
-
-            return $check_foundOfficer ;
-
         }
         
         // 6. ส่งผลลัพธ์กลับ
@@ -662,6 +675,139 @@ class Aims_emergencysController extends Controller
         $data = [
             "title" => "(Auto) การขอความช่วยเหลือใหม่ ID : " . $emergency_id,
             "content" => "To Officer id >> " . $officer_id,
+        ];
+        MyLog::create($data);
+
+        return "send success";
+
+    }
+
+    function auto_send_sos_to_group_line($emergency_id , $groupID)
+    {
+
+        $date_now =  date("d-m-Y");
+        $time_now =  date("H:i");
+        $text_at = '@' ;
+
+        $columns = Schema::getColumnListing('aims_emergency_operations');
+        $selects = array_map(function ($col) {
+            return "aims_emergency_operations.$col as op_$col";
+        }, $columns);
+
+        $emergency = DB::table('aims_emergencys')
+            ->where('aims_emergencys.id', '=', $emergency_id)
+            ->leftJoin('aims_emergency_operations', 'aims_emergencys.id', '=', 'aims_emergency_operations.aims_emergency_id')
+            ->leftJoin('aims_areas', 'aims_emergencys.aims_area_id', '=', 'aims_areas.id')
+            ->leftJoin('aims_partners', 'aims_emergencys.aims_partner_id', '=', 'aims_partners.id')
+            ->select(array_merge(
+                ['aims_emergencys.*'],
+                $selects,
+                ['aims_areas.name_area as area_name_area'],
+                ['aims_partners.name as partner_name']
+            ))
+            ->first();
+
+
+        $lat_user = $emergency->emergency_lat;
+        $lng_user = $emergency->emergency_lng;
+
+        DB::table('aims_emergency_operations')
+            ->where('aims_emergency_id', $emergency_id)
+            ->update([
+                'waiting_reply' => "group_line",
+                'time_command' => now(),
+                'updated_at' => now()
+            ]);
+
+        // return "send success";
+
+        $template_path = storage_path('../public/json/aims/send_sos.json');
+        $string_json = file_get_contents($template_path);
+
+        $string_json = str_replace("ตัวอย่าง","การขอความช่วยเหลือ",$string_json);
+
+        $text_icon = "-" ;
+        if (!empty( $emergency->emergency_photo )) {
+            $string_json = str_replace("photo_sos.png",$emergency->emergency_photo,$string_json);
+            $text_icon = "🔍" ;
+        }
+
+        $emergency_type = "หัวข้อ : ไม่ได้ระบุ" ;
+        if (!empty( $emergency->emergency_type )) {
+            $emergency_type = $emergency->emergency_type ;
+        }
+
+        $emergency_detail = "รายละเอียด : ไม่ได้ระบุ" ;
+        if (!empty( $emergency->emergency_detail )) {
+            $emergency_detail = $emergency->emergency_detail ;
+        }
+
+        $name_reporter = "ไม่ได้ระบุ" ;
+        if (!empty( $emergency->name_reporter )) {
+            $name_reporter = $emergency->name_reporter ;
+        }
+
+        $type_reporter = "ไม่ได้ระบุ" ;
+        if (!empty( $emergency->type_reporter )) {
+            $type_reporter = $emergency->type_reporter ;
+        }
+
+        $phone_reporter = "-" ;
+        if (!empty( $emergency->phone_reporter )) {
+            $phone_reporter = $emergency->phone_reporter ;
+        }
+
+        $emergency_location = "รายละเอียดสถานที่ : ไม่ได้ระบุ" ;
+        if (!empty( $emergency->emergency_location )) {
+            $emergency_location = $emergency->emergency_location ;
+        }
+
+        $string_json = str_replace("name_partner",$emergency->partner_name,$string_json);
+        $string_json = str_replace("name_area",$emergency->area_name_area,$string_json);
+        $string_json = str_replace("หัวข้อขอความช่วยเหลือ",$emergency_type,$string_json);
+        $string_json = str_replace("รายละเอียดขอความช่วยเหลือ",$emergency_detail,$string_json);
+
+        $string_json = str_replace("name_user",$name_reporter,$string_json);
+        $string_json = str_replace("type_reporter",$type_reporter,$string_json);
+        $string_json = str_replace("0999999999",$phone_reporter,$string_json);
+        $string_json = str_replace("emergency_location",$emergency_location,$string_json);
+        $string_json = str_replace("icon_photo",$text_icon,$string_json);
+
+        $string_json = str_replace("วันที่แจ้ง",$date_now,$string_json);
+        $string_json = str_replace("เวลาที่แจ้ง",$time_now,$string_json);
+
+        $string_json = str_replace("emergency_id",$emergency_id,$string_json);
+        $string_json = str_replace("aims_area_id",$emergency->aims_area_id,$string_json);
+
+        $string_json = str_replace("gg_lat_mail",$text_at.$lat_user,$string_json);
+        $string_json = str_replace("gg_lat",$lat_user,$string_json);
+        $string_json = str_replace("lng",$lng_user,$string_json);
+
+        $messages = [ json_decode($string_json, true) ];
+
+        $body = [
+            "to" => $groupID,
+            "messages" => $messages,
+        ];
+
+        $opts = [
+            'http' =>[
+                'method'  => 'POST',
+                'header'  => "Content-Type: application/json \r\n".
+                            'Authorization: Bearer '.env('CHANNEL_ACCESS_TOKEN'),
+                'content' => json_encode($body, JSON_UNESCAPED_UNICODE),
+                //'timeout' => 60
+            ]
+        ];
+                            
+        $context  = stream_context_create($opts);
+        $url = "https://api.line.me/v2/bot/message/push";
+        $result = file_get_contents($url, false, $context);
+
+        // SAVE LOG
+        $data = [
+            "title" => "(Auto) การขอความช่วยเหลือใหม่ ID : " . $emergency_id,
+            "content" => "To group_line id >> " . $groupID,
         ];
         MyLog::create($data);
 

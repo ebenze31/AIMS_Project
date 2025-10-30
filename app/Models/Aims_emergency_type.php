@@ -25,7 +25,7 @@ class Aims_emergency_type extends Model
      *
      * @var array
      */
-    protected $fillable = ['name_emergency_type', 'aims_partner_id', 'aims_area_id', 'status'];
+    protected $fillable = ['name_emergency_type', 'aims_partner_id', 'aims_area_id', 'status','send_auto_to','groupID'];
 
     
 }
