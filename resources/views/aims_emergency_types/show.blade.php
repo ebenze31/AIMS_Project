@@ -220,7 +220,7 @@
                 </h5>
             </div>
 
-            @if( Auth::user()->id == "2" )
+            @if( Auth::user()->id == "5" )
             <div class="d-flex align-items-center">
                 <label class="fw-semibold text-secondary me-2 mb-0">ส่งเคสอัตโนมัติไปยัง :</label>
                 <div class="btn-group">
