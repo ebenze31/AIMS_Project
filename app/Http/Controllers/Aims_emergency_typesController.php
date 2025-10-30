@@ -188,9 +188,9 @@ class Aims_emergency_typesController extends Controller
         $name_title = 'ผู้ใช้ไม่ได้กรอก';
         if( !empty($aims_emergency_type->name_emergency_type) ){
             $name_title = $aims_emergency_type->name_emergency_type ;
+            $send_auto_to = $aims_emergency_type->send_auto_to ;
         }
 
-        $send_auto_to = $aims_emergency_type->send_auto_to ;
 
         $data_user = Auth::user();
         $aims_commands = Aims_command::where('user_id' , $data_user->id)->first();
