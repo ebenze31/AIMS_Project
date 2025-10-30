@@ -300,7 +300,7 @@ class Aims_emergencysController extends Controller
                 ->where('name_emergency_type', $name_emergency_type)
                 ->first();
 
-            if($check_send_auto_to && $check_send_auto_to == "group_line"){
+            if($check_send_auto_to && $check_send_auto_to->name_emergency_type == "group_line"){
                 // ส่งเข้ากลุ่มไลน์
                 $groupID = $check_send_auto_to->groupID;
                 $this->auto_send_sos_to_group_line($emergency->id,$groupID);
