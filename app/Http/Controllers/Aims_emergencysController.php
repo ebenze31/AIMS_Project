@@ -295,8 +295,8 @@ class Aims_emergencysController extends Controller
 
 
             $check_send_auto_to = DB::table('aims_emergency_types')
-                ->where('aims_partner_id', "partner_id")
-                ->where('aims_area_id', "area_id")
+                ->where('aims_partner_id', $partner_id)
+                ->where('aims_area_id', $area_id)
                 ->where('name_emergency_type', $name_emergency_type)
                 ->first();
 
